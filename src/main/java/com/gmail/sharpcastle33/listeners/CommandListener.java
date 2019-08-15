@@ -21,15 +21,16 @@ public class CommandListener implements CommandExecutor{
 		+ ChatColor.GOLD + "/nobility estate" + ChatColor.GRAY + "| " + ChatColor.AQUA + "Access estate-related commands. Nobility groups without an estate are considered Nomads. \n"
 		+ ChatColor.GOLD + "/nobility invite <name>" + ChatColor.GRAY + "| " + ChatColor.AQUA + "Invites a player to your Nobility group.\n"
 		+ ChatColor.GOLD + "/nobility kick <name>" + ChatColor.GRAY + "| " + ChatColor.AQUA + "Kicks a player from your Nobility group. \n");
-			
+			return true;
 		}else if(args.length == 1) {
 			//nobility create
-			if(args[0] == "create") {
+			if(args[0].equalsIgnoreCase("create")) {
 			  sender.sendMessage(ChatColor.GOLD + "This command creates a Nobility group, which can be used later to allow a group of players to claim land by founding an Estate. \n" + ChatColor.RED + "Correct usage is /nobility create <name>");
 			}
+			return true;
 		}else if(args.length == 2) {
 			//nobility create <NAME>
-			if(args[0] == "create" && args[1].length() >= 2) {
+			if(args[0].equalsIgnoreCase("create") && args[1].length() >= 2) {
 				
 				for(int i = 0; i < Nobility.groupMan.groups.size(); i++) {
 					Group g = Nobility.groupMan.groups.get(i);
@@ -40,7 +41,7 @@ public class CommandListener implements CommandExecutor{
 				}
 				
 				Group temp = new Group(args[1], sender.getName());
-				Nobility.groupMan.groups.add(temp);
+				Nobility.getGroupManager().groups.add(temp);
 				
 				return true;
 			}
