@@ -4,10 +4,10 @@ import java.util.ArrayList;
 
 public class GroupManager {
 	
-	public ArrayList<Group> groups;
+	public ArrayList<Group> groups = new ArrayList<Group>();
 	
-	public GroupManager() {
+	/*public GroupManager() {
 		ArrayList<Group> groups = new ArrayList<Group>();
-	}
+	}*/
 
 }

@@ -22,6 +22,7 @@ public class Group {
 		this.hasEstate = false;
 		ArrayList<String> pending = new ArrayList<String>();
 		pendingInvites = pending;
+		this.name = name;
 	}
 	
 	public void addMember(Player p) {
