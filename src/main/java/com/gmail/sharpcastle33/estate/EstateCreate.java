@@ -1,4 +1,4 @@
-package com.gmail.sharpcastle33.listeners;
+package com.gmail.sharpcastle33.estate;
 
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -7,9 +7,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEvent;
 
-import com.gmail.sharpcastle33.estate.Estate;
-import com.gmail.sharpcastle33.estate.EstateManager;
-
 public class EstateCreate implements Listener {
 	
 	@EventHandler
@@ -17,7 +14,7 @@ public class EstateCreate implements Listener {
 		Player p = e.getPlayer();
 		Block b = e.getClickedBlock();
 			if (b != null && b.getType() == Material.CHEST) {			
-				EstateManager.createEstate(b, p);
+				//EstateManager.createEstate(b, p);
 			}
 	}
 	
