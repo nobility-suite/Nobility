@@ -1,26 +1,24 @@
 package com.gmail.sharpcastle33.estate;
 
-import java.util.ArrayList;
-
 import org.bukkit.block.Block;
 
 import com.gmail.sharpcastle33.group.Group;
 
 public class Estate {
-	private ArrayList<Group> group = new ArrayList<Group>();
+	private Group group;
 	private Block block;
 	
-	public Estate(Block block, ArrayList<Group> group) {
+	public Estate(Block block, Group group) {
 		this.setGroup(group);
 		this.setBlock(block);
 
 	}
 
-	public ArrayList<Group> getGroup() {
+	public Group getGroup() {
 		return group;
 	}
 
-	public void setGroup(ArrayList<Group> group) {
+	public void setGroup(Group group) {
 		this.group = group;
 	}
 
