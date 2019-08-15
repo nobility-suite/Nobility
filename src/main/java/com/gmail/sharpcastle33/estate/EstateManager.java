@@ -11,15 +11,15 @@ import com.gmail.sharpcastle33.group.Group;
 
 public class EstateManager {
 	
-	public ArrayList<Estate> estates;
-
+	public ArrayList<Estate> estates = new ArrayList<Estate>();
 	
-	public EstateManager() {
+	/*public EstateManager() {
 		ArrayList<Estate> estates = new ArrayList<Estate>();
-	}
+	}*/
 	
 	public Estate createEstate(Block block, Player player) {
 		Group group = null;
+		
 		for(int i = 0; i < Nobility.groupMan.groups.size(); i++) {
 			Group g = Nobility.groupMan.groups.get(i);
 			for(String s : g.members) {
@@ -28,6 +28,7 @@ public class EstateManager {
 				}
 			}
 		}
+		
 		
 		Estate estate = new Estate(block, group);		
 		estates.add(estate);

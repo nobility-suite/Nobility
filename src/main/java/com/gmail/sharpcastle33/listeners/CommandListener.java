@@ -31,7 +31,7 @@ public class CommandListener implements CommandExecutor{
 		}else if(args.length == 2) {
 			//nobility create <NAME>
 			if(args[0].equalsIgnoreCase("create") && args[1].length() >= 2) {
-				
+
 				for(int i = 0; i < Nobility.groupMan.groups.size(); i++) {
 					Group g = Nobility.groupMan.groups.get(i);
 					if(g.name.equals(args[1])) {
@@ -42,7 +42,7 @@ public class CommandListener implements CommandExecutor{
 				
 				Group temp = new Group(args[1], sender.getName());
 				Nobility.getGroupManager().groups.add(temp);
-				
+				sender.sendMessage(ChatColor.GOLD + "You created the group " + temp.name);
 				return true;
 			}
 			

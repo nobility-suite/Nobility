@@ -25,11 +25,12 @@ public class Nobility extends JavaPlugin{
 	    getCommand("nobility").setExecutor(new CommandListener());
 
 	    registerEvents();
+
 	    
 	}
 	
 	public static GroupManager getGroupManager() {
-		return groupMan;
+	    	return groupMan;
 	}
 	
 	private void registerEvents() {
