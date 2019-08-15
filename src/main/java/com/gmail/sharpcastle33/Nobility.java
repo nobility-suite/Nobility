@@ -1,6 +1,6 @@
 package com.gmail.sharpcastle33;
 
-import org.bukkit.plugin.Plugin;
+import io.github.kingvictoria.NobilityRegions;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -13,12 +13,14 @@ public class Nobility extends JavaPlugin{
 	
 	public static GroupManager groupMan;
 	public static EstateManager estateMan;
-	private Plugin plugin;
+	private static Nobility nobility;
+	private static NobilityRegions nobilityRegions;
 	private CommandListener commandListener;
 	
 	public void onEnable() {
 		
-		plugin = this;
+		nobility = this;
+		nobilityRegions = getPlugin(NobilityRegions.class);
 		groupMan = new GroupManager();
 		estateMan = new EstateManager();
 		
@@ -41,5 +43,21 @@ public class Nobility extends JavaPlugin{
 	public void onDisable() {
 		
 	}
+
+	/**
+	 * Gets the instance of the Nobility plugin
+	 * @return Nobility Plugin
+	 */
+	public static Nobility getNobility() {
+		return nobility;
+	} // getNobility
+
+	/**
+	 * Gets the instance of the NobilityRegions plugin
+	 * @return NobilityRegions Plugin
+	 */
+	public static NobilityRegions getNobilityRegions() {
+		return nobilityRegions;
+	} // getNobilityRegions
 
 }

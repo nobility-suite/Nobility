@@ -1,6 +1,7 @@
 name: Nobility
 main: com.gmail.sharpcastle33.Nobility
 version: 0.0.1-SNAPSHOT
+depend: [NobilityRegions]
 commands:
    nobility:
       description: (OP ONLY) debug command for setting an enchant on an item
