@@ -3,6 +3,7 @@ package com.gmail.sharpcastle33.listeners;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 import com.gmail.sharpcastle33.Nobility;
 import com.gmail.sharpcastle33.group.Group;
@@ -26,8 +27,13 @@ public class CommandListener implements CommandExecutor{
 			//nobility create
 			if(args[0].equalsIgnoreCase("create")) {
 			  sender.sendMessage(ChatColor.GOLD + "This command creates a Nobility group, which can be used later to allow a group of players to claim land by founding an Estate. \n" + ChatColor.RED + "Correct usage is /nobility create <name>");
+				return true;
 			}
-			return true;
+			
+			if(args[0].equalsIgnoreCase("nextday")) {
+				Nobility.tickDay();
+				return true;
+			}
 		}else if(args.length == 2) {
 			//nobility create <NAME>
 			if(args[0].equalsIgnoreCase("create") && args[1].length() >= 2) {

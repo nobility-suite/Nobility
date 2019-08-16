@@ -1,6 +1,7 @@
 package com.gmail.sharpcastle33;
 
-import io.github.kingvictoria.NobilityRegions;
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -9,6 +10,9 @@ import com.gmail.sharpcastle33.group.GroupManager;
 import com.gmail.sharpcastle33.listeners.CommandListener;
 import com.gmail.sharpcastle33.listeners.EstateCreate;
 
+import io.github.kingvictoria.NobilityRegions;
+import net.md_5.bungee.api.ChatColor;
+
 public class Nobility extends JavaPlugin{
 	
 	public static GroupManager groupMan;
@@ -16,6 +20,8 @@ public class Nobility extends JavaPlugin{
 	private static Nobility nobility;
 	private static NobilityRegions nobilityRegions;
 	private CommandListener commandListener;
+	
+	public static int currentDay = 0;
 	
 	public void onEnable() {
 		
@@ -59,5 +65,14 @@ public class Nobility extends JavaPlugin{
 	public static NobilityRegions getNobilityRegions() {
 		return nobilityRegions;
 	} // getNobilityRegions
+	
+	public static void tickDay() {
+		currentDay += 1;
+		for(Player p : Bukkit.getServer().getOnlinePlayers()) {
+			p.sendMessage(ChatColor.GOLD + "Rise and shine! A new dawn is upon us. The current day is: " + ChatColor.BLUE + ChatColor.BOLD + currentDay);
+		}
+		//DO STUFF
+		
+	}
 
 }
