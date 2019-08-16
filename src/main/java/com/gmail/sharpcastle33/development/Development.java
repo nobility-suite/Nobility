@@ -1,48 +1,54 @@
 package com.gmail.sharpcastle33.development;
 
-import org.bukkit.inventory.ItemStack;
+import com.gmail.sharpcastle33.estate.Estate;
+import org.bukkit.Material;
 
-/* Developments:
- * - name
- * - icon
- * - price
- */
-public class Development {
-	
-	private String name;
-	private ItemStack icon;
-	private int price;
-	private int level;
-	
-	public Development(String name, ItemStack icon, int price) {
-		this.setName(name);
-		this.setIcon(icon);
-		this.setPrice(price);
-		this.level = 1;
+import java.util.List;
+import java.util.Map;
+
+public abstract class Development {
+	protected Estate estate;
+	static protected String name;
+	static protected Map<String, Integer> cost;
+	static protected Material icon;
+	static protected List<String> prerequisites;
+
+	public Development() {
+	} // constructor
+
+	/**
+	 * This development has been instantiated by a new Estate
+	 * @param estate Estate instantiator
+	 */
+	public abstract void init(Estate estate);
+
+	/**
+	 * This development has been constructed (prerequisites met and cost paid)
+	 */
+	public abstract void activate();
+
+	/**
+	 * This development has been deactivated
+	 */
+	public abstract void deactivate();
+
+	public Estate getEstate() {
+		return estate;
 	}
 
-	public String getName() {
+	public static String getName() {
 		return name;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public static Map<String, Integer> getCost() {
+		return cost;
 	}
 
-	public ItemStack getIcon() {
+	public static Material getIcon() {
 		return icon;
 	}
 
-	public void setIcon(ItemStack icon) {
-		this.icon = icon;
+	public static List<String> getPrerequisites() {
+		return prerequisites;
 	}
-
-	public int getPrice() {
-		return price;
-	}
-
-	public void setPrice(int price) {
-		this.price = price;
-	}
-	
-}
+} // class

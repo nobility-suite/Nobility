@@ -1,21 +1,38 @@
 package com.gmail.sharpcastle33.estate;
 
 import com.gmail.sharpcastle33.Nobility;
+import com.gmail.sharpcastle33.development.Development;
 import io.github.kingvictoria.Region;
 import org.bukkit.block.Block;
 
 import com.gmail.sharpcastle33.group.Group;
 
+import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.List;
+
 public class Estate {
 	private Group group;
 	private Block block;
 	private Region region;
+	private List<Development> developments;
 	
 	public Estate(Block block, Group group) {
 		this.setGroup(group);
 		this.setBlock(block);
 		region = Nobility.getNobilityRegions().getRegionMaster().getRegionByLocation(block.getLocation());
-	}
+
+		developments = new ArrayList<>();
+		for(Class type: Nobility.getDevelopmentManager().getTypes()) {
+			try {
+				Development development = (Development) type.newInstance();
+				development.init(this);
+				developments.add(development);
+			} catch (Exception e) {
+				e.printStackTrace();
+			} // try/catch
+		} // for
+	} // constructor
 
 	public Group getGroup() {
 		return group;

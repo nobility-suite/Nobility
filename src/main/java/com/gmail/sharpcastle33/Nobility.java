@@ -1,5 +1,8 @@
 package com.gmail.sharpcastle33;
 
+import com.gmail.sharpcastle33.development.Development;
+import com.gmail.sharpcastle33.development.DevelopmentManager;
+import com.gmail.sharpcastle33.development.Granary;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
@@ -19,6 +22,7 @@ public class Nobility extends JavaPlugin{
 	public static EstateManager estateMan;
 	private static Nobility nobility;
 	private static NobilityRegions nobilityRegions;
+	private static DevelopmentManager developmentManager;
 	private CommandListener commandListener;
 	
 	public static int currentDay = 0;
@@ -29,6 +33,9 @@ public class Nobility extends JavaPlugin{
 		nobilityRegions = getPlugin(NobilityRegions.class);
 		groupMan = new GroupManager();
 		estateMan = new EstateManager();
+
+		developmentManager = new DevelopmentManager();
+		developmentManager.registerDevelopment(Granary.class);
 		
 	    getCommand("nobility").setExecutor(new CommandListener());
 
@@ -65,6 +72,10 @@ public class Nobility extends JavaPlugin{
 	public static NobilityRegions getNobilityRegions() {
 		return nobilityRegions;
 	} // getNobilityRegions
+
+	public static DevelopmentManager getDevelopmentManager() {
+		return developmentManager;
+	}
 	
 	public static void tickDay() {
 		currentDay += 1;
