@@ -11,6 +11,7 @@ import com.gmail.sharpcastle33.estate.EstateManager;
 import com.gmail.sharpcastle33.group.GroupManager;
 import com.gmail.sharpcastle33.listeners.ChestClick;
 import com.gmail.sharpcastle33.listeners.CommandListener;
+import com.gmail.sharpcastle33.listeners.DevelopmentGUI;
 import com.gmail.sharpcastle33.listeners.EstateCreate;
 
 import io.github.kingvictoria.NobilityRegions;
@@ -52,6 +53,7 @@ public class Nobility extends JavaPlugin{
 		PluginManager pm = getServer().getPluginManager();
 		pm.registerEvents(new EstateCreate(), this);
 		pm.registerEvents(new ChestClick(), this);
+		pm.registerEvents(new DevelopmentGUI(), this);
 	}
 	
 	public void onDisable() {
