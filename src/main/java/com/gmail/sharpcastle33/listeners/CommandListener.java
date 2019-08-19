@@ -34,6 +34,7 @@ public class CommandListener implements CommandExecutor{
 				Nobility.tickDay();
 				return true;
 			}
+			
 		}else if(args.length == 2) {
 			//nobility create <NAME>
 			if(args[0].equalsIgnoreCase("create") && args[1].length() >= 2) {

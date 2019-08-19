@@ -2,6 +2,7 @@ name: ${project.name}
 main: com.gmail.sharpcastle33.Nobility
 version: ${project.version}
 depend: [NobilityRegions]
+api-version: 1.13
 commands:
    nobility:
       description: (OP ONLY) debug command for setting an enchant on an item

@@ -3,6 +3,9 @@ package com.gmail.sharpcastle33.development;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.bukkit.block.Block;
+import org.bukkit.entity.Player;
+
 public class DevelopmentManager {
     private List<Class> types; // List of all types of developments
 
@@ -21,4 +24,12 @@ public class DevelopmentManager {
     public List<Class> getTypes() {
         return types;
     } // getTypes
+    
+    public void openDevelopmentMenu(Player player, Block block) {
+    	
+    	for (int i = 0; i < this.types.size(); i++) {
+    		//types.get(i).getIcon();
+    	}    	
+    }
+    
 } // class

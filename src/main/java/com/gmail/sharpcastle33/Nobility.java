@@ -1,15 +1,15 @@
 package com.gmail.sharpcastle33;
 
-import com.gmail.sharpcastle33.development.Development;
-import com.gmail.sharpcastle33.development.DevelopmentManager;
-import com.gmail.sharpcastle33.development.Granary;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import com.gmail.sharpcastle33.development.DevelopmentManager;
+import com.gmail.sharpcastle33.development.Granary;
 import com.gmail.sharpcastle33.estate.EstateManager;
 import com.gmail.sharpcastle33.group.GroupManager;
+import com.gmail.sharpcastle33.listeners.ChestClick;
 import com.gmail.sharpcastle33.listeners.CommandListener;
 import com.gmail.sharpcastle33.listeners.EstateCreate;
 
@@ -51,6 +51,7 @@ public class Nobility extends JavaPlugin{
 	private void registerEvents() {
 		PluginManager pm = getServer().getPluginManager();
 		pm.registerEvents(new EstateCreate(), this);
+		pm.registerEvents(new ChestClick(), this);
 	}
 	
 	public void onDisable() {

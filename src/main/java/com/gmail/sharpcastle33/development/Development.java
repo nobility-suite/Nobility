@@ -47,8 +47,13 @@ public abstract class Development {
 	public static Material getIcon() {
 		return icon;
 	}
-
+	
 	public static List<String> getPrerequisites() {
-		return prerequisites;
+    	return prerequisites;
 	}
+	
+	public static void addPrerequisite(String development) {
+		prerequisites.add(development);
+	}
+	
 } // class

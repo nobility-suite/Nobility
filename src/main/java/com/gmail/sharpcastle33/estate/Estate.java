@@ -22,12 +22,12 @@ public class Estate {
 		this.setBlock(block);
 		region = Nobility.getNobilityRegions().getRegionMaster().getRegionByLocation(block.getLocation());
 
-		developments = new ArrayList<>();
+		setDevelopments(new ArrayList<>());
 		for(Class type: Nobility.getDevelopmentManager().getTypes()) {
 			try {
 				Development development = (Development) type.newInstance();
 				development.init(this);
-				developments.add(development);
+				getDevelopments().add(development);
 			} catch (Exception e) {
 				e.printStackTrace();
 			} // try/catch
@@ -51,5 +51,13 @@ public class Estate {
 	}
 
 	public Region getRegion() { return region; }
+
+	public List<Development> getDevelopments() {
+		return developments;
+	}
+
+	public void setDevelopments(List<Development> developments) {
+		this.developments = developments;
+	}
 
 }
