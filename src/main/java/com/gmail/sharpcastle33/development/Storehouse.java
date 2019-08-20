@@ -10,15 +10,8 @@ import com.gmail.sharpcastle33.estate.Estate;
 
 public class Storehouse extends Development {
 
-    static {
-        name = "Storehouse";
-        cost = new HashMap<>();
-        icon = Material.CHEST;
-        prerequisites = new ArrayList<>();
-    }
-
     @Override
-    public void init(Estate estate) {    	
+    public void init(Estate estate) {
     	//TODO
     }
 

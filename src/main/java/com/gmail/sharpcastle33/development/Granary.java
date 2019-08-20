@@ -10,13 +10,6 @@ import com.gmail.sharpcastle33.estate.Estate;
 
 public class Granary extends Development {
 
-    static {
-        name = "Granary";
-        cost = new HashMap<>();
-        icon = Material.BREAD;
-        prerequisites = new ArrayList<>();
-    }
-
     @Override
     public void init(Estate estate) {
         // TODO

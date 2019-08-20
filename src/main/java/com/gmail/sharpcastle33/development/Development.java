@@ -8,13 +8,14 @@ import java.util.Map;
 
 public abstract class Development {
 	protected Estate estate;
-	static protected String name;
-	static protected Map<String, Integer> cost;
-	static protected Material icon;
-	static protected List<String> prerequisites;
+	protected DevelopmentRegister register;
 
 	public Development() {
 	} // constructor
+
+	public void setRegister(DevelopmentRegister register) {
+		this.register = register;
+	}
 
 	/**
 	 * This development has been instantiated by a new Estate
@@ -36,24 +37,24 @@ public abstract class Development {
 		return estate;
 	}
 
-	public static String getName() {
-		return name;
+	public String getName() {
+		return register.getName();
 	}
 
-	public static Map<String, Integer> getCost() {
-		return cost;
+	public Map<String, Integer> getCost() {
+		return register.getCost();
 	}
 
-	public static Material getIcon() {
-		return icon;
+	public Material getIcon() {
+		return register.getIcon();
 	}
 	
-	public static List<String> getPrerequisites() {
-    	return prerequisites;
+	public List<String> getPrerequisites() {
+    	return register.getPrerequisites();
 	}
 	
-	public static void addPrerequisite(String development) {
-		prerequisites.add(development);
+	public void addPrerequisite(String development) {
+		register.getPrerequisites().add(development);
 	}
 	
 } // class

@@ -1,6 +1,7 @@
 package com.gmail.sharpcastle33;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -17,6 +18,9 @@ import com.gmail.sharpcastle33.listeners.EstateCreate;
 
 import io.github.kingvictoria.NobilityRegions;
 import net.md_5.bungee.api.ChatColor;
+
+import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Nobility extends JavaPlugin{
 	
@@ -37,8 +41,8 @@ public class Nobility extends JavaPlugin{
 		estateMan = new EstateManager();
 
 		developmentManager = new DevelopmentManager();
-		developmentManager.registerDevelopment(Granary.class);
-		developmentManager.registerDevelopment(Storehouse.class);
+		developmentManager.registerDevelopment(Granary.class, "Granary", new HashMap<>(), Material.BREAD, new ArrayList<>());
+		developmentManager.registerDevelopment(Storehouse.class, "Storehouse", new HashMap<>(), Material.CHEST, new ArrayList<>());
 		
 	    getCommand("nobility").setExecutor(new CommandListener());
 

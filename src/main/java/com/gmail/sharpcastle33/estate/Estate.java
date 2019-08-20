@@ -2,6 +2,7 @@ package com.gmail.sharpcastle33.estate;
 
 import com.gmail.sharpcastle33.Nobility;
 import com.gmail.sharpcastle33.development.Development;
+import com.gmail.sharpcastle33.development.DevelopmentRegister;
 import io.github.kingvictoria.Region;
 import org.bukkit.block.Block;
 
@@ -23,9 +24,10 @@ public class Estate {
 		region = Nobility.getNobilityRegions().getRegionMaster().getRegionByLocation(block.getLocation());
 
 		setDevelopments(new ArrayList<>());
-		for(Class type: Nobility.getDevelopmentManager().getTypes()) {
+		for(DevelopmentRegister register: Nobility.getDevelopmentManager().getTypes()) {
 			try {
-				Development development = (Development) type.newInstance();
+				Development development = (Development) register.getDevelopment().newInstance();
+				development.setRegister(register);
 				development.init(this);
 				getDevelopments().add(development);
 			} catch (Exception e) {
