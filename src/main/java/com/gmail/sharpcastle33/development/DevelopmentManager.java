@@ -25,11 +25,4 @@ public class DevelopmentManager {
         return types;
     } // getTypes
     
-    public void openDevelopmentMenu(Player player, Block block) {
-    	
-    	for (int i = 0; i < this.types.size(); i++) {
-    		//types.get(i).getIcon();
-    	}    	
-    }
-    
 } // class
