@@ -20,7 +20,7 @@ public class EstateManager {
 	public ArrayList<Estate> estates = new ArrayList<Estate>();
 	
 	//hashmap player-estate
-	public HashMap<Player, Estate> estateOfPlayer = new HashMap<Player, Estate>();
+	private HashMap<Player, Estate> estateOfPlayer = new HashMap<Player, Estate>();
 	
 	/*public EstateManager() {
 		ArrayList<Estate> estates = new ArrayList<Estate>();
@@ -40,7 +40,8 @@ public class EstateManager {
 		
 	}
 	
-	public void openDevelopmentGUI(Estate estate, Player player) {
+	public void openDevelopmentGUI(Player player) {
+		Estate estate = getEstateOfPlayer(player);
 		Inventory developmentIcons = Bukkit.createInventory(null, 9, estate.getGroup().name);
 		
 		int i = 0;
