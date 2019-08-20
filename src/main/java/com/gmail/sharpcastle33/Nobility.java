@@ -7,6 +7,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import com.gmail.sharpcastle33.development.DevelopmentManager;
 import com.gmail.sharpcastle33.development.Granary;
+import com.gmail.sharpcastle33.development.Storehouse;
 import com.gmail.sharpcastle33.estate.EstateManager;
 import com.gmail.sharpcastle33.group.GroupManager;
 import com.gmail.sharpcastle33.listeners.ChestClick;
@@ -37,6 +38,7 @@ public class Nobility extends JavaPlugin{
 
 		developmentManager = new DevelopmentManager();
 		developmentManager.registerDevelopment(Granary.class);
+		developmentManager.registerDevelopment(Storehouse.class);
 		
 	    getCommand("nobility").setExecutor(new CommandListener());
 

@@ -25,7 +25,7 @@ public abstract class Development {
 	/**
 	 * This development has been constructed (prerequisites met and cost paid)
 	 */
-	public abstract void activate();
+	public abstract void activate(Estate estate);
 
 	/**
 	 * This development has been deactivated

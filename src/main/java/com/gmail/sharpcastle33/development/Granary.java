@@ -23,7 +23,7 @@ public class Granary extends Development {
     }
 
     @Override
-    public void activate() {
+    public void activate(Estate estate) {
 		//Temporary Code
     	Location loc = estate.getBlock().getLocation().add(0, 0, 1);
 		loc.getBlock().setType(Material.HAY_BLOCK);

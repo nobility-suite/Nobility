@@ -13,7 +13,7 @@ public class Storehouse extends Development {
     static {
         name = "Storehouse";
         cost = new HashMap<>();
-        icon = Material.BREAD;
+        icon = Material.CHEST;
         prerequisites = new ArrayList<>();
     }
 
@@ -23,7 +23,7 @@ public class Storehouse extends Development {
     }
 
     @Override
-    public void activate() {
+    public void activate(Estate estate) {
     	//<Temporary Code>
     	//Visual indication storehouse is built
     	Location loc = estate.getBlock().getLocation().add(0, 0, -1);
