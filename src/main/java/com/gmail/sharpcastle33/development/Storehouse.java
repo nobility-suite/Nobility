@@ -11,12 +11,12 @@ import com.gmail.sharpcastle33.estate.Estate;
 public class Storehouse extends Development {
 
     @Override
-    public void init(Estate estate) {
+    public void init() {
     	//TODO
     }
 
     @Override
-    public void activate(Estate estate) {
+    public void activate() {
     	//<Temporary Code>
     	//Visual indication storehouse is built
     	Location loc = estate.getBlock().getLocation().add(0, 0, -1);

@@ -11,14 +11,12 @@ import com.gmail.sharpcastle33.estate.Estate;
 public class Granary extends Development {
 
     @Override
-    public void init(Estate estate) {
-        this.addPrerequisite("Storehouse");
+    public void init() {
+        // TODO this.addPrerequisite("Storehouse");
     }
 
     @Override
-    public void activate(Estate estate) {
-		//Temporary Code
-    	this.setActive(true);
+    public void activate() {
     	Location loc = estate.getBlock().getLocation().add(0, 0, 1);
 		loc.getBlock().setType(Material.HAY_BLOCK);
     }

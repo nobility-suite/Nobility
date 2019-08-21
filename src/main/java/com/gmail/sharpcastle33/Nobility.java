@@ -2,6 +2,7 @@ package com.gmail.sharpcastle33;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -41,8 +42,12 @@ public class Nobility extends JavaPlugin{
 		estateMan = new EstateManager();
 
 		developmentManager = new DevelopmentManager();
-		developmentManager.registerDevelopment(Granary.class, "Granary", new HashMap<>(), Material.BREAD, new ArrayList<>());
+		/* Temporary */
+		List<String> storehousePrerequisites = new ArrayList<>();
+		storehousePrerequisites.add("Storehouse");
+		developmentManager.registerDevelopment(Granary.class, "Granary", new HashMap<>(), Material.BREAD, storehousePrerequisites);
 		developmentManager.registerDevelopment(Storehouse.class, "Storehouse", new HashMap<>(), Material.CHEST, new ArrayList<>());
+		/* End Temporary Code */
 		
 	    getCommand("nobility").setExecutor(new CommandListener());
 

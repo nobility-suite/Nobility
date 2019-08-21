@@ -24,24 +24,24 @@ public class DevelopmentGUI implements Listener {
 
 
 		ItemStack item = event.getCurrentItem();
+
+		if(!item.hasItemMeta()) return;
+
 		String name = item.getItemMeta().getDisplayName();
 		Estate estate = Nobility.estateMan.getEstateOfPlayer(player);
 
 		if (title != estate.getGroup().name) return;
-		
-		if(event.isShiftClick()) {
-			event.setCancelled(true);
-		}
+
+		event.setCancelled(true);
 		
 		for(Development development: estate.getDevelopments()) {
 			String developmentName = development.getName();
 			player.sendMessage(developmentName);
 			player.sendMessage(item.getItemMeta().getDisplayName());
 			if (developmentName.contentEquals(name)) {
-				development.activate(estate);
-				estate.addActiveDevelopment(developmentName);
+				development.activate();
+				development.setActive(true);
 				player.sendMessage("You created a " + developmentName);
-				event.setCancelled(true);
 			}		
 		}		
 	}

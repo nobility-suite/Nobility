@@ -1,32 +1,36 @@
 package com.gmail.sharpcastle33.development;
 
 import com.gmail.sharpcastle33.estate.Estate;
-import org.bukkit.Material;
-
-import java.util.List;
-import java.util.Map;
 
 public abstract class Development {
 	protected Estate estate;
 	protected DevelopmentRegister register;
+	protected boolean active;
 
+	/**
+	 * Empty constructor required to instantiate arbitrary development from Class object
+	 */
 	public Development() {
 	} // constructor
 
-	public void setRegister(DevelopmentRegister register) {
+	/**
+	 * Initialization common to all developments
+	 * @param register
+	 */
+	public void pre_init(DevelopmentRegister register, Estate estate) {
 		this.register = register;
+		this.estate = estate;
 	}
 
 	/**
 	 * This development has been instantiated by a new Estate
-	 * @param estate Estate instantiator
 	 */
-	public abstract void init(Estate estate);
+	public abstract void init();
 
 	/**
 	 * This development has been constructed (prerequisites met and cost paid)
 	 */
-	public abstract void activate(Estate estate);
+	public abstract void activate();
 
 	/**
 	 * This development has been deactivated
@@ -37,32 +41,12 @@ public abstract class Development {
 		return estate;
 	}
 
-	public String getName() {
-		return register.getName();
-	}
+	public DevelopmentRegister getRegister() { return register; }
 
-	public Map<String, Integer> getCost() {
-		return register.getCost();
-	}
+	public boolean isActive() { return active; }
 
-	public Material getIcon() {
-		return register.getIcon();
-	}
-	
-	public List<String> getPrerequisites() {
-    	return register.getPrerequisites();
-	}
-	
-	public void addPrerequisite(String development) {
-		register.getPrerequisites().add(development);
-	}
-	
-	public void setActive(boolean b) {
-		register.setActive(b);
-	}
-	
-	public boolean getActive() {
-		return register.getActive();
-	}
+	public void setActive(boolean value) { active = value; }
+
+	public String getName() { return register.getName(); }
 	
 } // class

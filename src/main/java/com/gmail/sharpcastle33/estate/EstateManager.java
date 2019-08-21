@@ -2,8 +2,11 @@ package com.gmail.sharpcastle33.estate;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
+import com.gmail.sharpcastle33.development.DevelopmentRegister;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -45,14 +48,35 @@ public class EstateManager {
 		Inventory developmentIcons = Bukkit.createInventory(null, 9, estate.getGroup().name);
 		
 		int i = 0;
-		for(Development development: estate.getDevelopments()) {
-			if (estate.getActiveDevelopments().containsAll(development.getPrerequisites())) {
-				Material m = development.getIcon();
-				ItemStack icon = new ItemStack(m);
-				nameItem(icon, development.getName());
-				developmentIcons.setItem(i, icon);
-				i++;
-			}
+		for(Development development: estate.getActiveDevelopments()) {
+			Material m = development.getRegister().getIcon();
+			ItemStack icon = new ItemStack(m);
+			nameItem(icon, development.getName());
+			addLore(icon, ChatColor.GREEN + "Active");
+			developmentIcons.setItem(i, icon);
+			i++;
+		}
+		for(Development development: estate.getInactiveDevelopments()) {
+			Material m = Material.FIREWORK_STAR;
+			ItemStack icon = new ItemStack(m);
+			nameItem(icon, development.getName());
+			addLore(icon, ChatColor.RED + "Inactive");
+			developmentIcons.setItem(i, icon);
+			i++;
+		}
+		for(DevelopmentRegister register: estate.getUninitializedRegisteredDevelopments()) {
+			Material m = Material.STONE;
+			ItemStack icon = new ItemStack(m);
+			nameItem(icon, register.getName());
+			addLore(icon, ChatColor.YELLOW + "Not Yet Constructed");
+			addLore(icon, "");
+			addLore(icon, ChatColor.YELLOW + "Prerequisites:");
+			for(String prerequisite: register.getPrerequisites()) addLore(icon, prerequisite);
+			addLore(icon, "");
+			addLore(icon, ChatColor.YELLOW + "Cost:");
+			for(String material: register.getCost().keySet()) addLore(icon, material + ": " + register.getCost().get(material));
+			developmentIcons.setItem(i, icon);
+			i++;
 		}
 		
 		player.openInventory(developmentIcons);
@@ -65,6 +89,20 @@ public class EstateManager {
 		item.setItemMeta(meta);
 		return item;
 	}
+
+	/**
+	 * Utility method to add a single line of lore text to an item
+	 * @param item ItemStack item to add lore text to
+	 * @param text String text to add
+	 */
+	public static void addLore(ItemStack item, String text) {
+		ItemMeta meta = item.getItemMeta();
+		List<String> lore = meta.getLore();
+		if(lore == null) lore = new ArrayList<>();
+		lore.add(text);
+		meta.setLore(lore);
+		item.setItemMeta(meta);
+	} // addLore
 	
 	
 	//getters and setters for player-estate hashmap
