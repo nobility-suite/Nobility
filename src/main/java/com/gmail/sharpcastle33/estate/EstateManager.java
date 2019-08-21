@@ -46,7 +46,7 @@ public class EstateManager {
 		
 		int i = 0;
 		for(Development development: estate.getDevelopments()) {
-			if (estate.getDevelopments().containsAll(development.getPrerequisites())) {
+			if (estate.getActiveDevelopments().containsAll(development.getPrerequisites())) {
 				Material m = development.getIcon();
 				ItemStack icon = new ItemStack(m);
 				nameItem(icon, development.getName());

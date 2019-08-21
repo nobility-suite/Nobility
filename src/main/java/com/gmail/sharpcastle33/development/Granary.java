@@ -12,12 +12,13 @@ public class Granary extends Development {
 
     @Override
     public void init(Estate estate) {
-        // TODO
+        this.addPrerequisite("Storehouse");
     }
 
     @Override
     public void activate(Estate estate) {
 		//Temporary Code
+    	this.setActive(true);
     	Location loc = estate.getBlock().getLocation().add(0, 0, 1);
 		loc.getBlock().setType(Material.HAY_BLOCK);
     }

@@ -1,5 +1,8 @@
 package com.gmail.sharpcastle33;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -18,9 +21,6 @@ import com.gmail.sharpcastle33.listeners.EstateCreate;
 
 import io.github.kingvictoria.NobilityRegions;
 import net.md_5.bungee.api.ChatColor;
-
-import java.util.ArrayList;
-import java.util.HashMap;
 
 public class Nobility extends JavaPlugin{
 	

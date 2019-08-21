@@ -11,6 +11,8 @@ public class DevelopmentRegister {
     private Map<String, Integer> cost;
     private Material icon;
     private List<String> prerequisites;
+    private boolean active;
+    
 
     public DevelopmentRegister(Class development, String name, Map<String, Integer> cost, Material icon, List<String> prerequisites) {
         this.development = development;
@@ -18,6 +20,7 @@ public class DevelopmentRegister {
         this.cost = cost;
         this.icon = icon;
         this.prerequisites = prerequisites;
+        this.active = false;
     } // constructors
 
     public Class getDevelopment() {
@@ -58,5 +61,13 @@ public class DevelopmentRegister {
 
     public void setPrerequisites(List<String> prerequisites) {
         this.prerequisites = prerequisites;
+    }
+    
+    public boolean getActive() {
+    	return active;
+    }
+    
+    public void setActive(boolean b) {
+    	this.active = b;
     }
 }

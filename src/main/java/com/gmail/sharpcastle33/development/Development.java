@@ -57,4 +57,12 @@ public abstract class Development {
 		register.getPrerequisites().add(development);
 	}
 	
+	public void setActive(boolean b) {
+		register.setActive(b);
+	}
+	
+	public boolean getActive() {
+		return register.getActive();
+	}
+	
 } // class

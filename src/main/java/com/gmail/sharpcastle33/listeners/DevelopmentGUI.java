@@ -39,6 +39,7 @@ public class DevelopmentGUI implements Listener {
 			player.sendMessage(item.getItemMeta().getDisplayName());
 			if (developmentName.contentEquals(name)) {
 				development.activate(estate);
+				estate.addActiveDevelopment(developmentName);
 				player.sendMessage("You created a " + developmentName);
 				event.setCancelled(true);
 			}		

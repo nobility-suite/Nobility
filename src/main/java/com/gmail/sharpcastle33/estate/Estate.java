@@ -17,6 +17,7 @@ public class Estate {
 	private Block block;
 	private Region region;
 	private List<Development> developments;
+	private List<String> activeDevelopments;
 	
 	public Estate(Block block, Group group) {
 		this.setGroup(group);
@@ -24,6 +25,7 @@ public class Estate {
 		region = Nobility.getNobilityRegions().getRegionMaster().getRegionByLocation(block.getLocation());
 
 		setDevelopments(new ArrayList<>());
+		setActiveDevelopments(new ArrayList<>());
 		for(DevelopmentRegister register: Nobility.getDevelopmentManager().getTypes()) {
 			try {
 				Development development = (Development) register.getDevelopment().newInstance();
@@ -60,6 +62,18 @@ public class Estate {
 
 	public void setDevelopments(List<Development> developments) {
 		this.developments = developments;
+	}
+	
+	public List<String> getActiveDevelopments() {
+		return activeDevelopments;
+	}
+	
+	public void setActiveDevelopments(List<String> activeDevelopments) {
+		this.activeDevelopments = activeDevelopments;
+	}
+	
+	public void addActiveDevelopment(String development) {
+		activeDevelopments.add(development);
 	}
 
 }

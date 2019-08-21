@@ -14,6 +14,7 @@ public class EstateCreate implements Listener {
 	@EventHandler
 	public void chestClick (PlayerInteractEvent e) {
 		Player p = e.getPlayer();
+		if (Nobility.getGroupManager().getGroup(p) == null) return;
 		Block b = e.getClickedBlock();
 			if (!(Nobility.estateMan.playerHasEstate(p))) {
 				if (b != null && b.getType() == Material.CHEST) {				
