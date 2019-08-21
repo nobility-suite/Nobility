@@ -1,6 +1,7 @@
 package com.gmail.sharpcastle33.listeners;
 
 import com.gmail.sharpcastle33.development.DevelopmentRegister;
+import com.gmail.sharpcastle33.estate.EstateManager;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -40,6 +41,8 @@ public class DevelopmentGUI implements Listener {
 			if(developmentName.contentEquals(name)) {
 				estate.initializeRegister(register);
 				player.sendMessage("You constructed a " + developmentName);
+				player.closeInventory();
+				Nobility.estateMan.openDevelopmentGUI(player);
 			}
 		}
 		
@@ -49,6 +52,8 @@ public class DevelopmentGUI implements Listener {
 				development.activate();
 				development.setActive(true);
 				player.sendMessage("You activated a " + developmentName);
+				player.closeInventory();
+				Nobility.estateMan.openDevelopmentGUI(player);
 			}		
 		}		
 	}
