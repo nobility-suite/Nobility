@@ -1,5 +1,6 @@
 package com.gmail.sharpcastle33.listeners;
 
+import com.gmail.sharpcastle33.development.DevelopmentRegister;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -33,15 +34,21 @@ public class DevelopmentGUI implements Listener {
 		if (title != estate.getGroup().name) return;
 
 		event.setCancelled(true);
+
+		for(DevelopmentRegister register: estate.getUninitializedRegisteredDevelopments()) {
+			String developmentName = register.getName();
+			if(developmentName.contentEquals(name)) {
+				estate.initializeRegister(register);
+				player.sendMessage("You constructed a " + developmentName);
+			}
+		}
 		
 		for(Development development: estate.getDevelopments()) {
 			String developmentName = development.getName();
-			player.sendMessage(developmentName);
-			player.sendMessage(item.getItemMeta().getDisplayName());
 			if (developmentName.contentEquals(name)) {
 				development.activate();
 				development.setActive(true);
-				player.sendMessage("You created a " + developmentName);
+				player.sendMessage("You activated a " + developmentName);
 			}		
 		}		
 	}

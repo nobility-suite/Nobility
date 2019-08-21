@@ -27,6 +27,22 @@ public class Estate {
 		region = Nobility.getNobilityRegions().getRegionMaster().getRegionByLocation(block.getLocation());
 	} // constructor
 
+	/**
+	 * Initializes a DevelopmentRegister's Development
+	 * @param register DevelopmentRegister
+	 */
+	public void initializeRegister(DevelopmentRegister register) {
+		Class developmentClass = register.getDevelopment();
+		try {
+			Development development = (Development) developmentClass.getConstructors()[0].newInstance();
+			development.pre_init(register, this);
+			development.init();
+			initializedDevelopments.add(development);
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+
 	public Group getGroup() {
 		return group;
 	}
@@ -85,5 +101,13 @@ public class Estate {
 
 		return uninitializedRegisteredDevelopments;
 	} // getUninitializedRegisteredDevelopments
+
+	public Development getDevelopmentForName(String name) {
+		for(Development development: initializedDevelopments) {
+			if(development.getName().contentEquals(name)) return development;
+		}
+
+		return null;
+	}
 
 } // Class
