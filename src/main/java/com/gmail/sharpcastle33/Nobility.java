@@ -10,6 +10,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import com.gmail.sharpcastle33.development.Butcher;
 import com.gmail.sharpcastle33.development.Development;
 import com.gmail.sharpcastle33.development.DevelopmentManager;
 import com.gmail.sharpcastle33.development.Granary;
@@ -49,6 +50,7 @@ public class Nobility extends JavaPlugin{
 		storehousePrerequisites.add("Storehouse");
 		developmentManager.registerDevelopment(Granary.class, "Granary", new HashMap<>(), Material.BREAD, storehousePrerequisites);
 		developmentManager.registerDevelopment(Storehouse.class, "Storehouse", new HashMap<>(), Material.CHEST, new ArrayList<>());
+		developmentManager.registerDevelopment(Butcher.class, "Butcher", new HashMap<>(), Material.BEEF, storehousePrerequisites);
 		/* End Temporary Code */
 		
 	    getCommand("nobility").setExecutor(new CommandListener());

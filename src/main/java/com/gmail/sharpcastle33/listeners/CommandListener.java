@@ -55,7 +55,7 @@ public class CommandListener implements CommandExecutor{
 			}
 			
 			//nobility invite <name>
-			if(args[0] == "invite") {
+			if(args[0].equalsIgnoreCase("invite")) {
 				String inviter = sender.getName();
 				String reciever = args[1];
 				
@@ -90,7 +90,7 @@ public class CommandListener implements CommandExecutor{
 			}
 			
 			//nobility join <name>
-			if(args[0] == "join") {
+			if(args[0].equalsIgnoreCase("join")) {
 				Group temp = null;
 				for(int i = 0; i < Nobility.groupMan.groups.size(); i++) {
 					Group g = Nobility.groupMan.groups.get(i);
@@ -100,7 +100,7 @@ public class CommandListener implements CommandExecutor{
 							return false;
 						}
 					}
-					if(g.name == args[1]) {
+					if(g.name.equalsIgnoreCase(args[1])) {
 						temp = g;
 					}
 				}
