@@ -36,6 +36,12 @@ public abstract class Development {
 	 * This development has been deactivated
 	 */
 	public abstract void deactivate();
+	
+	/**
+	 * This development has ticked
+	 * 
+	 */
+	public abstract void tick();
 
 	public Estate getEstate() {
 		return estate;

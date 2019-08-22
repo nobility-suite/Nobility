@@ -28,5 +28,11 @@ public class Storehouse extends Development {
     public void deactivate() {
         // TODO
     }
+
+	@Override
+	public void tick() {
+		// TODO		
+	}
+    
 }
 

@@ -10,9 +10,11 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import com.gmail.sharpcastle33.development.Development;
 import com.gmail.sharpcastle33.development.DevelopmentManager;
 import com.gmail.sharpcastle33.development.Granary;
 import com.gmail.sharpcastle33.development.Storehouse;
+import com.gmail.sharpcastle33.estate.Estate;
 import com.gmail.sharpcastle33.estate.EstateManager;
 import com.gmail.sharpcastle33.group.GroupManager;
 import com.gmail.sharpcastle33.listeners.ChestClick;
@@ -97,7 +99,11 @@ public class Nobility extends JavaPlugin{
 			p.sendMessage(ChatColor.GOLD + "Rise and shine! A new dawn is upon us. The current day is: " + ChatColor.BLUE + ChatColor.BOLD + currentDay);
 		}
 		//DO STUFF
-		
+		for (Estate estate : estateMan.estates) {
+			for(Development development: estate.getActiveDevelopments()) {
+				development.tick();
+			}
+		}
 	}
 
 }
