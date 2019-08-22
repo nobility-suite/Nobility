@@ -49,6 +49,7 @@ public class Nobility extends JavaPlugin{
 		List<String> storehousePrerequisites = new ArrayList<>();
 		storehousePrerequisites.add("Storehouse");
 		developmentManager.registerDevelopment(Granary.class, "Granary", new HashMap<>(), Material.BREAD, storehousePrerequisites);
+		developmentManager.registerDevelopment(Granary.class, "Logging Camp", new HashMap<>(), Material.BREAD, storehousePrerequisites);
 		developmentManager.registerDevelopment(Storehouse.class, "Storehouse", new HashMap<>(), Material.CHEST, new ArrayList<>());
 		developmentManager.registerDevelopment(Butcher.class, "Butcher", new HashMap<>(), Material.BEEF, storehousePrerequisites);
 		/* End Temporary Code */
