@@ -1,5 +1,6 @@
 package com.gmail.sharpcastle33.listeners;
 
+import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -77,10 +78,14 @@ public class CommandListener implements CommandExecutor{
 				
 				if(inGroup) {
 					temp.pendingInvites.add(reciever);
+					Player rec = Bukkit.getPlayer(reciever);
+					rec.sendMessage(ChatColor.GOLD + "You have been invited to join the Nobility Group " + ChatColor.BLUE + temp.name);
 				}else {
 					sender.sendMessage(ChatColor.RED + "You are not part of a Nobility Group.");
 					return false;
 				}
+				
+				return true;
 				
 			}
 			
