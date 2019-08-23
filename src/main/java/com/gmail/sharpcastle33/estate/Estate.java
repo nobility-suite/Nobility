@@ -76,6 +76,19 @@ public class Estate {
 
 		return activeDevelopments;
 	} // getActiveDevelopments
+	
+	public List<String> getActiveDevelopmentsToString() {
+		List<String> activeDevelopments = new ArrayList<>();
+
+		for(Development development: initializedDevelopments) {
+			if(development.isActive()) {
+				String name = development.getName();
+				activeDevelopments.add(name);
+			}
+		} // for
+
+		return activeDevelopments;
+	} // getActiveDevelopmentsToString
 
 	public List<Development> getInactiveDevelopments() {
 		List<Development> inactiveDevelopments = new ArrayList<>();

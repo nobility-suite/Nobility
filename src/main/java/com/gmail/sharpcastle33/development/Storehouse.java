@@ -19,7 +19,7 @@ public class Storehouse extends Development {
     public void activate() {
     	//<Temporary Code>
     	//Visual indication storehouse is built
-    	Location loc = estate.getBlock().getLocation().add(0, 0, -1);
+    	Location loc = estate.getBlock().getLocation().add(1, 0, 0);
 		loc.getBlock().setType(Material.CHEST);
 		//</Temporary Code>
     }

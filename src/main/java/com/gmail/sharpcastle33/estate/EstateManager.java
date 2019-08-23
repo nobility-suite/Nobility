@@ -64,19 +64,22 @@ public class EstateManager {
 			developmentIcons.setItem(i, icon);
 			i++;
 		}
+		
 		for(DevelopmentRegister register: estate.getUninitializedRegisteredDevelopments()) {
-			Material m = Material.STONE;
-			ItemStack icon = new ItemStack(m);
-			nameItem(icon, register.getName());
-			addLore(icon, ChatColor.YELLOW + "Not Yet Constructed");
-			addLore(icon, "");
-			addLore(icon, ChatColor.YELLOW + "Prerequisites:");
-			for(String prerequisite: register.getPrerequisites()) addLore(icon, prerequisite);
-			addLore(icon, "");
-			addLore(icon, ChatColor.YELLOW + "Cost:");
-			for(String material: register.getCost().keySet()) addLore(icon, material + ": " + register.getCost().get(material));
-			developmentIcons.setItem(i, icon);
-			i++;
+			if (estate.getActiveDevelopmentsToString().containsAll(register.getPrerequisites())) {
+				Material m = register.getIcon();
+				ItemStack icon = new ItemStack(m);
+				nameItem(icon, register.getName());
+				addLore(icon, ChatColor.YELLOW + "Not Yet Constructed");
+				addLore(icon, "");
+				addLore(icon, ChatColor.YELLOW + "Prerequisites:");
+				for(String prerequisite: register.getPrerequisites()) addLore(icon, prerequisite);
+				addLore(icon, "");
+				addLore(icon, ChatColor.YELLOW + "Cost:");
+				for(String material: register.getCost().keySet()) addLore(icon, material + ": " + register.getCost().get(material));
+				developmentIcons.setItem(i, icon);
+				i++;
+			}
 		}
 		
 		player.openInventory(developmentIcons);

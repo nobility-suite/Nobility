@@ -57,7 +57,7 @@ public class DevelopmentManager {
     
     //Change if storehouse inventory and creation is changed
     public Inventory getStorehouseInventory(Estate estate) {
-    	Block storehouse = estate.getBlock().getLocation().add(0, 0, -1).getBlock();    	
+    	Block storehouse = estate.getBlock().getLocation().add(1, 0, 0).getBlock();    	
     	if(storehouse.getState() instanceof InventoryHolder){
     		InventoryHolder ih = (InventoryHolder) storehouse.getState();
     		Inventory storehouseInventory = ih.getInventory();

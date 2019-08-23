@@ -3,6 +3,7 @@ package com.gmail.sharpcastle33.development;
 import com.gmail.sharpcastle33.estate.Estate;
 
 public abstract class Development {
+
 	protected Estate estate;
 	protected DevelopmentRegister register;
 	protected boolean active;
