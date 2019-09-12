@@ -43,8 +43,8 @@ public class DevelopmentManager {
     		if (estate.getRegion().equals(otherEstate.getRegion())) {
     			for (Development otherDevelopment : otherEstate.getActiveDevelopments()) {
     				if (development.getName() == otherDevelopment.getName()) {
-    					totalCompetingEstates =+ totalCompetingEstates * otherDevelopment.getRegister().getProductivity();
-    					Bukkit.broadcastMessage("More than one person has a " + otherDevelopment.getName());
+    					totalCompetingEstates =+ level * otherDevelopment.getRegister().getProductivity();
+
     				}
     			} //multiply by each estate's level modifier later on
     		}
@@ -99,34 +99,39 @@ public class DevelopmentManager {
     	Inventory inventory = getStorehouseInventory(estate);
 		double productivity = .4d;
     	
-    	if (register.getCost().containsKey("Food")) {
-    		int foodAmount = countItems(Material.WHEAT, inventory) + countItems(Material.COOKED_BEEF, inventory) + countItems(Material.SWEET_BERRIES, inventory);
+    	if (register.getCost().containsKey("Food")) {	
     		int foodCost = register.getCost().get("Food");
+    		/* Broken code
+    		 * Might fix later
+    		int foodAmount = countItems(Material.WHEAT, inventory) + countItems(Material.COOKED_BEEF, inventory) + countItems(Material.SWEET_BERRIES, inventory);
+    		
     		if (foodCost > foodAmount) {
     			development.deactivate();
     			development.setActive(false);
+    			return;
     		}
     		
     		boolean wheatBoost = true;
     		boolean beefBoost = true;
     		boolean berryBoost = true;
-    		
-    		for (int i = 0; i < foodCost; i++) {
-    			
+    		int random = (int) (Math.floor(Math.random() * 3d));
+    		int total = 3;
+    		for (int i = 0 + random; i < total + random; i++) {
+    			int removeAmount = foodCost / 3;
     			if (i % 3 == 0) {
-    				if (inventory.removeItem(new ItemStack(Material.WHEAT, 1)).isEmpty()) {
-    					i--;
+    				if (!inventory.removeItem(new ItemStack(Material.WHEAT, removeAmount)).isEmpty()) {
     					wheatBoost = false;
+    					total++;
     				}
     			} else if (i % 3 == 1) {
-    				if (inventory.removeItem(new ItemStack(Material.COOKED_BEEF, 1)).isEmpty()) {
-    					i--;
+    				if (!inventory.removeItem(new ItemStack(Material.COOKED_BEEF, removeAmount)).isEmpty()) {
     					beefBoost = false;
+    					total++;
     				}
     			} else if (i % 3 == 2) {
-    				if (inventory.removeItem(new ItemStack(Material.SWEET_BERRIES, 1)).isEmpty()) {
-    					i--;
+    				if (!inventory.removeItem(new ItemStack(Material.SWEET_BERRIES, removeAmount)).isEmpty()) {
     					berryBoost = false;
+    					total++;
     				}
     			}
     			i++;
@@ -134,12 +139,25 @@ public class DevelopmentManager {
     		if (wheatBoost == true) productivity += .2;
     		if (beefBoost == true) productivity +=.2;
     		if (berryBoost == true) productivity +=.2;
+    		*/
+    		
+    		//Current replacement
+    		ItemStack[] listOfFoods = new ItemStack[3];
+    		listOfFoods[0] = new ItemStack(Material.COOKED_BEEF, foodCost);
+    		listOfFoods[1] = new ItemStack(Material.WHEAT, foodCost);
+    		listOfFoods[2] = new ItemStack(Material.SWEET_BERRIES, foodCost);
+    		for (int i = 0; i < listOfFoods.length; i++) {
+    			if (inventory.containsAtLeast(listOfFoods[i], foodCost)) {
+        			inventory.removeItem(listOfFoods[i]);
+        			productivity += .2d;
+        		}
+    		}    		
     	}
-    	
+    	Bukkit.broadcastMessage("The productivity of " + development.getName() + " is " + productivity);
     	register.setProductivity(productivity);
     }
     
-    private int countItems(Material material, Inventory inventory) {
+    public int countItems(Material material, Inventory inventory) {
     	int number = 0;
 		for (ItemStack item : inventory.getContents()) {
 			if (item != null && item.getType() == material) {

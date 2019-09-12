@@ -70,10 +70,10 @@ public class Nobility extends JavaPlugin{
 		
 		//Cost of upkeep for Granary, Butcher, and Gatherer
 		HashMap<String, Integer> foodUpkeep = new HashMap<>();
-		foodUpkeep.put("Food", 5);
+		foodUpkeep.put("Food", 1);
 		
 		HashMap<String, Integer> resourceUpkeep = new HashMap<>();
-		resourceUpkeep.put("Food", 10);
+		resourceUpkeep.put("Food", 2);
 		
 		developmentManager.registerDevelopment(Granary.class, "Granary", foodUpkeep, Material.BREAD, storehousePrerequisites, foodInitialCost);
 		developmentManager.registerDevelopment(LoggingCamp.class, "Logging Camp", resourceUpkeep, Material.IRON_AXE, storehousePrerequisites, resourceInitialCost);
@@ -135,7 +135,9 @@ public class Nobility extends JavaPlugin{
 		for (Estate estate : estateMan.estates) {
 			for(Development development: estate.getActiveDevelopments()) {
 				developmentManager.subtractUpkeep(development.getRegister(), estate, development);
-				development.tick();				
+				if (development.isActive()) {
+					development.tick();
+				}
 			}
 		}
 	}

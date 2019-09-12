@@ -1,7 +1,5 @@
 package com.gmail.sharpcastle33.listeners;
 
-import com.gmail.sharpcastle33.development.DevelopmentRegister;
-import com.gmail.sharpcastle33.estate.EstateManager;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -11,6 +9,7 @@ import org.bukkit.inventory.ItemStack;
 
 import com.gmail.sharpcastle33.Nobility;
 import com.gmail.sharpcastle33.development.Development;
+import com.gmail.sharpcastle33.development.DevelopmentRegister;
 import com.gmail.sharpcastle33.estate.Estate;
 
 public class DevelopmentGUI implements Listener {
@@ -54,11 +53,20 @@ public class DevelopmentGUI implements Listener {
 		for(Development development: estate.getDevelopments()) {
 			String developmentName = development.getName();
 			if (developmentName.contentEquals(name)) {
-				development.activate();
-				development.setActive(true);
-				player.sendMessage(developmentName + " is now active");
-				player.closeInventory();
-				Nobility.estateMan.openDevelopmentGUI(player);
+				if (development.isActive() == false) {
+					//TODO: if development has enough food...
+					development.activate();
+					development.setActive(true);
+					player.sendMessage(developmentName + " is now active");
+					player.closeInventory();
+					Nobility.estateMan.openDevelopmentGUI(player);
+				} else {
+					development.deactivate();
+					development.setActive(false);
+					player.sendMessage(developmentName + " is now inactive");
+					player.closeInventory();
+					Nobility.estateMan.openDevelopmentGUI(player);
+				}
 			}
 		}		
 	}

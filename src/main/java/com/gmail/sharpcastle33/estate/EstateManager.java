@@ -76,20 +76,27 @@ public class EstateManager {
 				nameItem(icon, register.getName());
 				addLore(icon, ChatColor.YELLOW + "Not Yet Constructed");
 				addLore(icon, "");
-				addLore(icon, ChatColor.YELLOW + "Prerequisites:");
-				for(String prerequisite: register.getPrerequisites()) addLore(icon, prerequisite);
-				addLore(icon, "");
-				addLore(icon, ChatColor.YELLOW + "Cost:");
-				for(String material: register.getCost().keySet()) addLore(icon, material + ": " + register.getCost().get(material));
-				//
-				addLore(icon, "");
-				addLore(icon, ChatColor.YELLOW + "Initial Cost:");
-				for(ItemStack item : register.getInitialCost()) {
-					addLore(icon, item.getType().toString() +  ": " + item.getAmount());
+				if (!register.getPrerequisites().isEmpty()) {
+					addLore(icon, ChatColor.YELLOW + "Prerequisites:");
+					for(String prerequisite: register.getPrerequisites()) addLore(icon, prerequisite);
+					addLore(icon, "");
 				}
-				if(!Nobility.getDevelopmentManager().checkCosts(register, estate)) {
-					addLore(icon, ChatColor.RED + "Not enough to construct this estate");
-				}				
+				
+				if (!register.getCost().isEmpty()) {
+					addLore(icon, ChatColor.YELLOW + "Upkeep Cost:");
+					for(String material: register.getCost().keySet()) addLore(icon, material + ": " + register.getCost().get(material));
+					addLore(icon, "");
+				}
+				
+				if(!register.getInitialCost().isEmpty()) {
+					addLore(icon, ChatColor.YELLOW + "Initial Cost:");
+					for(ItemStack item : register.getInitialCost()) {
+						addLore(icon, item.getType().toString() +  ": " + item.getAmount());
+					}
+					if(!Nobility.getDevelopmentManager().checkCosts(register, estate)) {
+						addLore(icon, ChatColor.RED + "Not enough to construct this estate");
+					}
+				}
 				developmentIcons.setItem(i, icon);
 				i++;
 			}
