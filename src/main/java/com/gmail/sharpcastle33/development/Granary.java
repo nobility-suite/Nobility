@@ -33,7 +33,7 @@ public class Granary extends Development {
     
     //Change if time bank changes
     private ItemStack getWheatAmount() {
-    	int returnAmount = Nobility.getDevelopmentManager().calculateGains(estate, "Wheat");
+    	int returnAmount = Nobility.getDevelopmentManager().calculateGains(estate, "Wheat", this);
 		ItemStack returnStack = new ItemStack(Material.WHEAT, returnAmount);
 		return returnStack;    		
     }

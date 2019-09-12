@@ -33,7 +33,7 @@ public class LoggingCamp extends Development {
     
     //Change if time bank changes
     private ItemStack getResourceAmount() {
-    	int returnAmount = Nobility.getDevelopmentManager().calculateGains(estate, "Log");
+    	int returnAmount = Nobility.getDevelopmentManager().calculateGains(estate, "Log", this);
 		ItemStack returnStack = new ItemStack(Material.OAK_LOG, returnAmount);
 		return returnStack;    		
     }

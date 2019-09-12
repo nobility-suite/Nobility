@@ -7,6 +7,7 @@ import java.util.List;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -52,13 +53,35 @@ public class Nobility extends JavaPlugin{
 		/* Temporary */
 		List<String> storehousePrerequisites = new ArrayList<>();
 		storehousePrerequisites.add("Storehouse");
-		developmentManager.registerDevelopment(Granary.class, "Granary", new HashMap<>(), Material.BREAD, storehousePrerequisites);
-		developmentManager.registerDevelopment(LoggingCamp.class, "Logging Camp", new HashMap<>(), Material.IRON_AXE, storehousePrerequisites);
-		developmentManager.registerDevelopment(Storehouse.class, "Storehouse", new HashMap<>(), Material.CHEST, new ArrayList<>());
-		developmentManager.registerDevelopment(Butcher.class, "Butcher", new HashMap<>(), Material.BEEF, storehousePrerequisites);
-		developmentManager.registerDevelopment(Gatherer.class, "Gatherer", new HashMap<>(), Material.SWEET_BERRIES, storehousePrerequisites);
-		developmentManager.registerDevelopment(Quarry.class, "Quarry", new HashMap<>(), Material.SMOOTH_STONE, storehousePrerequisites);
-		developmentManager.registerDevelopment(IronMine.class, "Iron Mine", new HashMap<>(), Material.IRON_PICKAXE, storehousePrerequisites);
+		
+		//Cost to create Granary, Butcher, or Gatherer
+		List<ItemStack> foodInitialCost = new ArrayList<>();
+		ItemStack wood = new ItemStack(Material.OAK_LOG, 10);
+		ItemStack stoneFood = new ItemStack(Material.SMOOTH_STONE, 5);
+		foodInitialCost.add(wood);
+		foodInitialCost.add(stoneFood);
+		
+		//Cost to create Logging Camp, Quarry, or Iron Mine
+		List<ItemStack> resourceInitialCost = new ArrayList<>();
+		ItemStack iron = new ItemStack(Material.OAK_LOG, 5);
+		ItemStack stoneResource = new ItemStack(Material.SMOOTH_STONE, 5);
+		foodInitialCost.add(wood);
+		foodInitialCost.add(stoneResource);
+		
+		//Cost of upkeep for Granary, Butcher, and Gatherer
+		HashMap<String, Integer> foodUpkeep = new HashMap<>();
+		foodUpkeep.put("Food", 5);
+		
+		HashMap<String, Integer> resourceUpkeep = new HashMap<>();
+		resourceUpkeep.put("Food", 10);
+		
+		developmentManager.registerDevelopment(Granary.class, "Granary", foodUpkeep, Material.BREAD, storehousePrerequisites, foodInitialCost);
+		developmentManager.registerDevelopment(LoggingCamp.class, "Logging Camp", resourceUpkeep, Material.IRON_AXE, storehousePrerequisites, resourceInitialCost);
+		developmentManager.registerDevelopment(Storehouse.class, "Storehouse", new HashMap<>(), Material.CHEST, new ArrayList<>(), new ArrayList<>());
+		developmentManager.registerDevelopment(Butcher.class, "Butcher", foodUpkeep, Material.BEEF, storehousePrerequisites, foodInitialCost);
+		developmentManager.registerDevelopment(Gatherer.class, "Gatherer", foodUpkeep, Material.SWEET_BERRIES, storehousePrerequisites, foodInitialCost);
+		developmentManager.registerDevelopment(Quarry.class, "Quarry", resourceUpkeep, Material.SMOOTH_STONE, storehousePrerequisites, resourceInitialCost);
+		developmentManager.registerDevelopment(IronMine.class, "Iron Mine", foodUpkeep, Material.IRON_PICKAXE, storehousePrerequisites, resourceInitialCost);
 		/* End Temporary Code */
 		
 	    getCommand("nobility").setExecutor(new CommandListener());
@@ -111,7 +134,8 @@ public class Nobility extends JavaPlugin{
 		//DO STUFF
 		for (Estate estate : estateMan.estates) {
 			for(Development development: estate.getActiveDevelopments()) {
-				development.tick();
+				developmentManager.subtractUpkeep(development.getRegister(), estate, development);
+				development.tick();				
 			}
 		}
 	}

@@ -33,11 +33,11 @@ public class Butcher extends Development {
 
 	@Override
 	public void tick() {
-		Nobility.getDevelopmentManager().getStorehouseInventory(estate).addItem(getMeatAmount());	
+		Nobility.getDevelopmentManager().getStorehouseInventory(estate).addItem(getMeatAmount());
 	}
     
 	private ItemStack getMeatAmount() {
-		int returnAmount = Nobility.getDevelopmentManager().calculateGains(estate, "Beef");
+		int returnAmount = Nobility.getDevelopmentManager().calculateGains(estate, "Beef", this);
 		ItemStack returnStack = new ItemStack(Material.COOKED_BEEF, returnAmount);
 		return returnStack;    		
     }

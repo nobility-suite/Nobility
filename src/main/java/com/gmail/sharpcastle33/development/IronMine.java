@@ -31,7 +31,7 @@ public class IronMine extends Development {
     
     //Change if time bank changes
     private ItemStack getResourceAmount() {
-    	int returnAmount = Nobility.getDevelopmentManager().calculateGains(estate, "Iron");
+    	int returnAmount = Nobility.getDevelopmentManager().calculateGains(estate, "Iron", this);
 		ItemStack returnStack = new ItemStack(Material.IRON_ORE, returnAmount);
 		return returnStack;    		
     }

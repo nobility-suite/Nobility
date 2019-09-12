@@ -39,6 +39,11 @@ public class DevelopmentGUI implements Listener {
 		for(DevelopmentRegister register: estate.getUninitializedRegisteredDevelopments()) {
 			String developmentName = register.getName();
 			if(developmentName.contentEquals(name)) {
+				//Check costs
+				if (!Nobility.getDevelopmentManager().checkCosts(register, estate)) {
+					player.sendMessage("You don't have enough to construct this estate");
+					return;
+				}
 				estate.initializeRegister(register);
 				player.sendMessage("You constructed a " + developmentName);
 				player.closeInventory();
@@ -51,10 +56,10 @@ public class DevelopmentGUI implements Listener {
 			if (developmentName.contentEquals(name)) {
 				development.activate();
 				development.setActive(true);
-				player.sendMessage("You activated a " + developmentName);
+				player.sendMessage(developmentName + "is now active");
 				player.closeInventory();
 				Nobility.estateMan.openDevelopmentGUI(player);
-			}		
+			}
 		}		
 	}
 	

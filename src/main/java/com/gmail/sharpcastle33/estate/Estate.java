@@ -37,7 +37,8 @@ public class Estate {
 			Development development = (Development) developmentClass.getConstructors()[0].newInstance();
 			development.pre_init(register, this);
 			development.init();
-			initializedDevelopments.add(development);
+			initializedDevelopments.add(development);						
+			Nobility.getDevelopmentManager().subtractCosts(register, this);
 		} catch(Exception e) {
 			e.printStackTrace();
 		}

@@ -77,6 +77,16 @@ public class EstateManager {
 				addLore(icon, "");
 				addLore(icon, ChatColor.YELLOW + "Cost:");
 				for(String material: register.getCost().keySet()) addLore(icon, material + ": " + register.getCost().get(material));
+				//
+				addLore(icon, "");
+				addLore(icon, ChatColor.YELLOW + "Initial Cost:");
+				for(ItemStack item : register.getInitialCost()) {
+					addLore(icon, item.getType().toString() +  ": " + item.getAmount());
+				}
+				if(Nobility.getDevelopmentManager().checkCosts(register, estate)) {
+					addLore(icon, "");
+					addLore(icon, ChatColor.RED + "Not enough to construct this estate");
+				}				
 				developmentIcons.setItem(i, icon);
 				i++;
 			}

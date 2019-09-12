@@ -1,9 +1,10 @@
 package com.gmail.sharpcastle33.development;
 
-import org.bukkit.Material;
-
 import java.util.List;
 import java.util.Map;
+
+import org.bukkit.Material;
+import org.bukkit.inventory.ItemStack;
 
 public class DevelopmentRegister {
     private Class development;
@@ -11,14 +12,17 @@ public class DevelopmentRegister {
     private Map<String, Integer> cost;
     private Material icon;
     private List<String> prerequisites;
+    private List<ItemStack> initialCost;
+    private double productivity;
     
-
-    public DevelopmentRegister(Class development, String name, Map<String, Integer> cost, Material icon, List<String> prerequisites) {
+    public DevelopmentRegister(Class development, String name, Map<String, Integer> cost, Material icon, List<String> prerequisites, List<ItemStack> initialCost) {
         this.development = development;
         this.name = name;
         this.cost = cost;
         this.icon = icon;
         this.prerequisites = prerequisites;
+        this.initialCost = initialCost;
+        this.productivity = .4d;
     } // constructors
 
     public Class getDevelopment() {
@@ -60,5 +64,21 @@ public class DevelopmentRegister {
     public void setPrerequisites(List<String> prerequisites) {
         this.prerequisites = prerequisites;
     }
+
+	public List<ItemStack> getInitialCost() {
+		return initialCost;
+	}
+
+	public void setInitialCost(List<ItemStack> initialCost) {
+		this.initialCost = initialCost;
+	}
+
+	public double getProductivity() {
+		return productivity;
+	}
+
+	public void setProductivity(double productivity) {
+		this.productivity = productivity;
+	}
 
 }

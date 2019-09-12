@@ -33,7 +33,7 @@ public class Gatherer extends Development {
     
     //Change if time bank changes
     private ItemStack getResourceAmount() {
-    	int returnAmount = Nobility.getDevelopmentManager().calculateGains(estate, "Fruit");
+    	int returnAmount = Nobility.getDevelopmentManager().calculateGains(estate, "Fruit", this);
 		ItemStack returnStack = new ItemStack(Material.SWEET_BERRIES, returnAmount);
 		return returnStack;    		
     }

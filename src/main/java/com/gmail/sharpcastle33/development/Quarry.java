@@ -33,7 +33,7 @@ public class Quarry extends Development {
 	
 	//Change if time bank changes
     private ItemStack getResourceAmount() {
-    	int returnAmount = Nobility.getDevelopmentManager().calculateGains(estate, "Stone");
+    	int returnAmount = Nobility.getDevelopmentManager().calculateGains(estate, "Stone", this);
 		ItemStack returnStack = new ItemStack(Material.SMOOTH_STONE, returnAmount);
 		return returnStack;    		
     }
