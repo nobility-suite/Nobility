@@ -41,7 +41,7 @@ public class DevelopmentGUI implements Listener {
 			if(developmentName.contentEquals(name)) {
 				//Check costs
 				if (!Nobility.getDevelopmentManager().checkCosts(register, estate)) {
-					player.sendMessage("You don't have enough to construct this estate");
+					player.sendMessage("You don't have enough to construct this development");
 					return;
 				}
 				estate.initializeRegister(register);
@@ -56,7 +56,7 @@ public class DevelopmentGUI implements Listener {
 			if (developmentName.contentEquals(name)) {
 				development.activate();
 				development.setActive(true);
-				player.sendMessage(developmentName + "is now active");
+				player.sendMessage(developmentName + " is now active");
 				player.closeInventory();
 				Nobility.estateMan.openDevelopmentGUI(player);
 			}

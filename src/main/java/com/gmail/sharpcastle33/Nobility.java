@@ -63,10 +63,10 @@ public class Nobility extends JavaPlugin{
 		
 		//Cost to create Logging Camp, Quarry, or Iron Mine
 		List<ItemStack> resourceInitialCost = new ArrayList<>();
-		ItemStack iron = new ItemStack(Material.OAK_LOG, 5);
+		ItemStack iron = new ItemStack(Material.IRON_INGOT, 5);
 		ItemStack stoneResource = new ItemStack(Material.SMOOTH_STONE, 5);
-		foodInitialCost.add(wood);
-		foodInitialCost.add(stoneResource);
+		resourceInitialCost.add(iron);
+		resourceInitialCost.add(stoneResource);
 		
 		//Cost of upkeep for Granary, Butcher, and Gatherer
 		HashMap<String, Integer> foodUpkeep = new HashMap<>();

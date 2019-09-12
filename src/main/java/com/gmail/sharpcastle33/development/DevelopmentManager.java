@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.inventory.Inventory;
@@ -43,11 +44,12 @@ public class DevelopmentManager {
     			for (Development otherDevelopment : otherEstate.getActiveDevelopments()) {
     				if (development.getName() == otherDevelopment.getName()) {
     					totalCompetingEstates =+ totalCompetingEstates * otherDevelopment.getRegister().getProductivity();
+    					Bukkit.broadcastMessage("More than one person has a " + otherDevelopment.getName());
     				}
     			} //multiply by each estate's level modifier later on
     		}
     	}
-    	
+    	Bukkit.broadcastMessage("Number of competing estates: " + totalCompetingEstates);
     	if (totalCompetingEstates * maximum <= regionResource) {
     		rounded = Math.floor(maximum * level * productivity);
     		returnAmount = (int) rounded;
@@ -77,7 +79,7 @@ public class DevelopmentManager {
     
     public Boolean checkCosts(DevelopmentRegister register, Estate estate) {
 		for (ItemStack cost : register.getInitialCost()) {
-    		if (!getStorehouseInventory(estate).contains(cost, cost.getAmount())) {
+    		if (!getStorehouseInventory(estate).containsAtLeast(cost, cost.getAmount())) {
     			return false;
     		}
 		}		
@@ -97,9 +99,9 @@ public class DevelopmentManager {
     	Inventory inventory = getStorehouseInventory(estate);
 		double productivity = .4d;
     	
-    	if (register.getCost().containsKey("food")) {
+    	if (register.getCost().containsKey("Food")) {
     		int foodAmount = countItems(Material.WHEAT, inventory) + countItems(Material.COOKED_BEEF, inventory) + countItems(Material.SWEET_BERRIES, inventory);
-    		int foodCost = register.getCost().get("food");
+    		int foodCost = register.getCost().get("Food");
     		if (foodCost > foodAmount) {
     			development.deactivate();
     			development.setActive(false);
@@ -113,17 +115,17 @@ public class DevelopmentManager {
     			
     			if (i % 3 == 0) {
     				if (inventory.removeItem(new ItemStack(Material.WHEAT, 1)).isEmpty()) {
-    					foodCost++;
+    					i--;
     					wheatBoost = false;
     				}
     			} else if (i % 3 == 1) {
     				if (inventory.removeItem(new ItemStack(Material.COOKED_BEEF, 1)).isEmpty()) {
-    					foodCost++;
+    					i--;
     					beefBoost = false;
     				}
     			} else if (i % 3 == 2) {
     				if (inventory.removeItem(new ItemStack(Material.SWEET_BERRIES, 1)).isEmpty()) {
-    					foodCost++;
+    					i--;
     					berryBoost = false;
     				}
     			}
@@ -140,7 +142,7 @@ public class DevelopmentManager {
     private int countItems(Material material, Inventory inventory) {
     	int number = 0;
 		for (ItemStack item : inventory.getContents()) {
-			if (item.getType() == material) {
+			if (item != null && item.getType() == material) {
 				number += item.getAmount();
 			}
 		}

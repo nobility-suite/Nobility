@@ -53,6 +53,10 @@ public class EstateManager {
 			ItemStack icon = new ItemStack(m);
 			nameItem(icon, development.getName());
 			addLore(icon, ChatColor.GREEN + "Active");
+			addLore(icon, "");
+			addLore(icon, ChatColor.YELLOW + "Upkeep Cost:");
+			addLore(icon, ChatColor.YELLOW + "");
+			addLore(icon, ChatColor.YELLOW + "Food: " + development.getRegister().getCost().get("Food"));
 			developmentIcons.setItem(i, icon);
 			i++;
 		}
@@ -83,8 +87,7 @@ public class EstateManager {
 				for(ItemStack item : register.getInitialCost()) {
 					addLore(icon, item.getType().toString() +  ": " + item.getAmount());
 				}
-				if(Nobility.getDevelopmentManager().checkCosts(register, estate)) {
-					addLore(icon, "");
+				if(!Nobility.getDevelopmentManager().checkCosts(register, estate)) {
 					addLore(icon, ChatColor.RED + "Not enough to construct this estate");
 				}				
 				developmentIcons.setItem(i, icon);
