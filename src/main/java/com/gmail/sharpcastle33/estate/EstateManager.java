@@ -56,7 +56,11 @@ public class EstateManager {
 			addLore(icon, "");
 			addLore(icon, ChatColor.YELLOW + "Upkeep Cost:");
 			addLore(icon, ChatColor.YELLOW + "");
-			addLore(icon, ChatColor.YELLOW + "Food: " + development.getRegister().getCost().get("Food"));
+			addLore(icon,"Food: " + development.getRegister().getCost().get("Food"));
+			if (development.getRegister().getCost().containsKey("Hardware")) {
+				addLore(icon,"Hardware: " + development.getRegister().getCost().get("Hardware"));
+			}
+
 			developmentIcons.setItem(i, icon);
 			i++;
 		}

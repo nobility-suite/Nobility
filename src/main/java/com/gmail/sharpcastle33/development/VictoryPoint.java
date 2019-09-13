@@ -6,7 +6,7 @@ import org.bukkit.inventory.ItemStack;
 
 import com.gmail.sharpcastle33.Nobility;
 
-public class IronMine extends Development {
+public class VictoryPoint extends Development{
 
 	@Override
     public void init() {
@@ -15,8 +15,8 @@ public class IronMine extends Development {
 
     @Override
     public void activate() {
-    	Location loc = estate.getBlock().getLocation().add(0, 0, -1);
-		loc.getBlock().setType(Material.BLAST_FURNACE);
+    	Location loc = estate.getBlock().getLocation().add(2, 0, 1);
+		loc.getBlock().setType(Material.BELL);
     }
 
     @Override
@@ -29,11 +29,12 @@ public class IronMine extends Development {
     	Nobility.getDevelopmentManager().getStorehouseInventory(estate).addItem(getResourceAmount());
     }
     
+
+    
     //Change if time bank changes
     private ItemStack getResourceAmount() {
-    	int returnAmount = Nobility.getDevelopmentManager().calculateGains(estate, "Iron", this);
-		ItemStack returnStack = new ItemStack(Material.IRON_INGOT, returnAmount);
-		return returnStack;    		
+    	int returnAmount = (int) (this.register.getProductivity() * 10d);
+		ItemStack returnStack = new ItemStack(Material.BELL, returnAmount);
+		return returnStack;
     }
-	
 }

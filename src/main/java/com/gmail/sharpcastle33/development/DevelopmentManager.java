@@ -17,6 +17,7 @@ import com.gmail.sharpcastle33.estate.Estate;
 public class DevelopmentManager {
     private List<DevelopmentRegister> types; // List of all types of developments
 
+    
     public DevelopmentManager() {
         types = new ArrayList<>();
     } // constructor
@@ -34,17 +35,18 @@ public class DevelopmentManager {
     	double regionResource = estate.getRegion().getResource(resource);
     	double level = 1; //Add to the development class
     	double maximum = 10; //5 is arbitrary. Tweak later on.
-    	double totalCompetingEstates = 0;
     	double rounded;
+    	double totalCompetingEstates = 0;
     	double productivity = development.getRegister().getProductivity();
     	int returnAmount;
     	
     	for (Estate otherEstate : Nobility.estateMan.estates) {
     		if (estate.getRegion().equals(otherEstate.getRegion())) {
     			for (Development otherDevelopment : otherEstate.getActiveDevelopments()) {
-    				if (development.getName() == otherDevelopment.getName()) {
-    					totalCompetingEstates =+ level * otherDevelopment.getRegister().getProductivity();
-
+    				//Bukkit.broadcastMessage("Development: " + otherDevelopment.getRegister().getName());
+    				if (development.getRegister().getName().contains(otherDevelopment.getRegister().getName())) {
+    					//Bukkit.broadcastMessage("Developments equal");
+    					totalCompetingEstates += level * otherDevelopment.getRegister().getProductivity();
     				}
     			} //multiply by each estate's level modifier later on
     		}
@@ -94,6 +96,7 @@ public class DevelopmentManager {
     }
     
     public void subtractUpkeep(DevelopmentRegister register, Estate estate, Development development) {
+    	
     	if (register.getCost() == null) return;
     	
     	Inventory inventory = getStorehouseInventory(estate);
@@ -143,17 +146,39 @@ public class DevelopmentManager {
     		
     		//Current replacement
     		ItemStack[] listOfFoods = new ItemStack[3];
-    		listOfFoods[0] = new ItemStack(Material.COOKED_BEEF, foodCost);
-    		listOfFoods[1] = new ItemStack(Material.WHEAT, foodCost);
-    		listOfFoods[2] = new ItemStack(Material.SWEET_BERRIES, foodCost);
+    		listOfFoods[0] = new ItemStack(Material.COOKED_BEEF);
+    		listOfFoods[1] = new ItemStack(Material.WHEAT);
+    		listOfFoods[2] = new ItemStack(Material.SWEET_BERRIES);
     		for (int i = 0; i < listOfFoods.length; i++) {
     			if (inventory.containsAtLeast(listOfFoods[i], foodCost)) {
-        			inventory.removeItem(listOfFoods[i]);
+    				listOfFoods[i].setAmount(foodCost);
+    				inventory.removeItem(listOfFoods[i]);
         			productivity += .2d;
         		}
     		}    		
     	}
-    	Bukkit.broadcastMessage("The productivity of " + development.getName() + " is " + productivity);
+    	
+    	if (register.getCost().containsKey("Hardware")) {
+    		Bukkit.broadcastMessage("There is a hardware cost");
+    		ItemStack[] listOfHardwares = new ItemStack[3];
+    		int hardwareCost = register.getCost().get("Hardware");
+    		listOfHardwares[0] = new ItemStack(Material.IRON_INGOT);
+    		listOfHardwares[1] = new ItemStack(Material.SMOOTH_STONE);
+    		listOfHardwares[2] = new ItemStack(Material.OAK_LOG);
+    		for (int i = 0; i < listOfHardwares.length; i++) {
+    			if (inventory.containsAtLeast(listOfHardwares[i], hardwareCost)) {
+        			listOfHardwares[i].setAmount(hardwareCost);
+    				inventory.removeItem(listOfHardwares[i]);
+        			Bukkit.broadcastMessage("Enough hardware");
+        		} else {
+        			development.deactivate();
+        			development.setActive(false);
+        			Bukkit.broadcastMessage("Not enough hardware");
+        		}
+    		}
+    	}
+    	
+    	//Bukkit.broadcastMessage("The productivity of " + development.getName() + " is " + productivity);
     	register.setProductivity(productivity);
     }
     
