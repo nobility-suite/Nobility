@@ -152,7 +152,6 @@ public class Nobility extends JavaPlugin{
 		for (Estate estate : estateMan.estates) {
 			for(Development development: estate.getActiveDevelopments()) {
 				developmentManager.subtractUpkeep(development.getRegister(), estate, development);				
-				developmentManager.calculateGains(estate, resource, development);
 			}
 		}
 		
