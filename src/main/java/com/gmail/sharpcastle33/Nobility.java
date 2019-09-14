@@ -147,13 +147,20 @@ public class Nobility extends JavaPlugin{
 		for(Player p : Bukkit.getServer().getOnlinePlayers()) {
 			p.sendMessage(ChatColor.GOLD + "Rise and shine! A new dawn is upon us. The current day is: " + ChatColor.BLUE + ChatColor.BOLD + currentDay);
 		}
+
 		//DO STUFF
 		for (Estate estate : estateMan.estates) {
 			for(Development development: estate.getActiveDevelopments()) {
-				developmentManager.subtractUpkeep(development.getRegister(), estate, development);
+				developmentManager.subtractUpkeep(development.getRegister(), estate, development);				
+				developmentManager.calculateGains(estate, resource, development);
+			}
+		}
+		
+		for (Estate estate : estateMan.estates) {
+			for(Development development: estate.getActiveDevelopments()) {
 				if (development.isActive()) {
 					development.tick();
-				}
+				}					
 			}
 		}
 	}

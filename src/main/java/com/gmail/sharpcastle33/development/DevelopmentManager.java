@@ -44,7 +44,7 @@ public class DevelopmentManager {
     		if (estate.getRegion().equals(otherEstate.getRegion())) {
     			for (Development otherDevelopment : otherEstate.getActiveDevelopments()) {
     				//Bukkit.broadcastMessage("Development: " + otherDevelopment.getRegister().getName());
-    				if (development.getRegister().getName().contains(otherDevelopment.getRegister().getName())) {
+    				if (development.getRegister().getName().equalsIgnoreCase(otherDevelopment.getRegister().getName())) {
     					//Bukkit.broadcastMessage("Developments equal");
     					totalCompetingEstates += level * otherDevelopment.getRegister().getProductivity();
     				}

@@ -60,7 +60,7 @@ public class DevelopmentGUI implements Listener {
 					player.sendMessage(developmentName + " is now active");
 					player.closeInventory();
 					Nobility.estateMan.openDevelopmentGUI(player);
-				} else {
+				}  else {
 					development.deactivate();
 					development.setActive(false);
 					player.sendMessage(developmentName + " is now inactive");
