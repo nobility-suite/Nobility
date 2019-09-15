@@ -53,14 +53,22 @@ public class EstateManager {
 			ItemStack icon = new ItemStack(m);
 			nameItem(icon, development.getName());
 			addLore(icon, ChatColor.GREEN + "Active");
-			addLore(icon, "");
-			addLore(icon, ChatColor.YELLOW + "Upkeep Cost:");
-			addLore(icon, ChatColor.YELLOW + "");
-			addLore(icon,"Food: " + development.getRegister().getCost().get("Food"));
-			if (development.getRegister().getCost().containsKey("Hardware")) {
-				addLore(icon,"Hardware: " + development.getRegister().getCost().get("Hardware"));
+			if (!development.getRegister().getCost().isEmpty()) {			
+				addLore(icon, ChatColor.YELLOW + "Upkeep Cost:");
+				if (development.getRegister().getCost().containsKey("Food")) {
+					addLore(icon,"Food: " + development.getRegister().getCost().get("Food"));
+				}
+				if (development.getRegister().getCost().containsKey("Hardware")) {
+					addLore(icon,"Hardware: " + development.getRegister().getCost().get("Hardware"));
+				}
 			}
-
+			if (development.getRegister().getResource() != null) {
+				addLore(icon, "Collection Power (base): " + development.getRegister().getCollectionPower() * development.getRegister().getProductivity() + " (4)"); //register.getBasePower
+				addLore(icon, "Region Total: " + estate.getRegion().getResource(development.getRegister().getResource()));
+				//addLore(icon, "Percent: " + TODO: actualYield / regionTotal);
+				//TODO: Actual Yield, Food Usage, if (foodUsage != maximum) "Click to increase food usage"
+			}
+			
 			developmentIcons.setItem(i, icon);
 			i++;
 		}
@@ -69,6 +77,7 @@ public class EstateManager {
 			ItemStack icon = new ItemStack(m);
 			nameItem(icon, development.getName());
 			addLore(icon, ChatColor.RED + "Inactive");
+			addLore(icon, "Click to Activate");
 			developmentIcons.setItem(i, icon);
 			i++;
 		}

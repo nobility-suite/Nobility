@@ -90,14 +90,14 @@ public class Nobility extends JavaPlugin{
 		victoryPointUpkeep.put("Hardware", 3);
 		victoryPointUpkeep.put("Food", 3);
 		
-		developmentManager.registerDevelopment(Granary.class, "Granary", foodUpkeep, Material.BREAD, storehousePrerequisites, foodInitialCost);
-		developmentManager.registerDevelopment(LoggingCamp.class, "Logging Camp", resourceUpkeep, Material.IRON_AXE, storehousePrerequisites, resourceInitialCost);
-		developmentManager.registerDevelopment(Storehouse.class, "Storehouse", new HashMap<>(), Material.CHEST, new ArrayList<>(), new ArrayList<>());
-		developmentManager.registerDevelopment(Butcher.class, "Butcher", foodUpkeep, Material.BEEF, storehousePrerequisites, foodInitialCost);
-		developmentManager.registerDevelopment(Gatherer.class, "Gatherer", foodUpkeep, Material.SWEET_BERRIES, storehousePrerequisites, foodInitialCost);
-		developmentManager.registerDevelopment(Quarry.class, "Quarry", resourceUpkeep, Material.SMOOTH_STONE, storehousePrerequisites, resourceInitialCost);
-		developmentManager.registerDevelopment(IronMine.class, "Iron Mine", resourceUpkeep, Material.IRON_PICKAXE, storehousePrerequisites, resourceInitialCost);
-		developmentManager.registerDevelopment(VictoryPoint.class, "Victory Point", victoryPointUpkeep, Material.BELL, storehousePrerequisites, victoryPointInitialCost);
+		developmentManager.registerDevelopment(Granary.class, "Granary", foodUpkeep, Material.BREAD, storehousePrerequisites, foodInitialCost, "Wheat");
+		developmentManager.registerDevelopment(LoggingCamp.class, "Logging Camp", resourceUpkeep, Material.IRON_AXE, storehousePrerequisites, resourceInitialCost, "Logs");
+		developmentManager.registerDevelopment(Storehouse.class, "Storehouse", new HashMap<>(), Material.CHEST, new ArrayList<>(), new ArrayList<>(), null);
+		developmentManager.registerDevelopment(Butcher.class, "Butcher", foodUpkeep, Material.BEEF, storehousePrerequisites, foodInitialCost, "Beef");
+		developmentManager.registerDevelopment(Gatherer.class, "Gatherer", foodUpkeep, Material.SWEET_BERRIES, storehousePrerequisites, foodInitialCost, "Fruit");
+		developmentManager.registerDevelopment(Quarry.class, "Quarry", resourceUpkeep, Material.SMOOTH_STONE, storehousePrerequisites, resourceInitialCost, "Stone");
+		developmentManager.registerDevelopment(IronMine.class, "Iron Mine", resourceUpkeep, Material.IRON_PICKAXE, storehousePrerequisites, resourceInitialCost, "Iron");
+		developmentManager.registerDevelopment(VictoryPoint.class, "Victory Point", victoryPointUpkeep, Material.BELL, storehousePrerequisites, victoryPointInitialCost, null);
 		/* End Temporary Code */
 		
 	    getCommand("nobility").setExecutor(new CommandListener());

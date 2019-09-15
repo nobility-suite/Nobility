@@ -22,8 +22,8 @@ public class DevelopmentManager {
         types = new ArrayList<>();
     } // constructor
 
-    public void registerDevelopment(Class development, String name, Map<String, Integer> cost, Material icon, List<String> prerequisites, List<ItemStack> initialCost) {
-        types.add(new DevelopmentRegister(development, name, cost, icon, prerequisites, initialCost));
+    public void registerDevelopment(Class development, String name, Map<String, Integer> cost, Material icon, List<String> prerequisites, List<ItemStack> initialCost, String resource) {
+        types.add(new DevelopmentRegister(development, name, cost, icon, prerequisites, initialCost, resource));
         
     } // registerDevelopment
 

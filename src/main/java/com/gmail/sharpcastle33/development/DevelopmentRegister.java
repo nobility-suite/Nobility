@@ -14,15 +14,20 @@ public class DevelopmentRegister {
     private List<String> prerequisites;
     private List<ItemStack> initialCost;
     private double productivity;
+    private int collectionPower;
+    private String resource;
     
-    public DevelopmentRegister(Class development, String name, Map<String, Integer> cost, Material icon, List<String> prerequisites, List<ItemStack> initialCost) {
+    
+    public DevelopmentRegister(Class development, String name, Map<String, Integer> cost, Material icon, List<String> prerequisites, List<ItemStack> initialCost, String resource) {
         this.development = development;
         this.name = name;
         this.cost = cost;
         this.icon = icon;
         this.prerequisites = prerequisites;
         this.initialCost = initialCost;
+        this.resource = resource;
         this.productivity = .4d;
+        this.setCollectionPower(10);
     } // constructors
 
     public Class getDevelopment() {
@@ -79,6 +84,22 @@ public class DevelopmentRegister {
 
 	public void setProductivity(double productivity) {
 		this.productivity = productivity;
+	}
+
+	public int getCollectionPower() {
+		return collectionPower;
+	}
+
+	public void setCollectionPower(int collectionPower) {
+		this.collectionPower = collectionPower;
+	}
+
+	public String getResource() {
+		return resource;
+	}
+
+	public void setResource(String resource) {
+		this.resource = resource;
 	}
 
 }
