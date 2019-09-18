@@ -1,10 +1,10 @@
 package com.gmail.sharpcastle33.estate;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-
-import com.gmail.sharpcastle33.development.DevelopmentRegister;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -13,9 +13,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-
 import com.gmail.sharpcastle33.Nobility;
 import com.gmail.sharpcastle33.development.Development;
+import com.gmail.sharpcastle33.development.DevelopmentRegister;
 import com.gmail.sharpcastle33.group.Group;
 
 public class EstateManager {
@@ -28,6 +28,16 @@ public class EstateManager {
 	/*public EstateManager() {
 		ArrayList<Estate> estates = new ArrayList<Estate>();
 	}*/
+	
+	public boolean isVulnerable(Estate e) {
+	  int h = e.getVulnerabilityHour(); //should be between 0 and 23;
+	  Date dt = new Date();
+	  int currentHour = dt.getHours();
+	  if(currentHour >= h && currentHour < h+2) {
+	    return true;
+	  }
+	  return false;
+	}
 	
 	public Estate createEstate(Block block, Player player) {
 		Group group = Nobility.groupMan.getGroup(player);		

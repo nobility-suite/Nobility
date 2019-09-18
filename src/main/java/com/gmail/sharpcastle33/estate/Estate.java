@@ -18,11 +18,14 @@ public class Estate {
 	private List<DevelopmentRegister> registeredDevelopments;
 	private List<Development> initializedDevelopments;
 	
+	private int vulnerabilityHour;
+	
 	public Estate(Block block, Group group) {
 		this.setGroup(group);
 		this.setBlock(block);
 		this.registeredDevelopments = Nobility.getDevelopmentManager().getTypes();
 		this.initializedDevelopments = new ArrayList<>();
+		this.vulnerabilityHour = 0;
 
 		region = Nobility.getNobilityRegions().getRegionMaster().getRegionByLocation(block.getLocation());
 	} // constructor
@@ -42,6 +45,14 @@ public class Estate {
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public int getVulnerabilityHour() {
+	  return this.vulnerabilityHour;
+	}
+	
+	public void setVulnerabilityHour(int i) {
+	  this.vulnerabilityHour = i;
 	}
 
 	public Group getGroup() {
