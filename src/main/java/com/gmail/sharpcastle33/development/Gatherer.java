@@ -28,7 +28,6 @@ public class Gatherer extends Development {
     public void tick() {	
     	Nobility.getDevelopmentManager().getStorehouseInventory(estate).addItem(getResourceAmount());
     }
-    
 
     
     //Change if time bank changes
