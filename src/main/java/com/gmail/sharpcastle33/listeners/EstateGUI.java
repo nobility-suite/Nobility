@@ -12,7 +12,7 @@ import com.gmail.sharpcastle33.estate.Estate;
 
 public class EstateGUI implements Listener {
 	
-	/*
+	
 	@EventHandler
 	public void onInventoryClick(InventoryClickEvent event) {
 		if (event.getCurrentItem() == null) return;		
@@ -24,7 +24,7 @@ public class EstateGUI implements Listener {
 		ItemStack item = event.getCurrentItem();
 		if(!item.hasItemMeta()) return;
 		
-		String name = item.getItemMeta().getDisplayName();
+		//String name = item.getItemMeta().getDisplayName();
 		Estate estate = Nobility.estateMan.getEstateOfPlayer(player);
 		
 		if (title != estate.getGroup().name) return;
@@ -33,5 +33,5 @@ public class EstateGUI implements Listener {
 		
 		
 	}
-	*/
+	
 }

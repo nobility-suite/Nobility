@@ -1,0 +1,66 @@
+developments:
+  storehouse:
+    icon: CHEST
+    prerequisites:
+    initialCost:
+    upkeepCost:
+      WHEAT: 1
+    collectsResources: false
+    collectsFood: false
+    isWall: false
+    isStorehouse: true
+    resource:
+  granary:
+    icon: BREAD
+    prerequisites:
+      - storehouse
+    initialCost:
+      OAK_LOG: 10
+      SMOOTH_STONE: 5
+    upkeepCost:
+      WHEAT: 1
+    collectsResources: false
+    collectsFood: true
+    isWall: false
+    isStorehouse: false
+    resource: Wheat
+  loggingCamp:
+    icon: IRON_AXE
+    prerequisites:
+      - storehouse
+    initialCost:
+      IRON_INGOT: 5
+      SMOOTH_STONE: 5
+    upkeepCost:
+      WHEAT: 1
+    collectsResources: true
+    collectsFood: false
+    isWall: false
+    resource: Logs
+  quarry:
+    icon: SMOOTH_STONE
+    prerequisites:
+      - storehouse
+    initialCost:
+      IRON_INGOT: 5
+      SMOOTH_STONE: 5
+    upkeepCost:
+      WHEAT: 1
+    collectsResources: true
+    collectsFood: false
+    isWall: false
+    resource: Stone
+  ironMine:
+    icon: IRON_PICKAXE
+    prerequisites:
+      - storehouse
+    initialCost:
+      IRON_INGOT: 5
+      SMOOTH_STONE: 5
+    upkeepCost:
+      WHEAT: 1
+    collectsResources: true
+    collectsFood: false
+    isWall: false
+    resource: Iron
+    

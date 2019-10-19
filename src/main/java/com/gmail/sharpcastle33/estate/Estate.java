@@ -1,40 +1,44 @@
 package com.gmail.sharpcastle33.estate;
 
-import com.gmail.sharpcastle33.Nobility;
-import com.gmail.sharpcastle33.development.Development;
-import com.gmail.sharpcastle33.development.DevelopmentRegister;
-import io.github.kingvictoria.Region;
-import org.bukkit.block.Block;
-
-import com.gmail.sharpcastle33.group.Group;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import org.bukkit.block.Block;
+
+import com.gmail.sharpcastle33.development.Development;
+import com.gmail.sharpcastle33.development.DevelopmentType;
+import com.gmail.sharpcastle33.group.Group;
+
+import io.github.kingvictoria.NobilityRegions;
+import io.github.kingvictoria.Region;
 
 public class Estate {
 	private Group group;
 	private Block block;
 	private Region region;
-	private List<DevelopmentRegister> registeredDevelopments;
-	private List<Development> initializedDevelopments;
+	private List<Development> builtDevelopments;
 	
 	private int vulnerabilityHour;
 	
 	public Estate(Block block, Group group) {
 		this.setGroup(group);
 		this.setBlock(block);
-		this.registeredDevelopments = Nobility.getDevelopmentManager().getTypes();
-		this.initializedDevelopments = new ArrayList<>();
+		this.builtDevelopments = new ArrayList<>();
 		this.vulnerabilityHour = 0;
 
-		region = Nobility.getNobilityRegions().getRegionMaster().getRegionByLocation(block.getLocation());
+		region = NobilityRegions.getRegionMaster().getRegionByLocation(block.getLocation());
 	} // constructor
-
+	
+	public void buildDevelopment(DevelopmentType type) {
+		Development development = new Development(type);
+		builtDevelopments.add(development);
+	}
+	
 	/**
 	 * Initializes a DevelopmentRegister's Development
 	 * @param register DevelopmentRegister
 	 */
-	public void initializeRegister(DevelopmentRegister register) {
+	/* public void initializeRegister(Development development) {
 		Class developmentClass = register.getDevelopment();
 		try {
 			Development development = (Development) developmentClass.getConstructors()[0].newInstance();
@@ -45,7 +49,7 @@ public class Estate {
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
-	}
+	} */
 	
 	public int getVulnerabilityHour() {
 	  return this.vulnerabilityHour;
@@ -71,18 +75,33 @@ public class Estate {
 		this.block = block;
 	}
 
-	public Region getRegion() { return region; }
+	public Region getRegion() { 
+		return region; 
+	}
 
-	public List<DevelopmentRegister> getRegisteredDevelopments() { return registeredDevelopments; }
+	public List<Development> getBuiltDevelopments() {
+		return builtDevelopments;
+	}
+	
+	
+	
+	public List<String> getUnbuiltDevelopments() {
+		List<String> unbuiltDevelopments = new ArrayList<>();
+		for (String name : DevelopmentType.getTypes().keySet()) {
+			unbuiltDevelopments.add(name);
+		}
+		for (Development development : builtDevelopments) {
+			unbuiltDevelopments.remove(development.getDevelopmentType().getName());
+		}
+		
+		return unbuiltDevelopments;
 
-	public List<Development> getDevelopments() {
-		return initializedDevelopments;
 	}
 	
 	public List<Development> getActiveDevelopments() {
 		List<Development> activeDevelopments = new ArrayList<>();
 
-		for(Development development: initializedDevelopments) {
+		for(Development development : builtDevelopments) {
 			if(development.isActive()) activeDevelopments.add(development);
 		} // for
 
@@ -90,37 +109,39 @@ public class Estate {
 	} // getActiveDevelopments
 	
 	public List<String> getActiveDevelopmentsToString() {
-		List<String> activeDevelopments = new ArrayList<>();
-
-		for(Development development: initializedDevelopments) {
-			if(development.isActive()) {
-				String name = development.getName();
-				activeDevelopments.add(name);
-			}
+		List<String> activeDevelopments = new ArrayList<>();		
+		for(Development development : getActiveDevelopments()) {
+			String name = development.getDevelopmentType().getName();
+			activeDevelopments.add(name);		
 		} // for
-
 		return activeDevelopments;
 	} // getActiveDevelopmentsToString
 
 	public List<Development> getInactiveDevelopments() {
 		List<Development> inactiveDevelopments = new ArrayList<>();
 
-		for(Development development: initializedDevelopments) {
+		for(Development development : builtDevelopments) {
 			if(!development.isActive()) inactiveDevelopments.add(development);
 		} // for
 
 		return inactiveDevelopments;
 	} // getInactiveDevelopments
+	
+	
+	
+	
 
-	public List<DevelopmentRegister> getUninitializedRegisteredDevelopments() {
-		List<DevelopmentRegister> uninitializedRegisteredDevelopments = new ArrayList<>();
-		List<DevelopmentRegister> initializedRegisteredDevelopments = new ArrayList<>();
+	
+	/*
+	public List<Development> getUninitializedRegisteredDevelopments() {
+		List<Development> uninitializedRegisteredDevelopments = new ArrayList<>();
+		List<Development> initializedRegisteredDevelopments = new ArrayList<>();
 
 		for(Development development: initializedDevelopments) {
-			initializedRegisteredDevelopments.add(development.getRegister());
+			initializedRegisteredDevelopments.add(development);
 		} // for
 
-		for(DevelopmentRegister register: registeredDevelopments) {
+		for(Development register: registeredDevelopments.) {
 			if(!initializedRegisteredDevelopments.contains(register)) uninitializedRegisteredDevelopments.add(register);
 		} // for
 
@@ -129,10 +150,10 @@ public class Estate {
 
 	public Development getDevelopmentForName(String name) {
 		for(Development development: initializedDevelopments) {
-			if(development.getName().contentEquals(name)) return development;
+			if(development.getDevelopmentType().getName().contentEquals(name)) return development;
 		}
 
 		return null;
-	}
+	}*/
 
 } // Class

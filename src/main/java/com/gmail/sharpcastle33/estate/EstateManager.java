@@ -2,9 +2,9 @@ package com.gmail.sharpcastle33.estate;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -13,16 +13,17 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+
 import com.gmail.sharpcastle33.Nobility;
 import com.gmail.sharpcastle33.development.Development;
-import com.gmail.sharpcastle33.development.DevelopmentRegister;
+import com.gmail.sharpcastle33.development.DevelopmentType;
 import com.gmail.sharpcastle33.group.Group;
 
 public class EstateManager {
 	
 	public ArrayList<Estate> estates = new ArrayList<Estate>();
 	
-	//hashmap player-estate
+	//HashMap player-estate
 	private HashMap<Player, Estate> estateOfPlayer = new HashMap<Player, Estate>();
 	
 	/*public EstateManager() {
@@ -31,9 +32,9 @@ public class EstateManager {
 	
 	public boolean isVulnerable(Estate e) {
 	  int h = e.getVulnerabilityHour(); //should be between 0 and 23;
-	  Date dt = new Date();
-	  int currentHour = dt.getHours();
-	  if(currentHour >= h && currentHour < h+2) {
+	  Calendar rightNow = Calendar.getInstance();
+	  int currentHour = rightNow.get(Calendar.HOUR_OF_DAY);
+	  if(currentHour >= h && currentHour < (h+2) % 24) {
 	    return true;
 	  }
 	  return false;
@@ -59,22 +60,29 @@ public class EstateManager {
 		
 		int i = 0;
 		for(Development development: estate.getActiveDevelopments()) {
-			Material m = development.getRegister().getIcon();
+			DevelopmentType type = development.getDevelopmentType();
+			Material m = type.getIcon();
 			ItemStack icon = new ItemStack(m);
-			nameItem(icon, development.getName());
+			nameItem(icon, type.getName());
 			addLore(icon, ChatColor.GREEN + "Active");
-			if (!development.getRegister().getCost().isEmpty()) {			
+			if (!type.getUpkeepCost().isEmpty()) {			
 				addLore(icon, ChatColor.YELLOW + "Upkeep Cost:");
-				if (development.getRegister().getCost().containsKey("Food")) {
+				for (ItemStack cost : type.getUpkeepCost()) {
+					addLore(icon, cost.getType().toString() + ": " + cost.getAmount());
+				}
+				
+				/*
+				 * For when the costs have been abstracted
+				if (type.getUpkeepCost().containsKey("Food")) {
 					addLore(icon,"Food: " + development.getRegister().getCost().get("Food"));
 				}
-				if (development.getRegister().getCost().containsKey("Hardware")) {
+				if (type.getUpkeepCost().containsKey("Hardware")) {
 					addLore(icon,"Hardware: " + development.getRegister().getCost().get("Hardware"));
-				}
+				} */
 			}
-			if (development.getRegister().getResource() != null) {
-				addLore(icon, "Collection Power (base): " + development.getRegister().getCollectionPower() * development.getRegister().getProductivity() + " (4)"); //register.getBasePower
-				addLore(icon, "Region Total: " + estate.getRegion().getResource(development.getRegister().getResource()));
+			if (type.getResource() != null) {
+				addLore(icon, "Collection Power (base): " + development.getCollectionPower() * development.getProductivity() + " (4)"); //register.getBasePower
+				addLore(icon, "Region Total: " + estate.getRegion().getResource(type.getResource()));
 				//addLore(icon, "Percent: " + TODO: actualYield / regionTotal);
 				//TODO: Actual Yield, Food Usage, if (foodUsage != maximum) "Click to increase food usage"
 			}
@@ -85,38 +93,41 @@ public class EstateManager {
 		for(Development development: estate.getInactiveDevelopments()) {
 			Material m = Material.FIREWORK_STAR;
 			ItemStack icon = new ItemStack(m);
-			nameItem(icon, development.getName());
+			nameItem(icon, development.getDevelopmentType().getName());
 			addLore(icon, ChatColor.RED + "Inactive");
 			addLore(icon, "Click to Activate");
 			developmentIcons.setItem(i, icon);
 			i++;
 		}
 		
-		for(DevelopmentRegister register: estate.getUninitializedRegisteredDevelopments()) {
-			if (estate.getActiveDevelopmentsToString().containsAll(register.getPrerequisites())) {
-				Material m = register.getIcon();
+		for(String name: estate.getUnbuiltDevelopments()) {
+			DevelopmentType type = DevelopmentType.getDevelopmentType(name);
+			if (estate.getActiveDevelopmentsToString().containsAll(type.getPrerequisites())) {
+				Material m = type.getIcon();
 				ItemStack icon = new ItemStack(m);
-				nameItem(icon, register.getName());
+				nameItem(icon, type.getName());
 				addLore(icon, ChatColor.YELLOW + "Not Yet Constructed");
 				addLore(icon, "");
-				if (!register.getPrerequisites().isEmpty()) {
+				if (!type.getPrerequisites().isEmpty()) {
 					addLore(icon, ChatColor.YELLOW + "Prerequisites:");
-					for(String prerequisite: register.getPrerequisites()) addLore(icon, prerequisite);
+					for(String prerequisite: type.getPrerequisites()) addLore(icon, prerequisite);
 					addLore(icon, "");
 				}
 				
-				if (!register.getCost().isEmpty()) {
+				if (!type.getUpkeepCost().isEmpty()) {
 					addLore(icon, ChatColor.YELLOW + "Upkeep Cost:");
-					for(String material: register.getCost().keySet()) addLore(icon, material + ": " + register.getCost().get(material));
+					for(ItemStack cost : type.getUpkeepCost()) {						
+						addLore(icon, cost.getType().toString() + ": " + cost.getAmount());
+					}
 					addLore(icon, "");
 				}
 				
-				if(!register.getInitialCost().isEmpty()) {
+				if(!type.getInitialCost().isEmpty()) {
 					addLore(icon, ChatColor.YELLOW + "Initial Cost:");
-					for(ItemStack item : register.getInitialCost()) {
+					for(ItemStack item : type.getInitialCost()) {
 						addLore(icon, item.getType().toString() +  ": " + item.getAmount());
 					}
-					if(!Nobility.getDevelopmentManager().checkCosts(register, estate)) {
+					if(!Nobility.getDevelopmentManager().checkCosts(type, estate)) {
 						addLore(icon, ChatColor.RED + "Not enough to construct this estate");
 					}
 				}

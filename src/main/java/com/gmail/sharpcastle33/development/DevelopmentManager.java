@@ -1,9 +1,5 @@
 package com.gmail.sharpcastle33.development;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -15,21 +11,21 @@ import com.gmail.sharpcastle33.Nobility;
 import com.gmail.sharpcastle33.estate.Estate;
 
 public class DevelopmentManager {
-    private List<DevelopmentRegister> types; // List of all types of developments
+    //private List<Development> types; // List of all types of developments
 
     
     public DevelopmentManager() {
-        types = new ArrayList<>();
+        //types = new ArrayList<>();
     } // constructor
 
-    public void registerDevelopment(Class development, String name, Map<String, Integer> cost, Material icon, List<String> prerequisites, List<ItemStack> initialCost, String resource) {
-        types.add(new DevelopmentRegister(development, name, cost, icon, prerequisites, initialCost, resource));
+    /*public void registerDevelopment(Class development, String name, Map<String, Integer> cost, Material icon, List<String> prerequisites, List<ItemStack> initialCost, String resource) {
+        types.add(new Development(development, name, cost, icon, prerequisites, initialCost, resource));
         
-    } // registerDevelopment
+    }*/ // registerDevelopment
 
-    public List<DevelopmentRegister> getTypes() {
+    /*public List<Development> getTypes() {
         return types;
-    } // getTypes
+    } // getTypes*/
     
     public int calculateGains(Estate estate, String resource, Development development) {
     	double regionResource = estate.getRegion().getResource(resource);
@@ -37,16 +33,16 @@ public class DevelopmentManager {
     	double maximum = 10; //5 is arbitrary. Tweak later on.
     	double rounded;
     	double totalCompetingEstates = 0;
-    	double productivity = development.getRegister().getProductivity();
+    	double productivity = development.getProductivity();
     	int returnAmount;
     	
     	for (Estate otherEstate : Nobility.estateMan.estates) {
     		if (estate.getRegion().equals(otherEstate.getRegion())) {
     			for (Development otherDevelopment : otherEstate.getActiveDevelopments()) {
     				//Bukkit.broadcastMessage("Development: " + otherDevelopment.getRegister().getName());
-    				if (development.getRegister().getName().equalsIgnoreCase(otherDevelopment.getRegister().getName())) {
+    				if (development.getDevelopmentType().getName().equalsIgnoreCase(otherDevelopment.getDevelopmentType().getName())) {
     					//Bukkit.broadcastMessage("Developments equal");
-    					totalCompetingEstates += level * otherDevelopment.getRegister().getProductivity();
+    					totalCompetingEstates += level * otherDevelopment.getProductivity();
     				}
     			} //multiply by each estate's level modifier later on
     		}
@@ -79,8 +75,8 @@ public class DevelopmentManager {
     	}    	
     }
     
-    public Boolean checkCosts(DevelopmentRegister register, Estate estate) {
-		for (ItemStack cost : register.getInitialCost()) {
+    public Boolean checkCosts(DevelopmentType developmentType, Estate estate) {
+		for (ItemStack cost : developmentType.getInitialCost()) {
     		if (!getStorehouseInventory(estate).containsAtLeast(cost, cost.getAmount())) {
     			return false;
     		}
@@ -88,21 +84,35 @@ public class DevelopmentManager {
     	return true;   	
     }
     
-    public void subtractCosts(DevelopmentRegister register, Estate estate) {
-		if(register.getInitialCost() == null) return;		
-    	for (ItemStack cost : register.getInitialCost()) {
+    public void subtractCosts(DevelopmentType type, Estate estate) {
+		if(type.getInitialCost() == null) return;		
+    	for (ItemStack cost : type.getInitialCost()) {
 			Nobility.getDevelopmentManager().getStorehouseInventory(estate).removeItem(cost);
 		}  	
     }
     
-    public void subtractUpkeep(DevelopmentRegister register, Estate estate, Development development) {
+    public void subtractUpkeep(DevelopmentType type, Estate estate) {
     	
-    	if (register.getCost() == null) return;
+    	if (type.getUpkeepCost() == null) return;
     	
     	Inventory inventory = getStorehouseInventory(estate);
-		double productivity = .4d;
+    	for (ItemStack cost : type.getUpkeepCost()) {
+    		inventory.remove(cost);
+    	}
     	
-    	if (register.getCost().containsKey("Food")) {	
+    	
+    	/*
+    	 * The plan for this is the development's productivity will
+    	 * increase in yield if there is a variety of upkeep items
+    	 * 
+    	 * I also want to abstract the upkeep costs to something more
+    	 * general like "food" instead of "WHEAT"
+    	 */
+    	//double productivity = .4d;
+    	
+		
+		/*
+    	if (development.getDevelopmentType().getUpkeepCost().containsKey("Food")) {	
     		int foodCost = register.getCost().get("Food");
     		/* Broken code
     		 * Might fix later
@@ -142,7 +152,7 @@ public class DevelopmentManager {
     		if (wheatBoost == true) productivity += .2;
     		if (beefBoost == true) productivity +=.2;
     		if (berryBoost == true) productivity +=.2;
-    		*/
+    		
     		
     		//Current replacement
     		ItemStack[] listOfFoods = new ItemStack[3];
@@ -177,9 +187,10 @@ public class DevelopmentManager {
         		}
     		}
     	}
+    	*/
     	
     	//Bukkit.broadcastMessage("The productivity of " + development.getName() + " is " + productivity);
-    	register.setProductivity(productivity);
+    	//development.setProductivity(productivity);
     }
     
     public int countItems(Material material, Inventory inventory) {

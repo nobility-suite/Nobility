@@ -9,7 +9,7 @@ import org.bukkit.inventory.ItemStack;
 
 import com.gmail.sharpcastle33.Nobility;
 import com.gmail.sharpcastle33.development.Development;
-import com.gmail.sharpcastle33.development.DevelopmentRegister;
+import com.gmail.sharpcastle33.development.DevelopmentType;
 import com.gmail.sharpcastle33.estate.Estate;
 
 public class DevelopmentGUI implements Listener {
@@ -18,12 +18,9 @@ public class DevelopmentGUI implements Listener {
 	public void onInventoryClick(InventoryClickEvent event) {
 		if (event.getCurrentItem() == null) return;		
 
-		
 		InventoryView inventory = event.getView();
 		String title = inventory.getTitle();
 		Player player = (Player) event.getWhoClicked();
-
-
 		ItemStack item = event.getCurrentItem();
 
 		if(!item.hasItemMeta()) return;
@@ -35,23 +32,23 @@ public class DevelopmentGUI implements Listener {
 
 		event.setCancelled(true);
 
-		for(DevelopmentRegister register: estate.getUninitializedRegisteredDevelopments()) {
-			String developmentName = register.getName();
-			if(developmentName.contentEquals(name)) {
+		for(String development: estate.getUnbuiltDevelopments()) {
+			if(development.contentEquals(name)) {
+				DevelopmentType type = DevelopmentType.getDevelopmentType(development);
 				//Check costs
-				if (!Nobility.getDevelopmentManager().checkCosts(register, estate)) {
+				if (!Nobility.getDevelopmentManager().checkCosts(type, estate)) {
 					player.sendMessage("You don't have enough to construct this development");
 					return;
 				}
-				estate.initializeRegister(register);
-				player.sendMessage("You constructed a " + developmentName);
+				estate.buildDevelopment(type);
+				player.sendMessage("You constructed a " + type.getName());
 				player.closeInventory();
 				Nobility.estateMan.openDevelopmentGUI(player);
 			}
 		}
 		
-		for(Development development: estate.getDevelopments()) {
-			String developmentName = development.getName();
+		for(Development development: estate.getBuiltDevelopments()) {
+			String developmentName = development.getDevelopmentType().getName();
 			if (developmentName.contentEquals(name)) {
 				if (development.isActive() == false) {
 					//TODO: if development has enough food...

@@ -1,59 +1,67 @@
 package com.gmail.sharpcastle33.development;
 
-import com.gmail.sharpcastle33.estate.Estate;
+public class Development {
+	private DevelopmentType development;
+	
+	private double productivity;
+	private int collectionPower;
+	private boolean isActive;
+		
+	public Development(DevelopmentType development) {
+		this.setDevelopmentType(development);
+		this.productivity = .4d;
+		this.setCollectionPower(10);
+	} // constructors
+	
 
-public abstract class Development {
-
-	protected Estate estate;
-	protected DevelopmentRegister register;
-	protected boolean active;
-
-	/**
-	 * Empty constructor required to instantiate arbitrary development from Class object
-	 */
-	public Development() {
-	} // constructor
-
-	/**
-	 * Initialization common to all developments
-	 * @param register
-	 */
-	public void pre_init(DevelopmentRegister register, Estate estate) {
-		this.register = register;
-		this.estate = estate;
+	public void tick() {
+		if (this.getDevelopmentType().isCollectsFood()) {
+			//collect food
+		}
+		
+		if (this.getDevelopmentType().isCollectsResources()) {
+			//collect resources
+		}
+	}
+	
+	public void activate() {
+		setActive(true);
+	}
+	
+	public void deactivate() {
+		setActive(false);
+	}
+	
+	public DevelopmentType getDevelopmentType() {
+		return development;
 	}
 
-	/**
-	 * This development has been instantiated by a new Estate
-	 */
-	public abstract void init();
-
-	/**
-	 * This development has been constructed (prerequisites met and cost paid)
-	 */
-	public abstract void activate();
-
-	/**
-	 * This development has been deactivated
-	 */
-	public abstract void deactivate();
-	
-	/**
-	 * This development has ticked
-	 * 
-	 */
-	public abstract void tick();
-
-	public Estate getEstate() {
-		return estate;
+	public void setDevelopmentType(DevelopmentType development) {
+		this.development = development;
 	}
 
-	public DevelopmentRegister getRegister() { return register; }
+	public double getProductivity() {
+		return productivity;
+	}
 
-	public boolean isActive() { return active; }
+	public void setProductivity(double productivity) {
+		this.productivity = productivity;
+	}
 
-	public void setActive(boolean value) { active = value; }
-
-	public String getName() { return register.getName(); }
+	public int getCollectionPower() {
+		return collectionPower;
+	}
 	
-} // class
+	public void setCollectionPower(int collectionPower) {
+		this.collectionPower = collectionPower;
+	}
+
+	public boolean isActive() {
+		return isActive;
+	}
+
+	public void setActive(boolean isActive) {
+		this.isActive = isActive;
+	}
+
+}

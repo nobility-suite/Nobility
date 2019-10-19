@@ -4,8 +4,6 @@ import java.util.ArrayList;
 
 import org.bukkit.entity.Player;
 
-import com.gmail.sharpcastle33.Nobility;
-
 public class GroupManager {
 	
 	public ArrayList<Group> groups = new ArrayList<Group>();
