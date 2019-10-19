@@ -43,6 +43,7 @@ public class DevelopmentType {
 			) {
 		this.setName(name);
 		this.setIcon(icon);
+		this.setPrerequisites(prerequisites);
 		this.setInitialCost(initialCost);
 		this.setUpkeepCost(upkeepCost);
 		this.setCollectsResources(collectsResources);
@@ -118,26 +119,23 @@ public class DevelopmentType {
 		String name = config.getName();
 		Material icon = Material.getMaterial(config.getString("icon"));
 		
-		List<String> prerequisites;
-		try {
-			prerequisites = config.getStringList("prerequisites");
-		} catch (NullPointerException e) {
-			prerequisites = new ArrayList<>();
-		}
+		ArrayList<String> prerequisites = new ArrayList<String>();
+		List<String> listOfPrerequisites = config.getStringList("prerequisites");
+		prerequisites.addAll(listOfPrerequisites);
 
 		
 		//TODO: Change costs to string-integer maps not ItemStacks
 		List<ItemStack> initialCost = new ArrayList<ItemStack>();
-		if (config.getConfigurationSection(name + ".initialCost") != null) { 
-			for (String key : config.getConfigurationSection(name + ".initialCost").getKeys(false)) {
+		if (config.getConfigurationSection("initialCost") != null) { 
+			for (String key : config.getConfigurationSection("initialCost").getKeys(false)) {
 				Material type = Material.getMaterial(key);
 				int amount = config.getInt("initialCost." + key);
 				initialCost.add(new ItemStack(type, amount));
 			}
 		}
 		List<ItemStack> upkeepCost = new ArrayList<ItemStack>();
-		if (config.getConfigurationSection(name + ".upkeepCost") != null) { 
-			for (String key : config.getConfigurationSection(name + ".upkeepCost").getKeys(false)) {
+		if (config.getConfigurationSection("upkeepCost") != null) { 
+			for (String key : config.getConfigurationSection("upkeepCost").getKeys(false)) {
 				Material type = Material.getMaterial(key);
 				int amount = config.getInt("upkeepCost." + key);
 				upkeepCost.add(new ItemStack(type, amount));

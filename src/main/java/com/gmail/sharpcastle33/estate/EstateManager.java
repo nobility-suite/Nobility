@@ -102,17 +102,18 @@ public class EstateManager {
 		
 		for(String name: estate.getUnbuiltDevelopments()) {
 			DevelopmentType type = DevelopmentType.getDevelopmentType(name);
-			//if (estate.getActiveDevelopmentsToString().containsAll(type.getPrerequisites())) {
+			player.sendMessage(type.getPrerequisites().toString() + " " + type.getName());
+			if (estate.getActiveDevelopmentsToString().containsAll(type.getPrerequisites())) {
 				Material m = type.getIcon();
 				ItemStack icon = new ItemStack(m);
 				nameItem(icon, type.getName());
 				addLore(icon, ChatColor.YELLOW + "Not Yet Constructed");
 				addLore(icon, "");
-				/*if (!type.getPrerequisites().isEmpty()) {
+				if (!type.getPrerequisites().isEmpty()) {
 					addLore(icon, ChatColor.YELLOW + "Prerequisites:");
 					for(String prerequisite : type.getPrerequisites()) addLore(icon, prerequisite);
 					addLore(icon, "");
-				} */
+				}
 				
 				if (!type.getUpkeepCost().isEmpty()) {
 					addLore(icon, ChatColor.YELLOW + "Upkeep Cost:");
@@ -133,7 +134,7 @@ public class EstateManager {
 				}
 				developmentIcons.setItem(i, icon);
 				i++;
-			//}
+			}
 		}
 		
 		player.openInventory(developmentIcons);

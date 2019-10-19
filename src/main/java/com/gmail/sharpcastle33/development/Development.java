@@ -15,12 +15,17 @@ public class Development {
 	
 
 	public void tick() {
+	
 		if (this.getDevelopmentType().isCollectsFood()) {
 			//collect food
 		}
 		
 		if (this.getDevelopmentType().isCollectsResources()) {
 			//collect resources
+		}
+		
+		if (this.getDevelopmentType().isStorehouse()) {
+			
 		}
 	}
 	
