@@ -110,7 +110,7 @@ public class Estate {
 	
 	public List<String> getActiveDevelopmentsToString() {
 		List<String> activeDevelopments = new ArrayList<>();		
-		for(Development development : getActiveDevelopments()) {
+		for(Development development : builtDevelopments) {
 			String name = development.getDevelopmentType().getName();
 			activeDevelopments.add(name);		
 		} // for

@@ -1,7 +1,5 @@
 package com.gmail.sharpcastle33;
 
-import java.util.logging.Level;
-
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
@@ -39,7 +37,7 @@ public class Nobility extends JavaPlugin{
 		estateMan = new EstateManager();
 
 		developmentManager = new DevelopmentManager();
-		
+		registerConfig();
 		reloadConfig();
 	    getCommand("nobility").setExecutor(new CommandListener());
 	    DevelopmentType.loadDevelopmentTypes(getConfig().getConfigurationSection("developments"));
@@ -106,6 +104,11 @@ public class Nobility extends JavaPlugin{
 				}					
 			}
 		}
+	}
+	
+	private void registerConfig() {
+		getConfig().options().copyDefaults(true);
+		saveConfig();		
 	}
 
 }

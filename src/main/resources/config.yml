@@ -36,7 +36,7 @@ developments:
     collectsResources: true
     collectsFood: false
     isWall: false
-    resource: Logs
+    resource: Log
   quarry:
     icon: SMOOTH_STONE
     prerequisites:

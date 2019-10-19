@@ -117,20 +117,31 @@ public class DevelopmentType {
 	public static DevelopmentType getDevelopmentType(ConfigurationSection config) {
 		String name = config.getName();
 		Material icon = Material.getMaterial(config.getString("icon"));
-		List<String> prerequisites = config.getStringList("prerequisites");
+		
+		List<String> prerequisites;
+		try {
+			prerequisites = config.getStringList("prerequisites");
+		} catch (NullPointerException e) {
+			prerequisites = new ArrayList<>();
+		}
+
 		
 		//TODO: Change costs to string-integer maps not ItemStacks
 		List<ItemStack> initialCost = new ArrayList<ItemStack>();
-		for (String key : config.getConfigurationSection("initialCost").getKeys(false)) {
-			Material type = Material.getMaterial(key);
-			int amount = config.getInt("initialCost." + key);
-			initialCost.add(new ItemStack(type, amount));
+		if (config.getConfigurationSection(name + ".initialCost") != null) { 
+			for (String key : config.getConfigurationSection(name + ".initialCost").getKeys(false)) {
+				Material type = Material.getMaterial(key);
+				int amount = config.getInt("initialCost." + key);
+				initialCost.add(new ItemStack(type, amount));
+			}
 		}
 		List<ItemStack> upkeepCost = new ArrayList<ItemStack>();
-		for (String key : config.getConfigurationSection("upkeepCost").getKeys(false)) {
-			Material type = Material.getMaterial(key);
-			int amount = config.getInt("upkeepCostCost." + key);
-			upkeepCost.add(new ItemStack(type, amount));
+		if (config.getConfigurationSection(name + ".upkeepCost") != null) { 
+			for (String key : config.getConfigurationSection(name + ".upkeepCost").getKeys(false)) {
+				Material type = Material.getMaterial(key);
+				int amount = config.getInt("upkeepCost." + key);
+				upkeepCost.add(new ItemStack(type, amount));
+			}
 		}
 
 		//List<ItemStack> initialCost = new ItemStack(Material.getMaterial(config.getString("i)))
@@ -162,7 +173,12 @@ public class DevelopmentType {
 	}
 
 	public List<String> getPrerequisites() {
-		return prerequisites;
+		try {
+			return prerequisites;
+		} catch (NullPointerException e) {
+			prerequisites = new ArrayList<>();
+			return prerequisites;
+		}
 	}
 
 	public void setPrerequisites(List<String> prerequisites) {
