@@ -20,14 +20,10 @@ public class DevelopmentType {
 	private List<String> prerequisites;
 	private List<ItemStack> initialCost;
 	private List<ItemStack> upkeepCost;
-	private boolean collectsResources;
-	private boolean collectsFood;
+	private boolean isCollector;
 	private boolean isWall;
 	private boolean isStorehouse;
 	private String resource;
-	
-
-
 	
 	public DevelopmentType(
 			String name,
@@ -35,8 +31,7 @@ public class DevelopmentType {
 			List<String> prerequisites,
 			List<ItemStack> initialCost,
 			List<ItemStack> upkeepCost,
-			boolean collectsResources,
-			boolean collectsFood,
+			boolean isCollector,
 			boolean isWall,
 			boolean isStorehouse,
 			String resource
@@ -46,8 +41,7 @@ public class DevelopmentType {
 		this.setPrerequisites(prerequisites);
 		this.setInitialCost(initialCost);
 		this.setUpkeepCost(upkeepCost);
-		this.setCollectsResources(collectsResources);
-		this.setCollectsFood(collectsFood);
+		this.setCollector(isCollector);
 		this.setWall(isWall);
 		this.setStorehouse(isStorehouse);
 		this.setResource(resource);
@@ -67,22 +61,6 @@ public class DevelopmentType {
 
 	public void setIcon(Material icon) {
 		this.icon = icon;
-	}
-
-	public boolean isCollectsResources() {
-		return collectsResources;
-	}
-
-	public void setCollectsResources(boolean collectsResources) {
-		this.collectsResources = collectsResources;
-	}
-
-	public boolean isCollectsFood() {
-		return collectsFood;
-	}
-
-	public void setCollectsFood(boolean collectsFood) {
-		this.collectsFood = collectsFood;
 	}
 
 	public boolean isWall() {
@@ -106,7 +84,6 @@ public class DevelopmentType {
 			if (type != null) {
 				types.put(key, type);
 				Bukkit.getLogger().log(Level.INFO, "Development type {0} loaded: {1}", new Object[] {key, type});
-				//Nobility.getDevelopmentManager().registerDevelopment(development, name, cost, icon, getPrerequisites(), getInitialCost(), resource);
 			}
 		}
 	}
@@ -122,7 +99,6 @@ public class DevelopmentType {
 		ArrayList<String> prerequisites = new ArrayList<String>();
 		List<String> listOfPrerequisites = config.getStringList("prerequisites");
 		prerequisites.addAll(listOfPrerequisites);
-
 		
 		//TODO: Change costs to string-integer maps not ItemStacks
 		List<ItemStack> initialCost = new ArrayList<ItemStack>();
@@ -143,8 +119,7 @@ public class DevelopmentType {
 		}
 
 		//List<ItemStack> initialCost = new ItemStack(Material.getMaterial(config.getString("i)))
-		boolean collectsResources = config.getBoolean("collectsResources");
-		boolean collectsFood = config.getBoolean("collectsFood");
+		boolean isCollector = config.getBoolean("isCollector");
 		boolean isWall = config.getBoolean("isWall");
 		boolean isStorehouse = config.getBoolean("isStorehouse");
 		String resource = config.getString("resource");
@@ -154,8 +129,7 @@ public class DevelopmentType {
 				prerequisites,
 				initialCost,
 				upkeepCost,
-				collectsResources, 
-				collectsFood, 
+				isCollector,
 				isWall,
 				isStorehouse,
 				resource
@@ -209,6 +183,14 @@ public class DevelopmentType {
 	
 	public static LinkedHashMap<String, DevelopmentType> getTypes() {
 		return types;
+	}
+
+	public boolean isCollector() {
+		return isCollector;
+	}
+
+	public void setCollector(boolean isCollector) {
+		this.isCollector = isCollector;
 	}
 	
 }

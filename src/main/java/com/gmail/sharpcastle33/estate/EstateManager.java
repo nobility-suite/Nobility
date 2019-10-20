@@ -102,7 +102,6 @@ public class EstateManager {
 		
 		for(String name: estate.getUnbuiltDevelopments()) {
 			DevelopmentType type = DevelopmentType.getDevelopmentType(name);
-			player.sendMessage(type.getPrerequisites().toString() + " " + type.getName());
 			if (estate.getActiveDevelopmentsToString().containsAll(type.getPrerequisites())) {
 				Material m = type.getIcon();
 				ItemStack icon = new ItemStack(m);

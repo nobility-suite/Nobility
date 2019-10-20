@@ -1,32 +1,35 @@
 package com.gmail.sharpcastle33.development;
 
+import com.gmail.sharpcastle33.estate.Estate;
+
 public class Development {
 	private DevelopmentType development;
+	private Developer developer;
+	private Estate estate;
 	
 	private double productivity;
 	private int collectionPower;
 	private boolean isActive;
 		
-	public Development(DevelopmentType development) {
+	public Development(DevelopmentType development, Estate estate) {
 		this.setDevelopmentType(development);
 		this.productivity = .4d;
 		this.setCollectionPower(10);
+		
+		
+		if (this.getDevelopmentType().isStorehouse()) {
+			this.setDeveloper(new Storehouse());
+		}
+		
+		if (this.getDevelopmentType().isCollector()) {
+			this.setDeveloper(new Collector(estate, this));
+		}
+		
 	} // constructors
 	
 
 	public void tick() {
-	
-		if (this.getDevelopmentType().isCollectsFood()) {
-			//collect food
-		}
-		
-		if (this.getDevelopmentType().isCollectsResources()) {
-			//collect resources
-		}
-		
-		if (this.getDevelopmentType().isStorehouse()) {
-			
-		}
+		developer.tick();
 	}
 	
 	public void activate() {
@@ -67,6 +70,26 @@ public class Development {
 
 	public void setActive(boolean isActive) {
 		this.isActive = isActive;
+	}
+
+
+	public Developer getDeveloper() {
+		return developer;
+	}
+
+
+	public void setDeveloper(Developer developer) {
+		this.developer = developer;
+	}
+
+
+	public Estate getEstate() {
+		return estate;
+	}
+
+
+	public void setEstate(Estate estate) {
+		this.estate = estate;
 	}
 
 }

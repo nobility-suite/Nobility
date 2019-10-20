@@ -87,7 +87,7 @@ public class DevelopmentManager {
     public void subtractCosts(DevelopmentType type, Estate estate) {
 		if(type.getInitialCost() == null) return;		
     	for (ItemStack cost : type.getInitialCost()) {
-			Nobility.getDevelopmentManager().getStorehouseInventory(estate).removeItem(cost);
+			getStorehouseInventory(estate).removeItem(cost);
 		}  	
     }
     

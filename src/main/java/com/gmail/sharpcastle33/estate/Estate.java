@@ -3,10 +3,9 @@ package com.gmail.sharpcastle33.estate;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.block.Block;
 
+import com.gmail.sharpcastle33.Nobility;
 import com.gmail.sharpcastle33.development.Development;
 import com.gmail.sharpcastle33.development.DevelopmentType;
 import com.gmail.sharpcastle33.group.Group;
@@ -32,13 +31,10 @@ public class Estate {
 	} // constructor
 	
 	public void buildDevelopment(DevelopmentType type) {
-		Development development = new Development(type);
-		if (type.isStorehouse()) {
-			Location loc = this.getBlock().getLocation().add(1, 0, 0);
-			loc.getBlock().setType(Material.CHEST);
-		}
-		
+		Development development = new Development(type, this);
+		development.getDeveloper().build(this);
 		builtDevelopments.add(development);
+		Nobility.getDevelopmentManager().subtractCosts(type, this);
 	}
 	
 	/**
