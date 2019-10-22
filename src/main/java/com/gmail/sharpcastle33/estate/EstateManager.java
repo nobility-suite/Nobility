@@ -122,7 +122,7 @@ public class EstateManager {
 					addLore(icon, "");
 				}
 				
-				if(!type.getInitialCost().isEmpty()) {
+				if(!type.getInitialCost().isEmpty() ) {
 					addLore(icon, ChatColor.YELLOW + "Initial Cost:");
 					for(ItemStack item : type.getInitialCost()) {
 						addLore(icon, item.getType().toString() +  ": " + item.getAmount());
