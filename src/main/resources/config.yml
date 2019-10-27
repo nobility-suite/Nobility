@@ -35,7 +35,7 @@ developments:
       WHEAT: 1
     isCollector: true
     isWall: false
-    resource: OAK_LOG
+    resource: WOOD
   quarry:
     name: Quarry
     icon: SMOOTH_STONE
@@ -48,7 +48,7 @@ developments:
       WHEAT: 1
     isCollector: true
     isWall: false
-    resource: SMOOTH_STONE
+    resource: STONE
   ironMine:
     name: Iron Mine
     icon: IRON_PICKAXE
@@ -61,5 +61,5 @@ developments:
       WHEAT: 1
     isCollector: true
     isWall: false
-    resource: IRON_INGOT
+    resource: IRON
     

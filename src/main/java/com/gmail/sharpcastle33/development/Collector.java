@@ -26,8 +26,9 @@ public class Collector implements Developer{
 		Nobility.getDevelopmentManager().getStorehouseInventory(estate).addItem(getResourceAmount());				
 	}
 	
-	private ItemStack getResourceAmount() {    	
-		String resource = development.getDevelopmentType().getResource();
+	private ItemStack getResourceAmount() {   
+		//TODO: Get the returnMaterial by checking the region (e.g. if region is jungle and resource is wood, return jungle logs)
+		String resource = development.getDevelopmentType().getResource();		
 		Material returnMaterial = Material.matchMaterial(resource);
     	int returnAmount = Nobility.getDevelopmentManager().calculateGains(estate, resource, development);
 		ItemStack returnStack = new ItemStack(returnMaterial, returnAmount);
