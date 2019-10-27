@@ -123,6 +123,12 @@ public class DevelopmentType {
 		boolean isWall = config.getBoolean("isWall");
 		boolean isStorehouse = config.getBoolean("isStorehouse");
 		String resource = config.getString("resource");
+		
+		//Check if the string is a material
+		if (config.getConfigurationSection("resource") != null) {
+			resource = resource.toUpperCase();
+		}
+
 		return new DevelopmentType(
 				name, 
 				icon,

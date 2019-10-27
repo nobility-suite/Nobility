@@ -1,6 +1,5 @@
 package com.gmail.sharpcastle33.development;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
@@ -29,11 +28,10 @@ public class Collector implements Developer{
 	
 	private ItemStack getResourceAmount() {    	
 		String resource = development.getDevelopmentType().getResource();
-    	resource.toUpperCase();
 		Material returnMaterial = Material.matchMaterial(resource);
     	int returnAmount = Nobility.getDevelopmentManager().calculateGains(estate, resource, development);
 		ItemStack returnStack = new ItemStack(returnMaterial, returnAmount);
-		return returnStack;    		
+		return returnStack;
     }
 
 }

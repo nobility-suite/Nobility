@@ -1,0 +1,15 @@
+We're already putting the resource extraction behind sieges. So if you want to stop someone from extracting resources, you have to go through a siege. That means attacking their estate, waiting for 20 something hours until it next becomes vulnerable (while the defenders prepare), coming back for a 2 hour battle with siege weapons and trying to do enough damage to the estate while the defenders try to prevent that. 
+
+We're exploring the idea of allowing players to create walls around their city that can't be easily bypassed without first starting a siege. Bastions have traditionally had low adoption rates on CivEx, and we'd like to add another method for players to be protected from petty raiding. 
+
+The walls would be a block functionally similar to small-radius bastions, but probably also prevent breaks. The walls would be disabled if the defenders lose a siege. We will probably do some additional restrictions so players prefer to only surround their cities with them, rather than cover them with it.
+
+This feature would accomplish a few things:
+
+Give players safety from petty raiding within the walled confines of their cities
+
+Give players someplace to run if they are being attacked.
+
+See how adoption rates change when new content is added as estate upgrades, which are more clearly visible to players in-game (progression-wise) than bastions typically are.
+
+Further force raiders to procure siege equipment and greater numbers if they want to be successful (which requires settling down and managing an estate, at which point they are participating in the server the same as anyone else)

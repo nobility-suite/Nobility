@@ -82,7 +82,7 @@ public class EstateManager {
 			}
 			if (type.getResource() != null) {
 				addLore(icon, "Collection Power (base): " + development.getCollectionPower() * development.getProductivity() + " (4)"); //register.getBasePower
-				addLore(icon, "Region Total: " + estate.getRegion().getResource(type.getResource()));
+				addLore(icon, "Region Total: " + estate.getRegion().getResource(type.getResource().toUpperCase()));
 				//addLore(icon, "Percent: " + TODO: actualYield / regionTotal);
 				//TODO: Actual Yield, Food Usage, if (foodUsage != maximum) "Click to increase food usage"
 			}

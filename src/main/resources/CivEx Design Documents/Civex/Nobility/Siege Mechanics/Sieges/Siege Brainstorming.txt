@@ -1,0 +1,12 @@
+I was thinking of having the wall blocks effect drop after the first siege is lost, that way you can still properly defend during the siege
+I don't really get how you're navigating towards the central block? What I'm currently envisioning is a ring shape of wall blocks. If you could break them individually, it would only take one bomb to get inside
+The way I was originally thinking about the siege system is that walls keep enemy players out of the inner city. When the city becomes vulnerable, attackers can bring cannons and shoot at the walls. The entire city has a health bar representing the strength of its walls, which can go to 0 if enough cannon fire lands in/near/within the city/walls. The cannons have cooldowns and are difficult to move, meaning sending players out to attack the cannons makes it difficult to damage your city
+The last major part was a floor and ceiling on how many cannons can damage the city at once
+if you don't use enough cannons, the city won't take any damage (meaning you need more players to siege!) if you bring overwhelming numbers, there's a cap on damage per minute so that battles aren't too short
+the ceiling/floor would be based on the defensive upgrades the city has
+
+
+
+So here's a simple version for how the siege system could work. So walls have a Bastion effect and provide a blanket reinforcement to all blocks within the radius. During the vulnerability period, the reinforcement effect drops to like 5. There is a central block that emits the Bastion effect. There are "bomb" blocks the attacker uses. They have a 1 minute fuse, and if the defenders let them go off, they destroy the bastion effect in the area. The attackers need to navigate towards the central block and destroy it.
+So essentially existing vault fight mechanics, but replacing "spam blocks to break bastions" with "wait for bomb block to go off"
+Probably a new name for a bombs would be good. I don't think I explained it very well so I'll draw a picture
