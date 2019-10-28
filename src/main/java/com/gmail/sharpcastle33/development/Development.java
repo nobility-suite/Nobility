@@ -19,13 +19,11 @@ public class Development {
 		
 		if (this.getDevelopmentType().isStorehouse()) {
 			this.setDeveloper(new Storehouse(estate, this));
-		}
-		
-		if (this.getDevelopmentType().isCollector()) {
+		} else if (this.getDevelopmentType().isCollector()) {
 			this.setDeveloper(new Collector(estate, this));
 		}
 		
-	} // constructors
+	}
 	
 
 	public void tick() {

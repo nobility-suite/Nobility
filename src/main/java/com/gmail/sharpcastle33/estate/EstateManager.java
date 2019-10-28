@@ -31,13 +31,13 @@ public class EstateManager {
 	}*/
 	
 	public boolean isVulnerable(Estate e) {
-	  int h = e.getVulnerabilityHour(); //should be between 0 and 23;
-	  Calendar rightNow = Calendar.getInstance();
-	  int currentHour = rightNow.get(Calendar.HOUR_OF_DAY);
-	  if(currentHour >= h && currentHour < (h+2) % 24) {
-	    return true;
-	  }
-	  return false;
+		int h = e.getVulnerabilityHour(); //should be between 0 and 23;
+		Calendar rightNow = Calendar.getInstance();
+		int currentHour = rightNow.get(Calendar.HOUR_OF_DAY);
+		if(currentHour >= h && currentHour < (h+2) % 24) {
+			return true;
+		}
+		return false;
 	}
 	
 	public Estate createEstate(Block block, Player player) {
