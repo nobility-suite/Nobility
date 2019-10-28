@@ -36,8 +36,9 @@ public class EstateManager {
 		int currentHour = rightNow.get(Calendar.HOUR_OF_DAY);
 		if(currentHour >= h && currentHour < (h+2) % 24) {
 			return true;
+		} else {
+			return false;
 		}
-		return false;
 	}
 	
 	public Estate createEstate(Block block, Player player) {

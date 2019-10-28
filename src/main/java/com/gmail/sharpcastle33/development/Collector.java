@@ -31,8 +31,7 @@ public class Collector implements Developer{
 		String resource = development.getDevelopmentType().getResource();		
 		Material returnMaterial = Material.matchMaterial(resource);
     	int returnAmount = Nobility.getDevelopmentManager().calculateGains(estate, resource, development);
-		ItemStack returnStack = new ItemStack(returnMaterial, returnAmount);
-		return returnStack;
+		return new ItemStack(returnMaterial, returnAmount);
     }
 
 }
