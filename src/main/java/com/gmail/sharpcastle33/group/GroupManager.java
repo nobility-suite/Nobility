@@ -10,18 +10,13 @@ public class GroupManager {
 
 	public Group getGroup(Player player) {
 		for(int i = 0; i < groups.size(); i++) {
-			Group g = groups.get(i);
-			for(String s : g.members) {
-				if(player.getName().equals(s)) {
-					return g;
-				}
+			Group group = groups.get(i);
+			if (group.members.contains(player.getUniqueId())) {
+				return group;
 			}
 		}
 		return null;
 	}
-	
-	/*public GroupManager() {
-		ArrayList<Group> groups = new ArrayList<Group>();
-	}*/
+
 
 }

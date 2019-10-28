@@ -32,7 +32,7 @@ public class Estate {
 	
 	public void buildDevelopment(DevelopmentType type) {
 		Development development = new Development(type, this);
-		development.getDeveloper().build(this);
+		development.getDeveloper().build();
 		builtDevelopments.add(development);
 		Nobility.getDevelopmentManager().subtractCosts(type, this);
 	}

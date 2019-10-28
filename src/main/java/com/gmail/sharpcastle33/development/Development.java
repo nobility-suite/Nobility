@@ -18,7 +18,7 @@ public class Development {
 		
 		
 		if (this.getDevelopmentType().isStorehouse()) {
-			this.setDeveloper(new Storehouse());
+			this.setDeveloper(new Storehouse(estate, this));
 		}
 		
 		if (this.getDevelopmentType().isCollector()) {

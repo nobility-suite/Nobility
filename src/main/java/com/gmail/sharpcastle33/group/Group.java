@@ -1,36 +1,37 @@
 package com.gmail.sharpcastle33.group;
 
 import java.util.ArrayList;
+import java.util.UUID;
 
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 public class Group {
 	
-	public ArrayList<String> members;
+	public ArrayList<UUID> members;
 	public String name;
 	public String leaderPrefix;
 	public Location estateLocation;
 	public boolean hasEstate;
-	public ArrayList<String> pendingInvites;
+	public ArrayList<UUID> pendingInvites;
 	
-	public Group(String name, String playerName) {
-		ArrayList<String> mem = new ArrayList<String>();
+	public Group(String name, UUID playerName) {
+		ArrayList<UUID> mem = new ArrayList<>();
 		mem.add(playerName);
 		this.members = mem;
 		this.leaderPrefix = "Lord ";
 		this.hasEstate = false;
-		ArrayList<String> pending = new ArrayList<String>();
+		ArrayList<UUID> pending = new ArrayList<>();
 		pendingInvites = pending;
 		this.name = name;
 	}
 	
 	public void addMember(Player p) {
-		members.add(p.getName());
+		members.add(p.getUniqueId());
 	}
 	
 	public void removeMember(Player p) {
-		members.remove(p.getName());
+		members.remove(p.getUniqueId());
 	}
 
 }

@@ -17,7 +17,7 @@ public class Collector implements Developer{
 	}
 
 	@Override
-	public void build(Estate estate) {
+	public void build() {
 		
 	}
 

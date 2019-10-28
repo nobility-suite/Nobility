@@ -7,12 +7,16 @@ import com.gmail.sharpcastle33.estate.Estate;
 
 public class Storehouse implements Developer{
 
-	public Storehouse() {
-		
+	Estate estate;
+	Development development;
+	
+	public Storehouse(Estate estate, Development development) {
+		this.estate = estate;
+		this.development = development;
 	}
 
 	@Override
-	public void build(Estate estate) {
+	public void build() {
 		Location loc = estate.getBlock().getLocation().add(1, 0, 0);
 		loc.getBlock().setType(Material.CHEST);
 		
