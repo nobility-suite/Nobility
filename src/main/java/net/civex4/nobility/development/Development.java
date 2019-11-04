@@ -1,6 +1,6 @@
-package com.gmail.sharpcastle33.development;
+package net.civex4.nobility.development;
 
-import com.gmail.sharpcastle33.estate.Estate;
+import net.civex4.nobility.estate.Estate;
 
 public class Development {
 	private DevelopmentType development;

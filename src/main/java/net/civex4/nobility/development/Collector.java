@@ -1,10 +1,10 @@
-package com.gmail.sharpcastle33.development;
+package net.civex4.nobility.development;
 
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
-import com.gmail.sharpcastle33.Nobility;
-import com.gmail.sharpcastle33.estate.Estate;
+import net.civex4.nobility.Nobility;
+import net.civex4.nobility.estate.Estate;
 
 public class Collector implements Developer{
 	

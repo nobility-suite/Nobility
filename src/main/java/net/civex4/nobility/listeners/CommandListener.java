@@ -1,4 +1,4 @@
-package com.gmail.sharpcastle33.listeners;
+package net.civex4.nobility.listeners;
 
 import java.util.UUID;
 
@@ -8,9 +8,8 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import com.gmail.sharpcastle33.Nobility;
-import com.gmail.sharpcastle33.group.Group;
-
+import net.civex4.nobility.Nobility;
+import net.civex4.nobility.group.Group;
 import net.md_5.bungee.api.ChatColor;
 
 public class CommandListener implements CommandExecutor{

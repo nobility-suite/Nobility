@@ -1,4 +1,4 @@
-package com.gmail.sharpcastle33.estate;
+package net.civex4.nobility.estate;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -14,10 +14,10 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import com.gmail.sharpcastle33.Nobility;
-import com.gmail.sharpcastle33.development.Development;
-import com.gmail.sharpcastle33.development.DevelopmentType;
-import com.gmail.sharpcastle33.group.Group;
+import net.civex4.nobility.Nobility;
+import net.civex4.nobility.development.Development;
+import net.civex4.nobility.development.DevelopmentType;
+import net.civex4.nobility.group.Group;
 
 public class EstateManager {
 	

@@ -1,4 +1,4 @@
-package com.gmail.sharpcastle33.listeners;
+package net.civex4.nobility.listeners;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -7,8 +7,8 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
 
-import com.gmail.sharpcastle33.Nobility;
-import com.gmail.sharpcastle33.estate.Estate;
+import net.civex4.nobility.Nobility;
+import net.civex4.nobility.estate.Estate;
 
 public class EstateGUI implements Listener {
 	

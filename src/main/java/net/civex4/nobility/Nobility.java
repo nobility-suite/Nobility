@@ -1,5 +1,11 @@
 package net.civex4.nobility;
 
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
+import org.bukkit.plugin.PluginManager;
+import org.bukkit.plugin.java.JavaPlugin;
+
+import io.github.kingvictoria.NobilityRegions;
 import net.civex4.nobility.development.Development;
 import net.civex4.nobility.development.DevelopmentManager;
 import net.civex4.nobility.development.DevelopmentType;
@@ -10,12 +16,6 @@ import net.civex4.nobility.listeners.ChestClick;
 import net.civex4.nobility.listeners.CommandListener;
 import net.civex4.nobility.listeners.DevelopmentGUI;
 import net.civex4.nobility.listeners.EstateCreate;
-import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
-import org.bukkit.plugin.PluginManager;
-import org.bukkit.plugin.java.JavaPlugin;
-
-import io.github.kingvictoria.NobilityRegions;
 import net.md_5.bungee.api.ChatColor;
 
 public class Nobility extends JavaPlugin {

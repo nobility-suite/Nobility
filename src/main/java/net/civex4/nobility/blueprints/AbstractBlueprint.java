@@ -1,4 +1,4 @@
-package com.gmail.sharpcastle33.blueprints;
+package net.civex4.nobility.blueprints;
 
 import java.awt.List;
 import java.util.ArrayList;

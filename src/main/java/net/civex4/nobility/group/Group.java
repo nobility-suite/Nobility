@@ -1,4 +1,4 @@
-package com.gmail.sharpcastle33.group;
+package net.civex4.nobility.group;
 
 import java.util.ArrayList;
 import java.util.UUID;

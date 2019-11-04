@@ -1,17 +1,16 @@
-package com.gmail.sharpcastle33.estate;
+package net.civex4.nobility.estate;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.block.Block;
 
-import com.gmail.sharpcastle33.Nobility;
-import com.gmail.sharpcastle33.development.Development;
-import com.gmail.sharpcastle33.development.DevelopmentType;
-import com.gmail.sharpcastle33.group.Group;
-
 import io.github.kingvictoria.NobilityRegions;
 import io.github.kingvictoria.Region;
+import net.civex4.nobility.Nobility;
+import net.civex4.nobility.development.Development;
+import net.civex4.nobility.development.DevelopmentType;
+import net.civex4.nobility.group.Group;
 
 public class Estate {
 	private Group group;

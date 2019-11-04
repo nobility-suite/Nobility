@@ -1,5 +1,5 @@
 name: Nobility
-main: com.gmail.sharpcastle33.Nobility
+main: net.civex4.nobility.Nobility
 version: 0.0.1-SNAPSHOT
 depend: [NobilityRegions]
 api-version: 1.13

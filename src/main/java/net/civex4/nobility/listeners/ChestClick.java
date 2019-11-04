@@ -1,4 +1,4 @@
-package com.gmail.sharpcastle33.listeners;
+package net.civex4.nobility.listeners;
 
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -8,7 +8,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 
-import com.gmail.sharpcastle33.Nobility;
+import net.civex4.nobility.Nobility;
 
 public class ChestClick implements Listener {
 	

@@ -1,6 +1,4 @@
-package com.gmail.sharpcastle33.development;
-
-import com.gmail.sharpcastle33.estate.Estate;
+package net.civex4.nobility.development;
 
 public interface Developer {
 	
