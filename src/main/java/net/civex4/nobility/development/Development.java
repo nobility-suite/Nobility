@@ -1,7 +1,15 @@
 package net.civex4.nobility.development;
 
 import net.civex4.nobility.estate.Estate;
-
+/* TODO:
+ * Developments need some refactoring. Either the developments
+ * are composed of several different features (e.g. stores stuff,
+ * collects stuff, etc.), or developments inherit from abstract
+ * classes. The features could all be interfaces, and other
+ * functions can see if a development is an instance of the
+ * interface to check if things like "build()" or "destroy()" 
+ * are applicable to it.
+ */
 public class Development {
 	private DevelopmentType development;
 	private Developer developer;
@@ -16,7 +24,7 @@ public class Development {
 		this.productivity = .4d;
 		this.setCollectionPower(10);
 		
-		
+		//TODO: Use a factory method pattern
 		if (this.getDevelopmentType().isStorehouse()) {
 			this.setDeveloper(new Storehouse(estate, this));
 		} else if (this.getDevelopmentType().isCollector()) {

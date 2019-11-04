@@ -11,7 +11,7 @@ import net.civex4.nobility.Nobility;
 import net.civex4.nobility.estate.Estate;
 
 public class EstateGUI implements Listener {
-	
+	//TODO: This class does nothing
 	
 	@EventHandler
 	public void onInventoryClick(InventoryClickEvent event) {

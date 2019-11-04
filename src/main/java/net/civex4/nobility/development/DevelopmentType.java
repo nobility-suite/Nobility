@@ -15,6 +15,7 @@ public class DevelopmentType {
 	private static LinkedHashMap<String, DevelopmentType> types = new LinkedHashMap<String, DevelopmentType>();
 	
 	private String name;
+	private String title;
 	private Material icon;	
 	
 	private List<String> prerequisites;
@@ -27,6 +28,7 @@ public class DevelopmentType {
 	
 	public DevelopmentType(
 			String name,
+			String title,
 			Material icon,
 			List<String> prerequisites,
 			List<ItemStack> initialCost,
@@ -37,6 +39,7 @@ public class DevelopmentType {
 			String resource
 			) {
 		this.setName(name);
+		this.setTitle(title);
 		this.setIcon(icon);
 		this.setPrerequisites(prerequisites);
 		this.setInitialCost(initialCost);
@@ -45,30 +48,6 @@ public class DevelopmentType {
 		this.setWall(isWall);
 		this.setStorehouse(isStorehouse);
 		this.setResource(resource);
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public Material getIcon() {
-		return icon;
-	}
-
-	public void setIcon(Material icon) {
-		this.icon = icon;
-	}
-
-	public boolean isWall() {
-		return isWall;
-	}
-
-	public void setWall(boolean isWall) {
-		this.isWall = isWall;
 	}
 	
 	public boolean equals(Object obj) {
@@ -94,6 +73,7 @@ public class DevelopmentType {
 	
 	public static DevelopmentType getDevelopmentType(ConfigurationSection config) {
 		String name = config.getName();
+		String title = config.getString("title");
 		Material icon = Material.getMaterial(config.getString("icon"));
 		
 		ArrayList<String> prerequisites = new ArrayList<String>();
@@ -131,6 +111,7 @@ public class DevelopmentType {
 
 		return new DevelopmentType(
 				name, 
+				title,
 				icon,
 				prerequisites,
 				initialCost,
@@ -142,6 +123,30 @@ public class DevelopmentType {
 				);
 	}
 
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public Material getIcon() {
+		return icon;
+	}
+
+	public void setIcon(Material icon) {
+		this.icon = icon;
+	}
+
+	public boolean isWall() {
+		return isWall;
+	}
+
+	public void setWall(boolean isWall) {
+		this.isWall = isWall;
+	}
+	
 	public List<ItemStack> getInitialCost() {
 		return initialCost;
 	}
@@ -197,6 +202,14 @@ public class DevelopmentType {
 
 	public void setCollector(boolean isCollector) {
 		this.isCollector = isCollector;
+	}
+
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
 	}
 	
 }

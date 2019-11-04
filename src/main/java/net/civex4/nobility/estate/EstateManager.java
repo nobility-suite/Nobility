@@ -55,6 +55,7 @@ public class EstateManager {
 		
 	}
 	
+	//TODO: Could use CivModCore for item renaming and menu management
 	public void openDevelopmentGUI(Player player) {
 		Estate estate = getEstateOfPlayer(player);
 		Inventory developmentIcons = Bukkit.createInventory(null, 9, estate.getGroup().name);
@@ -64,7 +65,7 @@ public class EstateManager {
 			DevelopmentType type = development.getDevelopmentType();
 			Material m = type.getIcon();
 			ItemStack icon = new ItemStack(m);
-			nameItem(icon, type.getName());
+			nameItem(icon, type.getTitle());
 			addLore(icon, ChatColor.GREEN + "Active");
 			if (!type.getUpkeepCost().isEmpty()) {			
 				addLore(icon, ChatColor.YELLOW + "Upkeep Cost:");
@@ -94,7 +95,7 @@ public class EstateManager {
 		for(Development development: estate.getInactiveDevelopments()) {
 			Material m = Material.FIREWORK_STAR;
 			ItemStack icon = new ItemStack(m);
-			nameItem(icon, development.getDevelopmentType().getName());
+			nameItem(icon, development.getDevelopmentType().getTitle());
 			addLore(icon, ChatColor.RED + "Inactive");
 			addLore(icon, "Click to Activate");
 			developmentIcons.setItem(i, icon);
@@ -106,7 +107,7 @@ public class EstateManager {
 			if (estate.getActiveDevelopmentsToString().containsAll(type.getPrerequisites())) {
 				Material m = type.getIcon();
 				ItemStack icon = new ItemStack(m);
-				nameItem(icon, type.getName());
+				nameItem(icon, type.getTitle());
 				addLore(icon, ChatColor.YELLOW + "Not Yet Constructed");
 				addLore(icon, "");
 				if (!type.getPrerequisites().isEmpty()) {
