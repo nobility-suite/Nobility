@@ -1,33 +1,47 @@
 package com.gmail.sharpcastle33.development;
 
 import com.gmail.sharpcastle33.estate.Estate;
-
+/* TODO:
+ * Developments need some refactoring. Either the developments
+ * are composed of several different features (e.g. stores stuff,
+ * collects stuff, etc.), or developments inherit from abstract
+ * classes. The features could all be interfaces, and other
+ * functions can see if a development is an instance of the
+ * interface to check if things like "build()" or "destroy()" 
+ * are applicable to it.
+ */
 public class Development {
 	private DevelopmentType development;
-	private Developer developer;
+	private Developable developable;
 	private Estate estate;
 	
 	private double productivity;
 	private int collectionPower;
 	private boolean isActive;
 		
-	public Development(DevelopmentType development, Estate estate) {
-		this.setDevelopmentType(development);
+	public Development(DevelopmentType type, Estate estate) {
+		this.setDevelopmentType(type);
 		this.productivity = .4d;
 		this.setCollectionPower(10);
 		
-		
-		if (this.getDevelopmentType().isStorehouse()) {
-			this.setDeveloper(new Storehouse(estate, this));
-		} else if (this.getDevelopmentType().isCollector()) {
-			this.setDeveloper(new Collector(estate, this));
+		//TODO: Use a factory method pattern
+		if (type.isStorehouse()) {
+			this.setDevelopable(new Storehouse(estate, this));
+		} else if (development.isCollector()) {
+			this.setDevelopable(new Collector(estate, this));
 		}
-		
 	}
 	
-
+	interface Buildable {
+		void build();
+	}
+	
+	interface Tickable {
+		void tick();
+	}
+	
 	public void tick() {
-		developer.tick();
+		developable.tick();
 	}
 	
 	public void activate() {
@@ -71,13 +85,13 @@ public class Development {
 	}
 
 
-	public Developer getDeveloper() {
-		return developer;
+	public Developable getDevelopable() {
+		return developable;
 	}
 
 
-	public void setDeveloper(Developer developer) {
-		this.developer = developer;
+	public void setDevelopable(Developable developable) {
+		this.developable = developable;
 	}
 
 

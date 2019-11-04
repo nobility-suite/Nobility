@@ -1,10 +1,8 @@
 package com.gmail.sharpcastle33.development;
 
-import com.gmail.sharpcastle33.estate.Estate;
-
-public interface Developer {
+public interface Developable {
 	
 	void build();
 	void tick();
-
+	
 }

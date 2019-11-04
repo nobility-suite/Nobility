@@ -1,6 +1,6 @@
 developments:
   storehouse:
-    name: Storehouse
+    title: Storehouse
     icon: CHEST
     prerequisites:
     initialCost:
@@ -11,7 +11,7 @@ developments:
     isStorehouse: true
     resource:
   granary:
-    name: Granary
+    title: Granary
     icon: BREAD
     prerequisites:
       - storehouse
@@ -24,7 +24,7 @@ developments:
     isStorehouse: false
     resource: WHEAT
   loggingCamp:
-    name: Logging Camp
+    title: Logging Camp
     icon: IRON_AXE
     prerequisites:
       - storehouse
@@ -37,7 +37,7 @@ developments:
     isWall: false
     resource: WOOD
   quarry:
-    name: Quarry
+    title: Quarry
     icon: SMOOTH_STONE
     prerequisites:
       - storehouse
@@ -50,7 +50,7 @@ developments:
     isWall: false
     resource: STONE
   ironMine:
-    name: Iron Mine
+    title: Iron Mine
     icon: IRON_PICKAXE
     prerequisites:
       - storehouse

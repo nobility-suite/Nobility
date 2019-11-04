@@ -6,7 +6,7 @@ import org.bukkit.inventory.ItemStack;
 import com.gmail.sharpcastle33.Nobility;
 import com.gmail.sharpcastle33.estate.Estate;
 
-public class Collector implements Developer{
+public class Collector implements Developable {
 	
 	private Estate estate;
 	private Development development;

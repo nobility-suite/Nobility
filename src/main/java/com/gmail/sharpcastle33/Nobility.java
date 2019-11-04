@@ -3,7 +3,6 @@ package com.gmail.sharpcastle33;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
-import org.bukkit.plugin.java.JavaPlugin;
 
 import com.gmail.sharpcastle33.development.Development;
 import com.gmail.sharpcastle33.development.DevelopmentManager;
@@ -18,8 +17,10 @@ import com.gmail.sharpcastle33.listeners.EstateCreate;
 
 import io.github.kingvictoria.NobilityRegions;
 import net.md_5.bungee.api.ChatColor;
+import vg.civcraft.mc.civmodcore.ACivMod;
 
-public class Nobility extends JavaPlugin{
+
+public class Nobility extends ACivMod {
 	
 	public static GroupManager groupMan;
 	public static EstateManager estateMan;
@@ -29,26 +30,27 @@ public class Nobility extends JavaPlugin{
 	
 	public static int currentDay = 0;
 	
+	@Override
 	public void onEnable() {
-		
+		super.onEnable();
 		nobility = this;
 		nobilityRegions = getPlugin(NobilityRegions.class);
+		
 		groupMan = new GroupManager();
 		estateMan = new EstateManager();
-
+		
 		developmentManager = new DevelopmentManager();
 		registerConfig();
 		reloadConfig();
-	    getCommand("nobility").setExecutor(new CommandListener());
-	    DevelopmentType.loadDevelopmentTypes(getConfig().getConfigurationSection("developments"));
-	    
-	    registerEvents();
-
-	    
+		getCommand("nobility").setExecutor(new CommandListener());
+		DevelopmentType.loadDevelopmentTypes(getConfig().getConfigurationSection("developments"));
+		
+		registerEvents();
+		
 	}
-	
+		
 	public static GroupManager getGroupManager() {
-	    	return groupMan;
+		return groupMan;
 	}
 	
 	private void registerEvents() {
@@ -56,12 +58,6 @@ public class Nobility extends JavaPlugin{
 		pm.registerEvents(new EstateCreate(), this);
 		pm.registerEvents(new ChestClick(), this);
 		pm.registerEvents(new DevelopmentGUI(), this);
-	}
-	
-	
-	
-	public void onDisable() {
-		
 	}
 
 	/**

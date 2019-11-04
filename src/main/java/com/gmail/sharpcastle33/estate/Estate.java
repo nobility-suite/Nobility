@@ -32,7 +32,8 @@ public class Estate {
 	
 	public void buildDevelopment(DevelopmentType type) {
 		Development development = new Development(type, this);
-		development.getDeveloper().build();
+		//NOTE: Name of interface is likely going to change.
+		development.getDevelopable().build();
 		builtDevelopments.add(development);
 		Nobility.getDevelopmentManager().subtractCosts(type, this);
 	}

@@ -37,7 +37,6 @@ public class DevelopmentManager {
 			}
 		}
 		
-		//
 		if (totalCompetingEstates * maximum <= regionResource) {
 			rounded = Math.floor(maximum * level * productivity);
 			returnAmount = (int) rounded;
