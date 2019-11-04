@@ -1,47 +1,33 @@
 package com.gmail.sharpcastle33.development;
 
 import com.gmail.sharpcastle33.estate.Estate;
-/* TODO:
- * Developments need some refactoring. Either the developments
- * are composed of several different features (e.g. stores stuff,
- * collects stuff, etc.), or developments inherit from abstract
- * classes. The features could all be interfaces, and other
- * functions can see if a development is an instance of the
- * interface to check if things like "build()" or "destroy()" 
- * are applicable to it.
- */
+
 public class Development {
 	private DevelopmentType development;
-	private Developable developable;
+	private Developer developer;
 	private Estate estate;
 	
 	private double productivity;
 	private int collectionPower;
 	private boolean isActive;
 		
-	public Development(DevelopmentType type, Estate estate) {
-		this.setDevelopmentType(type);
+	public Development(DevelopmentType development, Estate estate) {
+		this.setDevelopmentType(development);
 		this.productivity = .4d;
 		this.setCollectionPower(10);
 		
-		//TODO: Use a factory method pattern
-		if (type.isStorehouse()) {
-			this.setDevelopable(new Storehouse(estate, this));
-		} else if (development.isCollector()) {
-			this.setDevelopable(new Collector(estate, this));
+		
+		if (this.getDevelopmentType().isStorehouse()) {
+			this.setDeveloper(new Storehouse(estate, this));
+		} else if (this.getDevelopmentType().isCollector()) {
+			this.setDeveloper(new Collector(estate, this));
 		}
+		
 	}
 	
-	interface Buildable {
-		void build();
-	}
-	
-	interface Tickable {
-		void tick();
-	}
-	
+
 	public void tick() {
-		developable.tick();
+		developer.tick();
 	}
 	
 	public void activate() {
@@ -85,13 +71,13 @@ public class Development {
 	}
 
 
-	public Developable getDevelopable() {
-		return developable;
+	public Developer getDeveloper() {
+		return developer;
 	}
 
 
-	public void setDevelopable(Developable developable) {
-		this.developable = developable;
+	public void setDeveloper(Developer developer) {
+		this.developer = developer;
 	}
 
 

@@ -25,7 +25,11 @@ public class EstateManager {
 	
 	//HashMap player-estate
 	private HashMap<Player, Estate> estateOfPlayer = new HashMap<Player, Estate>();
-		
+	
+	/*public EstateManager() {
+		ArrayList<Estate> estates = new ArrayList<Estate>();
+	}*/
+	
 	public boolean isVulnerable(Estate e) {
 		int h = e.getVulnerabilityHour(); //should be between 0 and 23;
 		Calendar rightNow = Calendar.getInstance();
@@ -54,12 +58,13 @@ public class EstateManager {
 	public void openDevelopmentGUI(Player player) {
 		Estate estate = getEstateOfPlayer(player);
 		Inventory developmentIcons = Bukkit.createInventory(null, 9, estate.getGroup().name);
+		
 		int i = 0;
 		for(Development development: estate.getActiveDevelopments()) {
 			DevelopmentType type = development.getDevelopmentType();
 			Material m = type.getIcon();
 			ItemStack icon = new ItemStack(m);
-			nameItem(icon, type.getTitle());
+			nameItem(icon, type.getName());
 			addLore(icon, ChatColor.GREEN + "Active");
 			if (!type.getUpkeepCost().isEmpty()) {			
 				addLore(icon, ChatColor.YELLOW + "Upkeep Cost:");
@@ -89,7 +94,7 @@ public class EstateManager {
 		for(Development development: estate.getInactiveDevelopments()) {
 			Material m = Material.FIREWORK_STAR;
 			ItemStack icon = new ItemStack(m);
-			nameItem(icon, development.getDevelopmentType().getTitle());
+			nameItem(icon, development.getDevelopmentType().getName());
 			addLore(icon, ChatColor.RED + "Inactive");
 			addLore(icon, "Click to Activate");
 			developmentIcons.setItem(i, icon);
@@ -101,7 +106,7 @@ public class EstateManager {
 			if (estate.getActiveDevelopmentsToString().containsAll(type.getPrerequisites())) {
 				Material m = type.getIcon();
 				ItemStack icon = new ItemStack(m);
-				nameItem(icon, type.getTitle());
+				nameItem(icon, type.getName());
 				addLore(icon, ChatColor.YELLOW + "Not Yet Constructed");
 				addLore(icon, "");
 				if (!type.getPrerequisites().isEmpty()) {

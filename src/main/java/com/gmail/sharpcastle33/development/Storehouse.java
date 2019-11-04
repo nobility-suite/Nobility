@@ -5,7 +5,7 @@ import org.bukkit.Material;
 
 import com.gmail.sharpcastle33.estate.Estate;
 
-public class Storehouse implements Developable {
+public class Storehouse implements Developer{
 
 	Estate estate;
 	Development development;
@@ -27,6 +27,5 @@ public class Storehouse implements Developable {
 		// TODO Auto-generated method stub
 		
 	}
-	
 
 }
