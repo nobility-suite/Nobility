@@ -16,6 +16,7 @@ public class Estate {
 	private Group group;
 	private Block block;
 	private Region region;
+	//TODO: Replace builtDevelopments with a hashmap marking each developmentType to a boolean
 	private List<Development> builtDevelopments;
 	
 	private int vulnerabilityHour;
@@ -86,18 +87,17 @@ public class Estate {
 	}
 	
 	
-	
-	public List<String> getUnbuiltDevelopments() {
-		List<String> unbuiltDevelopments = new ArrayList<>();
+	//Returns nice looking titles (used to compare with items in GUI)
+	public List<DevelopmentType> getUnbuiltDevelopments() {
+		List<DevelopmentType> unbuiltDevelopments = new ArrayList<>();
 		for (String name : DevelopmentType.getTypes().keySet()) {
-			unbuiltDevelopments.add(name);
+			unbuiltDevelopments.add(DevelopmentType.getDevelopmentType(name));
 		}
 		for (Development development : builtDevelopments) {
-			unbuiltDevelopments.remove(development.getDevelopmentType().getName());
+			unbuiltDevelopments.remove(development.getDevelopmentType());
 		}
 		
 		return unbuiltDevelopments;
-
 	}
 	
 	public List<Development> getActiveDevelopments() {
@@ -108,7 +108,7 @@ public class Estate {
 		} // for
 
 		return activeDevelopments;
-	} // getActiveDevelopments
+	}
 	
 	public List<String> getActiveDevelopmentsToString() {
 		List<String> activeDevelopments = new ArrayList<>();		
@@ -117,7 +117,7 @@ public class Estate {
 			activeDevelopments.add(name);		
 		} // for
 		return activeDevelopments;
-	} // getActiveDevelopmentsToString
+	}
 
 	public List<Development> getInactiveDevelopments() {
 		List<Development> inactiveDevelopments = new ArrayList<>();
@@ -129,33 +129,4 @@ public class Estate {
 		return inactiveDevelopments;
 	} // getInactiveDevelopments
 	
-	
-	
-	
-
-	
-	/*
-	public List<Development> getUninitializedRegisteredDevelopments() {
-		List<Development> uninitializedRegisteredDevelopments = new ArrayList<>();
-		List<Development> initializedRegisteredDevelopments = new ArrayList<>();
-
-		for(Development development: initializedDevelopments) {
-			initializedRegisteredDevelopments.add(development);
-		} // for
-
-		for(Development register: registeredDevelopments.) {
-			if(!initializedRegisteredDevelopments.contains(register)) uninitializedRegisteredDevelopments.add(register);
-		} // for
-
-		return uninitializedRegisteredDevelopments;
-	} // getUninitializedRegisteredDevelopments
-
-	public Development getDevelopmentForName(String name) {
-		for(Development development: initializedDevelopments) {
-			if(development.getDevelopmentType().getName().contentEquals(name)) return development;
-		}
-
-		return null;
-	}*/
-
-} // Class
+}

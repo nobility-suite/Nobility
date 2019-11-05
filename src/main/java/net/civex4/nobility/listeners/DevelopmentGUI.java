@@ -31,10 +31,11 @@ public class DevelopmentGUI implements Listener {
 		if (title != estate.getGroup().name) return;
 
 		event.setCancelled(true);
-
-		for(String development: estate.getUnbuiltDevelopments()) {
-			if(development.contentEquals(name)) {
-				DevelopmentType type = DevelopmentType.getDevelopmentType(development);
+		
+		//Need to use actual titles, can't use internal names
+		for(DevelopmentType type: estate.getUnbuiltDevelopments()) {
+			String developmentName = type.getTitle();
+			if(developmentName.contentEquals(name)) {
 				//Check costs
 				if (!Nobility.getDevelopmentManager().checkCosts(type, estate)) {
 					player.sendMessage("You don't have enough to construct this development");
@@ -43,12 +44,12 @@ public class DevelopmentGUI implements Listener {
 				estate.buildDevelopment(type);
 				player.sendMessage("You constructed a " + type.getName());
 				player.closeInventory();
-				Nobility.estateMan.openDevelopmentGUI(player);
+				//Nobility.estateMan.openDevelopmentGUI(player);
 			}
 		}
 		
 		for(Development development: estate.getBuiltDevelopments()) {
-			String developmentName = development.getDevelopmentType().getName();
+			String developmentName = development.getDevelopmentType().getTitle();
 			if (developmentName.contentEquals(name)) {
 				if (development.isActive() == false) {
 					//TODO: if development has enough food...
@@ -56,13 +57,13 @@ public class DevelopmentGUI implements Listener {
 					development.setActive(true);
 					player.sendMessage(developmentName + " is now active");
 					player.closeInventory();
-					Nobility.estateMan.openDevelopmentGUI(player);
+					//Nobility.estateMan.openDevelopmentGUI(player);
 				}  else {
 					development.deactivate();
 					development.setActive(false);
 					player.sendMessage(developmentName + " is now inactive");
 					player.closeInventory();
-					Nobility.estateMan.openDevelopmentGUI(player);
+					//Nobility.estateMan.openDevelopmentGUI(player);
 				}
 			}
 		}		

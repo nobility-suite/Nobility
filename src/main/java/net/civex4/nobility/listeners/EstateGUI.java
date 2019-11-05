@@ -11,7 +11,10 @@ import net.civex4.nobility.Nobility;
 import net.civex4.nobility.estate.Estate;
 
 public class EstateGUI implements Listener {
-	//TODO: This class does nothing
+	/* This class currently does nothing
+	 * The plan is to add buttons here for all the estate features
+	 * (e.g. developments, trade routes, etc.)
+	 */
 	
 	@EventHandler
 	public void onInventoryClick(InventoryClickEvent event) {

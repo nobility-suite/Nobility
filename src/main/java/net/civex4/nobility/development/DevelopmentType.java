@@ -130,6 +130,22 @@ public class DevelopmentType {
 	public void setName(String name) {
 		this.name = name;
 	}
+	
+	public String getTitle() {
+		return title;
+	}
+	
+	public static List<String> getTitles(List<DevelopmentType> types) {
+		List<String> titles = new ArrayList<>();
+		for (DevelopmentType type : types) {
+			titles.add(type.getTitle());
+		}
+		return titles;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
 
 	public Material getIcon() {
 		return icon;
@@ -204,12 +220,6 @@ public class DevelopmentType {
 		this.isCollector = isCollector;
 	}
 
-	public String getTitle() {
-		return title;
-	}
 
-	public void setTitle(String title) {
-		this.title = title;
-	}
 	
 }

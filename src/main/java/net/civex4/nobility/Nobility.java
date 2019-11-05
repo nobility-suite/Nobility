@@ -19,95 +19,95 @@ import net.civex4.nobility.listeners.EstateCreate;
 import net.md_5.bungee.api.ChatColor;
 
 public class Nobility extends JavaPlugin {
+	
+	public static GroupManager groupMan;
+	public static EstateManager estateMan;
+	private static Nobility nobility;
+	private static NobilityRegions nobilityRegions;
+	private static DevelopmentManager developmentManager;
 
-  public static GroupManager groupMan;
-  public static EstateManager estateMan;
-  private static Nobility nobility;
-  private static NobilityRegions nobilityRegions;
-  private static DevelopmentManager developmentManager;
+	public static int currentDay = 0;
 
-  public static int currentDay = 0;
+	public void onEnable() {
 
-  public void onEnable() {
+		nobility = this;
+		nobilityRegions = getPlugin(NobilityRegions.class);
+		groupMan = new GroupManager();
+		estateMan = new EstateManager();
 
-    nobility = this;
-    nobilityRegions = getPlugin(NobilityRegions.class);
-    groupMan = new GroupManager();
-    estateMan = new EstateManager();
+		developmentManager = new DevelopmentManager();
+		registerConfig();
+		reloadConfig();
+		getCommand("nobility").setExecutor(new CommandListener());
+		DevelopmentType.loadDevelopmentTypes(getConfig().getConfigurationSection("developments"));
 
-    developmentManager = new DevelopmentManager();
-    registerConfig();
-    reloadConfig();
-    getCommand("nobility").setExecutor(new CommandListener());
-    DevelopmentType.loadDevelopmentTypes(getConfig().getConfigurationSection("developments"));
+		registerEvents();
+	}
 
-    registerEvents();
-  }
+	public static GroupManager getGroupManager() {
+		return groupMan;
+	}
 
-  public static GroupManager getGroupManager() {
-    return groupMan;
-  }
-
-  private void registerEvents() {
-    PluginManager pm = getServer().getPluginManager();
-    pm.registerEvents(new EstateCreate(), this);
-    pm.registerEvents(new ChestClick(), this);
-    pm.registerEvents(new DevelopmentGUI(), this);
-  }
+	private void registerEvents() {
+		PluginManager pm = getServer().getPluginManager();
+		pm.registerEvents(new EstateCreate(), this);
+		pm.registerEvents(new ChestClick(), this);
+		pm.registerEvents(new DevelopmentGUI(), this);
+	}
 
 
-  public void onDisable() {
+	public void onDisable() {
 
-  }
+	}
 
-  /**
-   * Gets the instance of the Nobility plugin
-   *
-   * @return Nobility Plugin
-   */
-  public static Nobility getNobility() {
-    return nobility;
-  }
+	/**
+	 * Gets the instance of the Nobility plugin
+	 *
+	 * @return Nobility Plugin
+	 */
+	public static Nobility getNobility() {
+		return nobility;
+	}
 
-  /**
-   * Gets the instance of the NobilityRegions plugin
-   *
-   * @return NobilityRegions Plugin
-   */
-  public static NobilityRegions getNobilityRegions() {
-    return nobilityRegions;
-  }
+	/**
+	 * Gets the instance of the NobilityRegions plugin
+	 *
+	 * @return NobilityRegions Plugin
+	 */
+	public static io.github.kingvictoria.NobilityRegions getNobilityRegions() {
+		return nobilityRegions;
+	}
 
-  public static DevelopmentManager getDevelopmentManager() {
-    return developmentManager;
-  }
+	public static DevelopmentManager getDevelopmentManager() {
+		return developmentManager;
+	}
 
-  public static void tickDay() {
-    currentDay += 1;
-    for (Player p : Bukkit.getServer().getOnlinePlayers()) {
-      p.sendMessage(ChatColor.GOLD + "Rise and shine! A new dawn is upon us. The current day is: "
-          + ChatColor.BLUE + ChatColor.BOLD + currentDay);
-    }
+	public static void tickDay() {
+		currentDay += 1;
+		for (Player p : Bukkit.getServer().getOnlinePlayers()) {
+			p.sendMessage(ChatColor.GOLD + "Rise and shine! A new dawn is upon us. The current day is: "
+					+ ChatColor.BLUE + ChatColor.BOLD + currentDay);
+		}
 
-    //DO STUFF
-    for (Estate estate : estateMan.estates) {
-      for (Development development : estate.getActiveDevelopments()) {
-        developmentManager.subtractUpkeep(development.getDevelopmentType(), estate);
-      }
-    }
+		//DO STUFF
+		for (Estate estate : estateMan.estates) {
+			for (Development development : estate.getActiveDevelopments()) {
+				developmentManager.subtractUpkeep(development.getDevelopmentType(), estate);
+			}
+		}
 
-    for (Estate estate : estateMan.estates) {
-      for (Development development : estate.getActiveDevelopments()) {
-        if (development.isActive()) {
-          development.tick();
-        }
-      }
-    }
-  }
+		for (Estate estate : estateMan.estates) {
+			for (Development development : estate.getActiveDevelopments()) {
+				if (development.isActive()) {
+					development.tick();
+				}
+			}
+		}
+	}
 
-  private void registerConfig() {
-    getConfig().options().copyDefaults(true);
-    saveConfig();
-  }
+	private void registerConfig() {
+		getConfig().options().copyDefaults(true);
+		saveConfig();
+	}
 
 }

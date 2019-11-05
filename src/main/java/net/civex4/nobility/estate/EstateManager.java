@@ -34,11 +34,7 @@ public class EstateManager {
 		int h = e.getVulnerabilityHour(); //should be between 0 and 23;
 		Calendar rightNow = Calendar.getInstance();
 		int currentHour = rightNow.get(Calendar.HOUR_OF_DAY);
-		if(currentHour >= h && currentHour < (h+2) % 24) {
-			return true;
-		} else {
-			return false;
-		}
+		return currentHour >= h && currentHour < ((h+2) % 24) ? true : false;
 	}
 	
 	public Estate createEstate(Block block, Player player) {
@@ -102,8 +98,8 @@ public class EstateManager {
 			i++;
 		}
 		
-		for(String name: estate.getUnbuiltDevelopments()) {
-			DevelopmentType type = DevelopmentType.getDevelopmentType(name);
+		//Show all developments the player has prerequisites for
+		for(DevelopmentType type: estate.getUnbuiltDevelopments()) {			
 			if (estate.getActiveDevelopmentsToString().containsAll(type.getPrerequisites())) {
 				Material m = type.getIcon();
 				ItemStack icon = new ItemStack(m);
@@ -112,7 +108,9 @@ public class EstateManager {
 				addLore(icon, "");
 				if (!type.getPrerequisites().isEmpty()) {
 					addLore(icon, ChatColor.YELLOW + "Prerequisites:");
-					for(String prerequisite : type.getPrerequisites()) addLore(icon, prerequisite);
+					for(String prerequisite : type.getPrerequisites()) {
+						addLore(icon, DevelopmentType.getDevelopmentType(prerequisite).getTitle());
+					}
 					addLore(icon, "");
 				}
 				
@@ -141,10 +139,10 @@ public class EstateManager {
 		player.openInventory(developmentIcons);
 	}
 	
-	//Utility method to rename an item
+	//Utility method to rename an item. Returns bold.
 	public static ItemStack nameItem(ItemStack item, String name) {
 		ItemMeta meta = item.getItemMeta();
-		meta.setDisplayName(name);		
+		meta.setDisplayName(ChatColor.BOLD + name);		
 		item.setItemMeta(meta);
 		return item;
 	}
