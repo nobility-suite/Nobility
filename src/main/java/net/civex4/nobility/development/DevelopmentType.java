@@ -10,6 +10,9 @@ import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
 
+import io.github.kingvictoria.NobilityRegions;
+import io.github.kingvictoria.RegionResource;
+
 public class DevelopmentType {
 	
 	private static LinkedHashMap<String, DevelopmentType> types = new LinkedHashMap<String, DevelopmentType>();
@@ -71,6 +74,8 @@ public class DevelopmentType {
 		return types.get(name);
 	}
 	
+	
+	
 	public static DevelopmentType getDevelopmentType(ConfigurationSection config) {
 		String name = config.getName();
 		String title = config.getString("title");
@@ -104,7 +109,7 @@ public class DevelopmentType {
 		boolean isStorehouse = config.getBoolean("isStorehouse");
 		String resource = config.getString("resource");
 		
-		//Check if the string is a material
+		//TODO: Check if resource is a valid RegionResource enum. Otherwise shutdown.
 		if (config.getConfigurationSection("resource") != null) {
 			resource = resource.toUpperCase();
 		}
