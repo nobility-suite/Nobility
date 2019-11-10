@@ -5,12 +5,10 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -18,6 +16,9 @@ import net.civex4.nobility.Nobility;
 import net.civex4.nobility.development.Development;
 import net.civex4.nobility.development.DevelopmentType;
 import net.civex4.nobility.group.Group;
+import vg.civcraft.mc.civmodcore.api.ItemAPI;
+import vg.civcraft.mc.civmodcore.inventorygui.Clickable;
+import vg.civcraft.mc.civmodcore.inventorygui.ClickableInventory;
 
 public class EstateManager {
 	
@@ -51,18 +52,21 @@ public class EstateManager {
 		
 	}
 	
-	//TODO: Could use CivModCore for item renaming and menu management
+	// TODO Could use CivModCore for item renaming
 	public void openDevelopmentGUI(Player player) {
 		Estate estate = getEstateOfPlayer(player);
-		Inventory developmentIcons = Bukkit.createInventory(null, 9, estate.getGroup().name);
+		ClickableInventory developmentGUI = new ClickableInventory(9, estate.getGroup().name);
+		//Inventory developmentIcons = Bukkit.createInventory(null, 9, estate.getGroup().name);
 		
-		int i = 0;
+		// ACTIVE DEVELOPMENTS:
 		for(Development development: estate.getActiveDevelopments()) {
 			DevelopmentType type = development.getDevelopmentType();
 			Material m = type.getIcon();
 			ItemStack icon = new ItemStack(m);
 			nameItem(icon, type.getTitle());
 			addLore(icon, ChatColor.GREEN + "Active");
+
+			
 			if (!type.getUpkeepCost().isEmpty()) {			
 				addLore(icon, ChatColor.YELLOW + "Upkeep Cost:");
 				for (ItemStack cost : type.getUpkeepCost()) {
@@ -84,28 +88,58 @@ public class EstateManager {
 				//addLore(icon, "Percent: " + TODO: actualYield / regionTotal);
 				//TODO: Actual Yield, Food Usage, if (foodUsage != maximum) "Click to increase food usage"
 			}
+
+			// IF ACTIVE DEVELOPMENT IS CLICKED
+			Clickable c = new Clickable(icon) {				
+				@Override
+				public void clicked(Player p) {
+					// TODO open development options menu
+					String developmentName = development.getDevelopmentType().getTitle();
+					development.deactivate();
+					development.setActive(false);
+					player.sendMessage(developmentName + " is now inactive");
+					player.closeInventory();
+					openDevelopmentGUI(p);
+				}
+			};
 			
-			developmentIcons.setItem(i, icon);
-			i++;
+			developmentGUI.addSlot(c);
 		}
+		
+		// INACTIVE DEVELOPMENTS:
 		for(Development development: estate.getInactiveDevelopments()) {
 			Material m = Material.FIREWORK_STAR;
 			ItemStack icon = new ItemStack(m);
 			nameItem(icon, development.getDevelopmentType().getTitle());
 			addLore(icon, ChatColor.RED + "Inactive");
 			addLore(icon, "Click to Activate");
-			developmentIcons.setItem(i, icon);
-			i++;
+
+			
+			// IF INACTIVE DEVELOPMENT IS CLICKED
+			Clickable c = new Clickable(icon) {				
+				@Override
+				public void clicked(Player p) {
+					// TODO if development has enough food...
+					String developmentName = development.getDevelopmentType().getTitle();
+					development.activate();
+					development.setActive(true);
+					player.sendMessage(developmentName + " is now active");
+					player.closeInventory();
+					openDevelopmentGUI(p);
+				}
+			};
+			
+			developmentGUI.addSlot(c);
 		}
 		
-		//Show all developments the player has prerequisites for
+		// UNBUILT AVAILABLE DEVELOPMENTS
 		for(DevelopmentType type: estate.getUnbuiltDevelopments()) {			
 			if (estate.getActiveDevelopmentsToString().containsAll(type.getPrerequisites())) {
 				Material m = type.getIcon();
 				ItemStack icon = new ItemStack(m);
 				nameItem(icon, type.getTitle());
 				addLore(icon, ChatColor.YELLOW + "Not Yet Constructed");
-				addLore(icon, "");
+				
 				if (!type.getPrerequisites().isEmpty()) {
 					addLore(icon, ChatColor.YELLOW + "Prerequisites:");
 					for(String prerequisite : type.getPrerequisites()) {
@@ -117,26 +151,41 @@ public class EstateManager {
 				if (!type.getUpkeepCost().isEmpty()) {
 					addLore(icon, ChatColor.YELLOW + "Upkeep Cost:");
 					for(ItemStack cost : type.getUpkeepCost()) {						
-						addLore(icon, cost.getType().toString() + ": " + cost.getAmount());
+						addLore(icon, ItemAPI.getDisplayName(cost) + ": " + cost.getAmount());
 					}
 					addLore(icon, "");
 				}
 				
 				if(!type.getInitialCost().isEmpty() ) {
 					addLore(icon, ChatColor.YELLOW + "Initial Cost:");
-					for(ItemStack item : type.getInitialCost()) {
-						addLore(icon, item.getType().toString() +  ": " + item.getAmount());
+					for(ItemStack cost : type.getInitialCost()) {
+						addLore(icon, ItemAPI.getDisplayName(cost) +  ": " + cost.getAmount());
 					}
 					if(!Nobility.getDevelopmentManager().checkCosts(type, estate)) {
 						addLore(icon, ChatColor.RED + "Not enough to construct this estate");
 					}
 				}
-				developmentIcons.setItem(i, icon);
-				i++;
-			}
+				
+				// IF UNBUILT DEVELOPMENT IS CLICKED:
+				Clickable c = new Clickable(icon) {				
+					@Override
+					public void clicked(Player p) {
+						if (!Nobility.getDevelopmentManager().checkCosts(type, estate)) {
+							player.sendMessage("You don't have enough to construct this development");
+							return;
+						}
+						estate.buildDevelopment(type);
+						player.sendMessage("You constructed a " + type.getTitle());
+						player.closeInventory();
+						openDevelopmentGUI(p);
+					}
+				};
+				
+				developmentGUI.addSlot(c);
+			}			
 		}
 		
-		player.openInventory(developmentIcons);
+		developmentGUI.showInventory(player);
 	}
 	
 	//Utility method to rename an item. Returns bold.
