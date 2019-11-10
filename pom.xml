@@ -9,6 +9,10 @@
             <id>spigot-repo</id>
             <url>https://hub.spigotmc.org/nexus/content/groups/public/</url>
         </repository>
+		<repository>
+			<id>devoted-repo</id>
+			<url>https://build.devotedmc.com/plugin/repository/everything/</url>
+		</repository>
         <repository>
             <id>jitpack.io</id>
             <url>https://jitpack.io</url>
@@ -26,6 +30,11 @@
              <groupId>com.github.nobility-suite</groupId>
              <artifactId>NobilityRegions</artifactId>
              <version>v0.5-1.14.4</version>
+         </dependency>
+         <dependency>
+         	<groupId>vg.civcraft.mc.civmodcore</groupId>
+         	<artifactId>CivModCore</artifactId>
+         	<version>1.7.5</version>
          </dependency>
      </dependencies>
     

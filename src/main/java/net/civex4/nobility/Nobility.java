@@ -3,7 +3,6 @@ package net.civex4.nobility;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
-import org.bukkit.plugin.java.JavaPlugin;
 
 import io.github.kingvictoria.NobilityRegions;
 import net.civex4.nobility.development.Development;
@@ -12,13 +11,16 @@ import net.civex4.nobility.development.DevelopmentType;
 import net.civex4.nobility.estate.Estate;
 import net.civex4.nobility.estate.EstateManager;
 import net.civex4.nobility.group.GroupManager;
+import net.civex4.nobility.gui.GUICommand;
+import net.civex4.nobility.gui.TextInputListener;
 import net.civex4.nobility.listeners.ChestClick;
 import net.civex4.nobility.listeners.CommandListener;
 import net.civex4.nobility.listeners.DevelopmentGUI;
 import net.civex4.nobility.listeners.EstateCreate;
 import net.md_5.bungee.api.ChatColor;
+import vg.civcraft.mc.civmodcore.ACivMod;
 
-public class Nobility extends JavaPlugin {
+public class Nobility extends ACivMod {
 	
 	public static GroupManager groupMan;
 	public static EstateManager estateMan;
@@ -27,9 +29,10 @@ public class Nobility extends JavaPlugin {
 	private static DevelopmentManager developmentManager;
 
 	public static int currentDay = 0;
-
+	
+	@Override
 	public void onEnable() {
-
+		super.onEnable();
 		nobility = this;
 		nobilityRegions = getPlugin(NobilityRegions.class);
 		groupMan = new GroupManager();
@@ -39,6 +42,7 @@ public class Nobility extends JavaPlugin {
 		registerConfig();
 		reloadConfig();
 		getCommand("nobility").setExecutor(new CommandListener());
+		getCommand("test").setExecutor(new GUICommand());
 		DevelopmentType.loadDevelopmentTypes(getConfig().getConfigurationSection("developments"));
 
 		registerEvents();
@@ -53,6 +57,7 @@ public class Nobility extends JavaPlugin {
 		pm.registerEvents(new EstateCreate(), this);
 		pm.registerEvents(new ChestClick(), this);
 		pm.registerEvents(new DevelopmentGUI(), this);
+		pm.registerEvents(new TextInputListener(), this);
 	}
 
 
@@ -109,5 +114,7 @@ public class Nobility extends JavaPlugin {
 		getConfig().options().copyDefaults(true);
 		saveConfig();
 	}
+
+
 
 }

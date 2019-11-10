@@ -8,4 +8,5 @@ commands:
       description: (OP ONLY) debug command for setting an enchant on an item
       usage: with an item in main hand /gce <enchant> <level>
       aliases: [ n ]
-
+   test:
+      description: Tests stuff

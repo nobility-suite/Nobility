@@ -19,15 +19,16 @@ public class DevelopmentGUI implements Listener {
 		if (event.getCurrentItem() == null) return;		
 
 		InventoryView inventory = event.getView();
+		if (inventory.getTitle() == null) return;
 		String title = inventory.getTitle();
 		Player player = (Player) event.getWhoClicked();
 		ItemStack item = event.getCurrentItem();
-
+		if (!Nobility.estateMan.playerHasEstate(player)) return;
 		if(!item.hasItemMeta()) return;
 
 		String name = item.getItemMeta().getDisplayName();
 		Estate estate = Nobility.estateMan.getEstateOfPlayer(player);
-
+		
 		if (title != estate.getGroup().name) return;
 
 		event.setCancelled(true);
