@@ -15,7 +15,6 @@ import net.civex4.nobility.gui.GUICommand;
 import net.civex4.nobility.gui.TextInputListener;
 import net.civex4.nobility.listeners.ChestClick;
 import net.civex4.nobility.listeners.CommandListener;
-import net.civex4.nobility.listeners.DevelopmentGUI;
 import net.civex4.nobility.listeners.EstateCreate;
 import net.md_5.bungee.api.ChatColor;
 import vg.civcraft.mc.civmodcore.ACivMod;
@@ -55,8 +54,7 @@ public class Nobility extends ACivMod {
 	private void registerEvents() {
 		PluginManager pm = getServer().getPluginManager();
 		pm.registerEvents(new EstateCreate(), this);
-		pm.registerEvents(new ChestClick(), this);
-		pm.registerEvents(new DevelopmentGUI(), this);
+		pm.registerEvents(new ChestClick(), this);;
 		pm.registerEvents(new TextInputListener(), this);
 	}
 

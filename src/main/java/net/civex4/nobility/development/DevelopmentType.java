@@ -10,6 +10,8 @@ import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
 
+import net.civex4.nobility.gui.Renamable;
+
 public class DevelopmentType {
 	
 	private static LinkedHashMap<String, DevelopmentType> types = new LinkedHashMap<String, DevelopmentType>();
@@ -25,6 +27,20 @@ public class DevelopmentType {
 	private boolean isWall;
 	private boolean isStorehouse;
 	private String resource;
+	
+	Renamable titleRenamable = new Renamable() {		
+		String title;
+		
+		@Override
+		public void setName(String name) {
+			this.title = name;		
+		}
+		
+		@Override
+		public String getName() {
+			return title;
+		}
+	};
 	
 	public DevelopmentType(
 			String name,
@@ -199,6 +215,41 @@ public class DevelopmentType {
 	public void setResource(String resource) {
 		this.resource = resource;
 	}
+	
+	/*
+	 * Development GUI pseudo code
+	 * 
+	 * new clickableInventory
+	 * 
+	 * for development types
+	 * 	for changeabale things in development types
+	 * 		create a clickable
+	 * 		if thing is instanceOf renamable
+	 * 			New TextInput
+	 * 		if thing is instanceOf changeableBoolean
+	 * 			New BooleanButton
+	 * 				onClick {
+	 * 					thing.state = state
+	 * 				}
+	 * 		if thing is instanceOf itemInput
+	 * 			New ItemInputButton
+	 * 				onClick 
+	 * 					choose item
+	 * 					enter number
+	 * 	Add clickable to inventory
+	 * 
+	 * 
+	 * Server Setttings -> DevelopmentTypes -> Changeables -> sub changeable menus
+	 *  |
+	 *  L> Regions / This region -> Region Changeables -> sub changeable menus
+	 *  
+	 * 
+	 */
+	
+	
+	
+	
+	
 
 	public boolean isStorehouse() {
 		return isStorehouse;
