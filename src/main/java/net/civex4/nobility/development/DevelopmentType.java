@@ -16,17 +16,17 @@ public class DevelopmentType {
 	
 	private static LinkedHashMap<String, DevelopmentType> types = new LinkedHashMap<String, DevelopmentType>();
 	
-	private String name;
-	private String title;
-	private Material icon;	
+	private String name; //Internal; Generate if config is null as the title in oneWordForm
+	private String title; //External; Change to "Renamable"
+	private Material icon; //Change to "MaterialInput"
 	
-	private List<String> prerequisites;
-	private List<ItemStack> initialCost;
-	private List<ItemStack> upkeepCost;
-	private boolean isCollector;
-	private boolean isWall;
-	private boolean isStorehouse;
-	private String resource;
+	private List<String> prerequisites; //Change to "SelectFromList"
+	private List<ItemStack> initialCost; //Change to "ItemInput"
+	private List<ItemStack> upkeepCost; //Change to "ItemInput"
+	private boolean isCollector; //Change to "Booleanable"
+	private boolean isWall;      // "     "    "	
+	private boolean isStorehouse;// "     "    "
+	private String resource; //Needs to be changed to "SelectFromList" from the NobilityRegion "RegionResource" enum
 	
 	Renamable titleRenamable = new Renamable() {		
 		String title;
@@ -41,6 +41,8 @@ public class DevelopmentType {
 			return title;
 		}
 	};
+	
+
 	
 	public DevelopmentType(
 			String name,
@@ -70,6 +72,7 @@ public class DevelopmentType {
 		if(!(obj instanceof DevelopmentType)) return false;
 		DevelopmentType other = (DevelopmentType) obj;
 		return other.getName().equals(name);
+
 	}
 	
 	public static void loadDevelopmentTypes(ConfigurationSection config) {		

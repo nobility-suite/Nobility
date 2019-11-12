@@ -17,6 +17,7 @@ import net.civex4.nobility.development.Development;
 import net.civex4.nobility.development.DevelopmentType;
 import net.civex4.nobility.group.Group;
 import vg.civcraft.mc.civmodcore.api.ItemAPI;
+import vg.civcraft.mc.civmodcore.api.ItemNames;
 import vg.civcraft.mc.civmodcore.inventorygui.Clickable;
 import vg.civcraft.mc.civmodcore.inventorygui.ClickableInventory;
 
@@ -35,7 +36,7 @@ public class EstateManager {
 		int h = e.getVulnerabilityHour(); //should be between 0 and 23;
 		Calendar rightNow = Calendar.getInstance();
 		int currentHour = rightNow.get(Calendar.HOUR_OF_DAY);
-		return currentHour >= h && currentHour < ((h+2) % 24) ? true : false;
+		return currentHour >= h && currentHour < ((h+2) % 24);
 	}
 	
 	public Estate createEstate(Block block, Player player) {
@@ -151,7 +152,7 @@ public class EstateManager {
 				if (!type.getUpkeepCost().isEmpty()) {
 					addLore(icon, ChatColor.YELLOW + "Upkeep Cost:");
 					for(ItemStack cost : type.getUpkeepCost()) {						
-						addLore(icon, ItemAPI.getDisplayName(cost) + ": " + cost.getAmount());
+						addLore(icon, ItemNames.getItemName(cost) + ": " + cost.getAmount());
 					}
 					addLore(icon, "");
 				}
@@ -159,7 +160,7 @@ public class EstateManager {
 				if(!type.getInitialCost().isEmpty() ) {
 					addLore(icon, ChatColor.YELLOW + "Initial Cost:");
 					for(ItemStack cost : type.getInitialCost()) {
-						addLore(icon, ItemAPI.getDisplayName(cost) +  ": " + cost.getAmount());
+						addLore(icon, ItemNames.getItemName(cost) +  ": " + cost.getAmount());
 					}
 					if(!Nobility.getDevelopmentManager().checkCosts(type, estate)) {
 						addLore(icon, ChatColor.RED + "Not enough to construct this estate");
