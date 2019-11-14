@@ -1,5 +1,7 @@
 package net.civex4.nobility.development;
 
+import java.util.ArrayList;
+
 import net.civex4.nobility.estate.Estate;
 /* TODO:
  * Developments need some refactoring. Either the developments
@@ -14,6 +16,12 @@ public class Development {
 	private DevelopmentType development;
 	private Developer developer;
 	private Estate estate;
+	
+	public enum Type {
+		COLLECTOR, WALL, STOREHOUSE
+	}
+	
+	ArrayList<Type> Types = new ArrayList<>();
 	
 	private double productivity;
 	private int collectionPower;
@@ -33,17 +41,24 @@ public class Development {
 		
 	}
 	
+	public void addType(Type type) {
+		Types.add(type);
+	}
 
 	public void tick() {
 		developer.tick();
 	}
 	
 	public void activate() {
-		setActive(true);
+		this.isActive = true;
 	}
 	
 	public void deactivate() {
-		setActive(false);
+		this.isActive = false;
+	}
+	
+	public boolean isActive() {
+		return isActive;
 	}
 	
 	public DevelopmentType getDevelopmentType() {
@@ -69,15 +84,6 @@ public class Development {
 	public void setCollectionPower(int collectionPower) {
 		this.collectionPower = collectionPower;
 	}
-
-	public boolean isActive() {
-		return isActive;
-	}
-
-	public void setActive(boolean isActive) {
-		this.isActive = isActive;
-	}
-
 
 	public Developer getDeveloper() {
 		return developer;

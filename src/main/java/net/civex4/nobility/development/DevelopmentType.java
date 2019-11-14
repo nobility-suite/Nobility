@@ -10,9 +10,6 @@ import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
 
-import io.github.kingvictoria.NobilityRegions;
-import io.github.kingvictoria.RegionResource;
-
 public class DevelopmentType {
 	
 	private static LinkedHashMap<String, DevelopmentType> types = new LinkedHashMap<String, DevelopmentType>();
@@ -24,6 +21,7 @@ public class DevelopmentType {
 	private List<String> prerequisites;
 	private List<ItemStack> initialCost;
 	private List<ItemStack> upkeepCost;
+
 	private boolean isCollector;
 	private boolean isWall;	
 	private boolean isStorehouse;

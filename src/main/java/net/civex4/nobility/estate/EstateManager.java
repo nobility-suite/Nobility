@@ -21,6 +21,7 @@ import vg.civcraft.mc.civmodcore.api.ItemNames;
 import vg.civcraft.mc.civmodcore.chatDialog.Dialog;
 import vg.civcraft.mc.civmodcore.inventorygui.Clickable;
 import vg.civcraft.mc.civmodcore.inventorygui.ClickableInventory;
+import vg.civcraft.mc.civmodcore.inventorygui.DecorationStack;
 
 public class EstateManager {
 	
@@ -53,29 +54,36 @@ public class EstateManager {
 		
 	}
 	
+	/* Need to create a menu with the options players can take with a development
+	 * The options are upgrade, enable, disable, see other developments in region,
+	 * and destroy, plus any additional features. Storehouse needs a feature, "open
+	 * storehouse inventory" 
+	 */
+	
 	public void openEstateGUI(Player player) {
 		Estate estate = getEstateOfPlayer(player);
-		ClickableInventory estateGUI = new ClickableInventory(9, estate.getGroup().getName());
-		
+		final int rowLength = 9;
+		ClickableInventory estateGUI = new ClickableInventory(rowLength * 3, estate.getGroup().getName());
+
 		// BUTTONS:
 		// DEVELOPMENT GUI
-		ItemStack developmentGUIIcon = createIcon(Material.CRAFTING_TABLE, "Developments");
+		ItemStack developmentGUIIcon = createIcon(Material.CRAFTING_TABLE, "Build a Development");
 		Clickable developmentButton = new Clickable(developmentGUIIcon) {
 			@Override
 			public void clicked(Player p) {
-				openDevelopmentGUI(p);
+				openBuildGUI(p);
 			}			
 		};
 		estateGUI.addSlot(developmentButton);
 		
 		// RENAME ESTATE
-		ItemStack renameIcon = createIcon(Material.FEATHER, "Rename");
+		ItemStack renameIcon = createIcon(Material.FEATHER, "Rename this Estate");
 		Clickable estateNameButton = new Clickable(renameIcon) {
 
 			@Override
 			public void clicked(Player p) {
 				p.closeInventory();
-				Dialog dialog = new Dialog(player, Nobility.getNobility(), "Enter in a new name:") {
+				new Dialog(player, Nobility.getNobility(), "Enter in a new name:") {
 					
 					@Override
 					public List<String> onTabComplete(String wordCompleted, String[] fullMessage) {
@@ -100,15 +108,14 @@ public class EstateManager {
 		};
 		estateGUI.addSlot(estateNameButton);
 		
-		// OPEN
-		estateGUI.showInventory(player);
-	}
-	
-	
-	// TODO Could use CivModCore for item renaming
-	public void openDevelopmentGUI(Player player) {
-		Estate estate = getEstateOfPlayer(player);
-		ClickableInventory developmentGUI = new ClickableInventory(9, "Developments of " + estate.getGroup().getName());
+		// DECORATION STACKS
+		for (int i = 0; i < rowLength * 2; i++) {
+			if (!(estateGUI.getSlot(i) instanceof Clickable)) {
+				Clickable c = new DecorationStack(createIcon(Material.BLACK_STAINED_GLASS, " "));
+				estateGUI.setSlot(c, i);
+			}
+		}
+		
 		// BUTTONS:
 		// ACTIVE DEVELOPMENTS:
 		for(Development development: estate.getActiveDevelopments()) {
@@ -122,20 +129,12 @@ public class EstateManager {
 			if (!type.getUpkeepCost().isEmpty()) {			
 				addLore(icon, ChatColor.YELLOW + "Upkeep Cost:");
 				for (ItemStack cost : type.getUpkeepCost()) {
-					addLore(icon, cost.getType().toString() + ": " + cost.getAmount());
+					addLore(icon, ItemNames.getItemName(cost) + ": " + cost.getAmount());
 				}
-				
-				/*
-				 * For when the costs have been abstracted
-				if (type.getUpkeepCost().containsKey("Food")) {
-					addLore(icon,"Food: " + development.getRegister().getCost().get("Food"));
-				}
-				if (type.getUpkeepCost().containsKey("Hardware")) {
-					addLore(icon,"Hardware: " + development.getRegister().getCost().get("Hardware"));
-				} */
+
 			}
 			if (type.getResource() != null) {
-				addLore(icon, "Collection Power (base): " + development.getCollectionPower() * development.getProductivity() + " (4)"); //register.getBasePower
+				addLore(icon, "Collection Power (base): " + development.getCollectionPower() * development.getProductivity() + " (4)");
 				addLore(icon, "Region Total: " + estate.getRegion().getResource(type.getResource().toUpperCase()));
 				//addLore(icon, "Percent: " + TODO: actualYield / regionTotal);
 				//TODO: Actual Yield, Food Usage, if (foodUsage != maximum) "Click to increase food usage"
@@ -148,14 +147,12 @@ public class EstateManager {
 					// TODO open development options menu
 					String developmentName = development.getDevelopmentType().getTitle();
 					development.deactivate();
-					development.setActive(false);
 					player.sendMessage(developmentName + " is now inactive");
-					player.closeInventory();
-					openDevelopmentGUI(p);
+					openEstateGUI(p);
 				}
 			};
 			
-			developmentGUI.addSlot(c);
+			estateGUI.addSlot(c);
 		}
 		
 		// INACTIVE DEVELOPMENTS:
@@ -174,15 +171,24 @@ public class EstateManager {
 					// TODO if development has enough food...
 					String developmentName = development.getDevelopmentType().getTitle();
 					development.activate();
-					development.setActive(true);
 					player.sendMessage(developmentName + " is now active");
-					player.closeInventory();
-					openDevelopmentGUI(p);
+					openEstateGUI(p);
 				}
 			};
 			
-			developmentGUI.addSlot(c);
+			estateGUI.addSlot(c);
 		}
+		
+		// OPEN
+		estateGUI.showInventory(player);
+	}
+	
+	
+	// TODO Could use CivModCore for item renaming
+	public void openBuildGUI(Player player) {
+		Estate estate = getEstateOfPlayer(player);
+		// TODO Estate name length can't be longer than 32
+		ClickableInventory developmentGUI = new ClickableInventory(9, "Build");
 		
 		// UNBUILT AVAILABLE DEVELOPMENTS
 		for(DevelopmentType type: estate.getUnbuiltDevelopments()) {			
@@ -228,8 +234,7 @@ public class EstateManager {
 						}
 						estate.buildDevelopment(type);
 						player.sendMessage("You constructed a " + type.getTitle());
-						player.closeInventory();
-						openDevelopmentGUI(p);
+						openEstateGUI(p);
 					}
 				};
 				

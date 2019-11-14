@@ -30,7 +30,7 @@ public class Collector implements Developer{
 		//TODO: Get the returnMaterial by checking the region (e.g. if region is jungle and resource is wood, return jungle logs)
 		String resource = development.getDevelopmentType().getResource();		
 		Material returnMaterial = Material.matchMaterial(resource);
-    	int returnAmount = Nobility.getDevelopmentManager().calculateGains(estate, resource, development);
+		int returnAmount = Nobility.getDevelopmentManager().calculateGains(estate, resource, development);
 		return new ItemStack(returnMaterial, returnAmount);
     }
 
