@@ -154,7 +154,7 @@ public class AbstractBlueprint {
       ing.put(getItemStackFromName(i_name), i_amt);
     }
     
-    return new AbstractBlueprint(result, ing, runs_amount, parsed_time, result_amount);
+    return new AbstractBlueprint(result, ing, runs_amount, itemName, result_amount);
   }
   
 }
