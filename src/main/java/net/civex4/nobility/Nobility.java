@@ -12,7 +12,6 @@ import net.civex4.nobility.estate.Estate;
 import net.civex4.nobility.estate.EstateManager;
 import net.civex4.nobility.group.GroupManager;
 import net.civex4.nobility.gui.GUICommand;
-import net.civex4.nobility.gui.TextInputListener;
 import net.civex4.nobility.listeners.ChestClick;
 import net.civex4.nobility.listeners.CommandListener;
 import net.civex4.nobility.listeners.EstateCreate;
@@ -59,7 +58,6 @@ public class Nobility extends ACivMod {
 		PluginManager pm = getServer().getPluginManager();
 		pm.registerEvents(new EstateCreate(), this);
 		pm.registerEvents(new ChestClick(), this);;
-		pm.registerEvents(new TextInputListener(), this);
 	}
 
 

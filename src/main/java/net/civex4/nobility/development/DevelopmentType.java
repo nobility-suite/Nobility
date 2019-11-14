@@ -10,39 +10,21 @@ import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
 
-import net.civex4.nobility.gui.Renamable;
-
 public class DevelopmentType {
 	
 	private static LinkedHashMap<String, DevelopmentType> types = new LinkedHashMap<String, DevelopmentType>();
 	
-	private String name; //Internal; Generate if config is null as the title in oneWordForm
-	private String title; //External; Change to "Renamable"
-	private Material icon; //Change to "MaterialInput"
+	private String name; // Internal Slug
+	private String title; // Beautiful Title
+	private Material icon;
 	
-	private List<String> prerequisites; //Change to "SelectFromList"
-	private List<ItemStack> initialCost; //Change to "ItemInput"
-	private List<ItemStack> upkeepCost; //Change to "ItemInput"
-	private boolean isCollector; //Change to "Booleanable"
-	private boolean isWall;      // "     "    "	
-	private boolean isStorehouse;// "     "    "
-	private String resource; //Needs to be changed to "SelectFromList" from the NobilityRegion "RegionResource" enum
-
-	Renamable titleRenamable = new Renamable() {		
-		String title;
-		
-		@Override
-		public void setName(String name) {
-			this.title = name;		
-		}
-		
-		@Override
-		public String getName() {
-			return title;
-		}
-	};
-	
-
+	private List<String> prerequisites;
+	private List<ItemStack> initialCost;
+	private List<ItemStack> upkeepCost;
+	private boolean isCollector;
+	private boolean isWall;	
+	private boolean isStorehouse;
+	private String resource;
 	
 	public DevelopmentType(
 			String name,

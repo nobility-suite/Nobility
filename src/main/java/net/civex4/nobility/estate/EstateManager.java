@@ -16,9 +16,9 @@ import net.civex4.nobility.Nobility;
 import net.civex4.nobility.development.Development;
 import net.civex4.nobility.development.DevelopmentType;
 import net.civex4.nobility.group.Group;
-import net.civex4.nobility.gui.TextInputButton;
 import vg.civcraft.mc.civmodcore.api.ItemAPI;
 import vg.civcraft.mc.civmodcore.api.ItemNames;
+import vg.civcraft.mc.civmodcore.chatDialog.Dialog;
 import vg.civcraft.mc.civmodcore.inventorygui.Clickable;
 import vg.civcraft.mc.civmodcore.inventorygui.ClickableInventory;
 
@@ -70,7 +70,34 @@ public class EstateManager {
 		
 		// RENAME ESTATE
 		ItemStack renameIcon = createIcon(Material.FEATHER, "Rename");
-		TextInputButton estateNameButton = new TextInputButton(renameIcon, estate.getGroup().name);
+		Clickable estateNameButton = new Clickable(renameIcon) {
+
+			@Override
+			public void clicked(Player p) {
+				p.closeInventory();
+				Dialog dialog = new Dialog(player, Nobility.getNobility(), "Enter in a new name:") {
+					
+					@Override
+					public List<String> onTabComplete(String wordCompleted, String[] fullMessage) {
+						return null;
+					}
+					
+					@Override
+					public void onReply(String[] message) {
+						// Set messages to one word
+						String newName = "";
+						for (String str : message) {newName = newName + str + " ";}
+						
+						estate.getGroup().setName(newName);
+						
+						player.sendMessage("This Estate is now called " + newName);
+						this.end();
+					}
+				};
+				
+			}
+			
+		};
 		estateGUI.addSlot(estateNameButton);
 		
 		// OPEN

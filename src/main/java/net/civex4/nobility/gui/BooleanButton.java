@@ -9,6 +9,8 @@ import vg.civcraft.mc.civmodcore.inventorygui.ClickableInventory;
 
 public class BooleanButton extends Clickable {
 	
+	// This button doesn't really work, but I haven't deleted it so I can refer to it as a template
+	
 	boolean state;
 	
 	public BooleanButton(ItemStack item) {

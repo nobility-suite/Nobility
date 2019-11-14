@@ -6,24 +6,11 @@ import java.util.UUID;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
-import net.civex4.nobility.gui.Renamable;
-
 public class Group {
 	
 	public ArrayList<UUID> members;
 	//public String name;
-	public Renamable name = new Renamable() {
-		private String name;
-		@Override
-		public String getName() {
-			return name;
-		}
-
-		@Override
-		public void setName(String name) {
-			this.name = name;			
-		}		
-	};
+	public String name;
 	public String leaderPrefix;
 	public Location estateLocation;
 	public boolean hasEstate;
@@ -37,7 +24,7 @@ public class Group {
 		this.hasEstate = false;
 		ArrayList<UUID> pending = new ArrayList<>();
 		pendingInvites = pending;
-		this.name.setName(name);
+		this.name = name;
 	}
 	
 	public void addMember(Player p) {
@@ -49,11 +36,11 @@ public class Group {
 	}
 	
 	public String getName() {
-		return name.getName();
+		return name;
 	}
 	
 	public void setName(String name) {
-		this.name.setName(name);
+		this.name = name;
 	}
 
 }
