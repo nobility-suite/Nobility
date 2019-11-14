@@ -17,15 +17,15 @@ public class DevelopmentType {
 	
 	private static LinkedHashMap<String, DevelopmentType> types = new LinkedHashMap<String, DevelopmentType>();
 	
-	private String name;
-	private String title;
-	private Material icon;	
+	private String name; // Internal Slug
+	private String title; // Beautiful Title
+	private Material icon;
 	
 	private List<String> prerequisites;
 	private List<ItemStack> initialCost;
 	private List<ItemStack> upkeepCost;
 	private boolean isCollector;
-	private boolean isWall;
+	private boolean isWall;	
 	private boolean isStorehouse;
 	private String resource;
 	
@@ -57,6 +57,7 @@ public class DevelopmentType {
 		if(!(obj instanceof DevelopmentType)) return false;
 		DevelopmentType other = (DevelopmentType) obj;
 		return other.getName().equals(name);
+
 	}
 	
 	public static void loadDevelopmentTypes(ConfigurationSection config) {		
@@ -204,6 +205,41 @@ public class DevelopmentType {
 	public void setResource(String resource) {
 		this.resource = resource;
 	}
+	
+	/*
+	 * Development GUI pseudo code
+	 * 
+	 * new clickableInventory
+	 * 
+	 * for development types
+	 * 	for changeabale things in development types
+	 * 		create a clickable
+	 * 		if thing is instanceOf renamable
+	 * 			New TextInput
+	 * 		if thing is instanceOf changeableBoolean
+	 * 			New BooleanButton
+	 * 				onClick {
+	 * 					thing.state = state
+	 * 				}
+	 * 		if thing is instanceOf itemInput
+	 * 			New ItemInputButton
+	 * 				onClick 
+	 * 					choose item
+	 * 					enter number
+	 * 	Add clickable to inventory
+	 * 
+	 * 
+	 * Server Setttings -> DevelopmentTypes -> Changeables -> sub changeable menus
+	 *  |
+	 *  L> Regions / This region -> Region Changeables -> sub changeable menus
+	 *  
+	 * 
+	 */
+	
+	
+	
+	
+	
 
 	public boolean isStorehouse() {
 		return isStorehouse;

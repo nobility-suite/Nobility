@@ -16,9 +16,9 @@ public class EstateCreate implements Listener {
 		Player p = e.getPlayer();
 		if (Nobility.getGroupManager().getGroup(p) == null) return;
 		Block b = e.getClickedBlock();
-			if (!(Nobility.estateMan.playerHasEstate(p))) {
+			if (!(Nobility.getEstateManager().playerHasEstate(p))) {
 				if (b != null && b.getType() == Material.CHEST) {				
-					Nobility.estateMan.createEstate(b, p);
+					Nobility.getEstateManager().createEstate(b, p);
 				}
 			}
 	}

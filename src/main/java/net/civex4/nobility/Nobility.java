@@ -11,17 +11,17 @@ import net.civex4.nobility.development.DevelopmentType;
 import net.civex4.nobility.estate.Estate;
 import net.civex4.nobility.estate.EstateManager;
 import net.civex4.nobility.group.GroupManager;
+import net.civex4.nobility.gui.GUICommand;
 import net.civex4.nobility.listeners.ChestClick;
 import net.civex4.nobility.listeners.CommandListener;
-import net.civex4.nobility.listeners.DevelopmentGUI;
 import net.civex4.nobility.listeners.EstateCreate;
 import net.md_5.bungee.api.ChatColor;
 import vg.civcraft.mc.civmodcore.ACivMod;
 
 public class Nobility extends ACivMod {
 	
-	public static GroupManager groupMan;
-	public static EstateManager estateMan;
+	private static GroupManager groupMan;
+	private static EstateManager estateMan;
 	private static Nobility nobility;
 	private static NobilityRegions nobilityRegions;
 	private static DevelopmentManager developmentManager;
@@ -40,6 +40,7 @@ public class Nobility extends ACivMod {
 		registerConfig();
 		reloadConfig();
 		getCommand("nobility").setExecutor(new CommandListener());
+		getCommand("test").setExecutor(new GUICommand());
 		DevelopmentType.loadDevelopmentTypes(getConfig().getConfigurationSection("developments"));
 
 		registerEvents();
@@ -48,12 +49,15 @@ public class Nobility extends ACivMod {
 	public static GroupManager getGroupManager() {
 		return groupMan;
 	}
+	
+	public static EstateManager getEstateManager() {
+		return estateMan;
+	}
 
 	private void registerEvents() {
 		PluginManager pm = getServer().getPluginManager();
 		pm.registerEvents(new EstateCreate(), this);
-		pm.registerEvents(new ChestClick(), this);
-		pm.registerEvents(new DevelopmentGUI(), this);
+		pm.registerEvents(new ChestClick(), this);;
 	}
 
 
@@ -109,11 +113,6 @@ public class Nobility extends ACivMod {
 	private void registerConfig() {
 		getConfig().options().copyDefaults(true);
 		saveConfig();
-	}
-
-	@Override
-	protected String getPluginName() {
-		return "Nobility";
 	}
 
 }

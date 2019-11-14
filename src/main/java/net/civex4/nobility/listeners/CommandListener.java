@@ -28,69 +28,69 @@ public class CommandListener implements CommandExecutor{
 					+ ChatColor.GOLD + "/nobility invite <name>" + ChatColor.GRAY + "| " + ChatColor.AQUA + "Invites a player to your Nobility group.\n"
 					+ ChatColor.GOLD + "/nobility kick <name>" + ChatColor.GRAY + "| " + ChatColor.AQUA + "Kicks a player from your Nobility group. \n");
 			return true;
-		}else if(args.length == 1) {
+		} else if (args.length == 1) {
 			//nobility create
-			if(args[0].equalsIgnoreCase("create")) {
+			if (args[0].equalsIgnoreCase("create")) {
 			  player.sendMessage(ChatColor.GOLD + "This command creates a Nobility group, which can be used later to allow a group of players to claim land by founding an Estate. \n" + ChatColor.RED + "Correct usage is /nobility create <name>");
 				return true;
 			}
 			
-			if(args[0].equalsIgnoreCase("nextday")) {
+			if (args[0].equalsIgnoreCase("nextday")) {
 				Nobility.tickDay();
 				return true;
 			}
 			
-		}else if(args.length == 2) {
+		} else if (args.length == 2) {
 			//nobility create <NAME>
 			if(args[0].equalsIgnoreCase("create") && args[1].length() >= 2) {
 
-				for(int i = 0; i < Nobility.groupMan.groups.size(); i++) {
-					Group g = Nobility.groupMan.groups.get(i);
-					if(g.name.equals(args[1])) {
+				for (int i = 0; i < Nobility.getGroupManager().groups.size(); i++) {
+					Group group = Nobility.getGroupManager().groups.get(i);
+					if(group.getName().equals(args[1])) {
 						player.sendMessage(ChatColor.RED + "That group already exists. Try another name");
-						return false;
+						return true;
 					}
 				}
 				
-				Group temp = new Group(args[1], playerId);
-				Nobility.getGroupManager().groups.add(temp);
-				player.sendMessage(ChatColor.GOLD + "You created the group " + temp.name);
+				Group tempGroup = new Group(args[1], playerId);
+				Nobility.getGroupManager().groups.add(tempGroup);
+				player.sendMessage(ChatColor.GOLD + "You created the group " + tempGroup.getName());
 				return true;
 			}
 			
 			//nobility invite <name>
-			if(args[0].equalsIgnoreCase("invite")) {
+			if (args[0].equalsIgnoreCase("invite")) {
 				UUID inviter = playerId;
 				Player recieverPlayer = Bukkit.getPlayer(args[1]);				
-				if (recieverPlayer == null ) {
+				if (recieverPlayer == null) {
 					player.sendMessage("That player is not online");
 					return true;
 				}				
 				UUID reciever = recieverPlayer.getUniqueId();			
 				
 				boolean inGroup = false;
-				Group temp = null;
-				for(int i = 0; i < Nobility.groupMan.groups.size(); i++) {
-					Group group = Nobility.groupMan.groups.get(i);
-					for(UUID id : group.members) {
-						if(id.equals(reciever)) {
+				Group tempGroup = null;
+				for (int i = 0; i < Nobility.getGroupManager().groups.size(); i++) {
+					Group group = Nobility.getGroupManager().groups.get(i);
+					for (UUID id : group.members) {
+						if (id.equals(reciever)) {
 							player.sendMessage(ChatColor.RED + "That player is already part of an Estate.");
 							return true;
 						}
 						
-						if(id.equals(inviter)) {
+						if (id.equals(inviter)) {
 							inGroup = true;
-							temp = group;
+							tempGroup = group;
 						}
 					}
 				}
 				
 				if(inGroup) {
-					temp.pendingInvites.add(reciever);
-					recieverPlayer.sendMessage(ChatColor.GOLD + "You have been invited to join the Nobility Group " + ChatColor.BLUE + temp.name);
+					tempGroup.pendingInvites.add(reciever);
+					recieverPlayer.sendMessage(ChatColor.GOLD + "You have been invited to join the Nobility Group " + ChatColor.BLUE + tempGroup.getName());
 				}else {
 					player.sendMessage(ChatColor.RED + "You are not part of a Nobility Group.");
-					return false;
+					return true;
 				}
 				
 				return true;
@@ -99,25 +99,25 @@ public class CommandListener implements CommandExecutor{
 			
 			//nobility join <name>
 			if(args[0].equalsIgnoreCase("join")) {
-				Group temp = null;
-				for(int i = 0; i < Nobility.groupMan.groups.size(); i++) {
-					Group group = Nobility.groupMan.groups.get(i);
+				Group tempGroup = null;
+				for(int i = 0; i < Nobility.getGroupManager().groups.size(); i++) {
+					Group group = Nobility.getGroupManager().groups.get(i);
 					for(UUID id : group.members) {
 						if(playerId.equals(id)) {
 							player.sendMessage(ChatColor.RED + "You are already part of a Nobility group.");
-							return false;
+							return true;
 						}
 					}
-					if(group.name.equalsIgnoreCase(args[1])) {
-						temp = group;
+					if(group.getName().equalsIgnoreCase(args[1])) {
+						tempGroup = group;
 					}
 				}
 				
-				if(temp != null) {
-					if(temp.pendingInvites.contains(playerId)) {
-						temp.pendingInvites.remove(playerId);
-						temp.members.add(playerId);
-						player.sendMessage(ChatColor.GREEN + "You have been added to " + temp.name);
+				if(tempGroup != null) {
+					if(tempGroup.pendingInvites.contains(playerId)) {
+						tempGroup.pendingInvites.remove(playerId);
+						tempGroup.members.add(playerId);
+						player.sendMessage(ChatColor.GREEN + "You have been added to " + tempGroup.getName());
 					}
 				}
 			}
