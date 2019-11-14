@@ -6,10 +6,10 @@ import org.bukkit.inventory.ItemStack;
 import vg.civcraft.mc.civmodcore.inventorygui.Clickable;
 import vg.civcraft.mc.civmodcore.inventorygui.ClickableInventory;
 
-public class TextInputButton extends Clickable{
+public class TextInputButton extends Clickable {
 	
-	TextInput textInput;
-	Renamable renamable;
+	private TextInput textInput;
+	public Renamable renamable;
 	
 	public TextInputButton(ItemStack item, Renamable renamable) {
 		super(item);
