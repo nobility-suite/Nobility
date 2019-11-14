@@ -27,7 +27,7 @@ public class DevelopmentType {
 	private boolean isWall;      // "     "    "	
 	private boolean isStorehouse;// "     "    "
 	private String resource; //Needs to be changed to "SelectFromList" from the NobilityRegion "RegionResource" enum
-	
+
 	Renamable titleRenamable = new Renamable() {		
 		String title;
 		

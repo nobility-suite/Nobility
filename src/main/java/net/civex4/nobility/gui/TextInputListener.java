@@ -22,7 +22,7 @@ public class TextInputListener implements Listener {
 			String input = event.getMessage();
 			TextInput textInput = TextInput.getInputFromPlayer(player);
 			textInput.setInput(input);
-			textInput.getRenamable().setName(input);
+			textInput.setName(input);
 			TextInput.setLastInput(player, input);
 			TextInput.removePlayerTyping(player);
 			event.setCancelled(true);

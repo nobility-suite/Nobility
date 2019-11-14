@@ -16,6 +16,7 @@ import net.civex4.nobility.Nobility;
 import net.civex4.nobility.development.Development;
 import net.civex4.nobility.development.DevelopmentType;
 import net.civex4.nobility.group.Group;
+import net.civex4.nobility.gui.TextInputButton;
 import vg.civcraft.mc.civmodcore.api.ItemAPI;
 import vg.civcraft.mc.civmodcore.api.ItemNames;
 import vg.civcraft.mc.civmodcore.inventorygui.Clickable;
@@ -40,25 +41,48 @@ public class EstateManager {
 	}
 	
 	public Estate createEstate(Block block, Player player) {
-		Group group = Nobility.groupMan.getGroup(player);		
+		Group group = Nobility.getGroupManager().getGroup(player);	
 		block.setType(Material.ENDER_CHEST);		
 		Estate estate = new Estate(block, group);		
 		estates.add(estate);
 		
-
-		player.sendMessage("You have created an estate for " + group.name);
+		player.sendMessage("You have created an estate for " + group.getName());
 		setEstateOfPlayer(player, estate);
 		
 		return estate;
 		
 	}
 	
+	public void openEstateGUI(Player player) {
+		Estate estate = getEstateOfPlayer(player);
+		ClickableInventory estateGUI = new ClickableInventory(9, estate.getGroup().getName());
+		
+		// BUTTONS:
+		// DEVELOPMENT GUI
+		ItemStack developmentGUIIcon = createIcon(Material.CRAFTING_TABLE, "Developments");
+		Clickable developmentButton = new Clickable(developmentGUIIcon) {
+			@Override
+			public void clicked(Player p) {
+				openDevelopmentGUI(p);
+			}			
+		};
+		estateGUI.addSlot(developmentButton);
+		
+		// RENAME ESTATE
+		ItemStack renameIcon = createIcon(Material.FEATHER, "Rename");
+		TextInputButton estateNameButton = new TextInputButton(renameIcon, estate.getGroup().name);
+		estateGUI.addSlot(estateNameButton);
+		
+		// OPEN
+		estateGUI.showInventory(player);
+	}
+	
+	
 	// TODO Could use CivModCore for item renaming
 	public void openDevelopmentGUI(Player player) {
 		Estate estate = getEstateOfPlayer(player);
-		ClickableInventory developmentGUI = new ClickableInventory(9, estate.getGroup().name);
-		//Inventory developmentIcons = Bukkit.createInventory(null, 9, estate.getGroup().name);
-		
+		ClickableInventory developmentGUI = new ClickableInventory(9, "Developments of " + estate.getGroup().getName());
+		// BUTTONS:
 		// ACTIVE DEVELOPMENTS:
 		for(Development development: estate.getActiveDevelopments()) {
 			DevelopmentType type = development.getDevelopmentType();
@@ -209,7 +233,13 @@ public class EstateManager {
 		lore.add(text);
 		meta.setLore(lore);
 		item.setItemMeta(meta);
-	} // addLore
+	}
+	
+	public static ItemStack createIcon(Material mat, String name) {
+		ItemStack icon = new ItemStack(mat);
+		ItemAPI.setDisplayName(icon, ChatColor.WHITE + name);
+		return icon;
+	}
 	
 	
 	//getters and setters for player-estate hashmap

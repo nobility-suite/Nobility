@@ -27,7 +27,7 @@ public class DevelopmentManager {
 		int returnAmount;
 		
 		//Calculate productivity by counting the other estates with the same development in the same region
-		for (Estate otherEstate : Nobility.estateMan.estates) {
+		for (Estate otherEstate : Nobility.getEstateManager().estates) {
 			if (estate.getRegion().equals(otherEstate.getRegion())) {
 				for (Development otherDevelopment : otherEstate.getActiveDevelopments()) {
 					if (development.getDevelopmentType().getName().equalsIgnoreCase(otherDevelopment.getDevelopmentType().getName())) {

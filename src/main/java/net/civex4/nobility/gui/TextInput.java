@@ -108,4 +108,8 @@ public class TextInput {
 		return renamable;
 	}
 	
+	public void setName(String name) {
+		renamable.setName(name);
+	}
+	
 }

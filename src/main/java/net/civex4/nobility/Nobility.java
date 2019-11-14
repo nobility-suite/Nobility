@@ -21,8 +21,8 @@ import vg.civcraft.mc.civmodcore.ACivMod;
 
 public class Nobility extends ACivMod {
 	
-	public static GroupManager groupMan;
-	public static EstateManager estateMan;
+	private static GroupManager groupMan;
+	private static EstateManager estateMan;
 	private static Nobility nobility;
 	private static NobilityRegions nobilityRegions;
 	private static DevelopmentManager developmentManager;
@@ -49,6 +49,10 @@ public class Nobility extends ACivMod {
 
 	public static GroupManager getGroupManager() {
 		return groupMan;
+	}
+	
+	public static EstateManager getEstateManager() {
+		return estateMan;
 	}
 
 	private void registerEvents() {

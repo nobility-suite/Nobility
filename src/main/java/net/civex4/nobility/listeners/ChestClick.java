@@ -15,11 +15,11 @@ public class ChestClick implements Listener {
 	@EventHandler
 	public void onChestClick(PlayerInteractEvent e) {
 		Player player = e.getPlayer();
-		if(!(Nobility.estateMan.playerHasEstate(player))) return;
+		if(!(Nobility.getEstateManager().playerHasEstate(player))) return;
 		Block b = e.getClickedBlock();
 		if(b != null && b.getType() == Material.ENDER_CHEST) {
 			if (e.getHand() == EquipmentSlot.HAND) {
-				Nobility.estateMan.openDevelopmentGUI(player);
+				Nobility.getEstateManager().openEstateGUI(player);
 				e.setCancelled(true);
 			}			
 		}
