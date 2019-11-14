@@ -10,9 +10,9 @@ import net.md_5.bungee.api.ChatColor;
 
 public class AbstractBlueprint {
   private static final String AMOUNT_DELIMITER = "x ";
-  private static final String RESULT_AMOUNT_PREFIX = "  ";
+  private static final String RESULT_AMOUNT_PREFIX = "";
   private static final String RESULT_PREFIX = ChatColor.YELLOW + "Result: ";
-  private static final String INGREDIENT_AMOUNT_PREFIX = "";
+  private static final String INGREDIENT_AMOUNT_PREFIX = ChatColor.GOLD + "  ";
   private static final String RUNS_PREFIX = "Uses: ";
   private static final String INGREDIENTS_LINE_DELIMITER = "Components:";
   
@@ -147,7 +147,8 @@ public class AbstractBlueprint {
     HashMap<ItemStack, Integer> ing = new HashMap<ItemStack, Integer>();
     
     for(String s : ingredient_strings) {
-      String[] s_arr = s.split(INGREDIENT_AMOUNT_PREFIX);
+      s.replaceFirst(INGREDIENT_AMOUNT_PREFIX, "");
+      String[] s_arr = s.split(AMOUNT_DELIMITER);
       int i_amt = Integer.parseInt(s_arr[0]);
       String i_name = s_arr[1];
       ing.put(getItemStackFromName(i_name), i_amt);
