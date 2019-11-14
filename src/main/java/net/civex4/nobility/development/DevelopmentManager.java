@@ -42,12 +42,10 @@ public class DevelopmentManager {
 			rounded = Math.floor(maximum * level * productivity);
 			returnAmount = (int) rounded;
 			return returnAmount;
-		} else if (totalCompetingEstates * maximum > regionResource) {
+		} else { //if players collecting is greater than resources available
 			rounded = Math.floor((regionResource * level * productivity) / totalCompetingEstates);
 			returnAmount = (int) rounded;
 			return returnAmount;
-		} else {			
-			return 0;
 		}
 	}
 	
