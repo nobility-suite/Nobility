@@ -25,3 +25,4 @@ bin/src/main/java/net/civex4/nobility/development/Collector.class
 bin/src/main/java/net/civex4/nobility/blueprints/AbstractBlueprint.class
 bin/pom.xml
 bin/.gitattributes
+*.prefs
