@@ -1,8 +1,17 @@
 package net.civex4.nobility.development;
 
 import java.util.ArrayList;
+import java.util.List;
 
-import net.civex4.nobility.estate.Estate;
+import org.bukkit.ChatColor;
+import org.bukkit.Material;
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+
+import vg.civcraft.mc.civmodcore.api.ItemAPI;
+import vg.civcraft.mc.civmodcore.inventorygui.Clickable;
+import vg.civcraft.mc.civmodcore.inventorygui.ClickableInventory;
+import vg.civcraft.mc.civmodcore.inventorygui.DecorationStack;
 /* TODO:
  * Developments need some refactoring. Either the developments
  * are composed of several different features (e.g. stores stuff,
@@ -13,40 +22,75 @@ import net.civex4.nobility.estate.Estate;
  * are applicable to it.
  */
 public class Development {
-	private DevelopmentType development;
-	private Developer developer;
-	private Estate estate;
+	private DevelopmentType type;
 	
-	public enum Type {
-		COLLECTOR, WALL, STOREHOUSE
-	}
+	private List<DevelopmentBehavior> behaviors = new ArrayList<>();
 	
-	ArrayList<Type> Types = new ArrayList<>();
-	
-	private double productivity;
-	private int collectionPower;
+	private double productivity; // add to collector
+	private int collectionPower; // add to collector
 	private boolean isActive;
 		
-	public Development(DevelopmentType development, Estate estate) {
+	public Development(DevelopmentType development) {
 		this.setDevelopmentType(development);
 		this.productivity = .4d;
 		this.setCollectionPower(10);
-		
-		//TODO: Use a factory method pattern
-		if (this.getDevelopmentType().isStorehouse()) {
-			this.setDeveloper(new Storehouse(estate, this));
-		} else if (this.getDevelopmentType().isCollector()) {
-			this.setDeveloper(new Collector(estate, this));
-		}
-		
+		this.isActive = true;
 	}
 	
-	public void addType(Type type) {
-		Types.add(type);
+	public void build() {
+		for (DevelopmentBehavior behavior : behaviors) {
+			behavior.build();
+		}
+	}
+	
+	public void openGUI(Player player) {
+		ClickableInventory gui = new ClickableInventory(9, this.getDevelopmentType().getTitle());
+		Development development = this;
+		
+		// INFO
+		// TODO Add information. Maybe behavior.getInfo()
+		Clickable info = new DecorationStack(new ItemStack(Material.PAPER));
+		gui.addSlot(info);
+		
+		// ACTIVATE / DEACTIVATE
+		// This is kind of convoluted. Maybe should use that BooleanButton...
+		ItemStack activeIcon = new ItemStack(Material.EGG);
+		ItemAPI.setDisplayName(activeIcon, ChatColor.GREEN + "Active");
+		
+		ItemStack inactiveIcon = new ItemStack(Material.EGG);
+		ItemAPI.setDisplayName(inactiveIcon, ChatColor.RED + "Inactive");
+		
+		ItemStack initialIcon = isActive ? activeIcon : inactiveIcon;
+	
+		Clickable activate = new Clickable(initialIcon) {
+			boolean state = development.isActive();
+			@Override
+			public void clicked(Player p) {
+				state = !state;
+				development.isActive = state;				
+				item = state ? activeIcon : inactiveIcon;	
+				ClickableInventory inventory = ClickableInventory.getOpenInventory(p);
+				inventory.setSlot(this, 1);
+				p.updateInventory();
+			}			
+		};
+		gui.addSlot(activate);
+
+		/*
+		for (DevelopmentBehavior behavior : behaviors) {
+			
+			for (Clickable c : behavior.getClickables()) {
+				gui.addSlot(c);
+			};
+		}*/
+		
+		gui.showInventory(player);
 	}
 
 	public void tick() {
-		developer.tick();
+		for (DevelopmentBehavior behavior : behaviors) {
+			behavior.tick();
+		}
 	}
 	
 	public void activate() {
@@ -62,11 +106,11 @@ public class Development {
 	}
 	
 	public DevelopmentType getDevelopmentType() {
-		return development;
+		return type;
 	}
 
-	public void setDevelopmentType(DevelopmentType development) {
-		this.development = development;
+	public void setDevelopmentType(DevelopmentType type) {
+		this.type = type;
 	}
 
 	public double getProductivity() {
@@ -85,23 +129,14 @@ public class Development {
 		this.collectionPower = collectionPower;
 	}
 
-	public Developer getDeveloper() {
-		return developer;
+	public List<DevelopmentBehavior> getBehaviors() {
+		return behaviors;
 	}
 
 
-	public void setDeveloper(Developer developer) {
-		this.developer = developer;
+	public void addBehavior(DevelopmentBehavior behavior) {
+		behaviors.add(behavior);
 	}
 
-
-	public Estate getEstate() {
-		return estate;
-	}
-
-
-	public void setEstate(Estate estate) {
-		this.estate = estate;
-	}
 
 }

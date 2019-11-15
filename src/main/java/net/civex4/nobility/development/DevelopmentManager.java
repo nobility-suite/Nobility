@@ -10,8 +10,7 @@ import net.civex4.nobility.Nobility;
 import net.civex4.nobility.estate.Estate;
 
 public class DevelopmentManager {
-	//private List<Development> types; // List of all types of developments
-
+	//private List<Development> types;
 	
 	public DevelopmentManager() {
 		//types = new ArrayList<>();

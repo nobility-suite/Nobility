@@ -29,11 +29,7 @@ public class EstateManager {
 	
 	//HashMap player-estate
 	private HashMap<Player, Estate> estateOfPlayer = new HashMap<Player, Estate>();
-	
-	/*public EstateManager() {
-		ArrayList<Estate> estates = new ArrayList<Estate>();
-	}*/
-	
+		
 	public boolean isVulnerable(Estate e) {
 		int h = e.getVulnerabilityHour(); //should be between 0 and 23;
 		Calendar rightNow = Calendar.getInstance();
@@ -66,15 +62,15 @@ public class EstateManager {
 		ClickableInventory estateGUI = new ClickableInventory(rowLength * 3, estate.getGroup().getName());
 
 		// BUTTONS:
-		// DEVELOPMENT GUI
-		ItemStack developmentGUIIcon = createIcon(Material.CRAFTING_TABLE, "Build a Development");
-		Clickable developmentButton = new Clickable(developmentGUIIcon) {
+		// BUILD GUI
+		ItemStack buildGUIIcon = createIcon(Material.CRAFTING_TABLE, "Build a Development");
+		Clickable buildButton = new Clickable(buildGUIIcon) {
 			@Override
 			public void clicked(Player p) {
 				openBuildGUI(p);
 			}			
 		};
-		estateGUI.addSlot(developmentButton);
+		estateGUI.addSlot(buildButton);
 		
 		// RENAME ESTATE
 		ItemStack renameIcon = createIcon(Material.FEATHER, "Rename this Estate");
@@ -111,20 +107,26 @@ public class EstateManager {
 		// DECORATION STACKS
 		for (int i = 0; i < rowLength * 2; i++) {
 			if (!(estateGUI.getSlot(i) instanceof Clickable)) {
-				Clickable c = new DecorationStack(createIcon(Material.BLACK_STAINED_GLASS, " "));
+				Clickable c = new DecorationStack(createIcon(Material.BLACK_STAINED_GLASS_PANE, " "));
 				estateGUI.setSlot(c, i);
 			}
 		}
-		
-		// BUTTONS:
-		// ACTIVE DEVELOPMENTS:
-		for(Development development: estate.getActiveDevelopments()) {
-			DevelopmentType type = development.getDevelopmentType();
-			Material m = type.getIcon();
-			ItemStack icon = new ItemStack(m);
-			nameItem(icon, type.getTitle());
-			addLore(icon, ChatColor.GREEN + "Active");
 
+		// BUILT DEVELOPMENTS:
+		for(Development development: estate.getBuiltDevelopments()) {
+			DevelopmentType type = development.getDevelopmentType();
+			ItemStack icon;
+			if (development.isActive()) {
+				Material m = type.getIcon();
+				icon = new ItemStack(m);
+				nameItem(icon, type.getTitle());
+				addLore(icon, ChatColor.GREEN + "Active");
+			} else {
+				Material m = Material.FIREWORK_STAR;
+				icon = new ItemStack(m);
+				nameItem(icon, development.getDevelopmentType().getTitle());
+				addLore(icon, ChatColor.RED + "Inactive");
+			}
 			
 			if (!type.getUpkeepCost().isEmpty()) {			
 				addLore(icon, ChatColor.YELLOW + "Upkeep Cost:");
@@ -140,39 +142,11 @@ public class EstateManager {
 				//TODO: Actual Yield, Food Usage, if (foodUsage != maximum) "Click to increase food usage"
 			}
 
-			// IF ACTIVE DEVELOPMENT IS CLICKED
+			// IF DEVELOPMENT IS CLICKED
 			Clickable c = new Clickable(icon) {				
 				@Override
 				public void clicked(Player p) {
-					// TODO open development options menu
-					String developmentName = development.getDevelopmentType().getTitle();
-					development.deactivate();
-					player.sendMessage(developmentName + " is now inactive");
-					openEstateGUI(p);
-				}
-			};
-			
-			estateGUI.addSlot(c);
-		}
-		
-		// INACTIVE DEVELOPMENTS:
-		for(Development development: estate.getInactiveDevelopments()) {
-			Material m = Material.FIREWORK_STAR;
-			ItemStack icon = new ItemStack(m);
-			nameItem(icon, development.getDevelopmentType().getTitle());
-			addLore(icon, ChatColor.RED + "Inactive");
-			addLore(icon, "Click to Activate");
-
-			
-			// IF INACTIVE DEVELOPMENT IS CLICKED
-			Clickable c = new Clickable(icon) {				
-				@Override
-				public void clicked(Player p) {
-					// TODO if development has enough food...
-					String developmentName = development.getDevelopmentType().getTitle();
-					development.activate();
-					player.sendMessage(developmentName + " is now active");
-					openEstateGUI(p);
+					development.openGUI(p);
 				}
 			};
 			

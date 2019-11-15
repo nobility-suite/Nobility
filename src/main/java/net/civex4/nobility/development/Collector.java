@@ -1,12 +1,15 @@
 package net.civex4.nobility.development;
 
+import java.util.List;
+
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
 import net.civex4.nobility.Nobility;
 import net.civex4.nobility.estate.Estate;
+import vg.civcraft.mc.civmodcore.inventorygui.Clickable;
 
-public class Collector implements Developer{
+public class Collector implements DevelopmentBehavior{
 	
 	private Estate estate;
 	private Development development;
@@ -33,5 +36,12 @@ public class Collector implements Developer{
 		int returnAmount = Nobility.getDevelopmentManager().calculateGains(estate, resource, development);
 		return new ItemStack(returnMaterial, returnAmount);
     }
+
+	@Override
+	public List<Clickable> getClickables() {
+		// INFO
+		return null;
+		// 
+	}
 
 }

@@ -7,8 +7,8 @@ import org.bukkit.block.Block;
 
 import io.github.kingvictoria.NobilityRegions;
 import io.github.kingvictoria.Region;
-import net.civex4.nobility.Nobility;
 import net.civex4.nobility.development.Development;
+import net.civex4.nobility.development.DevelopmentFactory;
 import net.civex4.nobility.development.DevelopmentType;
 import net.civex4.nobility.group.Group;
 
@@ -31,28 +31,8 @@ public class Estate {
 	} // constructor
 	
 	public void buildDevelopment(DevelopmentType type) {
-		Development development = new Development(type, this);
-		development.getDeveloper().build();
-		builtDevelopments.add(development);
-		Nobility.getDevelopmentManager().subtractCosts(type, this);
+		DevelopmentFactory.buildDevelopment(type, this);
 	}
-	
-	/**
-	 * Initializes a DevelopmentRegister's Development
-	 * @param register DevelopmentRegister
-	 */
-	/* public void initializeRegister(Development development) {
-		Class developmentClass = register.getDevelopment();
-		try {
-			Development development = (Development) developmentClass.getConstructors()[0].newInstance();
-			development.pre_init(register, this);
-			development.init();
-			initializedDevelopments.add(development);						
-			Nobility.getDevelopmentManager().subtractCosts(register, this);
-		} catch(Exception e) {
-			e.printStackTrace();
-		}
-	} */
 	
 	public int getVulnerabilityHour() {
 	  return this.vulnerabilityHour;

@@ -1,11 +1,14 @@
 package net.civex4.nobility.development;
 
+import java.util.List;
+
 import org.bukkit.Location;
 import org.bukkit.Material;
 
 import net.civex4.nobility.estate.Estate;
+import vg.civcraft.mc.civmodcore.inventorygui.Clickable;
 
-public class Storehouse implements Developer{
+public class Storehouse implements DevelopmentBehavior{
 
 	Estate estate;
 	Development development;
@@ -26,6 +29,14 @@ public class Storehouse implements Developer{
 	public void tick() {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public List<Clickable> getClickables() {
+		// OPEN INVENTORY
+		
+		// STORAGE INFO
+		return null;
 	}
 
 }

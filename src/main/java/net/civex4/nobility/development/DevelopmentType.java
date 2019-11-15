@@ -21,11 +21,12 @@ public class DevelopmentType {
 	private List<String> prerequisites;
 	private List<ItemStack> initialCost;
 	private List<ItemStack> upkeepCost;
-
+	
 	private boolean isCollector;
 	private boolean isWall;	
 	private boolean isStorehouse;
 	private String resource;
+	
 	
 	public DevelopmentType(
 			String name,
