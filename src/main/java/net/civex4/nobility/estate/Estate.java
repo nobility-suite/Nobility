@@ -18,7 +18,6 @@ public class Estate {
 	private Group group;
 	private Block block;
 	private Region region;
-	//TODO: Replace builtDevelopments with a hashmap marking each developmentType to a boolean
 	private List<Development> builtDevelopments;
 	
 	private int vulnerabilityHour;
@@ -38,7 +37,7 @@ public class Estate {
 	
 	public Inventory getInventory() {
 		for (Development development : builtDevelopments) {
-			if (development.getDevelopmentType().isStorehouse()) {
+			if (development.getType().isStorehouse()) {
 				return development.getInventory();
 			}
 		}
@@ -86,10 +85,21 @@ public class Estate {
 			unbuiltDevelopments.add(DevelopmentType.getDevelopmentType(name));
 		}
 		for (Development development : builtDevelopments) {
-			unbuiltDevelopments.remove(development.getDevelopmentType());
+			unbuiltDevelopments.remove(development.getType());
 		}
 		
 		return unbuiltDevelopments;
+	}
+	
+	public Development getDevelopment(DevelopmentType type) {
+		for (Development development : builtDevelopments) {
+			if (development.getType().equals(type)) {
+				return development;
+			}
+		}
+		
+		Bukkit.getLogger().warning("This estate does not have this development type");
+		return null;
 	}
 	
 	public List<Development> getActiveDevelopments() {
@@ -97,17 +107,17 @@ public class Estate {
 
 		for(Development development : builtDevelopments) {
 			if(development.isActive()) activeDevelopments.add(development);
-		} // for
+		}
 
 		return activeDevelopments;
 	}
 	
 	public List<String> getActiveDevelopmentsToString() {
 		List<String> activeDevelopments = new ArrayList<>();		
-		for(Development development : builtDevelopments) {
-			String name = development.getDevelopmentType().getName();
+		for(Development development : getActiveDevelopments()) {
+			String name = development.getType().getName();
 			activeDevelopments.add(name);		
-		} // for
+		}
 		return activeDevelopments;
 	}
 
@@ -116,7 +126,7 @@ public class Estate {
 
 		for(Development development : builtDevelopments) {
 			if(!development.isActive()) inactiveDevelopments.add(development);
-		} // for
+		}
 
 		return inactiveDevelopments;
 	} // getInactiveDevelopments

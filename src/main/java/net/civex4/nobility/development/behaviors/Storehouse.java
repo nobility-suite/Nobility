@@ -28,16 +28,15 @@ public class Storehouse implements DevelopmentBehavior{
 
 	@Override
 	public void build() {
-		/*
-		Location loc = estate.getBlock().getLocation().add(1, 0, 0);
-		loc.getBlock().setType(Material.CHEST);
-		*/
-		
+		inventory.addItem(
+				new ItemStack(Material.IRON_INGOT, 10),
+				new ItemStack(Material.OAK_LOG, 10),
+				new ItemStack(Material.SMOOTH_STONE, 10),
+				new ItemStack(Material.WHEAT, 10));
 	}
 
 	@Override
 	public void tick() {
-		// TODO Auto-generated method stub
 		
 	}
 

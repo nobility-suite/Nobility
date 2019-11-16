@@ -10,22 +10,18 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
+import net.civex4.nobility.Nobility;
 import net.civex4.nobility.development.behaviors.Collector;
 import net.civex4.nobility.development.behaviors.DevelopmentBehavior;
 import net.civex4.nobility.development.behaviors.Storehouse;
+import net.civex4.nobility.development.behaviors.Upgradable;
+import net.civex4.nobility.estate.Estate;
 import net.civex4.nobility.gui.ButtonLibrary;
 import vg.civcraft.mc.civmodcore.api.ItemAPI;
+import vg.civcraft.mc.civmodcore.api.ItemNames;
 import vg.civcraft.mc.civmodcore.inventorygui.Clickable;
 import vg.civcraft.mc.civmodcore.inventorygui.ClickableInventory;
-/* TODO:
- * Developments need some refactoring. Either the developments
- * are composed of several different features (e.g. stores stuff,
- * collects stuff, etc.), or developments inherit from abstract
- * classes. The features could all be interfaces, and other
- * functions can see if a development is an instance of the
- * interface to check if things like "build()" or "destroy()" 
- * are applicable to it.
- */
+
 public class Development {
 	private DevelopmentType type;
 	
@@ -45,8 +41,9 @@ public class Development {
 	}
 	
 	public void openGUI(Player player) {
-		ClickableInventory gui = new ClickableInventory(9, this.getDevelopmentType().getTitle());
+		ClickableInventory gui = new ClickableInventory(9, this.getType().getTitle());
 		Development development = this;
+		Estate estate = Nobility.getEstateManager().getEstateOfPlayer(player);
 		
 		// ACTIVATE / DEACTIVATE
 		int activateSlot = 0;
@@ -76,12 +73,42 @@ public class Development {
 		// or this could be setSlot with some extra logic to prevent overwriting
 		gui.addSlot(activate);
 		
-		// INFO
-		// TODO Add information. Maybe behavior.getInfo()
-
-		// SPECIAL BEHAVIORS
+		// BEHAVIORS
 		for (DevelopmentBehavior behavior : behaviors) {
 			
+			// UPGRADE
+			if (behavior instanceof Upgradable) {
+				Upgradable upgradable = (Upgradable) behavior;
+				ItemStack upgradeIcon = ButtonLibrary.createIcon(Material.ANVIL, "Upgrade");
+				
+				if(!type.getInitialCost().isEmpty() ) {
+					ItemAPI.addLore(upgradeIcon, ChatColor.YELLOW + "Upgrade Cost:");
+					for(ItemStack cost : type.getInitialCost()) {
+						ItemAPI.addLore(upgradeIcon, ItemNames.getItemName(cost) +  ": " + cost.getAmount());
+					}
+					if(!Nobility.getDevelopmentManager().checkCosts(type, estate.getInventory())) {
+						ItemAPI.addLore(upgradeIcon, ChatColor.RED + "Not enough to upgrade");
+					}
+				}
+				
+				Clickable upgrade = new Clickable(upgradeIcon) {
+
+					@Override
+					public void clicked(Player p) {
+						upgradable.upgrade();
+						p.sendMessage("You have upgraded the " 
+								+ development.getType().getTitle() 
+								+ " to level "
+								+ upgradable.getLevel());
+						Nobility.getDevelopmentManager().subtractCosts(type, estate.getInventory());
+						// update icons including info
+						openGUI(p);
+					}
+				};
+				gui.addSlot(upgrade);
+			}
+			
+			// EXTRA BEHAVIORS
 			for (Clickable c : behavior.getClickables()) {
 				gui.addSlot(c);
 			};
@@ -111,11 +138,11 @@ public class Development {
 		return isActive;
 	}
 	
-	public DevelopmentType getDevelopmentType() {
+	public DevelopmentType getType() {
 		return type;
 	}
 
-	public void setDevelopmentType(DevelopmentType type) {
+	public void setType(DevelopmentType type) {
 		this.type = type;
 	}
 
@@ -128,7 +155,7 @@ public class Development {
 	}
 	
 	public Inventory getInventory() {
-		if (!this.getDevelopmentType().isStorehouse()) {
+		if (!this.getType().isStorehouse()) {
 			Bukkit.getLogger().warning("You cannot get the inventory of a development without an inventory");
 			return null;
 		}
@@ -142,7 +169,7 @@ public class Development {
 	}
 	
 	public Collector getCollector() {
-		if (!this.getDevelopmentType().isCollector()) {
+		if (!this.getType().isCollector()) {
 			Bukkit.getLogger().warning("You cannot get the collector of a development without a collector");
 			return null;
 		}

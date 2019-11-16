@@ -20,13 +20,16 @@ public class Collector implements DevelopmentBehavior, Upgradable {
 	private Development development;
 	private int level = 1;
 	private double productivity = 1;
-	private int collectionPower = 10; //conditional of level
+	private int collectionPower; //starting level
+	private final int startingPower = 4;
+	private final int powerPerLevel = 2;
 	
 	private static CollectorManager manager = Nobility.getCollectorManager();
 	
 	public Collector(Estate estate, Development development) {
 		this.estate = estate;
 		this.development = development;
+		collectionPower = startingPower;
 	}
 
 	@Override
@@ -46,7 +49,7 @@ public class Collector implements DevelopmentBehavior, Upgradable {
 		// INFO
 		ItemStack info = ButtonLibrary.createIcon(Material.PAPER, "Info");
 		ItemAPI.addLore(info, "Collection Power: " + this.getCollectionPower() * this.getProductivity(),
-				"Region Total: " + estate.getRegion().getResource(development.getDevelopmentType().getResource().toUpperCase()));
+				"Region Total: " + estate.getRegion().getResource(development.getType().getResource().toUpperCase()));
 		//addLore(icon, "Percent: " + TODO: actualYield / regionTotal);
 		//TODO: Actual Yield, Food Usage, if (foodUsage != maximum) "Click to increase food usage"
 		
@@ -66,11 +69,13 @@ public class Collector implements DevelopmentBehavior, Upgradable {
 	@Override
 	public void upgrade() {
 		level++;
+		collectionPower += powerPerLevel;
 	}
 
 	@Override
 	public void setLevel(int level) {
-		this.level = level;		
+		this.level = level;
+		collectionPower = (level * powerPerLevel) + startingPower;
 	}
 	
 	public double getProductivity() {
@@ -83,10 +88,6 @@ public class Collector implements DevelopmentBehavior, Upgradable {
 
 	public int getCollectionPower() {
 		return collectionPower;
-	}
-	
-	public void setCollectionPower(int collectionPower) {
-		this.collectionPower = collectionPower;
 	}
 
 }

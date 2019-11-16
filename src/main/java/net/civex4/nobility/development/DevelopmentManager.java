@@ -1,5 +1,6 @@
 package net.civex4.nobility.development;
 
+import org.bukkit.Bukkit;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
@@ -10,27 +11,52 @@ public class DevelopmentManager {
 	public DevelopmentManager() { }
 	
 	public void subtractUpkeep(DevelopmentType type, Estate estate) {		
-		if (type.getUpkeepCost() == null) return;		
+		if (type.getUpkeepCost() == null) return;
 		Inventory inventory = estate.getInventory();
 		for (ItemStack cost : type.getUpkeepCost()) {
-			inventory.remove(cost);
+			if (inventory.containsAtLeast(cost, cost.getAmount())) {
+				inventory.removeItem(cost);
+			} else {
+				estate.getDevelopment(type).deactivate();
+			}
+
 		}
 	}
 	
-	public Boolean checkCosts(DevelopmentType developmentType, Estate estate) {
-		for (ItemStack cost : developmentType.getInitialCost()) {
-			if (!estate.getInventory().containsAtLeast(cost, cost.getAmount())) {
+	public boolean checkCosts(DevelopmentType type, Inventory inv) {		
+		if (type.getInitialCost().isEmpty()) return true;
+		if (inv == null) {
+			Bukkit.getLogger().warning("You can't check the cost of a null inventory");
+			return false;
+		}
+		for (ItemStack cost : type.getInitialCost()) {
+			if (!inv.containsAtLeast(cost, cost.getAmount())) {
 				return false;
 			}
 		}		
 		return true;   	
 	}
 	
-	public void subtractCosts(DevelopmentType type, Estate estate) {
-		if (type.getInitialCost() == null) return;		
+	public boolean checkCosts(DevelopmentType type, Estate estate) {
+		return checkCosts(type, estate.getInventory());
+	}
+	
+	public boolean subtractCosts(DevelopmentType type, Estate estate) {
+		Inventory inv = estate.getInventory();
+		return subtractCosts(type, inv);
+	}
+	
+	public boolean subtractCosts(DevelopmentType type, Inventory inv) {
+		if (type.getInitialCost() == null) return true;		
 		for (ItemStack cost : type.getInitialCost()) {
-			estate.getInventory().removeItem(cost);
-		}  	
+			if (checkCosts(type, inv)) {
+				inv.removeItem(cost);
+				return true;
+			} else {
+				return false;
+			}
+		}
+		return false;
 	}
 
 	

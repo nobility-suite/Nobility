@@ -5,7 +5,6 @@ developments:
     prerequisites:
     initialCost:
     upkeepCost:
-      WHEAT: 1
     isCollector: false
     isWall: false
     isStorehouse: true

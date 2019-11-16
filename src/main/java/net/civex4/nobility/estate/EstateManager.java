@@ -14,6 +14,7 @@ import org.bukkit.inventory.ItemStack;
 import net.civex4.nobility.Nobility;
 import net.civex4.nobility.development.Development;
 import net.civex4.nobility.development.DevelopmentType;
+import net.civex4.nobility.development.behaviors.Upgradable;
 import net.civex4.nobility.group.Group;
 import net.civex4.nobility.gui.ButtonLibrary;
 import vg.civcraft.mc.civmodcore.api.ItemAPI;
@@ -113,7 +114,7 @@ public class EstateManager {
 
 		// BUILT DEVELOPMENTS:
 		for(Development development: estate.getBuiltDevelopments()) {
-			DevelopmentType type = development.getDevelopmentType();
+			DevelopmentType type = development.getType();
 			ItemStack icon;
 			if (development.isActive()) {
 				Material m = type.getIcon();
@@ -123,7 +124,7 @@ public class EstateManager {
 			} else {
 				Material m = Material.FIREWORK_STAR;
 				icon = new ItemStack(m);
-				nameItem(icon, development.getDevelopmentType().getTitle());
+				nameItem(icon, development.getType().getTitle());
 				addLore(icon, ChatColor.RED + "Inactive");
 			}
 			
@@ -132,6 +133,11 @@ public class EstateManager {
 				for (ItemStack cost : type.getUpkeepCost()) {
 					addLore(icon, ItemNames.getItemName(cost) + ": " + cost.getAmount());
 				}
+			}
+			
+			// This indicates that the level needs to be moved to the development class
+			if (development.getCollector() instanceof Upgradable) {
+				addLore(icon, ChatColor.YELLOW + "Level " + development.getCollector().getLevel());
 			}
 
 			// IF DEVELOPMENT IS CLICKED

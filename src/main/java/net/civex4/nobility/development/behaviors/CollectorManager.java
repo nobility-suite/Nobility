@@ -14,7 +14,7 @@ public class CollectorManager {
 	
 	public ItemStack getResourceAmount(Estate estate, Development development) {   
 		//TODO: Get the returnMaterial by checking the region (e.g. if region is jungle and resource is wood, return jungle logs)
-		String resource = development.getDevelopmentType().getResource();		
+		String resource = development.getType().getResource();		
 		Material returnMaterial = Material.matchMaterial(resource);
 		int returnAmount = calculateGains(estate, development);
 		return new ItemStack(returnMaterial, returnAmount);
@@ -22,18 +22,17 @@ public class CollectorManager {
 	
 	public int calculateGains(Estate estate, Development development) {
 		Collector collector = development.getCollector();
-		String resource = development.getDevelopmentType().getResource();
+		String resource = development.getType().getResource();
 		double regionResource = estate.getRegion().getResource(resource);
 		double collectionPower = collector.getCollectionPower();
 		double totalCompetingCollectionPower = 0;
 		double productivity = collector.getProductivity();
 		
-		//Calculate productivity by counting the other estates with the same development in the same region
 		for (Estate otherEstate : Nobility.getEstateManager().getEstates()) {
 			if (estate.getRegion().equals(otherEstate.getRegion())) {
 				for (Development otherDevelopment : otherEstate.getActiveDevelopments()) {
-					if (development.getDevelopmentType().getResource()
-							.equalsIgnoreCase(otherDevelopment.getDevelopmentType().getResource())) {
+					if (development.getType().getResource()
+							.equalsIgnoreCase(otherDevelopment.getType().getResource())) {
 						totalCompetingCollectionPower += otherDevelopment.getCollector().getProductivity();
 					}
 				}
@@ -43,7 +42,8 @@ public class CollectorManager {
 		if (totalCompetingCollectionPower <= regionResource) {
 			return (int) Math.floor(collectionPower * productivity);
 		} else {
-			return (int) Math.floor((regionResource * collectionPower * productivity) / totalCompetingCollectionPower);
+			return (int) Math.floor((regionResource * collectionPower * productivity) 
+					/ totalCompetingCollectionPower);
 		}
 	}
 	

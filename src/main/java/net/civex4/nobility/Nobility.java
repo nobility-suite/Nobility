@@ -106,15 +106,13 @@ public class Nobility extends ACivMod {
 
 		for (Estate estate : estateMan.getEstates()) {
 			for (Development development : estate.getActiveDevelopments()) {
-				developmentManager.subtractUpkeep(development.getDevelopmentType(), estate);
+				developmentManager.subtractUpkeep(development.getType(), estate);
 			}
 		}
 
 		for (Estate estate : estateMan.getEstates()) {
 			for (Development development : estate.getActiveDevelopments()) {
-				if (development.isActive()) {
-					development.tick();
-				}
+				development.tick();
 			}
 		}
 	}
