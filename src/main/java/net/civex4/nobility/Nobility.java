@@ -8,6 +8,7 @@ import io.github.kingvictoria.NobilityRegions;
 import net.civex4.nobility.development.Development;
 import net.civex4.nobility.development.DevelopmentManager;
 import net.civex4.nobility.development.DevelopmentType;
+import net.civex4.nobility.development.behaviors.CollectorManager;
 import net.civex4.nobility.estate.Estate;
 import net.civex4.nobility.estate.EstateManager;
 import net.civex4.nobility.group.GroupManager;
@@ -25,6 +26,7 @@ public class Nobility extends ACivMod {
 	private static Nobility nobility;
 	private static NobilityRegions nobilityRegions;
 	private static DevelopmentManager developmentManager;
+	private static CollectorManager collectorManager;
 
 	public static int currentDay = 0;
 	
@@ -33,10 +35,7 @@ public class Nobility extends ACivMod {
 		super.onEnable();
 		nobility = this;
 		nobilityRegions = getPlugin(NobilityRegions.class);
-		groupMan = new GroupManager();
-		estateMan = new EstateManager();
-
-		developmentManager = new DevelopmentManager();
+		initializeManagers();
 		registerConfig();
 		reloadConfig();
 		getCommand("nobility").setExecutor(new CommandListener());
@@ -45,7 +44,14 @@ public class Nobility extends ACivMod {
 
 		registerEvents();
 	}
-
+	
+	private static void initializeManagers() {
+		groupMan = new GroupManager();
+		estateMan = new EstateManager();
+		developmentManager = new DevelopmentManager();
+		collectorManager = new CollectorManager();
+	}
+	
 	public static GroupManager getGroupManager() {
 		return groupMan;
 	}
@@ -54,6 +60,14 @@ public class Nobility extends ACivMod {
 		return estateMan;
 	}
 
+	public static DevelopmentManager getDevelopmentManager() {
+		return developmentManager;
+	}
+	
+	public static CollectorManager getCollectorManager() {
+		return collectorManager;
+	}
+	
 	private void registerEvents() {
 		PluginManager pm = getServer().getPluginManager();
 		pm.registerEvents(new EstateCreate(), this);
@@ -83,10 +97,6 @@ public class Nobility extends ACivMod {
 		return nobilityRegions;
 	}
 
-	public static DevelopmentManager getDevelopmentManager() {
-		return developmentManager;
-	}
-
 	public static void tickDay() {
 		currentDay += 1;
 		for (Player p : Bukkit.getServer().getOnlinePlayers()) {
@@ -94,14 +104,13 @@ public class Nobility extends ACivMod {
 					+ ChatColor.BLUE + ChatColor.BOLD + currentDay);
 		}
 
-		//DO STUFF
-		for (Estate estate : estateMan.estates) {
+		for (Estate estate : estateMan.getEstates()) {
 			for (Development development : estate.getActiveDevelopments()) {
 				developmentManager.subtractUpkeep(development.getDevelopmentType(), estate);
 			}
 		}
 
-		for (Estate estate : estateMan.estates) {
+		for (Estate estate : estateMan.getEstates()) {
 			for (Development development : estate.getActiveDevelopments()) {
 				if (development.isActive()) {
 					development.tick();

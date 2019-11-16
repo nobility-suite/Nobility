@@ -3,15 +3,20 @@ package net.civex4.nobility.development;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
+import net.civex4.nobility.development.behaviors.Collector;
+import net.civex4.nobility.development.behaviors.DevelopmentBehavior;
+import net.civex4.nobility.development.behaviors.Storehouse;
+import net.civex4.nobility.gui.ButtonLibrary;
 import vg.civcraft.mc.civmodcore.api.ItemAPI;
 import vg.civcraft.mc.civmodcore.inventorygui.Clickable;
 import vg.civcraft.mc.civmodcore.inventorygui.ClickableInventory;
-import vg.civcraft.mc.civmodcore.inventorygui.DecorationStack;
 /* TODO:
  * Developments need some refactoring. Either the developments
  * are composed of several different features (e.g. stores stuff,
@@ -26,14 +31,10 @@ public class Development {
 	
 	private List<DevelopmentBehavior> behaviors = new ArrayList<>();
 	
-	private double productivity; // add to collector
-	private int collectionPower; // add to collector
 	private boolean isActive;
 		
-	public Development(DevelopmentType development) {
-		this.setDevelopmentType(development);
-		this.productivity = .4d;
-		this.setCollectionPower(10);
+	public Development(DevelopmentType type) {
+		this.type = type;
 		this.isActive = true;
 	}
 	
@@ -47,13 +48,8 @@ public class Development {
 		ClickableInventory gui = new ClickableInventory(9, this.getDevelopmentType().getTitle());
 		Development development = this;
 		
-		// INFO
-		// TODO Add information. Maybe behavior.getInfo()
-		Clickable info = new DecorationStack(new ItemStack(Material.PAPER));
-		gui.addSlot(info);
-		
 		// ACTIVATE / DEACTIVATE
-		// This is kind of convoluted. Maybe should use that BooleanButton...
+		int activateSlot = 0;
 		ItemStack activeIcon = new ItemStack(Material.EGG);
 		ItemAPI.setDisplayName(activeIcon, ChatColor.GREEN + "Active");
 		
@@ -70,19 +66,29 @@ public class Development {
 				development.isActive = state;				
 				item = state ? activeIcon : inactiveIcon;	
 				ClickableInventory inventory = ClickableInventory.getOpenInventory(p);
-				inventory.setSlot(this, 1);
-				p.updateInventory();
-			}			
+				/* There's probably a better way to do this.
+				 * If another button is added before this, the activateSlot has to be updated
+				 */
+				inventory.setSlot(this, activateSlot);
+				inventory.showInventory(player);
+			}
 		};
+		// or this could be setSlot with some extra logic to prevent overwriting
 		gui.addSlot(activate);
+		
+		// INFO
+		// TODO Add information. Maybe behavior.getInfo()
 
-		/*
+		// SPECIAL BEHAVIORS
 		for (DevelopmentBehavior behavior : behaviors) {
 			
 			for (Clickable c : behavior.getClickables()) {
 				gui.addSlot(c);
 			};
-		}*/
+		}
+		
+		// HOME
+		gui.addSlot(ButtonLibrary.HOME.clickable());
 		
 		gui.showInventory(player);
 	}
@@ -113,29 +119,41 @@ public class Development {
 		this.type = type;
 	}
 
-	public double getProductivity() {
-		return productivity;
-	}
-
-	public void setProductivity(double productivity) {
-		this.productivity = productivity;
-	}
-
-	public int getCollectionPower() {
-		return collectionPower;
-	}
-	
-	public void setCollectionPower(int collectionPower) {
-		this.collectionPower = collectionPower;
-	}
-
 	public List<DevelopmentBehavior> getBehaviors() {
 		return behaviors;
 	}
 
-
 	public void addBehavior(DevelopmentBehavior behavior) {
 		behaviors.add(behavior);
+	}
+	
+	public Inventory getInventory() {
+		if (!this.getDevelopmentType().isStorehouse()) {
+			Bukkit.getLogger().warning("You cannot get the inventory of a development without an inventory");
+			return null;
+		}
+		for (DevelopmentBehavior behavior : behaviors) {
+			if (behavior instanceof Storehouse) {
+				Storehouse storehouse = (Storehouse) behavior;
+				return storehouse.getInventory();
+			}
+		}
+		return null;
+	}
+	
+	public Collector getCollector() {
+		if (!this.getDevelopmentType().isCollector()) {
+			Bukkit.getLogger().warning("You cannot get the collector of a development without a collector");
+			return null;
+		}
+		for (DevelopmentBehavior behavior : behaviors) {
+			if (behavior instanceof Storehouse) {
+				Collector collector = (Collector) behavior;
+				return collector;
+			}
+		}
+		return null;
+		
 	}
 
 

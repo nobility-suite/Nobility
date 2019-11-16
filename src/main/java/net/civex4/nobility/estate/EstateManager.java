@@ -10,12 +10,12 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 
 import net.civex4.nobility.Nobility;
 import net.civex4.nobility.development.Development;
 import net.civex4.nobility.development.DevelopmentType;
 import net.civex4.nobility.group.Group;
+import net.civex4.nobility.gui.ButtonLibrary;
 import vg.civcraft.mc.civmodcore.api.ItemAPI;
 import vg.civcraft.mc.civmodcore.api.ItemNames;
 import vg.civcraft.mc.civmodcore.chatDialog.Dialog;
@@ -25,9 +25,7 @@ import vg.civcraft.mc.civmodcore.inventorygui.DecorationStack;
 
 public class EstateManager {
 	
-	public ArrayList<Estate> estates = new ArrayList<Estate>();
-	
-	//HashMap player-estate
+	private ArrayList<Estate> estates = new ArrayList<Estate>();
 	private HashMap<Player, Estate> estateOfPlayer = new HashMap<Player, Estate>();
 		
 	public boolean isVulnerable(Estate e) {
@@ -63,7 +61,7 @@ public class EstateManager {
 
 		// BUTTONS:
 		// BUILD GUI
-		ItemStack buildGUIIcon = createIcon(Material.CRAFTING_TABLE, "Build a Development");
+		ItemStack buildGUIIcon = ButtonLibrary.createIcon(Material.CRAFTING_TABLE, "Build a Development");
 		Clickable buildButton = new Clickable(buildGUIIcon) {
 			@Override
 			public void clicked(Player p) {
@@ -73,7 +71,7 @@ public class EstateManager {
 		estateGUI.addSlot(buildButton);
 		
 		// RENAME ESTATE
-		ItemStack renameIcon = createIcon(Material.FEATHER, "Rename this Estate");
+		ItemStack renameIcon = ButtonLibrary.createIcon(Material.FEATHER, "Rename this Estate");
 		Clickable estateNameButton = new Clickable(renameIcon) {
 
 			@Override
@@ -99,15 +97,16 @@ public class EstateManager {
 					}
 				};
 				
-			}
-			
+			}			
 		};
 		estateGUI.addSlot(estateNameButton);
+		
+		// SEE ESTATES IN REGION TODO
 		
 		// DECORATION STACKS
 		for (int i = 0; i < rowLength * 2; i++) {
 			if (!(estateGUI.getSlot(i) instanceof Clickable)) {
-				Clickable c = new DecorationStack(createIcon(Material.BLACK_STAINED_GLASS_PANE, " "));
+				Clickable c = new DecorationStack(ButtonLibrary.createIcon(Material.BLACK_STAINED_GLASS_PANE, " "));
 				estateGUI.setSlot(c, i);
 			}
 		}
@@ -133,13 +132,6 @@ public class EstateManager {
 				for (ItemStack cost : type.getUpkeepCost()) {
 					addLore(icon, ItemNames.getItemName(cost) + ": " + cost.getAmount());
 				}
-
-			}
-			if (type.getResource() != null) {
-				addLore(icon, "Collection Power (base): " + development.getCollectionPower() * development.getProductivity() + " (4)");
-				addLore(icon, "Region Total: " + estate.getRegion().getResource(type.getResource().toUpperCase()));
-				//addLore(icon, "Percent: " + TODO: actualYield / regionTotal);
-				//TODO: Actual Yield, Food Usage, if (foodUsage != maximum) "Click to increase food usage"
 			}
 
 			// IF DEVELOPMENT IS CLICKED
@@ -157,8 +149,6 @@ public class EstateManager {
 		estateGUI.showInventory(player);
 	}
 	
-	
-	// TODO Could use CivModCore for item renaming
 	public void openBuildGUI(Player player) {
 		Estate estate = getEstateOfPlayer(player);
 		// TODO Estate name length can't be longer than 32
@@ -215,40 +205,17 @@ public class EstateManager {
 				developmentGUI.addSlot(c);
 			}			
 		}
+
+		developmentGUI.addSlot(ButtonLibrary.HOME.clickable());
 		
 		developmentGUI.showInventory(player);
 	}
 	
-	//Utility method to rename an item. Returns bold.
-	public static ItemStack nameItem(ItemStack item, String name) {
-		ItemMeta meta = item.getItemMeta();
-		meta.setDisplayName(ChatColor.BOLD + name);		
-		item.setItemMeta(meta);
-		return item;
-	}
-
-	/**
-	 * Utility method to add a single line of lore text to an item
-	 * @param item ItemStack item to add lore text to
-	 * @param text String text to add
-	 */
-	public static void addLore(ItemStack item, String text) {
-		ItemMeta meta = item.getItemMeta();
-		List<String> lore = meta.getLore();
-		if(lore == null) lore = new ArrayList<>();
-		lore.add(text);
-		meta.setLore(lore);
-		item.setItemMeta(meta);
+	public List<Estate> getEstates() {
+		return estates;
 	}
 	
-	public static ItemStack createIcon(Material mat, String name) {
-		ItemStack icon = new ItemStack(mat);
-		ItemAPI.setDisplayName(icon, ChatColor.WHITE + name);
-		return icon;
-	}
-	
-	
-	//getters and setters for player-estate hashmap
+	// Player-Estate map
 	public void setEstateOfPlayer(Player p, Estate e) {
 		estateOfPlayer.put(p, e);
 	}
@@ -259,6 +226,15 @@ public class EstateManager {
 	
 	public boolean playerHasEstate(Player p) {
 		return estateOfPlayer.containsKey(p);
+	}
+	
+	// Utilities
+	private static void nameItem(ItemStack item, String name) {
+		ItemAPI.setDisplayName(item, ChatColor.WHITE + name);
+	}
+
+	private static void addLore(ItemStack item, String text) {
+		ItemAPI.addLore(item, text);
 	}
 
 	

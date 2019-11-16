@@ -1,4 +1,4 @@
-package net.civex4.nobility.development;
+package net.civex4.nobility.development.behaviors;
 
 import java.util.List;
 

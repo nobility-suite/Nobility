@@ -3,7 +3,9 @@ package net.civex4.nobility.estate;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
+import org.bukkit.inventory.Inventory;
 
 import io.github.kingvictoria.NobilityRegions;
 import io.github.kingvictoria.Region;
@@ -32,6 +34,16 @@ public class Estate {
 	
 	public void buildDevelopment(DevelopmentType type) {
 		DevelopmentFactory.buildDevelopment(type, this);
+	}
+	
+	public Inventory getInventory() {
+		for (Development development : builtDevelopments) {
+			if (development.getDevelopmentType().isStorehouse()) {
+				return development.getInventory();
+			}
+		}
+		Bukkit.getLogger().warning("You cannot get the inventory of an estate that does not have an inventory");
+		return null;
 	}
 	
 	public int getVulnerabilityHour() {

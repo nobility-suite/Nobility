@@ -1,6 +1,8 @@
 package net.civex4.nobility.development;
 
 import net.civex4.nobility.Nobility;
+import net.civex4.nobility.development.behaviors.Collector;
+import net.civex4.nobility.development.behaviors.Storehouse;
 import net.civex4.nobility.estate.Estate;
 
 public class DevelopmentFactory {
