@@ -147,7 +147,7 @@ public class Development {
 			return null;
 		}
 		for (DevelopmentBehavior behavior : behaviors) {
-			if (behavior instanceof Storehouse) {
+			if (behavior instanceof Collector) {
 				Collector collector = (Collector) behavior;
 				return collector;
 			}

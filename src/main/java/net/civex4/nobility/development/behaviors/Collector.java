@@ -45,7 +45,7 @@ public class Collector implements DevelopmentBehavior, Upgradable {
 		
 		// INFO
 		ItemStack info = ButtonLibrary.createIcon(Material.PAPER, "Info");
-		ItemAPI.addLore(info, "Collection Power (base): " + this.getCollectionPower() * this.getProductivity() + " (4)",
+		ItemAPI.addLore(info, "Collection Power: " + this.getCollectionPower() * this.getProductivity(),
 				"Region Total: " + estate.getRegion().getResource(development.getDevelopmentType().getResource().toUpperCase()));
 		//addLore(icon, "Percent: " + TODO: actualYield / regionTotal);
 		//TODO: Actual Yield, Food Usage, if (foodUsage != maximum) "Click to increase food usage"
