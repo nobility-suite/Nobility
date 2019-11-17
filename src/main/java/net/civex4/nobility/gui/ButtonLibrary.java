@@ -26,6 +26,7 @@ public enum ButtonLibrary {
 	}
 	
 	public Clickable clickable() { return clickable; }
+	public ItemStack icon() { return clickable.getItemStack(); }
 	
 	
 	public static ItemStack createIcon(Material mat, String name) {

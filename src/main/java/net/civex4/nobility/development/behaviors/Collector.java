@@ -39,7 +39,7 @@ public class Collector implements DevelopmentBehavior, Upgradable {
 
 	@Override
 	public void tick() {
-		estate.getInventory().addItem(manager.getResourceAmount(estate, development));		
+		manager.getResourceAmount(estate, development).addToInventory(estate.getInventory());		
 	}
 	
 	@Override

@@ -80,7 +80,6 @@ public class Development {
 			if (behavior instanceof Upgradable) {
 				Upgradable upgradable = (Upgradable) behavior;
 				ItemStack upgradeIcon = ButtonLibrary.createIcon(Material.ANVIL, "Upgrade");
-				
 				if(!type.getInitialCost().isEmpty() ) {
 					ItemAPI.addLore(upgradeIcon, ChatColor.YELLOW + "Upgrade Cost:");
 					for(ItemStack cost : type.getInitialCost()) {
@@ -90,22 +89,29 @@ public class Development {
 						ItemAPI.addLore(upgradeIcon, ChatColor.RED + "Not enough to upgrade");
 					}
 				}
-				
+
 				Clickable upgrade = new Clickable(upgradeIcon) {
 
 					@Override
 					public void clicked(Player p) {
-						upgradable.upgrade();
-						p.sendMessage("You have upgraded the " 
-								+ development.getType().getTitle() 
-								+ " to level "
-								+ upgradable.getLevel());
-						Nobility.getDevelopmentManager().subtractCosts(type, estate.getInventory());
-						// update icons including info
-						openGUI(p);
+						if(Nobility.getDevelopmentManager().checkCosts(type, estate.getInventory())) {
+							upgradable.upgrade();
+							p.sendMessage("You have upgraded the " 
+									+ development.getType().getTitle() 
+									+ " to level "
+									+ upgradable.getLevel());
+							Nobility.getDevelopmentManager().subtractCosts(type, estate.getInventory());
+							// update icons including info
+							openGUI(p);
+						} else {
+							p.sendMessage("You don't have enough resources");
+						}
+
+						
 					}
 				};
 				gui.addSlot(upgrade);
+
 			}
 			
 			// EXTRA BEHAVIORS
@@ -170,7 +176,6 @@ public class Development {
 	
 	public Collector getCollector() {
 		if (!this.getType().isCollector()) {
-			Bukkit.getLogger().warning("You cannot get the collector of a development without a collector");
 			return null;
 		}
 		for (DevelopmentBehavior behavior : behaviors) {
@@ -179,8 +184,9 @@ public class Development {
 				return collector;
 			}
 		}
+
 		return null;
-		
+
 	}
 
 

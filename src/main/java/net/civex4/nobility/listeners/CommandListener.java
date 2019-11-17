@@ -120,6 +120,7 @@ public class CommandListener implements CommandExecutor{
 						player.sendMessage(ChatColor.GREEN + "You have been added to " + tempGroup.getName());
 					}
 				}
+				return true;
 			}
 		}
 		return false;
