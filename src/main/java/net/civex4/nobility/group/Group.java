@@ -52,5 +52,13 @@ public class Group {
 	public void setName(String name) {
 		this.name = name;
 	}
+	
+	public void setLocalization(GroupPermission perm, String str) {
+	  this.rankLocalizations.put(perm, str);
+	}
+	
+	public String getLocalization(GroupPermission perm) {
+	  return this.rankLocalizations.get(perm);
+	}
 
 }
