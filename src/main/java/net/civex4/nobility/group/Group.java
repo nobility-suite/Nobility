@@ -2,47 +2,48 @@ package net.civex4.nobility.group;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Set;
 import java.util.UUID;
-import org.bukkit.Location;
+
 import org.bukkit.entity.Player;
 
 public class Group {
-	
-  
-    public HashMap<UUID,GroupPermission> members;
-	//public ArrayList<UUID> members;
-	public String name;
-	public HashMap<GroupPermission,String> rankLocalizations;
-	public Location estateLocation;
-	public boolean hasEstate;
-	public ArrayList<UUID> pendingInvites;
-	
-	public Group(String name, UUID playerName) {
 	  
-	    this.hasEstate = false;
+    private HashMap<UUID, GroupPermission> members = new HashMap<>();
+	private String name;
+	private HashMap<GroupPermission, String> rankLocalizations; // possibly change to localRankNames
+	private boolean hasEstate = false;
+	private ArrayList<UUID> pendingInvites = new ArrayList<>();
+	
+	public Group(String name, UUID leader) {	  
+		this.hasEstate = false;
 	    this.name = name;
-	    
-		HashMap<UUID,GroupPermission> mem = new HashMap<>();
-		mem.put(playerName,GroupPermission.LEADER);
-		this.members = mem;
-		
-		ArrayList<UUID> pending = new ArrayList<>();
-		pendingInvites = pending;
-		
-		HashMap<GroupPermission,String> localizations = new HashMap<>();
-		localizations.put(GroupPermission.DEFAULT, "Peasant");
-		localizations.put(GroupPermission.TRUSTED, "Citizen");
-		localizations.put(GroupPermission.OFFICER, "Official");
-		localizations.put(GroupPermission.LEADER, "Lord");
-		this.rankLocalizations = localizations;
+		members.put(leader, GroupPermission.LEADER);
+		this.rankLocalizations = GroupPermission.getDefaultRanks();
 	}
 	
 	public void addMember(Player p) {
-		members.put(p.getUniqueId(),GroupPermission.DEFAULT);
+		addMember(p.getUniqueId());
+	}
+	
+	public void addMember(UUID id) {
+		members.put(id, GroupPermission.DEFAULT);
 	}
 	
 	public void removeMember(Player p) {
 		members.remove(p.getUniqueId());
+	}
+	
+	public Set<UUID> getMembers() {
+		return members.keySet();
+	}
+	
+	public GroupPermission getPermission(Player p) {
+		return members.get(p.getUniqueId());
+	}
+	
+	public void setPermission(Player p, GroupPermission permission) {
+		members.put(p.getUniqueId(), permission);
 	}
 	
 	public String getName() {
@@ -54,11 +55,26 @@ public class Group {
 	}
 	
 	public void setLocalization(GroupPermission perm, String str) {
-	  this.rankLocalizations.put(perm, str);
+		this.rankLocalizations.put(perm, str);
 	}
 	
 	public String getLocalization(GroupPermission perm) {
-	  return this.rankLocalizations.get(perm);
+		return this.rankLocalizations.get(perm);
 	}
 
+	public ArrayList<UUID> getPendingInvites() {
+		return pendingInvites;
+	}
+
+	public void addPendingInvite(UUID id) {
+		pendingInvites.add(id);
+	}
+	
+	public boolean hasEstate() {
+		return hasEstate;
+	}
+	
+	public void setHasEstate(boolean hasEstate) {
+		this.hasEstate = hasEstate;
+	}
 }

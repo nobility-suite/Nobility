@@ -133,7 +133,7 @@ public class Estate {
 	
 	public void addRelationship(Estate estate, Relationship relationship) {
 		if (estate.equals(this)) {
-			Bukkit.getLogger().warning(this.getGroup().name + "\'s relationship to itself cannot be set");
+			Bukkit.getLogger().warning(this.getGroup().getName() + "\'s relationship to itself cannot be set");
 		}		
 		relationships.put(estate, relationship);
 	}

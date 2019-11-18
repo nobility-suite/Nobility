@@ -9,9 +9,9 @@ public class GroupManager {
 	public ArrayList<Group> groups = new ArrayList<Group>();
 
 	public Group getGroup(Player player) {
-		for(int i = 0; i < groups.size(); i++) {
+		for (int i = 0; i < groups.size(); i++) {
 			Group group = groups.get(i);
-			if (group.members.contains(player.getUniqueId())) {
+			if (group.getMembers().contains(player.getUniqueId())) {
 				return group;
 			}
 		}

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
+import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -29,7 +30,7 @@ import vg.civcraft.mc.civmodcore.inventorygui.DecorationStack;
 public class EstateManager {
 	
 	private ArrayList<Estate> estates = new ArrayList<>();
-	private HashMap<Player, Estate> estateOfPlayer = new HashMap<Player, Estate>();
+	private HashMap<UUID, Estate> estateOfPlayer = new HashMap<>();
 	
 	private static final int rowLength = 9;
 	
@@ -41,7 +42,8 @@ public class EstateManager {
 	}
 	
 	public Estate createEstate(Block block, Player player) {
-		Group group = Nobility.getGroupManager().getGroup(player);	
+		Group group = Nobility.getGroupManager().getGroup(player);
+		group.setHasEstate(true);
 		block.setType(Material.ENDER_CHEST);		
 		Estate estate = new Estate(block, group);		
 		estates.add(estate);
@@ -300,15 +302,15 @@ public class EstateManager {
 	
 	// Player-Estate map
 	public void setEstateOfPlayer(Player p, Estate e) {
-		estateOfPlayer.put(p, e);
+		estateOfPlayer.put(p.getUniqueId(), e);
 	}
 	
 	public Estate getEstateOfPlayer(Player p) {
-		return estateOfPlayer.get(p);
+		return estateOfPlayer.get(p.getUniqueId());
 	}
 	
 	public boolean playerHasEstate(Player p) {
-		return estateOfPlayer.containsKey(p);
+		return estateOfPlayer.containsKey(p.getUniqueId());
 	}
 	
 	// Utilities

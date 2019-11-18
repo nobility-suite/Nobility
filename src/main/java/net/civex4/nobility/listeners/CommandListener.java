@@ -72,7 +72,7 @@ public class CommandListener implements CommandExecutor{
 				Group tempGroup = null;
 				for (int i = 0; i < Nobility.getGroupManager().groups.size(); i++) {
 					Group group = Nobility.getGroupManager().groups.get(i);
-					for (UUID id : group.members) {
+					for (UUID id : group.getMembers()) {
 						if (id.equals(reciever)) {
 							player.sendMessage(ChatColor.RED + "That player is already part of an Estate.");
 							return true;
@@ -86,7 +86,7 @@ public class CommandListener implements CommandExecutor{
 				}
 				
 				if(inGroup) {
-					tempGroup.pendingInvites.add(reciever);
+					tempGroup.getPendingInvites().add(reciever);
 					recieverPlayer.sendMessage(ChatColor.GOLD + "You have been invited to join the Nobility Group " + ChatColor.BLUE + tempGroup.getName());
 				}else {
 					player.sendMessage(ChatColor.RED + "You are not part of a Nobility Group.");
@@ -102,7 +102,7 @@ public class CommandListener implements CommandExecutor{
 				Group tempGroup = null;
 				for(int i = 0; i < Nobility.getGroupManager().groups.size(); i++) {
 					Group group = Nobility.getGroupManager().groups.get(i);
-					for(UUID id : group.members) {
+					for(UUID id : group.getMembers()) {
 						if(playerId.equals(id)) {
 							player.sendMessage(ChatColor.RED + "You are already part of a Nobility group.");
 							return true;
@@ -114,9 +114,9 @@ public class CommandListener implements CommandExecutor{
 				}
 				
 				if(tempGroup != null) {
-					if(tempGroup.pendingInvites.contains(playerId)) {
-						tempGroup.pendingInvites.remove(playerId);
-						tempGroup.members.add(playerId);
+					if(tempGroup.getPendingInvites().contains(playerId)) {
+						tempGroup.getPendingInvites().remove(playerId);
+						tempGroup.addMember(playerId);
 						player.sendMessage(ChatColor.GREEN + "You have been added to " + tempGroup.getName());
 					}
 				}
