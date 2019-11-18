@@ -76,7 +76,7 @@ public class EstateManager {
 		estateGUI.addSlot(buildButton);
 		
 		// RENAME ESTATE
-		ItemStack renameIcon = ButtonLibrary.createIcon(Material.FEATHER, "Rename this Estate");
+		ItemStack renameIcon = ButtonLibrary.createIcon(Material.FEATHER, "Rename This Estate");
 		Clickable estateNameButton = new Clickable(renameIcon) {
 
 			@Override
@@ -194,7 +194,7 @@ public class EstateManager {
 		ClickableInventory gui = new ClickableInventory(roundUpToNine(estates.size()), "Estates");
 		for (Estate otherEstate : estates) {
 			if (otherEstate.equals(estate)) continue;
-			String name = estate.getGroup().getName();
+			String name = otherEstate.getGroup().getName();
 			Material mat = Material.WHITE_BANNER; // TODO add icon creation;
 			ItemStack icon = ButtonLibrary.createIcon(mat, name);
 			addLore(icon, "Relationship: " + estate.getRelationship(otherEstate).title());

@@ -114,7 +114,7 @@ public class DevelopmentType {
 		if (resourceString != null) {
 			resource = RegionResource.getResource(resourceString);
 			if (resource == null) {
-				Bukkit.getLogger().warning("Could not parse config " + name + "because the resource is not a valid RegionResource");
+				Bukkit.getLogger().warning("Could not parse config " + name + " because the resource is not a valid RegionResource");
 				return null;
 			}
 			Nobility.getNobility().info("Resource " + resource.toString() + " added to " + title + " development type");
@@ -209,41 +209,6 @@ public class DevelopmentType {
 	public void setResource(RegionResource resource) {
 		this.resource = resource;
 	}
-	
-	/*
-	 * Development GUI pseudo code
-	 * 
-	 * new clickableInventory
-	 * 
-	 * for development types
-	 * 	for changeabale things in development types
-	 * 		create a clickable
-	 * 		if thing is instanceOf renamable
-	 * 			New TextInput
-	 * 		if thing is instanceOf changeableBoolean
-	 * 			New BooleanButton
-	 * 				onClick {
-	 * 					thing.state = state
-	 * 				}
-	 * 		if thing is instanceOf itemInput
-	 * 			New ItemInputButton
-	 * 				onClick 
-	 * 					choose item
-	 * 					enter number
-	 * 	Add clickable to inventory
-	 * 
-	 * 
-	 * Server Setttings -> DevelopmentTypes -> Changeables -> sub changeable menus
-	 *  |
-	 *  L> Regions / This region -> Region Changeables -> sub changeable menus
-	 *  
-	 * 
-	 */
-	
-	
-	
-	
-	
 
 	public boolean isStorehouse() {
 		return isStorehouse;

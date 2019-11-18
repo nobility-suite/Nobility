@@ -4,8 +4,6 @@
 .classpath
 .project
 bin/.gitignore
-bin/src/main/resources/plugin.yml
-bin/src/main/resources/config.yml
 bin/src/main/java/net/civex4/nobility/Nobility.class
 bin/src/main/java/net/civex4/nobility/listeners/EstateGUI.class
 bin/src/main/java/net/civex4/nobility/listeners/EstateCreate.class
@@ -23,6 +21,5 @@ bin/src/main/java/net/civex4/nobility/development/Development.class
 bin/src/main/java/net/civex4/nobility/development/Developer.class
 bin/src/main/java/net/civex4/nobility/development/Collector.class
 bin/src/main/java/net/civex4/nobility/blueprints/AbstractBlueprint.class
-bin/pom.xml
 bin/.gitattributes
 *.prefs

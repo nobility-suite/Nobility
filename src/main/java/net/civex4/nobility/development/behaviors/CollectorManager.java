@@ -16,6 +16,11 @@ public class CollectorManager {
 
 	public CollectorManager() { }
 	
+	/* For competing estates, the numbers don't add up to the region total because they round down.
+	 * TODO Subtract each estate yield amount from the region total to get the remainder
+	 * For each remainder, give to random estate weighted by the amount they got rounded down
+	 */
+	
 	public ItemMap getResourceAmount(Estate estate, Development development) {
 		
 		RegionResource collectorResource = development.getType().getResource();		
@@ -63,7 +68,7 @@ public class CollectorManager {
 		}
 		return collectionPower;
 	}
-
+	
 	public int countItems(Material material, Inventory inventory) {
 		int number = 0;
 		for (ItemStack item : inventory.getContents()) {

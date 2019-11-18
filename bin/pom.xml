@@ -1,0 +1,60 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.gmail.sharpcastle33</groupId>
+  <artifactId>Nobility</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <description>A plugin to allow for players to create nations with a focus on statecraft, warfare, and geopolitics. Nobility aims to be a much more flexible and mechanically-lightweight plugin than traditional plugins like Towny or Factions. Built for Spigot 1.12.</description>
+
+    <repositories>
+        <repository>
+            <id>spigot-repo</id>
+            <url>https://hub.spigotmc.org/nexus/content/groups/public/</url>
+        </repository>
+        <repository>
+    		<id>devoted-repo</id>
+    	    <url>https://build.devotedmc.com/plugin/repository/everything/</url>
+        </repository>
+        <repository>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
+        </repository>
+    </repositories>
+    
+     <dependencies>
+         <dependency>
+             <groupId>org.spigotmc</groupId>
+             <artifactId>spigot-api</artifactId>
+             <version>1.14.4-R0.1-SNAPSHOT</version>
+             <scope>provided</scope>
+         </dependency>
+         <dependency>
+             <groupId>com.github.nobility-suite</groupId>
+             <artifactId>NobilityRegions</artifactId>
+             <version>v0.5</version>
+         </dependency>
+     </dependencies>
+    
+     <build>
+        <finalName>${project.name}-${project.version}</finalName>
+        <resources>
+            <resource>
+                <directory>${basedir}/src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.1</version>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+    
+
+     <name>Nobility</name>
+</project>

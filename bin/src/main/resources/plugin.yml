@@ -1,0 +1,11 @@
+name: ${project.name}
+main: net.civex4.nobility.Nobility
+version: ${project.version}
+depend: [NobilityRegions]
+api-version: 1.13
+commands:
+   nobility:
+      description: (OP ONLY) debug command for setting an enchant on an item
+      usage: with an item in main hand /gce <enchant> <level>
+      aliases: [ n ]
+
