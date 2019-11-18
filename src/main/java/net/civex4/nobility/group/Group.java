@@ -1,15 +1,16 @@
 package net.civex4.nobility.group;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.UUID;
-
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 public class Group {
 	
-	public ArrayList<UUID> members;
-	//public String name;
+  
+    public HashMap<UUID,GroupPermission> members;
+	//public ArrayList<UUID> members;
 	public String name;
 	public String leaderPrefix;
 	public Location estateLocation;
@@ -17,8 +18,8 @@ public class Group {
 	public ArrayList<UUID> pendingInvites;
 	
 	public Group(String name, UUID playerName) {
-		ArrayList<UUID> mem = new ArrayList<>();
-		mem.add(playerName);
+		HashMap<UUID,GroupPermission> mem = new HashMap<>();
+		mem.put(playerName,GroupPermission.LEADER);
 		this.members = mem;
 		this.leaderPrefix = "Lord ";
 		this.hasEstate = false;
@@ -28,7 +29,7 @@ public class Group {
 	}
 	
 	public void addMember(Player p) {
-		members.add(p.getUniqueId());
+		members.put(p.getUniqueId(),GroupPermission.DEFAULT);
 	}
 	
 	public void removeMember(Player p) {
