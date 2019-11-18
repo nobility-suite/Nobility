@@ -12,20 +12,29 @@ public class Group {
     public HashMap<UUID,GroupPermission> members;
 	//public ArrayList<UUID> members;
 	public String name;
-	public String leaderPrefix;
+	public HashMap<GroupPermission,String> rankLocalizations;
 	public Location estateLocation;
 	public boolean hasEstate;
 	public ArrayList<UUID> pendingInvites;
 	
 	public Group(String name, UUID playerName) {
+	  
+	    this.hasEstate = false;
+	    this.name = name;
+	    
 		HashMap<UUID,GroupPermission> mem = new HashMap<>();
 		mem.put(playerName,GroupPermission.LEADER);
 		this.members = mem;
-		this.leaderPrefix = "Lord ";
-		this.hasEstate = false;
+		
 		ArrayList<UUID> pending = new ArrayList<>();
 		pendingInvites = pending;
-		this.name = name;
+		
+		HashMap<GroupPermission,String> localizations = new HashMap<>();
+		localizations.put(GroupPermission.DEFAULT, "Peasant");
+		localizations.put(GroupPermission.TRUSTED, "Citizen");
+		localizations.put(GroupPermission.OFFICER, "Official");
+		localizations.put(GroupPermission.LEADER, "Lord");
+		this.rankLocalizations = localizations;
 	}
 	
 	public void addMember(Player p) {
