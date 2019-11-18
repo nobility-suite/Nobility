@@ -10,6 +10,9 @@ import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
 
+import io.github.kingvictoria.RegionResource;
+import net.civex4.nobility.Nobility;
+
 public class DevelopmentType {
 	
 	private static LinkedHashMap<String, DevelopmentType> types = new LinkedHashMap<String, DevelopmentType>();
@@ -25,7 +28,7 @@ public class DevelopmentType {
 	private boolean isCollector;
 	private boolean isWall;	
 	private boolean isStorehouse;
-	private String resource;
+	private RegionResource resource;
 	
 	
 	public DevelopmentType(
@@ -38,18 +41,18 @@ public class DevelopmentType {
 			boolean isCollector,
 			boolean isWall,
 			boolean isStorehouse,
-			String resource
+			RegionResource resource
 			) {
-		this.setName(name);
-		this.setTitle(title);
-		this.setIcon(icon);
-		this.setPrerequisites(prerequisites);
-		this.setInitialCost(initialCost);
-		this.setUpkeepCost(upkeepCost);
-		this.setCollector(isCollector);
-		this.setWall(isWall);
-		this.setStorehouse(isStorehouse);
-		this.setResource(resource);
+		this.name = name;
+		this.title = title;
+		this.icon = icon;
+		this.prerequisites = prerequisites;
+		this.initialCost = initialCost;
+		this.upkeepCost = upkeepCost;
+		this.isCollector = isCollector;
+		this.isWall = isWall;
+		this.isStorehouse = isStorehouse;
+		this.resource = resource;
 	}
 	
 	public boolean equals(Object obj) {
@@ -81,7 +84,7 @@ public class DevelopmentType {
 		String title = config.getString("title");
 		Material icon = Material.getMaterial(config.getString("icon"));
 		
-		ArrayList<String> prerequisites = new ArrayList<String>();
+		ArrayList<String> prerequisites = new ArrayList<>();
 		List<String> listOfPrerequisites = config.getStringList("prerequisites");
 		prerequisites.addAll(listOfPrerequisites);
 		
@@ -103,15 +106,18 @@ public class DevelopmentType {
 			}
 		}
 
-		//List<ItemStack> initialCost = new ItemStack(Material.getMaterial(config.getString("i)))
 		boolean isCollector = config.getBoolean("isCollector");
 		boolean isWall = config.getBoolean("isWall");
 		boolean isStorehouse = config.getBoolean("isStorehouse");
-		String resource = config.getString("resource");
-		
-		//TODO: Check if resource is a valid RegionResource enum. Otherwise shutdown.
-		if (config.getConfigurationSection("resource") != null) {
-			resource = resource.toUpperCase();
+		String resourceString = config.getString("resource");
+		RegionResource resource = null;
+		if (resourceString != null) {
+			resource = RegionResource.getResource(resourceString);
+			if (resource == null) {
+				Bukkit.getLogger().warning("Could not parse config " + name + "because the resource is not a valid RegionResource");
+				return null;
+			}
+			Nobility.getNobility().info("Resource " + resource.toString() + " added to " + title + " development type");
 		}
 
 		return new DevelopmentType(
@@ -177,12 +183,7 @@ public class DevelopmentType {
 	}
 
 	public List<String> getPrerequisites() {
-		try {
-			return prerequisites;
-		} catch (NullPointerException e) {
-			prerequisites = new ArrayList<>();
-			return prerequisites;
-		}
+		return prerequisites;
 	}
 
 	public void setPrerequisites(List<String> prerequisites) {
@@ -197,11 +198,15 @@ public class DevelopmentType {
 		this.upkeepCost = upkeepCost;
 	}
 
-	public String getResource() {
+	public RegionResource getResource() {
+		if (!this.isCollector) {
+			Bukkit.getLogger().warning("You shouldn't try get the resource of something that isn't a collector");
+		}
+		
 		return resource;
 	}
 
-	public void setResource(String resource) {
+	public void setResource(RegionResource resource) {
 		this.resource = resource;
 	}
 	

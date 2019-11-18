@@ -1,7 +1,9 @@
 package net.civex4.nobility.estate;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
@@ -18,18 +20,16 @@ public class Estate {
 	private Group group;
 	private Block block;
 	private Region region;
-	private List<Development> builtDevelopments;
+	private List<Development> builtDevelopments = new ArrayList<>();
+	private Map<Estate, Relationship> relationships = new HashMap<>();
 	
-	private int vulnerabilityHour;
+	private int vulnerabilityHour = 0;
 	
 	public Estate(Block block, Group group) {
 		this.setGroup(group);
 		this.setBlock(block);
-		this.builtDevelopments = new ArrayList<>();
-		this.vulnerabilityHour = 0;
-
 		region = NobilityRegions.getRegionMaster().getRegionByLocation(block.getLocation());
-	} // constructor
+	}
 	
 	public void buildDevelopment(DevelopmentType type) {
 		DevelopmentFactory.buildDevelopment(type, this);
@@ -41,7 +41,7 @@ public class Estate {
 				return development.getInventory();
 			}
 		}
-		Bukkit.getLogger().warning("You cannot get the inventory of an estate that does not have an inventory");
+		//Bukkit.getLogger().warning("You cannot get the inventory of an estate that does not have an inventory");
 		return null;
 	}
 	
@@ -130,5 +130,27 @@ public class Estate {
 
 		return inactiveDevelopments;
 	} // getInactiveDevelopments
+	
+	public void addRelationship(Estate estate, Relationship relationship) {
+		if (estate.equals(this)) {
+			Bukkit.getLogger().warning(this.getGroup().name + "\'s relationship to itself cannot be set");
+		}		
+		relationships.put(estate, relationship);
+	}
+	
+	public void removeRelationship(Estate estate) {
+		if (estate.equals(this)) {
+			return;
+		}
+		relationships.remove(estate);
+	}
+	
+	public Relationship getRelationship(Estate estate) {
+		if (!relationships.containsKey(estate)) {
+			return Relationship.NEUTRAL;
+		} else {
+		return relationships.get(estate);
+		}
+	}
 	
 }

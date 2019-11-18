@@ -18,7 +18,7 @@ public class CollectorManager {
 	
 	public ItemMap getResourceAmount(Estate estate, Development development) {
 		
-		RegionResource collectorResource = RegionResource.getResource(development.getType().getResource());		
+		RegionResource collectorResource = development.getType().getResource();		
 		if (collectorResource == null) {
 			Bukkit.getLogger().warning(development.getType().getTitle() + "'s resource is not a valid resource. Use a RegionResource enum name");
 			return null;
@@ -53,7 +53,7 @@ public class CollectorManager {
 			if (estate.getRegion().equals(otherEstate.getRegion())) {
 				for (Development otherDevelopment : otherEstate.getActiveDevelopments()) {
 					if (development.getType().getResource()
-							.equalsIgnoreCase(otherDevelopment.getType().getResource())) {
+							.equals(otherDevelopment.getType().getResource())) {
 						int otherPower = otherDevelopment.getCollector().getCollectionPower();
 						double otherProductivity = otherDevelopment.getCollector().getProductivity();
 						collectionPower += ((double) otherPower) * otherProductivity;

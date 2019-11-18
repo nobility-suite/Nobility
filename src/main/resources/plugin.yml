@@ -6,7 +6,11 @@ api-version: 1.13
 commands:
    nobility:
       description: nobility
-      usage: you didn't do the command properly
+      usage: /nobility <argument> [other stuff]
       aliases: [ n ]
    test:
       description: Tests stuff
+   create:
+      description: Creates an estate at player's feet
+      usage: /create or /c
+      aliases: [ c ]

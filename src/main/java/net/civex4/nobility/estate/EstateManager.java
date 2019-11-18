@@ -5,10 +5,12 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import net.civex4.nobility.Nobility;
@@ -26,9 +28,11 @@ import vg.civcraft.mc.civmodcore.inventorygui.DecorationStack;
 
 public class EstateManager {
 	
-	private ArrayList<Estate> estates = new ArrayList<Estate>();
+	private ArrayList<Estate> estates = new ArrayList<>();
 	private HashMap<Player, Estate> estateOfPlayer = new HashMap<Player, Estate>();
-		
+	
+	private static final int rowLength = 9;
+	
 	public boolean isVulnerable(Estate e) {
 		int h = e.getVulnerabilityHour(); //should be between 0 and 23;
 		Calendar rightNow = Calendar.getInstance();
@@ -57,7 +61,7 @@ public class EstateManager {
 	
 	public void openEstateGUI(Player player) {
 		Estate estate = getEstateOfPlayer(player);
-		final int rowLength = 9;
+
 		ClickableInventory estateGUI = new ClickableInventory(rowLength * 3, estate.getGroup().getName());
 
 		// BUTTONS:
@@ -102,8 +106,32 @@ public class EstateManager {
 		};
 		estateGUI.addSlot(estateNameButton);
 		
-		// SEE ESTATES IN REGION TODO
+		// RELATIONSHIPS
+		ItemStack relationshipIcon = ButtonLibrary.createIcon(Material.SKELETON_SKULL, "Relationships");
+		Clickable relationshipButton = new Clickable(relationshipIcon) {
+
+			@Override
+			public void clicked(Player p) {
+				openEstateRelationshipGUI(p);
+			}
+			
+		};
+		estateGUI.addSlot(relationshipButton);
 		
+		// OPEN INVENTORY		
+		Inventory inv = estate.getInventory();
+		if (inv != null) {
+			Clickable openInventory = new Clickable(new ItemStack(Material.CHEST)) {
+				@Override
+				public void clicked(Player player) {
+					player.openInventory(inv);
+				}			
+			};		
+			estateGUI.addSlot(openInventory);
+		}
+		
+		// SEE ESTATES IN REGION TODO
+				
 		// DECORATION STACKS
 		for (int i = 0; i < rowLength * 2; i++) {
 			if (!(estateGUI.getSlot(i) instanceof Clickable)) {
@@ -112,7 +140,7 @@ public class EstateManager {
 			}
 		}
 
-		// BUILT DEVELOPMENTS:
+		// BUILT DEVELOPMENTS
 		for(Development development: estate.getBuiltDevelopments()) {
 			DevelopmentType type = development.getType();
 			ItemStack icon;
@@ -155,6 +183,55 @@ public class EstateManager {
 		estateGUI.showInventory(player);
 	}
 	
+	public void openEstateRelationshipGUI(Player player) {
+		Estate estate = getEstateOfPlayer(player);
+		if (estates.size() > (rowLength * 6)) {
+			// TODO Create MultiPageView
+			Bukkit.getLogger().warning("The number of estates being greater than 54 has not been handled yet "
+					+ "(EstateManager.openEstateRelationshipGUI(player))");
+			return;
+		}
+		ClickableInventory gui = new ClickableInventory(roundUpToNine(estates.size()), "Estates");
+		for (Estate otherEstate : estates) {
+			if (otherEstate.equals(estate)) continue;
+			String name = estate.getGroup().getName();
+			Material mat = Material.WHITE_BANNER; // TODO add icon creation;
+			ItemStack icon = ButtonLibrary.createIcon(mat, name);
+			addLore(icon, "Relationship: " + estate.getRelationship(otherEstate).title());
+			Clickable c = new Clickable(icon) {
+
+				@Override
+				public void clicked(Player p) {
+					openSetRelationshipGUI(p, estate, otherEstate);					
+				}
+				
+			};
+			gui.addSlot(c);
+		}
+		gui.addSlot(ButtonLibrary.HOME.clickable());
+		gui.showInventory(player);
+	}
+	
+	public void openSetRelationshipGUI(Player player, Estate estate, Estate otherEstate) {
+		ClickableInventory gui = new ClickableInventory(9, "Set Relationship");
+		for (Relationship r : Relationship.values()) {
+			Clickable c = new Clickable(r.icon()) {
+
+				@Override
+				public void clicked(Player p) {
+					estate.addRelationship(otherEstate, r);
+					p.sendMessage("Your relationship with " + estate.getGroup().getName() 
+							+ " has been set to " + r.title().toLowerCase());
+					openEstateRelationshipGUI(p);
+				}
+				
+			};
+			gui.addSlot(c);
+		}
+		gui.addSlot(ButtonLibrary.HOME.clickable());
+		gui.showInventory(player);
+	}
+
 	public void openBuildGUI(Player player) {
 		Estate estate = getEstateOfPlayer(player);
 		// TODO Estate name length can't be longer than 32
@@ -243,5 +320,8 @@ public class EstateManager {
 		ItemAPI.addLore(item, text);
 	}
 
+	private static int roundUpToNine(int number) {
+		return rowLength * ((number / 9) + 1);
+	}
 	
 }
