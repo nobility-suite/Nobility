@@ -81,9 +81,9 @@ public class Development {
 				Upgradable upgradable = (Upgradable) behavior;
 				ItemStack upgradeIcon = ButtonLibrary.createIcon(Material.ANVIL, "Upgrade");
 				if(!type.getInitialCost().isEmpty() ) {
-					ItemAPI.addLore(upgradeIcon, ChatColor.YELLOW + "Upgrade Cost:");
+					ItemAPI.addLore(upgradeIcon, ChatColor.GOLD + "Cost:");
 					for(ItemStack cost : type.getInitialCost()) {
-						ItemAPI.addLore(upgradeIcon, ItemNames.getItemName(cost) +  ": " + cost.getAmount());
+						ItemAPI.addLore(upgradeIcon, ChatColor.GRAY + ItemNames.getItemName(cost) +  ": " + ChatColor.WHITE + cost.getAmount());
 					}
 					if(!Nobility.getDevelopmentManager().checkCosts(type, estate.getInventory())) {
 						ItemAPI.addLore(upgradeIcon, ChatColor.RED + "Not enough to upgrade");
@@ -95,12 +95,14 @@ public class Development {
 					@Override
 					public void clicked(Player p) {
 						if(Nobility.getDevelopmentManager().checkCosts(type, estate.getInventory())) {
+							// TODO test if subtracting costs was successful before upgrading
+							Nobility.getDevelopmentManager().subtractCosts(type, estate.getInventory());
 							upgradable.upgrade();
 							p.sendMessage("You have upgraded the " 
 									+ development.getType().getTitle() 
 									+ " to level "
 									+ upgradable.getLevel());
-							Nobility.getDevelopmentManager().subtractCosts(type, estate.getInventory());
+							
 							// update icons including info
 							openGUI(p);
 						} else {

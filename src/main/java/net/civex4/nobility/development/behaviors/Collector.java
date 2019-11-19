@@ -10,6 +10,7 @@ import net.civex4.nobility.Nobility;
 import net.civex4.nobility.development.Development;
 import net.civex4.nobility.estate.Estate;
 import net.civex4.nobility.gui.ButtonLibrary;
+import net.md_5.bungee.api.ChatColor;
 import vg.civcraft.mc.civmodcore.api.ItemAPI;
 import vg.civcraft.mc.civmodcore.inventorygui.Clickable;
 import vg.civcraft.mc.civmodcore.inventorygui.DecorationStack;
@@ -48,13 +49,16 @@ public class Collector implements DevelopmentBehavior, Upgradable {
 		
 		// INFO
 		ItemStack info = ButtonLibrary.createIcon(Material.PAPER, "Info");
+		int collectionPower = (int) Math.floor(this.getCollectionPower() * this.getProductivity());
+		int competingCollectionPower = (int) manager.getTotalCollectionPower(estate, development) - collectionPower; 
 		int actualYield = manager.getResourceAmount(estate, development).getTotalItemAmount();
 		double regionTotal = estate.getRegion().getResource(development.getType().getResource());
 		int percentControl = (int) Math.round(((double) actualYield / regionTotal) * 100);
-		ItemAPI.addLore(info, "Collection Power: " + (int) Math.floor(this.getCollectionPower() * this.getProductivity()),
-				"Region Total: " + (int) regionTotal,
-				"Actual Yield: " + actualYield,
-				"Percent Control: " + percentControl + "%");
+		ItemAPI.addLore(info, ChatColor.GRAY + "Collection Power: " + ChatColor.WHITE + collectionPower,
+				ChatColor.GRAY + "Competing Collection Power: " + ChatColor.WHITE + competingCollectionPower,
+				ChatColor.GRAY + "Region Total: " + ChatColor.WHITE + (int) regionTotal,
+				ChatColor.GRAY + "Actual Yield: " + ChatColor.WHITE + actualYield,
+				ChatColor.GRAY + "Percent Control: " + ChatColor.WHITE + percentControl + "%");
 
 		
 		Clickable infoItem = new DecorationStack(info);
@@ -92,5 +96,7 @@ public class Collector implements DevelopmentBehavior, Upgradable {
 	public int getCollectionPower() {
 		return collectionPower;
 	}
+	
+
 
 }

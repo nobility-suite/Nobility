@@ -13,7 +13,7 @@ public class DevelopmentManager {
 	public void subtractUpkeep(DevelopmentType type, Estate estate) {		
 		if (type.getUpkeepCost() == null) return;
 		Inventory inventory = estate.getInventory();
-		for (ItemStack cost : type.getUpkeepCost()) {
+		for (ItemStack cost : type.getUpkeepCost()) {	
 			if (inventory.containsAtLeast(cost, cost.getAmount())) {
 				inventory.removeItem(cost);
 			} else {
@@ -48,15 +48,14 @@ public class DevelopmentManager {
 	
 	public boolean subtractCosts(DevelopmentType type, Inventory inv) {
 		if (type.getInitialCost() == null) return true;		
+		boolean ok = true;
 		for (ItemStack cost : type.getInitialCost()) {
-			if (checkCosts(type, inv)) {
-				inv.removeItem(cost);
-				return true;
-			} else {
-				return false;
-			}
-		}
-		return false;
+			inv.removeItem(cost);
+		} 
+		/* else {
+			Nobility.getNobility().warning("You cannot subtract costs if an inventory does not contain the costs");
+		} */
+		return ok;
 	}
 
 	

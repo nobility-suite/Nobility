@@ -52,7 +52,7 @@ public class CollectorManager {
 		return itemMap;
 	}
 	
-	private double getTotalCollectionPower(Estate estate, Development development) {
+	public double getTotalCollectionPower(Estate estate, Development development) {
 		double collectionPower = 0;
 		for (Estate otherEstate : Nobility.getEstateManager().getEstates()) {
 			if (estate.getRegion().equals(otherEstate.getRegion())) {

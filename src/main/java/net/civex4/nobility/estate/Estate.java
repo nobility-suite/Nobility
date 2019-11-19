@@ -11,6 +11,7 @@ import org.bukkit.inventory.Inventory;
 
 import io.github.kingvictoria.NobilityRegions;
 import io.github.kingvictoria.Region;
+import io.github.kingvictoria.RegionResource;
 import net.civex4.nobility.development.Development;
 import net.civex4.nobility.development.DevelopmentFactory;
 import net.civex4.nobility.development.DevelopmentType;
@@ -129,7 +130,7 @@ public class Estate {
 		}
 
 		return inactiveDevelopments;
-	} // getInactiveDevelopments
+	}
 	
 	public void addRelationship(Estate estate, Relationship relationship) {
 		if (estate.equals(this)) {
@@ -151,6 +152,16 @@ public class Estate {
 		} else {
 		return relationships.get(estate);
 		}
+	}
+
+	public int getCollectionPower(RegionResource resource) {
+		int power = 0;
+		for (Development development : this.getActiveDevelopments()) {
+			if (development.getType().isCollector() && development.getType().getResource() == resource) {
+				power += development.getCollector().getCollectionPower();
+			}
+		}
+		return power;
 	}
 	
 }

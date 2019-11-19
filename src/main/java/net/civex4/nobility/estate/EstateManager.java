@@ -14,6 +14,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
+import io.github.kingvictoria.Region;
+import io.github.kingvictoria.RegionResource;
 import net.civex4.nobility.Nobility;
 import net.civex4.nobility.development.Development;
 import net.civex4.nobility.development.DevelopmentType;
@@ -132,7 +134,19 @@ public class EstateManager {
 			estateGUI.addSlot(openInventory);
 		}
 		
-		// SEE ESTATES IN REGION TODO
+		// REGION INFO
+		
+		ItemStack regionInfoIcon = ButtonLibrary.createIcon(Material.IRON_ORE, "Region Information");
+		Clickable regionInfoButton = new Clickable(regionInfoIcon) {
+
+			@Override
+			public void clicked(Player p) {
+				openRegionInfoGUI(p);
+				
+			}
+			
+		};
+		estateGUI.addSlot(regionInfoButton);
 				
 		// DECORATION STACKS
 		for (int i = 0; i < rowLength * 2; i++) {
@@ -159,15 +173,15 @@ public class EstateManager {
 			}
 			
 			if (!type.getUpkeepCost().isEmpty()) {			
-				addLore(icon, ChatColor.YELLOW + "Upkeep Cost:");
+				addLore(icon, ChatColor.GOLD + "Upkeep Cost:");
 				for (ItemStack cost : type.getUpkeepCost()) {
-					addLore(icon, ItemNames.getItemName(cost) + ": " + cost.getAmount());
+					addLore(icon, ChatColor.GRAY + ItemNames.getItemName(cost) + ": " + ChatColor.WHITE + cost.getAmount());
 				}
 			}
 			
 			// This indicates that the level needs to be moved to the development class
 			if (development.getCollector() instanceof Upgradable) {
-				addLore(icon, ChatColor.YELLOW + "Level " + development.getCollector().getLevel());
+				addLore(icon, ChatColor.GRAY + "Level " + ChatColor.WHITE + development.getCollector().getLevel());
 			}
 
 			// IF DEVELOPMENT IS CLICKED
@@ -185,6 +199,32 @@ public class EstateManager {
 		estateGUI.showInventory(player);
 	}
 	
+	protected void openRegionInfoGUI(Player player) {
+		Estate estate = getEstateOfPlayer(player);
+		Region region = estate.getRegion();
+		ClickableInventory gui = new ClickableInventory(9, region.getName());
+		
+		for (RegionResource resource : region.getResources().keySet()) {
+			// TODO Need Nice Capitalization For The Resource
+			ItemStack resourceIcon = ButtonLibrary.createIcon(resource.resource().getType(), resource.name().toLowerCase());
+			resourceIcon.setAmount((int) region.getResource(resource));
+			ItemAPI.addLore(resourceIcon, 
+					ChatColor.GRAY + "Total Amount: " + ChatColor.WHITE + (int) region.getResource(resource),
+					ChatColor.GOLD + "Collection Power: ");
+			for (Estate estateInRegion : getEstatesInRegion(region)) {
+				ItemAPI.addLore(resourceIcon, 
+						ChatColor.GRAY + estateInRegion.getGroup().getName() + ": " + ChatColor.WHITE + estateInRegion.getCollectionPower(resource));
+			}
+			Clickable resourceButton = new DecorationStack(resourceIcon);
+			gui.addSlot(resourceButton);
+		}
+		gui.setSlot(ButtonLibrary.HOME.clickable(), 8);
+		
+		gui.showInventory(player);		
+		
+		
+	}
+
 	public void openEstateRelationshipGUI(Player player) {
 		Estate estate = getEstateOfPlayer(player);
 		if (estates.size() > (rowLength * 6)) {
@@ -245,28 +285,26 @@ public class EstateManager {
 				Material m = type.getIcon();
 				ItemStack icon = new ItemStack(m);
 				nameItem(icon, type.getTitle());
-				addLore(icon, ChatColor.YELLOW + "Not Yet Constructed");
+				addLore(icon, ChatColor.BLUE + "Click to build");
 				
 				if (!type.getPrerequisites().isEmpty()) {
-					addLore(icon, ChatColor.YELLOW + "Prerequisites:");
+					addLore(icon, ChatColor.GOLD + "Prerequisites:");
 					for(String prerequisite : type.getPrerequisites()) {
-						addLore(icon, DevelopmentType.getDevelopmentType(prerequisite).getTitle());
+						addLore(icon, ChatColor.GRAY + DevelopmentType.getDevelopmentType(prerequisite).getTitle());
 					}
-					addLore(icon, "");
 				}
 				
 				if (!type.getUpkeepCost().isEmpty()) {
-					addLore(icon, ChatColor.YELLOW + "Upkeep Cost:");
+					addLore(icon, ChatColor.GOLD + "Upkeep Cost:");
 					for(ItemStack cost : type.getUpkeepCost()) {						
-						addLore(icon, ItemNames.getItemName(cost) + ": " + cost.getAmount());
+						addLore(icon, ChatColor.GRAY + ItemNames.getItemName(cost) + ": " + ChatColor.WHITE + cost.getAmount());
 					}
-					addLore(icon, "");
 				}
 				
 				if(!type.getInitialCost().isEmpty() ) {
-					addLore(icon, ChatColor.YELLOW + "Initial Cost:");
+					addLore(icon, ChatColor.GOLD + "Initial Cost:");
 					for(ItemStack cost : type.getInitialCost()) {
-						addLore(icon, ItemNames.getItemName(cost) +  ": " + cost.getAmount());
+						addLore(icon, ChatColor.GRAY + ItemNames.getItemName(cost) +  ": " + ChatColor.WHITE + cost.getAmount());
 					}
 					if(!Nobility.getDevelopmentManager().checkCosts(type, estate)) {
 						addLore(icon, ChatColor.RED + "Not enough to construct this estate");
@@ -311,6 +349,17 @@ public class EstateManager {
 	
 	public boolean playerHasEstate(Player p) {
 		return estateOfPlayer.containsKey(p.getUniqueId());
+	}
+	
+	// Region Estate
+	public List<Estate> getEstatesInRegion(Region region) {
+		List<Estate> estatesInRegion = new ArrayList<>();
+		for (Estate estate : estates) {
+			if (estate.getRegion().equals(region)) {
+				estatesInRegion.add(estate);
+			}
+		}
+		return estatesInRegion;
 	}
 	
 	// Utilities
