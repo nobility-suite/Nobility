@@ -8,11 +8,13 @@ import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import io.github.kingvictoria.Region;
 import io.github.kingvictoria.RegionResource;
@@ -21,6 +23,7 @@ import net.civex4.nobility.development.Development;
 import net.civex4.nobility.development.DevelopmentType;
 import net.civex4.nobility.development.behaviors.Upgradable;
 import net.civex4.nobility.group.Group;
+import net.civex4.nobility.gui.BannerLetter;
 import net.civex4.nobility.gui.ButtonLibrary;
 import vg.civcraft.mc.civmodcore.api.ItemAPI;
 import vg.civcraft.mc.civmodcore.api.ItemNames;
@@ -66,8 +69,32 @@ public class EstateManager {
 	public void openEstateGUI(Player player) {
 		Estate estate = getEstateOfPlayer(player);
 
-		ClickableInventory estateGUI = new ClickableInventory(rowLength * 3, estate.getGroup().getName());
+		ClickableInventory estateGUI = new ClickableInventory(rowLength * 5, estate.getGroup().getName());
+		
+		// OPTIONS HEADER
+		for (int i = 0; i < 1; i++) {
+			if (!(estateGUI.getSlot(i) instanceof Clickable)) {
+				Clickable c = new DecorationStack(ButtonLibrary.createIcon(Material.BLACK_STAINED_GLASS_PANE, " "));
+				estateGUI.setSlot(c, i);
+			}
+		}		
 
+		ItemStack[] optionsLetters = BannerLetter.createBanners("options", DyeColor.GRAY, DyeColor.WHITE);
+		for (ItemStack item : optionsLetters) {
+			Clickable c = new DecorationStack(item);
+			estateGUI.addSlot(c);
+		}
+		
+		// DECORATION STACKS
+		for (int i = 0; i < rowLength * 1; i++) {
+			if (!(estateGUI.getSlot(i) instanceof Clickable)) {
+				Clickable c = new DecorationStack(ButtonLibrary.createIcon(Material.BLACK_STAINED_GLASS_PANE, " "));
+				estateGUI.setSlot(c, i);
+			}
+		}
+		
+		
+		
 		// BUTTONS:
 		// BUILD GUI
 		ItemStack buildGUIIcon = ButtonLibrary.createIcon(Material.CRAFTING_TABLE, "Build a Development");
@@ -85,26 +112,32 @@ public class EstateManager {
 
 			@Override
 			public void clicked(Player p) {
-				p.closeInventory();
-				new Dialog(player, Nobility.getNobility(), "Enter in a new name:") {
-					
+				
+				new BukkitRunnable() {
 					@Override
-					public List<String> onTabComplete(String wordCompleted, String[] fullMessage) {
-						return null;
-					}
-					
-					@Override
-					public void onReply(String[] message) {
-						// Set messages to one word
-						String newName = "";
-						for (String str : message) {newName = newName + str + " ";}
+					public void run() {
+						ClickableInventory.forceCloseInventory(p);
+						new Dialog(player, Nobility.getNobility(), "Enter in a new name:") {							
+							@Override
+							public List<String> onTabComplete(String wordCompleted, String[] fullMessage) {
+								return null;
+							}
+							
+							@Override
+							public void onReply(String[] message) {
+								// Set messages to one word
+								String newName = "";
+								for (String str : message) {newName = newName + str + " ";}
+								
+								estate.getGroup().setName(newName);
+								
+								player.sendMessage("This Estate is now called " + newName);
+								this.end();
+							}
+						};
 						
-						estate.getGroup().setName(newName);
-						
-						player.sendMessage("This Estate is now called " + newName);
-						this.end();
 					}
-				};
+				}.runTaskLater(Nobility.getNobility(), 1);
 				
 			}			
 		};
@@ -149,13 +182,29 @@ public class EstateManager {
 		estateGUI.addSlot(regionInfoButton);
 				
 		// DECORATION STACKS
-		for (int i = 0; i < rowLength * 2; i++) {
+		for (int i = 0; i < rowLength * 3; i++) {
 			if (!(estateGUI.getSlot(i) instanceof Clickable)) {
 				Clickable c = new DecorationStack(ButtonLibrary.createIcon(Material.BLACK_STAINED_GLASS_PANE, " "));
 				estateGUI.setSlot(c, i);
 			}
 		}
-
+		
+		// BUILT DEVELOPMENT HEADER
+		ItemStack[] builtLetters = BannerLetter.createBanners("built", DyeColor.GRAY, DyeColor.WHITE);
+		for (ItemStack item : builtLetters) {
+			Clickable c = new DecorationStack(item);
+			estateGUI.addSlot(c);
+		}
+		
+		// DECORATION STACKS
+		
+		for (int i = rowLength * 3; i < rowLength * 4; i++) {
+			if (!(estateGUI.getSlot(i) instanceof Clickable)) {
+				Clickable c = new DecorationStack(ButtonLibrary.createIcon(Material.BLACK_STAINED_GLASS_PANE, " "));
+				estateGUI.setSlot(c, i);
+			}
+		}
+		
 		// BUILT DEVELOPMENTS
 		for(Development development: estate.getBuiltDevelopments()) {
 			DevelopmentType type = development.getType();
