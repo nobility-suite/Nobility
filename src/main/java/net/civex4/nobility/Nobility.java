@@ -5,6 +5,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 
 import io.github.kingvictoria.NobilityRegions;
+import net.civex4.nobility.customItem.BottleBreak;
+import net.civex4.nobility.customItem.CustomBlockPlace;
+import net.civex4.nobility.customItem.GlassRecipe;
 import net.civex4.nobility.development.Development;
 import net.civex4.nobility.development.DevelopmentManager;
 import net.civex4.nobility.development.DevelopmentType;
@@ -46,6 +49,7 @@ public class Nobility extends ACivMod {
 		DevelopmentType.loadDevelopmentTypes(getConfig().getConfigurationSection("developments"));
 
 		registerEvents();
+		
 	}
 	
 	private static void initializeManagers() {
@@ -74,7 +78,11 @@ public class Nobility extends ACivMod {
 	private void registerEvents() {
 		PluginManager pm = getServer().getPluginManager();
 		pm.registerEvents(new EstateCreate(), this);
-		pm.registerEvents(new ChestClick(), this);;
+		pm.registerEvents(new ChestClick(), this);
+		pm.registerEvents(new BottleBreak(), this);
+		pm.registerEvents(new CustomBlockPlace(), this);
+		pm.registerEvents(new GlassRecipe(), this);
+		
 	}
 
 
