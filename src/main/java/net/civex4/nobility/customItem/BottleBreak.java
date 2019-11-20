@@ -19,7 +19,7 @@ public class BottleBreak implements Listener {
 		if (!event.getEntity().getType().equals(EntityType.SPLASH_POTION)) return;
 		Block block = event.getHitBlock();
 		Location loc = block.getLocation().add(0, 1, 0);
-		CustomItem customItem = CustomItem.getFactory().createItem(Material.GLASS_PANE, "Broken Glass");
+		CustomItem customItem = CustomItem.getFactory().createItem(Material.GLASS, "Broken Glass");
 		loc.getWorld().dropItemNaturally(loc, customItem.getItem());
 	}
 

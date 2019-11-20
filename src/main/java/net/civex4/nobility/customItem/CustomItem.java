@@ -9,8 +9,9 @@ import org.bukkit.inventory.ItemStack;
 
 public class CustomItem {
 	
-	ItemStack item;
-	Boolean canPlace = false;
+	private ItemStack item;
+	private Boolean canPlace = false; // allow to be placed
+	private Boolean canCraft = false; // allow use in vanilla recipes
 	
 	// TODO move to main class
 	private static CustomItemManager manager = new CustomItemManager();
@@ -31,6 +32,14 @@ public class CustomItem {
 	
 	public void canPlace(boolean canPlace) {
 		this.canPlace = canPlace;
+	}
+	
+	public boolean canCraft() {
+		return canCraft;
+	}
+	
+	public void canCraft(boolean canCraft) {
+		this.canCraft = canCraft;
 	}
 	
 	public static CustomItem get(ItemStack item) {

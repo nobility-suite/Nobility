@@ -10,7 +10,7 @@ import org.bukkit.inventory.ItemStack;
  *
  */
 
-public class CustomBlockPlace implements Listener {
+public class BlockPlaceDisable implements Listener {
 
 	@EventHandler
 	public void onBlockPlace(BlockPlaceEvent event) {
