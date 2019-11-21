@@ -1,7 +1,9 @@
 package net.civex4.nobility.customItem;
 
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 
 import org.bukkit.inventory.ItemStack;
 
@@ -10,7 +12,8 @@ import org.bukkit.inventory.ItemStack;
  */
 class CustomItemManager {
 
-	public HashMap<ItemStack, CustomItem> customItems = new HashMap<>();
+	private Map<ItemStack, CustomItem> customItems = new HashMap<>();
+	private static final Map<Integer, String> itemNames = new HashMap<>();
 	
 	public CustomItemManager() { }
 	
@@ -33,8 +36,11 @@ class CustomItemManager {
 	
 	public boolean isCustomItem(ItemStack stack) {
 		ItemStack clone = stack.clone();
+		
 		clone.setAmount(1);
 		return customItems.containsKey(clone);
 	}
+	
+	
 
 }

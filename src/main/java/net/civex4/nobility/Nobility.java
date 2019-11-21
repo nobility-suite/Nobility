@@ -5,9 +5,11 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 
 import io.github.kingvictoria.NobilityRegions;
+import net.civex4.nobility.customItem.AnvilDisable;
 import net.civex4.nobility.customItem.BlockPlaceDisable;
 import net.civex4.nobility.customItem.BottleBreak;
 import net.civex4.nobility.customItem.GlassRecipe;
+import net.civex4.nobility.customItem.InteractDisable;
 import net.civex4.nobility.customItem.RecipeDisable;
 import net.civex4.nobility.development.Development;
 import net.civex4.nobility.development.DevelopmentManager;
@@ -84,6 +86,8 @@ public class Nobility extends ACivMod {
 		pm.registerEvents(new BlockPlaceDisable(), this);
 		pm.registerEvents(new GlassRecipe(), this);
 		pm.registerEvents(new RecipeDisable(), this);
+		pm.registerEvents(new InteractDisable(), this);
+		pm.registerEvents(new AnvilDisable(), this);
 		
 	}
 

@@ -1,5 +1,6 @@
 package net.civex4.nobility.customItem;
 
+import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
 /**
@@ -10,13 +11,19 @@ import org.bukkit.inventory.ItemStack;
 public class CustomItem {
 	
 	private ItemStack item;
-	private Boolean canPlace = false; // allow to be placed
-	private Boolean canCraft = false; // allow use in vanilla recipes
+	private boolean canPlace = false;    // allow to be placed
+	private boolean canCraft = false;    // allow use in vanilla recipes
+	private boolean canInteract = false; // allow player interaction events
+
 	
 	// TODO move to main class
 	private static CustomItemManager manager = new CustomItemManager();
 	private static CustomItemFactory factory = new CustomItemFactory();
-	
+	private static ItemStack nullItem = CustomItem.getFactory()
+			.createItem(Material.DEAD_BRAIN_CORAL, 
+					"Broken Thing", 
+					"This is a placeholder item")
+			.getItem();
 	// Use CustomItem.getFactory().createItem(item) to create a custom item
 	protected CustomItem(ItemStack item) {
 		this.item = item;
@@ -42,6 +49,15 @@ public class CustomItem {
 		this.canCraft = canCraft;
 	}
 	
+	public boolean canInteract() {
+		return canInteract;
+	}
+	
+	public void canInteract(boolean canInteract) {
+		this.canInteract = canInteract;
+	}
+	
+	
 	public static CustomItem get(ItemStack item) {
 		return manager.getCustomItem(item);		
 	}
@@ -58,4 +74,7 @@ public class CustomItem {
 		return factory;
 	}
 
+	public static ItemStack getNullItem() {
+		return nullItem;
+	}
 }
