@@ -1,4 +1,4 @@
-package net.civex4.nobility.customItem;
+package net.civex4.nobility.customItem.listeners;
 
 import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
@@ -8,6 +8,7 @@ import org.bukkit.event.inventory.PrepareItemCraftEvent;
 import org.bukkit.inventory.CraftingInventory;
 import org.bukkit.inventory.ItemStack;
 
+import net.civex4.nobility.customItem.CustomItem;
 import vg.civcraft.mc.civmodcore.api.ItemAPI;
 
 /**

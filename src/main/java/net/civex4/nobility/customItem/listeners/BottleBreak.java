@@ -1,4 +1,4 @@
-package net.civex4.nobility.customItem;
+package net.civex4.nobility.customItem.listeners;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -7,6 +7,8 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.ProjectileHitEvent;
+
+import net.civex4.nobility.customItem.CustomItem;
 
 /** 
  * Creates an instance of a custom item if a splash potion breaks
@@ -19,7 +21,7 @@ public class BottleBreak implements Listener {
 		if (!event.getEntity().getType().equals(EntityType.SPLASH_POTION)) return;
 		Block block = event.getHitBlock();
 		Location loc = block.getLocation().add(0, 1, 0);
-		CustomItem customItem = CustomItem.getFactory().createItem(Material.GLASS, "Broken Glass");
+		CustomItem customItem = CustomItem.create(Material.GLASS, "Broken Glass");
 		loc.getWorld().dropItemNaturally(loc, customItem.getItem());
 	}
 

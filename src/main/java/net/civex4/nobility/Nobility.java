@@ -1,16 +1,20 @@
 package net.civex4.nobility;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.PluginManager;
 
 import io.github.kingvictoria.NobilityRegions;
-import net.civex4.nobility.customItem.AnvilDisable;
-import net.civex4.nobility.customItem.BlockPlaceDisable;
-import net.civex4.nobility.customItem.BottleBreak;
-import net.civex4.nobility.customItem.GlassRecipe;
-import net.civex4.nobility.customItem.InteractDisable;
-import net.civex4.nobility.customItem.RecipeDisable;
+import net.civex4.nobility.customItem.CustomItem;
+import net.civex4.nobility.customItem.listeners.AnvilDisable;
+import net.civex4.nobility.customItem.listeners.BlockPlaceDisable;
+import net.civex4.nobility.customItem.listeners.BottleBreak;
+import net.civex4.nobility.customItem.listeners.GlassRecipe;
+import net.civex4.nobility.customItem.listeners.InteractDisable;
+import net.civex4.nobility.customItem.listeners.OpenSmithingTable;
+import net.civex4.nobility.customItem.listeners.RecipeDisable;
 import net.civex4.nobility.development.Development;
 import net.civex4.nobility.development.DevelopmentManager;
 import net.civex4.nobility.development.DevelopmentType;
@@ -53,6 +57,9 @@ public class Nobility extends ACivMod {
 
 		registerEvents();
 		
+		ItemStack glassAmount = CustomItem.create(Material.GLASS, "Broken Glass").getItem();
+		glassAmount.setAmount(9);
+		CustomItem.createRecipe(new ItemStack(Material.GLASS), glassAmount);
 	}
 	
 	private static void initializeManagers() {
@@ -88,6 +95,7 @@ public class Nobility extends ACivMod {
 		pm.registerEvents(new RecipeDisable(), this);
 		pm.registerEvents(new InteractDisable(), this);
 		pm.registerEvents(new AnvilDisable(), this);
+		pm.registerEvents(new OpenSmithingTable(), this);
 		
 	}
 

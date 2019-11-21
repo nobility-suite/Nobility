@@ -1,9 +1,11 @@
-package net.civex4.nobility.customItem;
+package net.civex4.nobility.customItem.listeners;
 
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.inventory.ItemStack;
+
+import net.civex4.nobility.customItem.CustomItem;
 
 /**
  * Listener to cancel block placement if the item is a custom item and the item is set to cancel.

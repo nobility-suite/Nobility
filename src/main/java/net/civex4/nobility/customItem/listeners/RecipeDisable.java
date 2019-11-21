@@ -1,20 +1,18 @@
-package net.civex4.nobility.customItem;
+package net.civex4.nobility.customItem.listeners;
 
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.PrepareItemCraftEvent;
 import org.bukkit.inventory.CraftingInventory;
-import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
+
+import net.civex4.nobility.customItem.CustomItem;
 
 public class RecipeDisable implements Listener {
 	
 	@EventHandler(priority = EventPriority.LOW)
 	public void onCraft(PrepareItemCraftEvent event) {
-		InventoryView view = event.getView();
-		Player player = (Player) view.getPlayer();
 		CraftingInventory cInv = event.getInventory();
 		ItemStack[] items = cInv.getMatrix();
 		

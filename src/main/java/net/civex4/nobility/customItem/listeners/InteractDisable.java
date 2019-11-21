@@ -1,10 +1,12 @@
-package net.civex4.nobility.customItem;
+package net.civex4.nobility.customItem.listeners;
 
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.Event.Result;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
+
+import net.civex4.nobility.customItem.CustomItem;
 
 public class InteractDisable implements Listener {
 
