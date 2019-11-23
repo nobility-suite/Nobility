@@ -7,6 +7,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.PluginManager;
 
 import io.github.kingvictoria.NobilityRegions;
+import io.github.kingvictoria.RegionResource;
 import net.civex4.nobility.customItem.CustomItem;
 import net.civex4.nobility.customItem.listeners.AnvilDisable;
 import net.civex4.nobility.customItem.listeners.BlockPlaceDisable;
@@ -29,6 +30,10 @@ import net.civex4.nobility.listeners.CreateCommand;
 import net.civex4.nobility.listeners.EstateCreate;
 import net.md_5.bungee.api.ChatColor;
 import vg.civcraft.mc.civmodcore.ACivMod;
+import vg.civcraft.mc.civmodcore.playersettings.PlayerSettingAPI;
+import vg.civcraft.mc.civmodcore.playersettings.StringInputSetting;
+import vg.civcraft.mc.civmodcore.playersettings.gui.MenuSection;
+import vg.civcraft.mc.civmodcore.playersettings.impl.StringSetting;
 
 public class Nobility extends ACivMod {
 	
@@ -38,7 +43,8 @@ public class Nobility extends ACivMod {
 	private static NobilityRegions nobilityRegions;
 	private static DevelopmentManager developmentManager;
 	private static CollectorManager collectorManager;
-
+	private static MenuSection nobilityMenu = PlayerSettingAPI.getMainMenu().createMenuSection("Nobility", "Settings");
+	
 	public static int currentDay = 0;
 	
 	@Override
@@ -60,6 +66,11 @@ public class Nobility extends ACivMod {
 		ItemStack glassAmount = CustomItem.create(Material.GLASS, "Broken Glass").getItem();
 		glassAmount.setAmount(9);
 		CustomItem.createRecipe(new ItemStack(Material.GLASS), glassAmount);
+		String happinessMessage = "Happiness is just an abstract concept";
+		CustomItem happiness = CustomItem.create(Material.EGG, "Happiness", happinessMessage);
+		CustomItem.createRecipe(happiness.getItem(), RegionResource.GUN.resource(), RegionResource.BUTTER.resource());
+		StringInputSetting<String> string = new StringSetting(this, "Broken Glass", "Glass Name", "glassName", new ItemStack(Material.GLASS), "changes name of glass");
+		PlayerSettingAPI.registerSetting(string, DevelopmentType.getDevelopmentMenu());
 	}
 	
 	private static void initializeManagers() {
@@ -145,6 +156,10 @@ public class Nobility extends ACivMod {
 	private void registerConfig() {
 		getConfig().options().copyDefaults(true);
 		saveConfig();
+	}
+	
+	public static MenuSection getMenu() {
+		return nobilityMenu;
 	}
 
 }

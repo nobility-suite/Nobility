@@ -12,10 +12,14 @@ import org.bukkit.inventory.ItemStack;
 
 import io.github.kingvictoria.RegionResource;
 import net.civex4.nobility.Nobility;
+import vg.civcraft.mc.civmodcore.playersettings.PlayerSettingAPI;
+import vg.civcraft.mc.civmodcore.playersettings.gui.MenuSection;
 
 public class DevelopmentType {
 	
 	private static LinkedHashMap<String, DevelopmentType> types = new LinkedHashMap<String, DevelopmentType>();
+	
+	private static MenuSection developmentMenu = Nobility.getMenu().createMenuSection("Developments", "Settings");
 	
 	private String name; // Internal Slug
 	private String title; // Beautiful Title
@@ -230,6 +234,8 @@ public class DevelopmentType {
 		this.isCollector = isCollector;
 	}
 
-
+	public static MenuSection getDevelopmentMenu() {
+		return developmentMenu;
+	}
 	
 }

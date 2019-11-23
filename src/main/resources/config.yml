@@ -9,56 +9,30 @@ developments:
     isWall: false
     isStorehouse: true
     resource:
-  granary:
-    title: Granary
-    icon: BREAD
+  gun:
+    title: Gun
+    icon: BOW
     prerequisites:
       - storehouse
     initialCost:
+      IRON_INGOT: 10
+      SMOOTH_STONE: 10
+      WHEAT: 10
       OAK_LOG: 10
-      SMOOTH_STONE: 5
     upkeepCost:
-      WHEAT: 1
     isCollector: true
-    isStorehouse: false
-    resource: WHEAT
-  loggingCamp:
-    title: Logging Camp
-    icon: IRON_AXE
+    resource: GUN
+  butter:
+    title: Butter
+    icon: YELLOW_CONCRETE
     prerequisites:
       - storehouse
     initialCost:
-      IRON_INGOT: 5
-      SMOOTH_STONE: 5
+      IRON_INGOT: 10
+      SMOOTH_STONE: 10
+      WHEAT: 10
+      OAK_LOG: 10
     upkeepCost:
-      WHEAT: 1
     isCollector: true
-    isWall: false
-    resource: WOOD
-  quarry:
-    title: Quarry
-    icon: SMOOTH_STONE
-    prerequisites:
-      - storehouse
-    initialCost:
-      IRON_INGOT: 5
-      SMOOTH_STONE: 5
-    upkeepCost:
-      WHEAT: 1
-    isCollector: true
-    isWall: false
-    resource: STONE
-  ironMine:
-    title: Iron Mine
-    icon: IRON_PICKAXE
-    prerequisites:
-      - storehouse
-    initialCost:
-      IRON_INGOT: 5
-      SMOOTH_STONE: 5
-    upkeepCost:
-      WHEAT: 1
-    isCollector: true
-    isWall: false
-    resource: IRON
+    resource: BUTTER
     
