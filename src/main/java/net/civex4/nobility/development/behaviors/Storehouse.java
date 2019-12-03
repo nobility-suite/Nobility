@@ -29,10 +29,10 @@ public class Storehouse implements DevelopmentBehavior{
 	@Override
 	public void build() {
 		inventory.addItem(
-				new ItemStack(Material.IRON_INGOT, 10),
-				new ItemStack(Material.OAK_LOG, 10),
-				new ItemStack(Material.SMOOTH_STONE, 10),
-				new ItemStack(Material.WHEAT, 10));
+				new ItemStack(Material.IRON_INGOT, 40),
+				new ItemStack(Material.OAK_LOG, 40),
+				new ItemStack(Material.SMOOTH_STONE, 40),
+				new ItemStack(Material.WHEAT, 40));
 	}
 
 	@Override

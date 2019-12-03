@@ -21,6 +21,7 @@ import io.github.kingvictoria.RegionResource;
 import net.civex4.nobility.Nobility;
 import net.civex4.nobility.development.Development;
 import net.civex4.nobility.development.DevelopmentType;
+import net.civex4.nobility.development.behaviors.Collector;
 import net.civex4.nobility.development.behaviors.Upgradable;
 import net.civex4.nobility.group.Group;
 import net.civex4.nobility.gui.BannerLetter;
@@ -180,6 +181,20 @@ public class EstateManager {
 			
 		};
 		estateGUI.addSlot(regionInfoButton);
+		
+		// SET PRODUCTIVITY
+		
+		ItemStack productivityIcon = ButtonLibrary.createIcon(Material.WOODEN_PICKAXE, "Set Productivity");
+		Clickable productivityButton = new Clickable(productivityIcon) {
+
+			@Override
+			public void clicked(Player p) {
+				openProductivityMenu(p);
+				
+			}
+			
+		};
+		estateGUI.addSlot(productivityButton);
 				
 		// DECORATION STACKS
 		for (int i = 0; i < rowLength * 3; i++) {
@@ -248,6 +263,80 @@ public class EstateManager {
 		estateGUI.showInventory(player);
 	}
 	
+	protected void openProductivityMenu(Player player) {
+		//XXX going to break with more than 2 developments
+		Estate estate = getEstateOfPlayer(player);
+		ClickableInventory inv = new ClickableInventory(9, "Productivity");
+		
+		ItemStack availableIcon = ButtonLibrary.createIcon(Material.WOODEN_PICKAXE, "Available Productivity");
+		availableIcon.setAmount(estate.getFreeProductivity());
+		
+		Clickable availableButton = new DecorationStack(availableIcon);
+		inv.addSlot(availableButton);
+		
+		Clickable decor = new DecorationStack(new ItemStack(Material.BLACK_STAINED_GLASS_PANE));
+		inv.addSlot(decor);		
+		
+		for (Development development : estate.getActiveDevelopments()) {
+			if (!development.getType().isCollector()) {
+				continue;
+			}
+			Collector collector = development.getCollector();			
+			
+			Clickable increase = new Clickable(ButtonLibrary.createIcon(Material.GREEN_DYE, "Increase")) {
+
+				@Override
+				public void clicked(Player p) {
+					Collector otherCollector = null;
+					OTHER:
+						for (Development developmentTwo : estate.getActiveDevelopments()) {
+							if (!developmentTwo.getType().isCollector()) {
+								continue;
+							} else if (!developmentTwo.getCollector().equals(collector)){
+								otherCollector = developmentTwo.getCollector();
+								break OTHER;
+							}
+						}
+					if (estate.getFreeProductivity() > 0) {
+						collector.addProductivity();
+						estate.subtractFreeProductivity();
+					} else if (collector.getProductivity() < 10) {
+						collector.addProductivity();
+						otherCollector.subtractProductivity();
+					}
+					openProductivityMenu(p);
+
+				}
+				
+			};
+			inv.addSlot(increase);
+			ItemStack devIcon = new ItemStack(development.getType().getIcon());
+			ItemAPI.setDisplayName(devIcon, development.getType().getTitle());
+			devIcon.setAmount(collector.getProductivity());
+			ItemAPI.addLore(devIcon, "Productivity: " + collector.getProductivity());
+			Clickable developmentButton = new DecorationStack(devIcon);
+			inv.addSlot(developmentButton);
+			
+			Clickable decrease = new Clickable(ButtonLibrary.createIcon(Material.RED_DYE, "Decrease")) {
+
+				@Override
+				public void clicked(Player p) {
+					if (collector.getProductivity() > 0) {
+						collector.subtractProductivity();
+						estate.addFreeProductivity();
+					}
+					
+					openProductivityMenu(p);
+				}
+				
+			};
+			inv.addSlot(decrease);
+		}
+		inv.addSlot(ButtonLibrary.HOME.clickable());
+		
+		inv.showInventory(player);
+	}
+
 	protected void openRegionInfoGUI(Player player) {
 		Estate estate = getEstateOfPlayer(player);
 		Region region = estate.getRegion();

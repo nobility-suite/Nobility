@@ -20,10 +20,10 @@ public class Collector implements DevelopmentBehavior, Upgradable {
 	private Estate estate; 
 	private Development development;
 	private int level = 1;
-	private double productivity = 1;
+	private int productivity = 0;
 	private int collectionPower; //starting level
-	private final int startingPower = 4;
-	private final int powerPerLevel = 2;
+	private final int startingPower = 1;
+	private final int powerPerLevel = 1;
 	
 	private static CollectorManager manager = Nobility.getCollectorManager();
 	
@@ -63,7 +63,7 @@ public class Collector implements DevelopmentBehavior, Upgradable {
 		
 		Clickable infoItem = new DecorationStack(info);
 		clickables.add(infoItem);
-
+ 		
 		return clickables; 
 	}
 	
@@ -85,18 +85,28 @@ public class Collector implements DevelopmentBehavior, Upgradable {
 		collectionPower = (level * powerPerLevel) + startingPower;
 	}
 	
-	public double getProductivity() {
+	public int getProductivity() {
 		return productivity;
 	}
 
-	public void setProductivity(double productivity) {
+	public void setProductivity(int productivity) {
 		this.productivity = productivity;
 	}
 
+	public void addProductivity() {
+		productivity++;
+	}
+	
+	public void subtractProductivity() {
+		if (productivity > 0) {
+			productivity--;
+		} else {
+			throw new IllegalArgumentException();
+		}
+	}
+	
 	public int getCollectionPower() {
 		return collectionPower;
 	}
 	
-
-
 }

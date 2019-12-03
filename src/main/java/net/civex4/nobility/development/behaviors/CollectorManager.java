@@ -8,8 +8,10 @@ import org.bukkit.inventory.ItemStack;
 import io.github.kingvictoria.RegionResource;
 import io.github.kingvictoria.Region;
 import net.civex4.nobility.Nobility;
+import net.civex4.nobility.customItem.CustomItem;
 import net.civex4.nobility.development.Development;
 import net.civex4.nobility.estate.Estate;
+import vg.civcraft.mc.civmodcore.api.ItemAPI;
 import vg.civcraft.mc.civmodcore.itemHandling.ItemMap;
 
 public class CollectorManager {
@@ -47,9 +49,28 @@ public class CollectorManager {
 			amount = (int) Math.floor((totalRegionResource * collectionPower * productivity) 
 					/ totalCompetingCollectionPower);
 		}
-		
+		switch (collectorResource) {
+		case GUN:
+			collectorItem = Nobility.gun.getItem();
+			break;
+		case BUTTER:
+			collectorItem = Nobility.butter.getItem();
+			break;
+		case IRON:
+			break;
+		case STONE:
+			break;
+		case WHEAT:
+			break;
+		case WOOD:
+			break;
+		default:
+			break;
+		}
+			
 		itemMap.addItemAmount(collectorItem, amount);
 		return itemMap;
+
 	}
 	
 	public double getTotalCollectionPower(Estate estate, Development development) {

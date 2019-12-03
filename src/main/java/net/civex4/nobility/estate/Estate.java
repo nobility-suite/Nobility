@@ -23,6 +23,7 @@ public class Estate {
 	private Region region;
 	private List<Development> builtDevelopments = new ArrayList<>();
 	private Map<Estate, Relationship> relationships = new HashMap<>();
+	private int freeProductivity = 10;
 	
 	private int vulnerabilityHour = 0;
 	
@@ -162,6 +163,26 @@ public class Estate {
 			}
 		}
 		return power;
+	}
+	
+	public int getFreeProductivity() {
+		return freeProductivity;
+	}
+	
+	public void setFreeProductivity(int productivity) {
+		this.freeProductivity = productivity;
+	}
+	
+	public void addFreeProductivity() {
+		freeProductivity++;
+	}
+	
+	public void subtractFreeProductivity() {
+		if (freeProductivity > 0) {
+			freeProductivity--;
+		} else {
+			throw new IllegalArgumentException();
+		}
 	}
 	
 }

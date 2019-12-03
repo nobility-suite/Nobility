@@ -113,7 +113,7 @@ public class Development {
 					}
 				};
 				gui.addSlot(upgrade);
-
+				
 			}
 			
 			// EXTRA BEHAVIORS
