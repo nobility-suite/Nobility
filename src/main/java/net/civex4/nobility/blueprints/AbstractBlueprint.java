@@ -17,6 +17,19 @@ public class AbstractBlueprint {
   public int maxReturn;
   
   
+  public AbstractBlueprint(ArrayList<ItemGroup> groups, ItemStack result, int minRuns, int maxRuns,
+      String name, int minReturn, int maxReturn) {
+    super();
+    this.groups = groups;
+    this.result = result;
+    this.minRuns = minRuns;
+    this.maxRuns = maxRuns;
+    this.name = name;
+    this.minReturn = minReturn;
+    this.maxReturn = maxReturn;
+  }
+
+
   /**
    * Create a blueprint using the parameters of an AbstractBlueprint
    * @return Blueprint

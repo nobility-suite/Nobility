@@ -22,6 +22,15 @@ public class SimpleItemGroup extends ItemGroup{
   public int itemCountMin;
   public int itemCountMax;
   
+  public SimpleItemGroup(ArrayList<ItemStack> items, int selectionCount, int itemCountMin,
+      int itemCountMax) {
+
+    this.items = items;
+    this.selectionCount = selectionCount;
+    this.itemCountMin = itemCountMin;
+    this.itemCountMax = itemCountMax;
+  }
+
   public void setSelectionCount(int s) {
     this.selectionCount = s;
   }
