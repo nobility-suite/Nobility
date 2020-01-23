@@ -124,10 +124,21 @@ public class BlueprintManager {
       maxItemCount = group.getInt("maxItemCount");
     }
     
-    //TODO load itemstacks
+    items = getItemStackList(group.getConfigurationSection("items"));
     
     return new SimpleItemGroup(items, selectionCount, minItemCount, maxItemCount);
     
+  }
+  
+  private ArrayList<ItemStack> getItemStackList(ConfigurationSection list){
+    ArrayList<ItemStack> ret = new ArrayList<ItemStack>();
+    
+    for(String itemKey : list.getKeys(false)) {
+      ItemStack i = list.getItemStack(itemKey);
+      ret.add(i);
+    }
+    
+    return ret;
   }
 
 }
