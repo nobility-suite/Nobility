@@ -23,6 +23,7 @@ public class Estate {
 	private Region region;
 	private List<Development> builtDevelopments = new ArrayList<>();
 	private Map<Estate, Relationship> relationships = new HashMap<>();
+	private Map<RegionResource, Integer> mines = new HashMap<>(); //Local mines only
 	private int freeProductivity = 10;
 	
 	private int vulnerabilityHour = 0;
@@ -45,6 +46,18 @@ public class Estate {
 		}
 		//Bukkit.getLogger().warning("You cannot get the inventory of an estate that does not have an inventory");
 		return null;
+	}
+	
+	public void addMineSudo(RegionResource r) {
+	  if(mines.containsKey(r)) {
+	    mines.put(r, mines.get(r)+1);
+	  }else {
+	    mines.put(r, 1);
+	  }
+	}
+	
+	public int getMines(RegionResource r) {
+	  return mines.get(r);
 	}
 	
 	public int getVulnerabilityHour() {

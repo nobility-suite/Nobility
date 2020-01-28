@@ -15,6 +15,15 @@ import vg.civcraft.mc.civmodcore.api.ItemAPI;
 import vg.civcraft.mc.civmodcore.itemHandling.ItemMap;
 
 public class CollectorManager {
+  
+    /*
+     * ================
+     * TODO Deprecate this class, replace with new mine based system instead of collection  power system.
+     * 
+     * 
+     * IMPORTANT
+     * ================
+     */
 
 	public CollectorManager() { }
 	
@@ -50,12 +59,6 @@ public class CollectorManager {
 					/ totalCompetingCollectionPower);
 		}
 		switch (collectorResource) {
-		case GUN:
-			collectorItem = Nobility.gun.getItem();
-			break;
-		case BUTTER:
-			collectorItem = Nobility.butter.getItem();
-			break;
 		case IRON:
 			break;
 		case STONE:

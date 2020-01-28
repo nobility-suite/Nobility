@@ -513,4 +513,5 @@ public class EstateManager {
 		return rowLength * ((number / 9) + 1);
 	}
 	
+	
 }
