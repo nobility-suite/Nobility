@@ -1,0 +1,46 @@
+Hi,
+
+This package is supposed to take away the burden of managing DB connections, statements and resultsets so we can program
+a bit more easily with database. Hopefully this achieves that goal. Here is how it works and some things to consider
+when in use;
+
+1 - PersistenceManager) Classes that represent rows in the DB and can be persistable should implement the Persistable interface.
+	This allows any instance of a subclass of Persistable to be easily persisted or updated via PersistenceManager's handy methods;
+		1) List<Persistable> ReadEntity(Persistable arg)
+			This method allows you to pass a 'filter' object that has some fields populated, and return a list of objects
+			from the database that satisfy this filter. For example, if I pass a 'Player' object who only has 1 field populated
+			'Health', with some value '50', readEntity() will return a list of Player instances that have health of 50.
+
+		2)	void UpdateEntity(Persistable arg) | UpdateEntity(Persistable arg, boolean useNulls)
+			This method updates a passed object in the database. A primary_oid MUST be populated or else will throw assertException.
+			This method is overloaded to allow us to pass a boolean - which if true, will tell the manager to include nulls when updating.
+			Meaning, null values in the object will be considered updated, and will update the DB to have the same null values (potentially
+			erasing data).
+
+		3) int InsertEntity(Persistable arg)
+			This method inserts the passed object into the database and returns its new primary_oid. It also populates the oid in the argument object.
+			Because the current means of acquiring the new oid is not thread safe, this should be used sparingly and in
+			thread-safe conditions (not in events, listeners, etc).
+
+2 - Query) If using the 3 PersistenceManager methods don't fit the circumstance, we can create our own queries using PersistenceManager's
+createQuery(String sql) method. Just pass a sql query string and add the params. Params should be type-appropriate.
+	Example:
+
+	final String sql = "select primary_oid, name from PLAYERS where health = ? and faction = ?";
+	List<Player> players = PersistenceManager.getInstance().createQuery(sql).addLong(55).addString("Good Guys").getResult(Player.class);
+
+3 - Fields) Fields in subclasses of Persistable should be wrappers. Non-wrapper fields are ignored when building queries via the 3 PM methods.
+Inherited fields are also ignored. Fields should be in java standard camel-case. SQL column names should be sql standard snake_case_format.
+
+4 - Database & Tables) SQLLite databases are just 1 file. The file is placed in the parent of the plugins folder. There are tools that
+we can download to be able to query the database via the cmd. New tables must be defined in DatabaseConstants.java and then referenced
+in the constructor of DatabaseBuilder.java
+
+
+
+Finally) ...I think that's it. There are parts in the code that are a bit ugly that I don't feel good about. Exception handling
+is all over the place and probably should be looked at again, but I just slapped it together to get a functioning persistence layer
+done. This was very lightly tested. It functions, but I'm sure there are niche cases that something weird happens. If someone
+wants to polish it up, that would make me glad. Happy Modding!
+
+-WL
