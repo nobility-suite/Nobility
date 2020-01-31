@@ -13,11 +13,11 @@ public interface PersistenceManager {
 
 	PersistenceManager persistenceManager = new PersistenceManagerImpl();
 
-	<T extends Persistable> int insertEntity(T entity) throws SQLException, IllegalAccessException;
+	<T extends Persistable> int insertEntity(T entity);
 
-	<T extends Persistable> void updateEntity(T entity) throws SQLException, IllegalAccessException;
+	<T extends Persistable> void updateEntity(T entity);
 
-	<T extends Persistable> void updateEntity(T entity, boolean useNulls) throws SQLException, IllegalAccessException;
+	<T extends Persistable> void updateEntity(T entity, boolean useNulls);
 
 	<T extends Persistable> List<T> readEntity(T entity);
 

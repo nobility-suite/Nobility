@@ -4,7 +4,7 @@ This package is supposed to take away the burden of managing DB connections, sta
 a bit more easily with database. Hopefully this achieves that goal. Here is how it works and some things to consider
 when in use;
 
-1 - PersistenceManager) Classes that represent rows in the DB and can be persistable should implement the Persistable interface.
+1 - PersistenceManager) Classes that represent rows in the DB and can be persistable should implement the AbstractPersistable class.
 	This allows any instance of a subclass of Persistable to be easily persisted or updated via PersistenceManager's handy methods;
 		1) List<Persistable> ReadEntity(Persistable arg)
 			This method allows you to pass a 'filter' object that has some fields populated, and return a list of objects
