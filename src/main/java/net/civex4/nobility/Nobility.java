@@ -1,5 +1,6 @@
 package net.civex4.nobility;
 
+import net.civex4.nobility.database.utility.DatabaseBuilder;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -75,6 +76,8 @@ public class Nobility extends ACivMod {
 		CustomItem.createRecipe(happiness.getItem(), gun.getItem(), butter.getItem());
 		StringInputSetting<String> string = new StringSetting(this, "Broken Glass", "Glass Name", "glassName", new ItemStack(Material.GLASS), "changes name of glass");
 		PlayerSettingAPI.registerSetting(string, DevelopmentType.getDevelopmentMenu());
+
+		new DatabaseBuilder().setUpDatabase();
 	}
 	
 	private static void initializeManagers() {
