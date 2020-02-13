@@ -24,6 +24,7 @@ import net.civex4.nobility.development.DevelopmentType;
 import net.civex4.nobility.development.behaviors.Collector;
 import net.civex4.nobility.development.behaviors.Upgradable;
 import net.civex4.nobility.group.Group;
+import net.civex4.nobility.group.GroupPermission;
 import net.civex4.nobility.gui.BannerLetter;
 import net.civex4.nobility.gui.ButtonLibrary;
 import vg.civcraft.mc.civmodcore.api.ItemAPI;
@@ -34,7 +35,7 @@ import vg.civcraft.mc.civmodcore.inventorygui.ClickableInventory;
 import vg.civcraft.mc.civmodcore.inventorygui.DecorationStack;
 
 public class EstateManager {
-	
+  	
 	private ArrayList<Estate> estates = new ArrayList<>();
 	private HashMap<UUID, Estate> estateOfPlayer = new HashMap<>();
 	
@@ -512,6 +513,67 @@ public class EstateManager {
 	private static int roundUpToNine(int number) {
 		return rowLength * ((number / 9) + 1);
 	}
+	
+	public void sendInfoMessage(Estate e, Player p) {
+	  
+	  Calendar rightNow = Calendar.getInstance();
+      int currentHour = rightNow.get(Calendar.HOUR_OF_DAY);
+      int minutes = rightNow.get(Calendar.MINUTE);
+      
+	  Group g = e.getGroup();
+	  p.sendMessage(ChatColor.GOLD + "-=- " + g.getName() + " -=-");
+	  p.sendMessage(ChatColor.GOLD + "Region: " + ChatColor.YELLOW + e.getRegion().getName());
+	  p.sendMessage(ChatColor.GOLD + "Leader: " + ChatColor.YELLOW 
+	      + g.getLocalization(GroupPermission.LEADER)
+	      + " " + g.getLeader().getName());
+	  
+	  sendOfficialsMessage(e,p);
+	  
+	  p.sendMessage(ChatColor.GOLD + "Total Members: " + ChatColor.YELLOW + g.getMembers().size());
+	  p.sendMessage(ChatColor.GOLD + "Location: " + ChatColor.YELLOW + e.getBlock().getX() + "X, " + e.getBlock().getZ() + "Z");
+	  p.sendMessage(ChatColor.GOLD + "Siege Window: " + ChatColor.YELLOW + e.getVulnerabilityHour() + " to " + ((e.getVulnerabilityHour() + 2) % 24) + ChatColor.GOLD + " | Current Time: " + ChatColor.YELLOW + currentHour + ":" + minutes + ".");
+	  return; //TODO
+	}
+	
+	public void sendOfficialsMessage(Estate e, Player p) {
+	   Group g = e.getGroup();
+	   ArrayList<String> list = g.getOfficials();
+	   
+	   int extras = 0;
+	   
+	   if(list.size() > 4) {
+	      extras = list.size()-4;
+	   }
+	   
+	   String message = ChatColor.GOLD + "Officials: " + ChatColor.YELLOW;
+	   
+	   if(list.size() == 0) {
+	     message += "None. ";
+	     return;
+	   }
+	   
+	   if(extras > 0) {
+	     for(int i = 0; i < 4; i++) {
+	       message += g.getLocalization(GroupPermission.OFFICER) + " " + list.get(i) + ", ";
+	       if(i == 3) {
+	         message += "and " + extras + " more...";
+	       }
+	       
+	     }
+	   }else {
+	     for(String name : list) {
+           message += g.getLocalization(GroupPermission.OFFICER) + " " + name + ", ";
+	     }
+	   }
+	   
+	   p.sendMessage(message);
+	  
+	}
+	
+	public void sendMembersMessage(Estate e, Player p) {
+	  
+	}
+
 	
 	
 }

@@ -12,7 +12,7 @@ import net.civex4.nobility.Nobility;
 
 public class ChestClick implements Listener {
 	
-	@EventHandler
+	/*@EventHandler
 	public void onChestClick(PlayerInteractEvent e) {
 		Player player = e.getPlayer();
 		if(!(Nobility.getEstateManager().playerHasEstate(player))) return;
@@ -23,7 +23,7 @@ public class ChestClick implements Listener {
 				e.setCancelled(true);
 			}			
 		}
-	}
+	}*/
 	
 		
 }

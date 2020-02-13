@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Set;
 import java.util.UUID;
-
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 public class Group {
@@ -77,4 +77,14 @@ public class Group {
 	public void setHasEstate(boolean hasEstate) {
 		this.hasEstate = hasEstate;
 	}
+
+  public Player getLeader() {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  public ArrayList<String> getOfficials() {
+    // TODO Auto-generated method stub
+    return null;
+  }
 }

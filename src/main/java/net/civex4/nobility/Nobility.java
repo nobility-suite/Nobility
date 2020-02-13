@@ -27,6 +27,7 @@ import net.civex4.nobility.gui.GUICommand;
 import net.civex4.nobility.listeners.ChestClick;
 import net.civex4.nobility.listeners.CommandListener;
 import net.civex4.nobility.listeners.CreateCommand;
+import net.civex4.nobility.listeners.EstateCommandListener;
 import net.civex4.nobility.listeners.EstateCreate;
 import net.md_5.bungee.api.ChatColor;
 import vg.civcraft.mc.civmodcore.ACivMod;
@@ -60,6 +61,7 @@ public class Nobility extends ACivMod {
 		reloadConfig();
 		getCommand("nobility").setExecutor(new CommandListener());
 		getCommand("test").setExecutor(new GUICommand());
+		getCommand("estate").setExecutor(new EstateCommandListener());
 		getCommand("create").setExecutor(new CreateCommand());
 
 		DevelopmentType.loadDevelopmentTypes(getConfig().getConfigurationSection("developments"));
