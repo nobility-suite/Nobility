@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Set;
 import java.util.UUID;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
@@ -80,11 +81,23 @@ public class Group {
 
   public Player getLeader() {
     // TODO Auto-generated method stub
+    for(UUID u : members.keySet()) {
+      if(members.get(u) == GroupPermission.LEADER) {
+        return Bukkit.getPlayer(u);
+      }
+    }
     return null;
   }
 
   public ArrayList<String> getOfficials() {
     // TODO Auto-generated method stub
-    return null;
+    ArrayList<String> ret = new ArrayList<String>();
+    
+    for(UUID u : members.keySet()) {
+      if(members.get(u) == GroupPermission.OFFICER) {
+        ret.add(Bukkit.getPlayer(u).getName());
+      }
+    }
+    return ret;
   }
 }
