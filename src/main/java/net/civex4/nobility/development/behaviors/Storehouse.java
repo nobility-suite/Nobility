@@ -15,54 +15,54 @@ import vg.civcraft.mc.civmodcore.inventorygui.Clickable;
 import vg.civcraft.mc.civmodcore.inventorygui.DecorationStack;
 
 public class Storehouse implements DevelopmentBehavior{
-
-	Estate estate;
-	Development development;
-	Inventory inventory;
-	
-	public Storehouse(Estate estate, Development development) {
-		this.estate = estate;
-		this.development = development;
-		this.inventory = Bukkit.createInventory(null, 27);
-	}
-
-	@Override
-	public void build() {
-		inventory.addItem(
-				new ItemStack(Material.IRON_INGOT, 40),
-				new ItemStack(Material.OAK_LOG, 40),
-				new ItemStack(Material.SMOOTH_STONE, 40),
-				new ItemStack(Material.WHEAT, 40));
-	}
-
-	@Override
-	public void tick() {
-		
-	}
-
-	@Override
-	public List<Clickable> getClickables() {
-		List<Clickable> clickables = new ArrayList<>();
-		
-		// OPEN INVENTORY
-		Inventory inv = this.inventory;
-		Clickable openInventory = new Clickable(new ItemStack(Material.CHEST)) {
-			@Override
-			public void clicked(Player player) {
-				player.openInventory(inv);
-			}			
-		};		
-		clickables.add(openInventory);
-		
-		// STORAGE INFO
-		Clickable info = new DecorationStack(new ItemStack(Material.PAPER));
-		clickables.add(info);
-		
-		return clickables;
-	}
-	
-	public Inventory getInventory() {
-		return this.inventory;
-	}
+//
+//	Estate estate;
+//	Development development;
+//	Inventory inventory;
+//	
+//	public Storehouse(Estate estate, Development development) {
+//		this.estate = estate;
+//		this.development = development;
+//		this.inventory = Bukkit.createInventory(null, 27);
+//	}
+//
+//	@Override
+//	public void build() {
+//		inventory.addItem(
+//				new ItemStack(Material.IRON_INGOT, 40),
+//				new ItemStack(Material.OAK_LOG, 40),
+//				new ItemStack(Material.SMOOTH_STONE, 40),
+//				new ItemStack(Material.WHEAT, 40));
+//	}
+//
+//	@Override
+//	public void tick() {
+//		
+//	}
+//
+//	@Override
+//	public List<Clickable> getClickables() {
+//		List<Clickable> clickables = new ArrayList<>();
+//		
+//		// OPEN INVENTORY
+//		Inventory inv = this.inventory;
+//		Clickable openInventory = new Clickable(new ItemStack(Material.CHEST)) {
+//			@Override
+//			public void clicked(Player player) {
+//				player.openInventory(inv);
+//			}			
+//		};		
+//		clickables.add(openInventory);
+//		
+//		// STORAGE INFO
+//		Clickable info = new DecorationStack(new ItemStack(Material.PAPER));
+//		clickables.add(info);
+//		
+//		return clickables;
+//	}
+//	
+//	public Inventory getInventory() {
+//		return this.inventory;
+//	}
 
 }

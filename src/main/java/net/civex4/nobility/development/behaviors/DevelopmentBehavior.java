@@ -6,8 +6,8 @@ import vg.civcraft.mc.civmodcore.inventorygui.Clickable;
 
 public interface DevelopmentBehavior {
 	
-	void build();
-	void tick();
-	List<Clickable> getClickables();
+//	void build();
+//	void tick();
+//	List<Clickable> getClickables();
 
 }
