@@ -15,7 +15,7 @@ import vg.civcraft.mc.civmodcore.api.ItemAPI;
 import vg.civcraft.mc.civmodcore.inventorygui.Clickable;
 import vg.civcraft.mc.civmodcore.inventorygui.DecorationStack;
 
-public class Collector implements DevelopmentBehavior, Upgradable {
+public class Collector implements DevelopmentBehavior {
 	
 //	private Estate estate; 
 //	private Development development;

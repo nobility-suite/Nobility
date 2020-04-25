@@ -1,8 +1,20 @@
 package net.civex4.nobility.development;
 
+import org.bukkit.Material;
+
 public enum DevelopmentType {
 	CAMP,
 	GENERIC;
+
+	public Material getIcon() {
+		// TODO Auto-generated method stub
+		return Material.BAKED_POTATO;
+	}
+
+	public String getTitle() {
+		// TODO Auto-generated method stub
+		return "test";
+	}
 	
 //	private static LinkedHashMap<String, DevelopmentType> types = new LinkedHashMap<String, DevelopmentType>();
 //	

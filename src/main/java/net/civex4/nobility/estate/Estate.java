@@ -13,7 +13,6 @@ import io.github.kingvictoria.NobilityRegions;
 import io.github.kingvictoria.Region;
 import io.github.kingvictoria.RegionResource;
 import net.civex4.nobility.development.Development;
-import net.civex4.nobility.development.DevelopmentFactory;
 import net.civex4.nobility.development.DevelopmentType;
 import net.civex4.nobility.group.Group;
 
@@ -35,14 +34,12 @@ public class Estate {
 	}
 	
 	public void buildDevelopment(DevelopmentType type) {
-		DevelopmentFactory.buildDevelopment(type, this);
+		//DevelopmentFactory.buildDevelopment(type, this);
 	}
 	
 	public Inventory getInventory() {
 		for (Development development : builtDevelopments) {
-			if (development.getType().isStorehouse()) {
-				return development.getInventory();
-			}
+			
 		}
 		//Bukkit.getLogger().warning("You cannot get the inventory of an estate that does not have an inventory");
 		return null;
@@ -96,12 +93,12 @@ public class Estate {
 	//Returns nice looking titles (used to compare with items in GUI)
 	public List<DevelopmentType> getUnbuiltDevelopments() {
 		List<DevelopmentType> unbuiltDevelopments = new ArrayList<>();
-		for (String name : DevelopmentType.getTypes().keySet()) {
-			unbuiltDevelopments.add(DevelopmentType.getDevelopmentType(name));
-		}
-		for (Development development : builtDevelopments) {
-			unbuiltDevelopments.remove(development.getType());
-		}
+//		for (String name : DevelopmentType.getTypes().keySet()) {
+//			unbuiltDevelopments.add(DevelopmentType.getDevelopmentType(name));
+//		}
+//		for (Development development : builtDevelopments) {
+//			unbuiltDevelopments.remove(development.getType());
+//		}
 		
 		return unbuiltDevelopments;
 	}
@@ -129,10 +126,10 @@ public class Estate {
 	
 	public List<String> getActiveDevelopmentsToString() {
 		List<String> activeDevelopments = new ArrayList<>();		
-		for(Development development : getActiveDevelopments()) {
-			String name = development.getType().getName();
-			activeDevelopments.add(name);		
-		}
+//		for(Development development : getActiveDevelopments()) {
+//			String name = development.getType().getName();
+//			activeDevelopments.add(name);		
+//		}
 		return activeDevelopments;
 	}
 
@@ -170,11 +167,11 @@ public class Estate {
 
 	public int getCollectionPower(RegionResource resource) {
 		int power = 0;
-		for (Development development : this.getActiveDevelopments()) {
-			if (development.getType().isCollector() && development.getType().getResource() == resource) {
-				power += development.getCollector().getCollectionPower();
-			}
-		}
+//		for (Development development : this.getActiveDevelopments()) {
+//			if (development.getType().isCollector() && development.getType().getResource() == resource) {
+//				power += development.getCollector().getCollectionPower();
+//			}
+//		}
 		return power;
 	}
 	

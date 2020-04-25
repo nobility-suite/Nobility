@@ -51,7 +51,7 @@ public class CommandListener implements CommandExecutor{
 						return true;
 					}
 				}
-				
+					
 				Group tempGroup = new Group(args[1], playerId);
 				Nobility.getGroupManager().groups.add(tempGroup);
 				player.sendMessage(ChatColor.GOLD + "You created the group " + tempGroup.getName());

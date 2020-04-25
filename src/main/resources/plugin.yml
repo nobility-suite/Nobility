@@ -8,6 +8,9 @@ commands:
       description: nobility
       usage: /nobility <argument> [other stuff]
       aliases: [ n ]
+   estate:
+     description: Nobility's Estate-related commands.
+     usage: /estate <args> [other]
    test:
       description: Tests stuff
    create:

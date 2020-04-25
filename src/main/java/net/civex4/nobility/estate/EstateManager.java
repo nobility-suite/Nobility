@@ -22,7 +22,6 @@ import net.civex4.nobility.Nobility;
 import net.civex4.nobility.development.Development;
 import net.civex4.nobility.development.DevelopmentType;
 import net.civex4.nobility.development.behaviors.Collector;
-import net.civex4.nobility.development.behaviors.Upgradable;
 import net.civex4.nobility.group.Group;
 import net.civex4.nobility.group.GroupPermission;
 import net.civex4.nobility.gui.BannerLetter;
@@ -67,7 +66,7 @@ public class EstateManager {
 	 * and destroy, plus any additional features. Storehouse needs a feature, "open
 	 * storehouse inventory" 
 	 */
-	
+
 	public void openEstateGUI(Player player) {
 		Estate estate = getEstateOfPlayer(player);
 
@@ -237,23 +236,21 @@ public class EstateManager {
 				addLore(icon, ChatColor.RED + "Inactive");
 			}
 			
-			if (!type.getUpkeepCost().isEmpty()) {			
-				addLore(icon, ChatColor.GOLD + "Upkeep Cost:");
-				for (ItemStack cost : type.getUpkeepCost()) {
-					addLore(icon, ChatColor.GRAY + ItemNames.getItemName(cost) + ": " + ChatColor.WHITE + cost.getAmount());
-				}
-			}
+//			if (!type.getUpkeepCost().isEmpty()) {			
+//				addLore(icon, ChatColor.GOLD + "Upkeep Cost:");
+//				for (ItemStack cost : type.getUpkeepCost()) {
+//					addLore(icon, ChatColor.GRAY + ItemNames.getItemName(cost) + ": " + ChatColor.WHITE + cost.getAmount());
+//				}
+//			}
 			
 			// This indicates that the level needs to be moved to the development class
-			if (development.getCollector() instanceof Upgradable) {
-				addLore(icon, ChatColor.GRAY + "Level " + ChatColor.WHITE + development.getCollector().getLevel());
-			}
+
 
 			// IF DEVELOPMENT IS CLICKED
 			Clickable c = new Clickable(icon) {				
 				@Override
 				public void clicked(Player p) {
-					development.openGUI(p);
+					//development.openGUI(p);
 				}
 			};
 			
@@ -278,61 +275,7 @@ public class EstateManager {
 		Clickable decor = new DecorationStack(new ItemStack(Material.BLACK_STAINED_GLASS_PANE));
 		inv.addSlot(decor);		
 		
-		for (Development development : estate.getActiveDevelopments()) {
-			if (!development.getType().isCollector()) {
-				continue;
-			}
-			Collector collector = development.getCollector();			
-			
-			Clickable increase = new Clickable(ButtonLibrary.createIcon(Material.GREEN_DYE, "Increase")) {
 
-				@Override
-				public void clicked(Player p) {
-					Collector otherCollector = null;
-					OTHER:
-						for (Development developmentTwo : estate.getActiveDevelopments()) {
-							if (!developmentTwo.getType().isCollector()) {
-								continue;
-							} else if (!developmentTwo.getCollector().equals(collector)){
-								otherCollector = developmentTwo.getCollector();
-								break OTHER;
-							}
-						}
-					if (estate.getFreeProductivity() > 0) {
-						collector.addProductivity();
-						estate.subtractFreeProductivity();
-					} else if (collector.getProductivity() < 10) {
-						collector.addProductivity();
-						otherCollector.subtractProductivity();
-					}
-					openProductivityMenu(p);
-
-				}
-				
-			};
-			inv.addSlot(increase);
-			ItemStack devIcon = new ItemStack(development.getType().getIcon());
-			ItemAPI.setDisplayName(devIcon, development.getType().getTitle());
-			devIcon.setAmount(collector.getProductivity());
-			ItemAPI.addLore(devIcon, "Productivity: " + collector.getProductivity());
-			Clickable developmentButton = new DecorationStack(devIcon);
-			inv.addSlot(developmentButton);
-			
-			Clickable decrease = new Clickable(ButtonLibrary.createIcon(Material.RED_DYE, "Decrease")) {
-
-				@Override
-				public void clicked(Player p) {
-					if (collector.getProductivity() > 0) {
-						collector.subtractProductivity();
-						estate.addFreeProductivity();
-					}
-					
-					openProductivityMenu(p);
-				}
-				
-			};
-			inv.addSlot(decrease);
-		}
 		inv.addSlot(ButtonLibrary.HOME.clickable());
 		
 		inv.showInventory(player);
@@ -419,54 +362,54 @@ public class EstateManager {
 		ClickableInventory developmentGUI = new ClickableInventory(9, "Build");
 		
 		// UNBUILT AVAILABLE DEVELOPMENTS
-		for(DevelopmentType type: estate.getUnbuiltDevelopments()) {			
-			if (estate.getActiveDevelopmentsToString().containsAll(type.getPrerequisites())) {
-				Material m = type.getIcon();
-				ItemStack icon = new ItemStack(m);
-				nameItem(icon, type.getTitle());
-				addLore(icon, ChatColor.BLUE + "Click to build");
-				
-				if (!type.getPrerequisites().isEmpty()) {
-					addLore(icon, ChatColor.GOLD + "Prerequisites:");
-					for(String prerequisite : type.getPrerequisites()) {
-						addLore(icon, ChatColor.GRAY + DevelopmentType.getDevelopmentType(prerequisite).getTitle());
-					}
-				}
-				
-				if (!type.getUpkeepCost().isEmpty()) {
-					addLore(icon, ChatColor.GOLD + "Upkeep Cost:");
-					for(ItemStack cost : type.getUpkeepCost()) {						
-						addLore(icon, ChatColor.GRAY + ItemNames.getItemName(cost) + ": " + ChatColor.WHITE + cost.getAmount());
-					}
-				}
-				
-				if(!type.getInitialCost().isEmpty() ) {
-					addLore(icon, ChatColor.GOLD + "Initial Cost:");
-					for(ItemStack cost : type.getInitialCost()) {
-						addLore(icon, ChatColor.GRAY + ItemNames.getItemName(cost) +  ": " + ChatColor.WHITE + cost.getAmount());
-					}
-					if(!Nobility.getDevelopmentManager().checkCosts(type, estate)) {
-						addLore(icon, ChatColor.RED + "Not enough to construct this estate");
-					}
-				}
-				
-				// IF UNBUILT DEVELOPMENT IS CLICKED:
-				Clickable c = new Clickable(icon) {				
-					@Override
-					public void clicked(Player p) {
-						if (!Nobility.getDevelopmentManager().checkCosts(type, estate)) {
-							player.sendMessage("You don't have enough to construct this development");
-							return;
-						}
-						estate.buildDevelopment(type);
-						player.sendMessage("You constructed a " + type.getTitle());
-						openEstateGUI(p);
-					}
-				};
-				
-				developmentGUI.addSlot(c);
-			}			
-		}
+//		for(DevelopmentType type: estate.getUnbuiltDevelopments()) {			
+//			if (estate.getActiveDevelopmentsToString().containsAll(type.getPrerequisites())) {
+//				Material m = type.getIcon();
+//				ItemStack icon = new ItemStack(m);
+//				nameItem(icon, type.getTitle());
+//				addLore(icon, ChatColor.BLUE + "Click to build");
+//				
+//				if (!type.getPrerequisites().isEmpty()) {
+//					addLore(icon, ChatColor.GOLD + "Prerequisites:");
+//					for(String prerequisite : type.getPrerequisites()) {
+//						addLore(icon, ChatColor.GRAY + DevelopmentType.getDevelopmentType(prerequisite).getTitle());
+//					}
+//				}
+//				
+//				if (!type.getUpkeepCost().isEmpty()) {
+//					addLore(icon, ChatColor.GOLD + "Upkeep Cost:");
+//					for(ItemStack cost : type.getUpkeepCost()) {						
+//						addLore(icon, ChatColor.GRAY + ItemNames.getItemName(cost) + ": " + ChatColor.WHITE + cost.getAmount());
+//					}
+//				}
+//				
+//				if(!type.getInitialCost().isEmpty() ) {
+//					addLore(icon, ChatColor.GOLD + "Initial Cost:");
+//					for(ItemStack cost : type.getInitialCost()) {
+//						addLore(icon, ChatColor.GRAY + ItemNames.getItemName(cost) +  ": " + ChatColor.WHITE + cost.getAmount());
+//					}
+//					if(!Nobility.getDevelopmentManager().checkCosts(type, estate)) {
+//						addLore(icon, ChatColor.RED + "Not enough to construct this estate");
+//					}
+//				}
+//				
+//				// IF UNBUILT DEVELOPMENT IS CLICKED:
+//				Clickable c = new Clickable(icon) {				
+//					@Override
+//					public void clicked(Player p) {
+//						if (!Nobility.getDevelopmentManager().checkCosts(type, estate)) {
+//							player.sendMessage("You don't have enough to construct this development");
+//							return;
+//						}
+//						estate.buildDevelopment(type);
+//						player.sendMessage("You constructed a " + type.getTitle());
+//						openEstateGUI(p);
+//					}
+//				};
+//				
+//				developmentGUI.addSlot(c);
+//			}			
+//		}
 
 		developmentGUI.addSlot(ButtonLibrary.HOME.clickable());
 		

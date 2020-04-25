@@ -32,7 +32,6 @@ import net.civex4.nobility.listeners.EstateCreate;
 import net.md_5.bungee.api.ChatColor;
 import vg.civcraft.mc.civmodcore.ACivMod;
 import vg.civcraft.mc.civmodcore.playersettings.PlayerSettingAPI;
-import vg.civcraft.mc.civmodcore.playersettings.StringInputSetting;
 import vg.civcraft.mc.civmodcore.playersettings.gui.MenuSection;
 import vg.civcraft.mc.civmodcore.playersettings.impl.StringSetting;
 
@@ -64,7 +63,7 @@ public class Nobility extends ACivMod {
 		getCommand("estate").setExecutor(new EstateCommandListener());
 		getCommand("create").setExecutor(new CreateCommand());
 
-		DevelopmentType.loadDevelopmentTypes(getConfig().getConfigurationSection("developments"));
+		//DevelopmentType.loadDevelopmentTypes(getConfig().getConfigurationSection("developments"));
 
 		registerEvents();
 		
@@ -76,8 +75,8 @@ public class Nobility extends ACivMod {
 		CustomItem happiness = CustomItem.create(Material.EGG, "Happiness", happinessMessage);
 
 		CustomItem.createRecipe(happiness.getItem(), gun.getItem(), butter.getItem());
-		StringInputSetting<String> string = new StringSetting(this, "Broken Glass", "Glass Name", "glassName", new ItemStack(Material.GLASS), "changes name of glass");
-		PlayerSettingAPI.registerSetting(string, DevelopmentType.getDevelopmentMenu());
+		//StringInputSetting<String> string = new StringSetting(this, "Broken Glass", "Glass Name", "glassName", new ItemStack(Material.GLASS), "changes name of glass");
+		//PlayerSettingAPI.registerSetting(string, DevelopmentType.getDevelopmentMenu());
 
 		new DatabaseBuilder().setUpDatabase();
 	}
@@ -107,7 +106,7 @@ public class Nobility extends ACivMod {
 	
 	private void registerEvents() {
 		PluginManager pm = getServer().getPluginManager();
-		pm.registerEvents(new EstateCreate(), this);
+		//pm.registerEvents(new EstateCreate(), this);
 		pm.registerEvents(new ChestClick(), this);
 		pm.registerEvents(new BottleBreak(), this);
 		pm.registerEvents(new BlockPlaceDisable(), this);
@@ -151,7 +150,7 @@ public class Nobility extends ACivMod {
 
 		for (Estate estate : estateMan.getEstates()) {
 			for (Development development : estate.getActiveDevelopments()) {
-				developmentManager.subtractUpkeep(development.getType(), estate);
+				//developmentManager.subtractUpkeep(development.getType(), estate);
 			}
 		}
 

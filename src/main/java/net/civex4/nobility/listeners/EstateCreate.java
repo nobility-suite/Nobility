@@ -13,14 +13,14 @@ public class EstateCreate implements Listener {
 	
 	@EventHandler
 	public void chestClick (PlayerInteractEvent e) {
-		Player p = e.getPlayer();
-		if (Nobility.getGroupManager().getGroup(p) == null) return;
-		Block b = e.getClickedBlock();
-			if (!(Nobility.getEstateManager().playerHasEstate(p))) {
-				if (b != null && b.getType() == Material.CHEST) {				
-					Nobility.getEstateManager().createEstate(b, p);
-				}
-			}
+//		Player p = e.getPlayer();
+//		if (Nobility.getGroupManager().getGroup(p) == null) return;
+//		Block b = e.getClickedBlock();
+//			if (!(Nobility.getEstateManager().playerHasEstate(p))) {
+//				if (b != null && b.getType() == Material.CHEST) {				
+//					Nobility.getEstateManager().createEstate(b, p);
+//				}
+//			}
 	}
 	
 }
