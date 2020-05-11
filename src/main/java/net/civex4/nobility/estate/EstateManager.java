@@ -304,7 +304,22 @@ public class EstateManager {
 			Clickable resourceButton = new DecorationStack(resourceIcon);
 			ItemAPI.addLore(resourceIcon, ChatColor.BLUE + "Slots: (0/" + n.slots + ")",
 					ChatColor.BLUE + "Output:");
+			
+			if(output != null && output.size() > 0) {
+				for(ItemStack i : output) {
+					
+					String iname = "";
+					
+					if(i.hasItemMeta() && i.getItemMeta().hasDisplayName()) {
+						iname = i.getItemMeta().getDisplayName();
+					}else iname = i.getType().name();
+					
+					ItemAPI.addLore(resourceIcon, ChatColor.GRAY + "  " + i.getAmount() + "x " + ChatColor.YELLOW + iname );
+				}
+			}
+			
 			gui.addSlot(resourceButton);
+
 			
 		}
 //		for (RegionResource resource : region.getResources().keySet()) {
