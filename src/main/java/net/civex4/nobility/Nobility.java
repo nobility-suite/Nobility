@@ -8,6 +8,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.PluginManager;
 
 import io.github.kingvictoria.NobilityRegions;
+import net.civex4.nobility.claim.ClaimManager;
 import net.civex4.nobility.customItem.CustomItem;
 import net.civex4.nobility.customItem.listeners.AnvilDisable;
 import net.civex4.nobility.customItem.listeners.BlockPlaceDisable;
@@ -42,7 +43,8 @@ public class Nobility extends ACivMod {
 	private static Nobility nobility;
 	private static NobilityRegions nobilityRegions;
 	private static DevelopmentManager developmentManager;
-	private static CollectorManager collectorManager;
+
+	private static ClaimManager claimManager;
 	private static MenuSection nobilityMenu = PlayerSettingAPI.getMainMenu().createMenuSection("Nobility", "Settings");
 	
 	public static int currentDay = 0;
@@ -85,7 +87,7 @@ public class Nobility extends ACivMod {
 		groupMan = new GroupManager();
 		estateMan = new EstateManager();
 		developmentManager = new DevelopmentManager();
-		collectorManager = new CollectorManager();
+		claimManager = new ClaimManager();
 	}
 	
 	public static GroupManager getGroupManager() {
@@ -100,9 +102,10 @@ public class Nobility extends ACivMod {
 		return developmentManager;
 	}
 	
-	public static CollectorManager getCollectorManager() {
-		return collectorManager;
+	public static ClaimManager getClaimManager() {
+		return claimManager;
 	}
+	
 	
 	private void registerEvents() {
 		PluginManager pm = getServer().getPluginManager();

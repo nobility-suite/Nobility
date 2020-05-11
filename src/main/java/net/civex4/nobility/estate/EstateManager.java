@@ -16,8 +16,10 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import io.github.kingvictoria.NobilityRegions;
 import io.github.kingvictoria.Region;
 import io.github.kingvictoria.RegionResource;
+import io.github.kingvictoria.nodes.Node;
 import net.civex4.nobility.Nobility;
 import net.civex4.nobility.development.Development;
 import net.civex4.nobility.development.DevelopmentType;
@@ -286,20 +288,38 @@ public class EstateManager {
 		Region region = estate.getRegion();
 		ClickableInventory gui = new ClickableInventory(9, region.getName());
 		
-		for (RegionResource resource : region.getResources().keySet()) {
-			// TODO Need Nice Capitalization For The Resource
-			ItemStack resourceIcon = ButtonLibrary.createIcon(resource.resource().getType(), resource.name().toLowerCase());
-			resourceIcon.setAmount((int) region.getResource(resource));
-			ItemAPI.addLore(resourceIcon, 
-					ChatColor.GRAY + "Total Amount: " + ChatColor.WHITE + (int) region.getResource(resource),
-					ChatColor.GOLD + "Collection Power: ");
-			for (Estate estateInRegion : getEstatesInRegion(region)) {
-				ItemAPI.addLore(resourceIcon, 
-						ChatColor.GRAY + estateInRegion.getGroup().getName() + ": " + ChatColor.WHITE + estateInRegion.getCollectionPower(resource));
-			}
+		ArrayList<Node> nodes = Nobility.getNobilityRegions().getNodeManager().getNodes(region);
+		
+		for(Node n : nodes) {
+			Estate owner = Nobility.getClaimManager().claims.get(n); 
+			
+			String ownerName;
+			if(owner == null) { ownerName = ChatColor.GRAY + "None"; 
+			}else if(owner == estate) { ownerName = ChatColor.GREEN + estate.getGroup().getName();
+			}else ownerName = ChatColor.RED + owner.getGroup().getName();
+			
+			String name = ChatColor.YELLOW + n.name + ChatColor.WHITE + " (" + ownerName + ChatColor.WHITE + ")";
+			ArrayList<ItemStack> output = n.output;
+			ItemStack resourceIcon = ButtonLibrary.createIcon(Material.STONE, name);
 			Clickable resourceButton = new DecorationStack(resourceIcon);
+			ItemAPI.addLore(resourceIcon, ChatColor.BLUE + "Slots: (0/" + n.slots + ")");
 			gui.addSlot(resourceButton);
+			
 		}
+//		for (RegionResource resource : region.getResources().keySet()) {
+//			// TODO Need Nice Capitalization For The Resource
+//			ItemStack resourceIcon = ButtonLibrary.createIcon(resource.resource().getType(), resource.name().toLowerCase());
+//			resourceIcon.setAmount((int) region.getResource(resource));
+//			ItemAPI.addLore(resourceIcon, 
+//					ChatColor.GRAY + "Total Amount: " + ChatColor.WHITE + (int) region.getResource(resource),
+//					ChatColor.GOLD + "Collection Power: ");
+//			for (Estate estateInRegion : getEstatesInRegion(region)) {
+//				ItemAPI.addLore(resourceIcon, 
+//						ChatColor.GRAY + estateInRegion.getGroup().getName() + ": " + ChatColor.WHITE + estateInRegion.getCollectionPower(resource));
+//			}
+//			Clickable resourceButton = new DecorationStack(resourceIcon);
+//			gui.addSlot(resourceButton);
+//		}
 		gui.setSlot(ButtonLibrary.HOME.clickable(), 8);
 		
 		gui.showInventory(player);		
