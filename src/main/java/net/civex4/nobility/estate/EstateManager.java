@@ -302,7 +302,8 @@ public class EstateManager {
 			ArrayList<ItemStack> output = n.output;
 			ItemStack resourceIcon = ButtonLibrary.createIcon(Material.STONE, name);
 			Clickable resourceButton = new DecorationStack(resourceIcon);
-			ItemAPI.addLore(resourceIcon, ChatColor.BLUE + "Slots: (0/" + n.slots + ")");
+			ItemAPI.addLore(resourceIcon, ChatColor.BLUE + "Slots: (0/" + n.slots + ")",
+					ChatColor.BLUE + "Output:");
 			gui.addSlot(resourceButton);
 			
 		}
