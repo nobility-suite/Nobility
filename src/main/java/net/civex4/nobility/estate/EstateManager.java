@@ -63,40 +63,68 @@ public class EstateManager {
 		
 	}
 	
-	/* Need to create a menu with the options players can take with a development
-	 * The options are upgrade, enable, disable, see other developments in region,
-	 * and destroy, plus any additional features. Storehouse needs a feature, "open
-	 * storehouse inventory" 
-	 */
+
+/* ============================================================
+ * MENU CODE
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * GUI CODE AHEAD
+ * ============================================================
+ */
 
 	public void openEstateGUI(Player player) {
 		Estate estate = getEstateOfPlayer(player);
 
-		ClickableInventory estateGUI = new ClickableInventory(rowLength * 5, estate.getGroup().getName());
-		
-		// OPTIONS HEADER
-		for (int i = 0; i < 1; i++) {
-			if (!(estateGUI.getSlot(i) instanceof Clickable)) {
-				Clickable c = new DecorationStack(ButtonLibrary.createIcon(Material.BLACK_STAINED_GLASS_PANE, " "));
-				estateGUI.setSlot(c, i);
-			}
-		}		
-
-		ItemStack[] optionsLetters = BannerLetter.createBanners("options", DyeColor.GRAY, DyeColor.WHITE);
-		for (ItemStack item : optionsLetters) {
-			Clickable c = new DecorationStack(item);
-			estateGUI.addSlot(c);
-		}
+		int[] decoSlots = {0,2,3,4,5,6,8,9,10,11,12,13,14,15,16,17,18,20,22,24,26,27,35,36,44,45,46,47,48,49,50,51,52,53};
+		ClickableInventory estateGUI = new ClickableInventory(rowLength * 6, "Nobility Menu (" + estate.getGroup().getName() + ")");
 		
 		// DECORATION STACKS
-		for (int i = 0; i < rowLength * 1; i++) {
+		for (int i : decoSlots) {
 			if (!(estateGUI.getSlot(i) instanceof Clickable)) {
 				Clickable c = new DecorationStack(ButtonLibrary.createIcon(Material.BLACK_STAINED_GLASS_PANE, " "));
 				estateGUI.setSlot(c, i);
 			}
 		}
 		
+		//INFO BOOK
+		ItemStack info = ButtonLibrary.createIcon(Material.BOOK, ChatColor.GOLD + estate.getGroup().getName());
+		ItemAPI.addLore(info, ChatColor.BLUE + "Members: " + ChatColor.WHITE + "" + estate.getGroup().getMembers().size(),
+				ChatColor.BLUE + "Leader: " + ChatColor.WHITE + "" + estate.getGroup().getLocalization(GroupPermission.LEADER) + " " + estate.getGroup().getLeader().getDisplayName(),
+				ChatColor.BLUE + "Region: " + ChatColor.WHITE + estate.getRegion().getName(),
+				ChatColor.BLUE + "Location: " + ChatColor.WHITE + estate.getBlock().getX() + "X, " + estate.getBlock().getZ() + "Z");
+		Clickable infoIcon = new Clickable(info) {
+
+			@Override
+			public void clicked(Player p) {
+
+			}
+		};
+		estateGUI.addSlot(infoIcon);
 		
+		// REGION INFO
+		
+				ItemStack regionInfoIcon = ButtonLibrary.createIcon(Material.IRON_ORE, "Region Information");
+				Clickable regionInfoButton = new Clickable(regionInfoIcon) {
+
+					@Override
+					public void clicked(Player p) {
+						openRegionInfoGUI(p);
+						
+					}
+					
+				};
+				estateGUI.addSlot(regionInfoButton);
 		
 		// BUTTONS:
 		// BUILD GUI
@@ -109,42 +137,7 @@ public class EstateManager {
 		};
 		estateGUI.addSlot(buildButton);
 		
-		// RENAME ESTATE
-		ItemStack renameIcon = ButtonLibrary.createIcon(Material.FEATHER, "Rename This Estate");
-		Clickable estateNameButton = new Clickable(renameIcon) {
-
-			@Override
-			public void clicked(Player p) {
-				
-				new BukkitRunnable() {
-					@Override
-					public void run() {
-						ClickableInventory.forceCloseInventory(p);
-						new Dialog(player, Nobility.getNobility(), "Enter in a new name:") {							
-							@Override
-							public List<String> onTabComplete(String wordCompleted, String[] fullMessage) {
-								return null;
-							}
-							
-							@Override
-							public void onReply(String[] message) {
-								// Set messages to one word
-								String newName = "";
-								for (String str : message) {newName = newName + str + " ";}
-								
-								estate.getGroup().setName(newName);
-								
-								player.sendMessage("This Estate is now called " + newName);
-								this.end();
-							}
-						};
-						
-					}
-				}.runTaskLater(Nobility.getNobility(), 1);
-				
-			}			
-		};
-		estateGUI.addSlot(estateNameButton);
+		
 		
 		// RELATIONSHIPS
 		ItemStack relationshipIcon = ButtonLibrary.createIcon(Material.SKELETON_SKULL, "Relationships");
@@ -157,107 +150,6 @@ public class EstateManager {
 			
 		};
 		estateGUI.addSlot(relationshipButton);
-		
-		// OPEN INVENTORY		
-		Inventory inv = estate.getInventory();
-		if (inv != null) {
-			Clickable openInventory = new Clickable(new ItemStack(Material.CHEST)) {
-				@Override
-				public void clicked(Player player) {
-					player.openInventory(inv);
-				}			
-			};		
-			estateGUI.addSlot(openInventory);
-		}
-		
-		// REGION INFO
-		
-		ItemStack regionInfoIcon = ButtonLibrary.createIcon(Material.IRON_ORE, "Region Information");
-		Clickable regionInfoButton = new Clickable(regionInfoIcon) {
-
-			@Override
-			public void clicked(Player p) {
-				openRegionInfoGUI(p);
-				
-			}
-			
-		};
-		estateGUI.addSlot(regionInfoButton);
-		
-		// SET PRODUCTIVITY
-		
-		ItemStack productivityIcon = ButtonLibrary.createIcon(Material.WOODEN_PICKAXE, "Set Productivity");
-		Clickable productivityButton = new Clickable(productivityIcon) {
-
-			@Override
-			public void clicked(Player p) {
-				openProductivityMenu(p);
-				
-			}
-			
-		};
-		estateGUI.addSlot(productivityButton);
-				
-		// DECORATION STACKS
-		for (int i = 0; i < rowLength * 3; i++) {
-			if (!(estateGUI.getSlot(i) instanceof Clickable)) {
-				Clickable c = new DecorationStack(ButtonLibrary.createIcon(Material.BLACK_STAINED_GLASS_PANE, " "));
-				estateGUI.setSlot(c, i);
-			}
-		}
-		
-		// BUILT DEVELOPMENT HEADER
-		ItemStack[] builtLetters = BannerLetter.createBanners("built", DyeColor.GRAY, DyeColor.WHITE);
-		for (ItemStack item : builtLetters) {
-			Clickable c = new DecorationStack(item);
-			estateGUI.addSlot(c);
-		}
-		
-		// DECORATION STACKS
-		
-		for (int i = rowLength * 3; i < rowLength * 4; i++) {
-			if (!(estateGUI.getSlot(i) instanceof Clickable)) {
-				Clickable c = new DecorationStack(ButtonLibrary.createIcon(Material.BLACK_STAINED_GLASS_PANE, " "));
-				estateGUI.setSlot(c, i);
-			}
-		}
-		
-		// BUILT DEVELOPMENTS
-		for(Development development: estate.getBuiltDevelopments()) {
-			DevelopmentType type = development.getType();
-			ItemStack icon;
-			if (development.isActive()) {
-				Material m = type.getIcon();
-				icon = new ItemStack(m);
-				nameItem(icon, type.getTitle());
-				addLore(icon, ChatColor.GREEN + "Active");
-			} else {
-				Material m = Material.FIREWORK_STAR;
-				icon = new ItemStack(m);
-				nameItem(icon, development.getType().getTitle());
-				addLore(icon, ChatColor.RED + "Inactive");
-			}
-			
-//			if (!type.getUpkeepCost().isEmpty()) {			
-//				addLore(icon, ChatColor.GOLD + "Upkeep Cost:");
-//				for (ItemStack cost : type.getUpkeepCost()) {
-//					addLore(icon, ChatColor.GRAY + ItemNames.getItemName(cost) + ": " + ChatColor.WHITE + cost.getAmount());
-//				}
-//			}
-			
-			// This indicates that the level needs to be moved to the development class
-
-
-			// IF DEVELOPMENT IS CLICKED
-			Clickable c = new Clickable(icon) {				
-				@Override
-				public void clicked(Player p) {
-					//development.openGUI(p);
-				}
-			};
-			
-			estateGUI.addSlot(c);
-		}
 		
 		// OPEN
 		estateGUI.showInventory(player);
@@ -451,6 +343,43 @@ public class EstateManager {
 		
 		developmentGUI.showInventory(player);
 	}
+	
+	// RENAME ESTATE
+//			ItemStack renameIcon = ButtonLibrary.createIcon(Material.FEATHER, "Rename This Estate");
+//			Clickable estateNameButton = new Clickable(renameIcon) {
+//
+//				@Override
+//				public void clicked(Player p) {
+//					
+//					new BukkitRunnable() {
+//						@Override
+//						public void run() {
+//							ClickableInventory.forceCloseInventory(p);
+//							new Dialog(player, Nobility.getNobility(), "Enter in a new name:") {							
+//								@Override
+//								public List<String> onTabComplete(String wordCompleted, String[] fullMessage) {
+//									return null;
+//								}
+//								
+//								@Override
+//								public void onReply(String[] message) {
+//									// Set messages to one word
+//									String newName = "";
+//									for (String str : message) {newName = newName + str + " ";}
+//									
+//									estate.getGroup().setName(newName);
+//									
+//									player.sendMessage("This Estate is now called " + newName);
+//									this.end();
+//								}
+//							};
+//							
+//						}
+//					}.runTaskLater(Nobility.getNobility(), 1);
+//					
+//				}			
+//			};
+//			estateGUI.addSlot(estateNameButton);
 	
 	public List<Estate> getEstates() {
 		return estates;
