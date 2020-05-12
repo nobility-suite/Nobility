@@ -102,7 +102,8 @@ public class EstateManager {
 		ItemAPI.addLore(info, ChatColor.BLUE + "Members: " + ChatColor.WHITE + "" + estate.getGroup().getMembers().size(),
 				ChatColor.BLUE + "Leader: " + ChatColor.WHITE + "" + estate.getGroup().getLocalization(GroupPermission.LEADER) + " " + estate.getGroup().getLeader().getDisplayName(),
 				ChatColor.BLUE + "Region: " + ChatColor.WHITE + estate.getRegion().getName(),
-				ChatColor.BLUE + "Location: " + ChatColor.WHITE + estate.getBlock().getX() + "X, " + estate.getBlock().getZ() + "Z");
+				ChatColor.BLUE + "Location: " + ChatColor.WHITE + estate.getBlock().getX() + "X, " + estate.getBlock().getZ() + "Z",
+				ChatColor.BLUE + "Vulnerability Hour: " + ChatColor.WHITE + estate.getVulnerabilityHour());
 		Clickable infoIcon = new Clickable(info) {
 
 			@Override
@@ -136,9 +137,31 @@ public class EstateManager {
 			}			
 		};
 		estateGUI.addSlot(buildButton);
+
+		//CLAIMS
+		ItemStack claimIcon = ButtonLibrary.createIcon(Material.FILLED_MAP, "Claim a Node");
+		Clickable claimButton = new Clickable(claimIcon) {
+
+			@Override
+			public void clicked(Player p) {
+
+			}
+			
+		};
+		estateGUI.addSlot(claimButton);
 		
-		
-		
+		//WORKERS
+		ItemStack workerIcon = ButtonLibrary.createIcon(Material.IRON_PICKAXE, "Assign Workers");
+		Clickable workerButton = new Clickable(workerIcon) {
+
+			@Override
+			public void clicked(Player p) {
+
+			}
+			
+		};
+		estateGUI.addSlot(workerButton);
+
 		// RELATIONSHIPS
 		ItemStack relationshipIcon = ButtonLibrary.createIcon(Material.SKELETON_SKULL, "Relationships");
 		Clickable relationshipButton = new Clickable(relationshipIcon) {
@@ -153,6 +176,8 @@ public class EstateManager {
 		
 		// OPEN
 		estateGUI.showInventory(player);
+		
+		
 	}
 	
 	protected void openProductivityMenu(Player player) {
@@ -178,7 +203,49 @@ public class EstateManager {
 	protected void openRegionInfoGUI(Player player) {
 		Estate estate = getEstateOfPlayer(player);
 		Region region = estate.getRegion();
-		ClickableInventory gui = new ClickableInventory(9, region.getName());
+		ClickableInventory gui = new ClickableInventory(54, region.getName());
+		
+		int[] decoSlots = {0,8,9,10,11,12,13,14,15,16,17,18,26,27,35,36,44,45,46,47,48,50,51,52,53};
+		
+		// DECORATION STACKS
+		for (int i : decoSlots) {
+			if (!(gui.getSlot(i) instanceof Clickable)) {
+				Clickable c = new DecorationStack(ButtonLibrary.createIcon(Material.BLACK_STAINED_GLASS_PANE, " "));
+				gui.setSlot(c, i);
+			}
+		}
+		
+		List<Estate> estates = Nobility.getEstateManager().getEstatesInRegion(region);
+		int count = 0;
+		for(Estate e : estates) {
+			//TODO refactor estate info button into its own method for reusability
+			ItemStack info = ButtonLibrary.createIcon(Material.BOOK, ChatColor.GOLD + e.getGroup().getName());
+			ItemAPI.addLore(info, ChatColor.BLUE + "Members: " + ChatColor.WHITE + "" + e.getGroup().getMembers().size(),
+					ChatColor.BLUE + "Leader: " + ChatColor.WHITE + "" + e.getGroup().getLocalization(GroupPermission.LEADER) + " " + estate.getGroup().getLeader().getDisplayName(),
+					ChatColor.BLUE + "Region: " + ChatColor.WHITE + e.getRegion().getName(),
+					ChatColor.BLUE + "Location: " + ChatColor.WHITE + e.getBlock().getX() + "X, " + e.getBlock().getZ() + "Z",
+					ChatColor.BLUE + "Vulnerability Hour: " + ChatColor.WHITE + e.getVulnerabilityHour());
+			Clickable infoIcon = new Clickable(info) {
+
+				@Override
+				public void clicked(Player p) {
+
+				}
+			};
+			gui.addSlot(infoIcon);
+			count++;
+		}
+		
+		if(count < 7) {
+			int fill = 7-count;
+			int offset = count;
+			for(int i = offset; i <= fill+count; i++) {
+				if (!(gui.getSlot(i) instanceof Clickable)) {
+					Clickable c = new DecorationStack(ButtonLibrary.createIcon(Material.BLACK_STAINED_GLASS_PANE, " "));
+					gui.setSlot(c, i);
+				}
+			}
+		}
 		
 		ArrayList<Node> nodes = Nobility.getNobilityRegions().getNodeManager().getNodes(region);
 		
@@ -228,7 +295,7 @@ public class EstateManager {
 //			Clickable resourceButton = new DecorationStack(resourceIcon);
 //			gui.addSlot(resourceButton);
 //		}
-		gui.setSlot(ButtonLibrary.HOME.clickable(), 8);
+		gui.setSlot(ButtonLibrary.HOME.clickable(), 49);
 		
 		gui.showInventory(player);		
 		
