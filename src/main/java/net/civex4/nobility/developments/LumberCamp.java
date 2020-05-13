@@ -11,7 +11,9 @@ public class LumberCamp extends Development{
 		super(DevelopmentType.CAMP);
 		this.isActive = true;
 		this.name = "Lumber Camp";
-		this.icon = Material.IRON_AXE;
+		this.icon = Material.OAK_LOG;
+		this.buildDescription = "The Lumber Camp allows you to claim Forest nodes.";
+		this.useDescription = "Use this building to allocate workers to your forests.";
 	}
 
 }

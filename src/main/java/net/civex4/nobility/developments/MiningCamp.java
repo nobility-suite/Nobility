@@ -11,7 +11,9 @@ public class MiningCamp extends Development{
 		super(DevelopmentType.CAMP);
 		this.isActive = true;
 		this.name = "Mining Camp";
-		this.icon = Material.IRON_PICKAXE;
+		this.icon = Material.IRON_ORE;
+		this.buildDescription = "The Mining Camp allows you to claim Mine nodes.";
+		this.useDescription = "Use this building to allocate workers to your mines.";
 		
 		// TODO Auto-generated constructor stub
 	}

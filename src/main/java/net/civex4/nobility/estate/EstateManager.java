@@ -476,7 +476,10 @@ public class EstateManager {
 		gui.addSlot(infoIcon);
 		
 		gui.setSlot(ButtonLibrary.HOME.clickable(),49);
-
+		
+		ItemStack tips = ButtonLibrary.createIcon(Material.PAPER, ChatColor.BLUE + "Tips");
+		Clickable tipsIcon = new DecorationStack(tips);
+		gui.addSlot(tipsIcon);
 		
 		//Remove built developments
 		for(Development d : built) {
@@ -490,7 +493,14 @@ public class EstateManager {
 			if(!b.hasPrereqs) {
 				String formattedName = b.result.name;
 				ItemStack icon = ButtonLibrary.createIcon(b.result.icon, formattedName);
-				ItemAPI.addLore(icon, "");
+				ItemAPI.addLore(icon, ChatColor.BLUE + "Cost:");
+				
+				for(String s : b.cost.keySet()) {
+					ItemAPI.addLore(icon, ChatColor.GRAY + "  " + b.cost.get(s) + "x" + ChatColor.WHITE + " " + s);
+				}
+				ItemAPI.addLore(icon, ChatColor.BLUE + "Description: ");
+				ItemAPI.addLore(icon, ChatColor.GRAY + b.result.buildDescription);
+
 				
 				Clickable button = new Clickable(icon) {
 
@@ -502,8 +512,6 @@ public class EstateManager {
 				gui.addSlot(button);
 			}
 		}
-
-		gui.addSlot(ButtonLibrary.HOME.clickable());
 		
 		gui.showInventory(player);
 	}

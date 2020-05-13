@@ -1,8 +1,8 @@
 package net.civex4.nobility.development;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
+import net.civex4.nobility.developments.LumberCamp;
 import net.civex4.nobility.developments.MiningCamp;
 
 public class DevelopmentManager {
@@ -37,10 +37,19 @@ public class DevelopmentManager {
 	private HashMap<String,DevelopmentBlueprint>loadBlueprints() {
 		HashMap<String,DevelopmentBlueprint> ret = new HashMap<String,DevelopmentBlueprint>();
 		
+		HashMap<String,Integer> costs = new HashMap<String,Integer>();
+		costs.put("Iron Ingot", 10);
+		costs.put("Log", 50);
+		
 		DevelopmentBlueprint miningCamp = new DevelopmentBlueprint();
 		miningCamp.result = new MiningCamp();
-		
+		miningCamp.cost = costs;
 		ret.put(miningCamp.result.name,miningCamp);
+		
+		DevelopmentBlueprint lumberCamp = new DevelopmentBlueprint();
+		lumberCamp.result = new LumberCamp();
+		lumberCamp.cost = costs;
+		ret.put(lumberCamp.result.name,lumberCamp);
 		
 		return ret;
 	}
