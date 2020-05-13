@@ -90,18 +90,6 @@ public class Estate {
 	}
 	
 	
-	//Returns nice looking titles (used to compare with items in GUI)
-	public List<DevelopmentType> getUnbuiltDevelopments() {
-		List<DevelopmentType> unbuiltDevelopments = new ArrayList<>();
-//		for (String name : DevelopmentType.getTypes().keySet()) {
-//			unbuiltDevelopments.add(DevelopmentType.getDevelopmentType(name));
-//		}
-//		for (Development development : builtDevelopments) {
-//			unbuiltDevelopments.remove(development.getType());
-//		}
-		
-		return unbuiltDevelopments;
-	}
 	
 	public Development getDevelopment(DevelopmentType type) {
 		for (Development development : builtDevelopments) {

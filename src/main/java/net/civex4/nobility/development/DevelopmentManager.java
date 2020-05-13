@@ -1,33 +1,46 @@
 package net.civex4.nobility.development;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import net.civex4.nobility.developments.MiningCamp;
 
 public class DevelopmentManager {
-	private ArrayList<DevelopmentBlueprint> blueprints;
-	private ArrayList<DevelopmentBlueprint> upgrades;
+	private HashMap<String,DevelopmentBlueprint> blueprints;
+	private HashMap<String,DevelopmentBlueprint> upgrades;
 
 	public DevelopmentManager() { 
-		blueprints = new ArrayList<DevelopmentBlueprint>();
+		blueprints = new HashMap<String,DevelopmentBlueprint>();
 		blueprints = loadBlueprints();
 		
-		upgrades = new ArrayList<DevelopmentBlueprint>();
+		upgrades = new HashMap<String,DevelopmentBlueprint>();
 		upgrades = loadUpgrades();
 	}
 
-	private ArrayList<DevelopmentBlueprint> loadUpgrades() {
-		ArrayList<DevelopmentBlueprint> ret = new ArrayList<DevelopmentBlueprint>();
+	private HashMap<String,DevelopmentBlueprint> loadUpgrades() {
+		HashMap<String,DevelopmentBlueprint> ret = new HashMap<String,DevelopmentBlueprint>();
 		
-		DevelopmentBlueprint miningCamp = new DevelopmentBlueprint();
-		miningCamp.result = new MiningCamp();
+
 		
 		
 		return ret;
 	}
+	
+	public HashMap<String,DevelopmentBlueprint> getBlueprints(){
+		return this.blueprints;
+	}
+	
+	public HashMap<String,DevelopmentBlueprint> getUpgrades(){
+		return this.upgrades;
+	}
 
-	private ArrayList<DevelopmentBlueprint> loadBlueprints() {
-		ArrayList<DevelopmentBlueprint> ret = new ArrayList<DevelopmentBlueprint>();
+	private HashMap<String,DevelopmentBlueprint>loadBlueprints() {
+		HashMap<String,DevelopmentBlueprint> ret = new HashMap<String,DevelopmentBlueprint>();
+		
+		DevelopmentBlueprint miningCamp = new DevelopmentBlueprint();
+		miningCamp.result = new MiningCamp();
+		
+		ret.put(miningCamp.result.name,miningCamp);
 		
 		return ret;
 	}

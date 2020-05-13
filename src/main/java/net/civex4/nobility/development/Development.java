@@ -29,8 +29,8 @@ public abstract class Development {
 	public boolean isActive;
 	public String name;
 	public Material icon;
-	private String useDescription;
-	private String buildDescription;
+	public String useDescription;
+	public String buildDescription;
 	
 	public Development(DevelopmentType type) {
 		this.type = type;

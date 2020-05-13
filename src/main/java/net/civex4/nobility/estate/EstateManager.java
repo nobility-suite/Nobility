@@ -8,29 +8,20 @@ import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.scheduler.BukkitRunnable;
 
-import io.github.kingvictoria.NobilityRegions;
 import io.github.kingvictoria.Region;
-import io.github.kingvictoria.RegionResource;
 import io.github.kingvictoria.nodes.Node;
 import net.civex4.nobility.Nobility;
 import net.civex4.nobility.development.Development;
-import net.civex4.nobility.development.DevelopmentType;
-import net.civex4.nobility.development.behaviors.Collector;
+import net.civex4.nobility.development.DevelopmentBlueprint;
 import net.civex4.nobility.group.Group;
 import net.civex4.nobility.group.GroupPermission;
-import net.civex4.nobility.gui.BannerLetter;
 import net.civex4.nobility.gui.ButtonLibrary;
 import vg.civcraft.mc.civmodcore.api.ItemAPI;
-import vg.civcraft.mc.civmodcore.api.ItemNames;
-import vg.civcraft.mc.civmodcore.chatDialog.Dialog;
 import vg.civcraft.mc.civmodcore.inventorygui.Clickable;
 import vg.civcraft.mc.civmodcore.inventorygui.ClickableInventory;
 import vg.civcraft.mc.civmodcore.inventorygui.DecorationStack;
@@ -144,7 +135,7 @@ public class EstateManager {
 
 			@Override
 			public void clicked(Player p) {
-
+				openClaimGUI(p);
 			}
 			
 		};
@@ -273,7 +264,7 @@ public class EstateManager {
 						iname = i.getItemMeta().getDisplayName();
 					}else iname = i.getType().name();
 					
-					ItemAPI.addLore(resourceIcon, ChatColor.GRAY + "  " + i.getAmount() + "x " + ChatColor.YELLOW + iname );
+					ItemAPI.addLore(resourceIcon, ChatColor.GRAY + "  " + i.getAmount() + "x " + ChatColor.WHITE + iname );
 				}
 			}
 			
@@ -295,6 +286,110 @@ public class EstateManager {
 //			Clickable resourceButton = new DecorationStack(resourceIcon);
 //			gui.addSlot(resourceButton);
 //		}
+		gui.setSlot(ButtonLibrary.HOME.clickable(), 49);
+		
+		gui.showInventory(player);		
+		
+		
+	}
+	
+	private void openClaimGUI(Player player) {
+		Estate estate = getEstateOfPlayer(player);
+		Region region = estate.getRegion();
+		ClickableInventory gui = new ClickableInventory(54, "Claim Menu: " + region.getName());
+		
+		int[] decoSlots = {0,8,9,10,11,12,13,14,15,16,17,18,26,27,35,36,44,45,46,47,48,50,51,52,53};
+		
+		// DECORATION STACKS
+		for (int i : decoSlots) {
+			if (!(gui.getSlot(i) instanceof Clickable)) {
+				Clickable c = new DecorationStack(ButtonLibrary.createIcon(Material.BLACK_STAINED_GLASS_PANE, " "));
+				gui.setSlot(c, i);
+			}
+		}
+		
+		List<Estate> estates = Nobility.getEstateManager().getEstatesInRegion(region);
+		int count = 0;
+		for(Estate e : estates) {
+			//TODO refactor estate info button into its own method for reusability
+			ItemStack info = ButtonLibrary.createIcon(Material.BOOK, ChatColor.GOLD + e.getGroup().getName());
+			ItemAPI.addLore(info, ChatColor.BLUE + "Members: " + ChatColor.WHITE + "" + e.getGroup().getMembers().size(),
+					ChatColor.BLUE + "Leader: " + ChatColor.WHITE + "" + e.getGroup().getLocalization(GroupPermission.LEADER) + " " + estate.getGroup().getLeader().getDisplayName(),
+					ChatColor.BLUE + "Region: " + ChatColor.WHITE + e.getRegion().getName(),
+					ChatColor.BLUE + "Location: " + ChatColor.WHITE + e.getBlock().getX() + "X, " + e.getBlock().getZ() + "Z",
+					ChatColor.BLUE + "Vulnerability Hour: " + ChatColor.WHITE + e.getVulnerabilityHour());
+			Clickable infoIcon = new Clickable(info) {
+
+				@Override
+				public void clicked(Player p) {
+
+				}
+			};
+			gui.addSlot(infoIcon);
+			count++;
+		}
+		
+		if(count < 7) {
+			int fill = 7-count;
+			int offset = count;
+			for(int i = offset; i <= fill+count; i++) {
+				if (!(gui.getSlot(i) instanceof Clickable)) {
+					Clickable c = new DecorationStack(ButtonLibrary.createIcon(Material.BLACK_STAINED_GLASS_PANE, " "));
+					gui.setSlot(c, i);
+				}
+			}
+		}
+		
+		ArrayList<Node> nodes = Nobility.getNobilityRegions().getNodeManager().getNodes(region);
+		
+		for(Node n : nodes) {
+			Estate owner = Nobility.getClaimManager().claims.get(n); 
+			
+			String ownerName;
+			if(owner == null) { ownerName = ChatColor.GRAY + "None"; 
+			}else if(owner == estate) { ownerName = ChatColor.GREEN + estate.getGroup().getName();
+			}else ownerName = ChatColor.RED + owner.getGroup().getName();
+			
+			String name = ChatColor.YELLOW + n.name + ChatColor.WHITE + " (" + ownerName + ChatColor.WHITE + ")";
+			ArrayList<ItemStack> output = n.output;
+			ItemStack resourceIcon = ButtonLibrary.createIcon(Material.STONE, name);
+			Clickable resourceButton = new DecorationStack(resourceIcon);
+			ItemAPI.addLore(resourceIcon, ChatColor.BLUE + "Slots: (0/" + n.slots + ")",
+					ChatColor.BLUE + "Output:");
+			
+			if(output != null && output.size() > 0) {
+				for(ItemStack i : output) {
+					
+					String iname = "";
+					
+					if(i.hasItemMeta() && i.getItemMeta().hasDisplayName()) {
+						iname = i.getItemMeta().getDisplayName();
+					}else iname = i.getType().name();
+					
+					ItemAPI.addLore(resourceIcon, ChatColor.GRAY + "  " + i.getAmount() + "x " + ChatColor.WHITE + iname );
+				}
+			}
+			
+			if(owner == null) {
+				ItemAPI.addLore(resourceIcon, " ",
+						ChatColor.YELLOW + "" + ChatColor.BOLD + "Left click to claim!");
+				Clickable claimButton = new Clickable(resourceIcon) {
+
+					@Override
+					public void clicked(Player p) {
+						p.sendMessage(ChatColor.GREEN + "Claimed " + n.name + " for" + estate.getGroup().getName());
+						p.closeInventory();
+						Nobility.getClaimManager().claim(n, estate);
+					}
+				};
+				gui.addSlot(claimButton);
+			}else {
+				gui.addSlot(resourceButton);
+			}
+			
+
+			
+		}
 		gui.setSlot(ButtonLibrary.HOME.clickable(), 49);
 		
 		gui.showInventory(player);		
@@ -354,61 +449,63 @@ public class EstateManager {
 	public void openBuildGUI(Player player) {
 		Estate estate = getEstateOfPlayer(player);
 		// TODO Estate name length can't be longer than 32
-		ClickableInventory developmentGUI = new ClickableInventory(9, "Build");
+		ClickableInventory gui = new ClickableInventory(54, "Build");
 		
-		// UNBUILT AVAILABLE DEVELOPMENTS
-//		for(DevelopmentType type: estate.getUnbuiltDevelopments()) {			
-//			if (estate.getActiveDevelopmentsToString().containsAll(type.getPrerequisites())) {
-//				Material m = type.getIcon();
-//				ItemStack icon = new ItemStack(m);
-//				nameItem(icon, type.getTitle());
-//				addLore(icon, ChatColor.BLUE + "Click to build");
-//				
-//				if (!type.getPrerequisites().isEmpty()) {
-//					addLore(icon, ChatColor.GOLD + "Prerequisites:");
-//					for(String prerequisite : type.getPrerequisites()) {
-//						addLore(icon, ChatColor.GRAY + DevelopmentType.getDevelopmentType(prerequisite).getTitle());
-//					}
-//				}
-//				
-//				if (!type.getUpkeepCost().isEmpty()) {
-//					addLore(icon, ChatColor.GOLD + "Upkeep Cost:");
-//					for(ItemStack cost : type.getUpkeepCost()) {						
-//						addLore(icon, ChatColor.GRAY + ItemNames.getItemName(cost) + ": " + ChatColor.WHITE + cost.getAmount());
-//					}
-//				}
-//				
-//				if(!type.getInitialCost().isEmpty() ) {
-//					addLore(icon, ChatColor.GOLD + "Initial Cost:");
-//					for(ItemStack cost : type.getInitialCost()) {
-//						addLore(icon, ChatColor.GRAY + ItemNames.getItemName(cost) +  ": " + ChatColor.WHITE + cost.getAmount());
-//					}
-//					if(!Nobility.getDevelopmentManager().checkCosts(type, estate)) {
-//						addLore(icon, ChatColor.RED + "Not enough to construct this estate");
-//					}
-//				}
-//				
-//				// IF UNBUILT DEVELOPMENT IS CLICKED:
-//				Clickable c = new Clickable(icon) {				
-//					@Override
-//					public void clicked(Player p) {
-//						if (!Nobility.getDevelopmentManager().checkCosts(type, estate)) {
-//							player.sendMessage("You don't have enough to construct this development");
-//							return;
-//						}
-//						estate.buildDevelopment(type);
-//						player.sendMessage("You constructed a " + type.getTitle());
-//						openEstateGUI(p);
-//					}
-//				};
-//				
-//				developmentGUI.addSlot(c);
-//			}			
-//		}
+		HashMap<String,DevelopmentBlueprint> blueprints = Nobility.getDevelopmentManager().getBlueprints();
+		List<Development> built = estate.getBuiltDevelopments();
+		
+       int[] decoSlots = {0,2,3,4,5,6,8,9,10,11,12,13,14,15,16,17,45,46,47,48,50,51,52,53};
+		
+		// DECORATION STACKS
+		for (int i : decoSlots) {
+			if (!(gui.getSlot(i) instanceof Clickable)) {
+				Clickable c = new DecorationStack(ButtonLibrary.createIcon(Material.BLACK_STAINED_GLASS_PANE, " "));
+				gui.setSlot(c, i);
+			}
+		}
+		
+		Estate e = estate;
+		
+		ItemStack info = ButtonLibrary.createIcon(Material.BOOK, ChatColor.GOLD + e.getGroup().getName());
+		ItemAPI.addLore(info, ChatColor.BLUE + "Members: " + ChatColor.WHITE + "" + e.getGroup().getMembers().size(),
+				ChatColor.BLUE + "Leader: " + ChatColor.WHITE + "" + e.getGroup().getLocalization(GroupPermission.LEADER) + " " + estate.getGroup().getLeader().getDisplayName(),
+				ChatColor.BLUE + "Region: " + ChatColor.WHITE + e.getRegion().getName(),
+				ChatColor.BLUE + "Location: " + ChatColor.WHITE + e.getBlock().getX() + "X, " + e.getBlock().getZ() + "Z",
+				ChatColor.BLUE + "Vulnerability Hour: " + ChatColor.WHITE + e.getVulnerabilityHour());
+		Clickable infoIcon = new DecorationStack(info);
+		gui.addSlot(infoIcon);
+		
+		gui.setSlot(ButtonLibrary.HOME.clickable(),49);
 
-		developmentGUI.addSlot(ButtonLibrary.HOME.clickable());
 		
-		developmentGUI.showInventory(player);
+		//Remove built developments
+		for(Development d : built) {
+
+			if(blueprints.containsKey(d.name)) {
+				blueprints.remove(d.name);
+			}
+		}
+		
+		for(DevelopmentBlueprint b : blueprints.values()) {
+			if(!b.hasPrereqs) {
+				String formattedName = b.result.name;
+				ItemStack icon = ButtonLibrary.createIcon(b.result.icon, formattedName);
+				ItemAPI.addLore(icon, "");
+				
+				Clickable button = new Clickable(icon) {
+
+					@Override
+					public void clicked(Player p) {
+
+					}
+				};
+				gui.addSlot(button);
+			}
+		}
+
+		gui.addSlot(ButtonLibrary.HOME.clickable());
+		
+		gui.showInventory(player);
 	}
 	
 	// RENAME ESTATE
