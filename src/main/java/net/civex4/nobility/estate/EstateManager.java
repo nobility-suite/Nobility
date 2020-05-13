@@ -77,7 +77,7 @@ public class EstateManager {
 	public void openEstateGUI(Player player) {
 		Estate estate = getEstateOfPlayer(player);
 
-		int[] decoSlots = {0,2,3,4,5,6,8,9,10,11,12,13,14,15,16,17,18,20,22,24,26,27,35,36,44,45,46,47,48,49,50,51,52,53};
+		int[] decoSlots = {0,2,3,4,5,6,8,9,10,11,12,13,14,15,16,17,18,20,22,24,26,27,28,29,30,31,32,33,34,35,36,38,40,42,44,45,46,47,48,49,50,51,52,53};
 		ClickableInventory estateGUI = new ClickableInventory(rowLength * 6, "Nobility Menu (" + estate.getGroup().getName() + ")");
 		
 		// DECORATION STACKS
@@ -164,6 +164,55 @@ public class EstateManager {
 			
 		};
 		estateGUI.addSlot(relationshipButton);
+		
+		// VIEW DEVELOPMENTS
+		ItemStack devIcon = ButtonLibrary.createIcon(Material.FURNACE, "View Developments");
+		Clickable devButton = new Clickable(devIcon) {
+
+			@Override
+			public void clicked(Player p) {
+				
+			}
+			
+		};
+		estateGUI.addSlot(devButton);
+		
+		// VIEW STOCKPILES
+		ItemStack stockIcon = ButtonLibrary.createIcon(Material.CHEST, "View Stockpiles");
+		Clickable stockButton = new Clickable(stockIcon) {
+
+			@Override
+			public void clicked(Player p) {
+				
+			}
+			
+		};
+		estateGUI.addSlot(stockButton);
+		
+		
+		// DEFENCE
+		ItemStack defIcon = ButtonLibrary.createIcon(Material.STONE_BRICKS, "Defence");
+		Clickable defButton = new Clickable(defIcon) {
+
+			@Override
+			public void clicked(Player p) {
+				
+			}
+			
+		};
+		estateGUI.addSlot(defButton);
+		
+		// DEFENCE
+		ItemStack membersIcon = ButtonLibrary.createIcon(Material.PLAYER_HEAD, "View Citizens");
+		Clickable membersButton = new Clickable(membersIcon) {
+
+			@Override
+			public void clicked(Player p) {
+				
+			}
+			
+		};
+		estateGUI.addSlot(membersButton);
 		
 		// OPEN
 		estateGUI.showInventory(player);

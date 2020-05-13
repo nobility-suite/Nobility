@@ -1,9 +1,14 @@
 package net.civex4.nobility.development;
 
 import java.util.HashMap;
+import java.util.List;
+
+import org.bukkit.entity.Player;
 
 import net.civex4.nobility.developments.LumberCamp;
 import net.civex4.nobility.developments.MiningCamp;
+import net.civex4.nobility.estate.Estate;
+import net.md_5.bungee.api.ChatColor;
 
 public class DevelopmentManager {
 	private HashMap<String,DevelopmentBlueprint> blueprints;
@@ -52,6 +57,44 @@ public class DevelopmentManager {
 		ret.put(lumberCamp.result.name,lumberCamp);
 		
 		return ret;
+	}
+	
+	public boolean build (DevelopmentBlueprint b, Estate e, Player p) {
+		List<Development> built = e.getBuiltDevelopments();
+		
+		for(Development d : built) {
+			if(d.name == b.result.name){
+				p.sendMessage(ChatColor.RED + "Your estate already has a " + ChatColor.WHITE + d.name + " built.");
+				return false;
+			}
+		}
+		
+		if(!checkCosts(b,p)) {
+			p.sendMessage(ChatColor.RED + "You do not have enough materials to construct a " + ChatColor.WHITE + b.result.name + ".");
+			return false;
+		}
+		
+		if(false) {
+			//TODO check permissions
+			p.sendMessage(ChatColor.RED + "You must be an official of " + ChatColor.WHITE + e.getGroup().getName() + ChatColor.RED + " to construct this development.");
+			return false;
+		}
+		
+		p.sendMessage(ChatColor.GREEN + "Constructing...");
+		//TODO subtract costs here
+		DevelopmentManager.sudoBuildDevelopment(b,e);
+		p.sendMessage(ChatColor.GREEN + "Constructed a " + ChatColor.WHITE + b.result.name + ChatColor.GREEN + " in " + ChatColor.WHITE + e.getGroup().getName());
+		return true;
+		
+	}
+	
+	private static void sudoBuildDevelopment(DevelopmentBlueprint b, Estate e) {
+		Development result = b.result;
+		e.addDevelopment(result);	
+	}
+
+	public boolean checkCosts(DevelopmentBlueprint b, Player p) {
+		return true; //TODO implement
 	}
 	
 //	public void subtractUpkeep(DevelopmentType type, Estate estate) {		

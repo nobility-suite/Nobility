@@ -33,8 +33,8 @@ public class Estate {
 		region = NobilityRegions.getRegionMaster().getRegionByLocation(block.getLocation());
 	}
 	
-	public void buildDevelopment(DevelopmentType type) {
-		//DevelopmentFactory.buildDevelopment(type, this);
+	public void addDevelopment(Development d) {
+		builtDevelopments.add(d);
 	}
 	
 	public Inventory getInventory() {
