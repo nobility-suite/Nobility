@@ -171,7 +171,7 @@ public class EstateManager {
 
 			@Override
 			public void clicked(Player p) {
-				
+				openDevelopmentsGUI(p);
 			}
 			
 		};
@@ -220,6 +220,50 @@ public class EstateManager {
 		
 	}
 	
+	private void openDevelopmentsGUI(Player p) {
+	// TODO Auto-generated method stub
+		
+		Estate estate = getEstateOfPlayer(p);
+		// TODO Estate name length can't be longer than 32
+		ClickableInventory gui = new ClickableInventory(54, "View Developments");
+		
+		HashMap<String,DevelopmentBlueprint> blueprints = Nobility.getDevelopmentManager().getBlueprints();
+		List<Development> built = estate.getBuiltDevelopments();
+		
+       int[] decoSlots = {0,1,2,3,5,6,7,8,9,10,11,12,13,14,15,16,17,45,46,47,48,50,51,52,53};
+		
+		// DECORATION STACKS
+		for (int i : decoSlots) {
+			if (!(gui.getSlot(i) instanceof Clickable)) {
+				Clickable c = new DecorationStack(ButtonLibrary.createIcon(Material.BLACK_STAINED_GLASS_PANE, " "));
+				gui.setSlot(c, i);
+			}
+		}
+		
+		Estate e = estate;
+		
+		ItemStack info = ButtonLibrary.createIcon(Material.BOOK, ChatColor.GOLD + e.getGroup().getName());
+		ItemAPI.addLore(info, ChatColor.BLUE + "Members: " + ChatColor.WHITE + "" + e.getGroup().getMembers().size(),
+				ChatColor.BLUE + "Leader: " + ChatColor.WHITE + "" + e.getGroup().getLocalization(GroupPermission.LEADER) + " " + estate.getGroup().getLeader().getDisplayName(),
+				ChatColor.BLUE + "Region: " + ChatColor.WHITE + e.getRegion().getName(),
+				ChatColor.BLUE + "Location: " + ChatColor.WHITE + e.getBlock().getX() + "X, " + e.getBlock().getZ() + "Z",
+				ChatColor.BLUE + "Vulnerability Hour: " + ChatColor.WHITE + e.getVulnerabilityHour());
+		Clickable infoIcon = new DecorationStack(info);
+		gui.addSlot(infoIcon);
+		
+		gui.setSlot(ButtonLibrary.HOME.clickable(),49);
+		
+		for(Development d : built) {
+			ItemStack icon = ButtonLibrary.createIcon(Material.STONE, d.name);
+			
+			Clickable dicon = new DecorationStack(icon);
+			gui.addSlot(dicon);
+		}
+		
+		gui.showInventory(p);
+	
+	}
+
 	protected void openProductivityMenu(Player player) {
 		//XXX going to break with more than 2 developments
 		Estate estate = getEstateOfPlayer(player);
@@ -555,7 +599,7 @@ public class EstateManager {
 
 					@Override
 					public void clicked(Player p) {
-
+						Nobility.getDevelopmentManager().build(b, e, player);
 					}
 				};
 				gui.addSlot(button);

@@ -62,6 +62,8 @@ public class DevelopmentManager {
 	public boolean build (DevelopmentBlueprint b, Estate e, Player p) {
 		List<Development> built = e.getBuiltDevelopments();
 		
+		p.closeInventory();
+		
 		for(Development d : built) {
 			if(d.name == b.result.name){
 				p.sendMessage(ChatColor.RED + "Your estate already has a " + ChatColor.WHITE + d.name + " built.");
