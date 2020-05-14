@@ -261,6 +261,8 @@ public class EstateManager {
 				Clickable pcon = new DecorationStack(playerIcon);
 				gui.addSlot(pcon);
 			}
+			
+			gui.showInventory(p);
 	}
 	
 	private void openDevelopmentsGUI(Player p) {
@@ -348,7 +350,7 @@ public class EstateManager {
 			//TODO refactor estate info button into its own method for reusability
 			ItemStack info = ButtonLibrary.createIcon(Material.BOOK, ChatColor.GOLD + e.getGroup().getName());
 			ItemAPI.addLore(info, ChatColor.BLUE + "Members: " + ChatColor.WHITE + "" + e.getGroup().getMembers().size(),
-					ChatColor.BLUE + "Leader: " + ChatColor.WHITE + "" + e.getGroup().getLocalization(GroupPermission.LEADER) + " " + estate.getGroup().getLeader().getDisplayName(),
+					ChatColor.BLUE + "Leader: " + ChatColor.WHITE + "" + e.getGroup().getLocalization(GroupPermission.LEADER) + " " + e.getGroup().getLeader().getDisplayName(),
 					ChatColor.BLUE + "Region: " + ChatColor.WHITE + e.getRegion().getName(),
 					ChatColor.BLUE + "Location: " + ChatColor.WHITE + e.getBlock().getX() + "X, " + e.getBlock().getZ() + "Z",
 					ChatColor.BLUE + "Vulnerability Hour: " + ChatColor.WHITE + e.getVulnerabilityHour());
