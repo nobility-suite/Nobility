@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
@@ -12,6 +13,7 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.SkullMeta;
 
 import io.github.kingvictoria.Region;
 import io.github.kingvictoria.nodes.Node;
@@ -202,13 +204,13 @@ public class EstateManager {
 		};
 		estateGUI.addSlot(defButton);
 		
-		// DEFENCE
+		// MEMBERS
 		ItemStack membersIcon = ButtonLibrary.createIcon(Material.PLAYER_HEAD, "View Citizens");
 		Clickable membersButton = new Clickable(membersIcon) {
 
 			@Override
 			public void clicked(Player p) {
-				
+				openMembersGUI(p);
 			}
 			
 		};
@@ -218,6 +220,47 @@ public class EstateManager {
 		estateGUI.showInventory(player);
 		
 		
+	}
+	
+	
+	private void openMembersGUI(Player p) {
+		Estate estate = getEstateOfPlayer(p);
+		ClickableInventory gui = new ClickableInventory(54, "View Citizens");
+		  int[] decoSlots = {0,1,2,3,5,6,7,8,9,10,11,12,13,14,15,16,17,45,46,47,48,50,51,52,53};
+			
+			// DECORATION STACKS
+			for (int i : decoSlots) {
+				if (!(gui.getSlot(i) instanceof Clickable)) {
+					Clickable c = new DecorationStack(ButtonLibrary.createIcon(Material.BLACK_STAINED_GLASS_PANE, " "));
+					gui.setSlot(c, i);
+				}
+			}
+			
+			Estate e = estate;
+			
+			ItemStack info = ButtonLibrary.createIcon(Material.BOOK, ChatColor.GOLD + e.getGroup().getName());
+			ItemAPI.addLore(info, ChatColor.BLUE + "Members: " + ChatColor.WHITE + "" + e.getGroup().getMembers().size(),
+					ChatColor.BLUE + "Leader: " + ChatColor.WHITE + "" + e.getGroup().getLocalization(GroupPermission.LEADER) + " " + estate.getGroup().getLeader().getDisplayName(),
+					ChatColor.BLUE + "Region: " + ChatColor.WHITE + e.getRegion().getName(),
+					ChatColor.BLUE + "Location: " + ChatColor.WHITE + e.getBlock().getX() + "X, " + e.getBlock().getZ() + "Z",
+					ChatColor.BLUE + "Vulnerability Hour: " + ChatColor.WHITE + e.getVulnerabilityHour());
+			Clickable infoIcon = new DecorationStack(info);
+			gui.addSlot(infoIcon);
+			
+			gui.setSlot(ButtonLibrary.HOME.clickable(),49);
+			
+			Set<UUID> members = estate.getGroup().getMembers();
+			
+			for(UUID u : members) {
+				Player pl = Bukkit.getPlayer(u);
+				ItemStack playerIcon = ButtonLibrary.createIcon(Material.PLAYER_HEAD, pl.getName());
+				ItemAPI.addLore(playerIcon, ChatColor.BLUE + "Rank: " + ChatColor.WHITE + estate.getGroup().getPermission(pl));
+				SkullMeta im = (SkullMeta) ItemAPI.getItemMeta(playerIcon);
+				im.setOwningPlayer(Bukkit.getOfflinePlayer(u));
+				playerIcon.setItemMeta(im);
+				Clickable pcon = new DecorationStack(playerIcon);
+				gui.addSlot(pcon);
+			}
 	}
 	
 	private void openDevelopmentsGUI(Player p) {
