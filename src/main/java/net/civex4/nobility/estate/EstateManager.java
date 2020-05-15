@@ -317,25 +317,6 @@ public class EstateManager {
 	
 	}
 
-	protected void openProductivityMenu(Player player) {
-		//XXX going to break with more than 2 developments
-		Estate estate = getEstateOfPlayer(player);
-		ClickableInventory inv = new ClickableInventory(9, "Productivity");
-		
-		ItemStack availableIcon = ButtonLibrary.createIcon(Material.WOODEN_PICKAXE, "Available Productivity");
-		availableIcon.setAmount(estate.getFreeProductivity());
-		
-		Clickable availableButton = new DecorationStack(availableIcon);
-		inv.addSlot(availableButton);
-		
-		Clickable decor = new DecorationStack(new ItemStack(Material.BLACK_STAINED_GLASS_PANE));
-		inv.addSlot(decor);		
-		
-
-		inv.addSlot(ButtonLibrary.HOME.clickable());
-		
-		inv.showInventory(player);
-	}
 
 	protected void openRegionInfoGUI(Player player) {
 		Estate estate = getEstateOfPlayer(player);

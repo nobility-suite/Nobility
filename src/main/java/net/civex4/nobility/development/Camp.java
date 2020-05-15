@@ -1,7 +1,10 @@
 package net.civex4.nobility.development;
 
+import io.github.kingvictoria.nodes.NodeType;
+
 public class Camp extends Development{
 	private int nodeLimit;
+	public NodeType nodeType;
 	
 	public Camp() {
 		super(DevelopmentType.CAMP);

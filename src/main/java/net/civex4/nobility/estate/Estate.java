@@ -12,6 +12,8 @@ import org.bukkit.inventory.Inventory;
 import io.github.kingvictoria.NobilityRegions;
 import io.github.kingvictoria.Region;
 import io.github.kingvictoria.RegionResource;
+import io.github.kingvictoria.nodes.NodeType;
+import net.civex4.nobility.development.Camp;
 import net.civex4.nobility.development.Development;
 import net.civex4.nobility.development.DevelopmentType;
 import net.civex4.nobility.group.Group;
@@ -22,8 +24,6 @@ public class Estate {
 	private Region region;
 	private List<Development> builtDevelopments = new ArrayList<>();
 	private Map<Estate, Relationship> relationships = new HashMap<>();
-	private Map<RegionResource, Integer> mines = new HashMap<>(); //Local mines only
-	private int freeProductivity = 10;
 	
 	private int vulnerabilityHour = 0;
 	
@@ -45,17 +45,7 @@ public class Estate {
 		return null;
 	}
 	
-	public void addMineSudo(RegionResource r) {
-	  if(mines.containsKey(r)) {
-	    mines.put(r, mines.get(r)+1);
-	  }else {
-	    mines.put(r, 1);
-	  }
-	}
-	
-	public int getMines(RegionResource r) {
-	  return mines.get(r);
-	}
+
 	
 	public int getVulnerabilityHour() {
 	  return this.vulnerabilityHour;
@@ -163,24 +153,26 @@ public class Estate {
 		return power;
 	}
 	
-	public int getFreeProductivity() {
-		return freeProductivity;
-	}
 	
-	public void setFreeProductivity(int productivity) {
-		this.freeProductivity = productivity;
-	}
 	
-	public void addFreeProductivity() {
-		freeProductivity++;
-	}
-	
-	public void subtractFreeProductivity() {
-		if (freeProductivity > 0) {
-			freeProductivity--;
-		} else {
-			throw new IllegalArgumentException();
+	public ArrayList<Development> getCamps(){
+		ArrayList<Development> ret = new ArrayList<Development>();
+		for(Development d : this.builtDevelopments) {
+			if(d.getType() == DevelopmentType.CAMP) {
+				ret.add(d);
+			}
 		}
+		return ret;
+	}
+	
+	public Camp getCamp(NodeType type) {
+		for(Development d : this.getCamps()) {
+			Camp c = (Camp) d;
+			if(c.nodeType == type) {
+				return c;
+			}
+		}
+		return null;
 	}
 	
 }
