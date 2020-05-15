@@ -445,7 +445,13 @@ public class EstateManager {
 					ChatColor.BLUE + "Leader: " + ChatColor.WHITE + "" + e.getGroup().getLocalization(GroupPermission.LEADER) + " " + estate.getGroup().getLeader().getDisplayName(),
 					ChatColor.BLUE + "Region: " + ChatColor.WHITE + e.getRegion().getName(),
 					ChatColor.BLUE + "Location: " + ChatColor.WHITE + e.getBlock().getX() + "X, " + e.getBlock().getZ() + "Z",
-					ChatColor.BLUE + "Vulnerability Hour: " + ChatColor.WHITE + e.getVulnerabilityHour());
+					ChatColor.BLUE + "Vulnerability Hour: " + ChatColor.WHITE + e.getVulnerabilityHour(),
+					"");
+			
+			if(e == estate)
+			for(Camp c : e.getCamps()) {
+				ItemAPI.addLore(info, ChatColor.BLUE + "Node Limit (" + c.nodeType + ") " + ChatColor.WHITE + c.getNodeLimit());
+			}
 			Clickable infoIcon = new Clickable(info) {
 
 				@Override
@@ -506,6 +512,11 @@ public class EstateManager {
 
 					@Override
 					public void clicked(Player p) {
+						if(!Nobility.getClaimManager().underNodeLimit(n, estate)) {
+							p.sendMessage(ChatColor.RED + "You cannot claim any more nodes of type " + ChatColor.WHITE + n.type + ChatColor.RED + ", you must upgrade your camps first.");
+							p.closeInventory();
+							return;
+						}
 						p.sendMessage(ChatColor.GREEN + "Claimed " + n.name + " for" + estate.getGroup().getName());
 						p.closeInventory();
 						Nobility.getClaimManager().claim(n, estate);

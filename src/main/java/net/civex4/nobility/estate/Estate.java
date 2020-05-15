@@ -155,19 +155,18 @@ public class Estate {
 	
 	
 	
-	public ArrayList<Development> getCamps(){
-		ArrayList<Development> ret = new ArrayList<Development>();
+	public ArrayList<Camp> getCamps(){
+		ArrayList<Camp> ret = new ArrayList<Camp>();
 		for(Development d : this.builtDevelopments) {
 			if(d.getType() == DevelopmentType.CAMP) {
-				ret.add(d);
+				ret.add((Camp) d);
 			}
 		}
 		return ret;
 	}
 	
 	public Camp getCamp(NodeType type) {
-		for(Development d : this.getCamps()) {
-			Camp c = (Camp) d;
+		for(Camp c : this.getCamps()) {
 			if(c.nodeType == type) {
 				return c;
 			}

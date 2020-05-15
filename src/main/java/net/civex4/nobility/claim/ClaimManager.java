@@ -3,6 +3,7 @@ package net.civex4.nobility.claim;
 import java.util.HashMap;
 
 import io.github.kingvictoria.nodes.Node;
+import net.civex4.nobility.development.Camp;
 import net.civex4.nobility.estate.Estate;
 
 public class ClaimManager {
@@ -19,13 +20,29 @@ public class ClaimManager {
 			if(claims.get(n) != null) {
 				return false;
 			}else {
-				claims.put(n, e);
-				return true;
+				if(underNodeLimit(n,e)) {
+					claims.put(n, e);
+					return true;
+				}else {return false; }
 			}
 		}else {
-			claims.put(n,e);
-			return true;
+			if(underNodeLimit(n,e)) {
+				claims.put(n, e);
+				return true;
+			}else { return false;}
 		}
+	}
+	
+	public boolean underNodeLimit(Node n, Estate e) {
+		Camp camp = e.getCamp(n.type);
+		int limit = camp.getNodeLimit();
+		int counter = 0;
+		for(Node node : this.claims.keySet()) {
+			if(claims.get(node) == e && node.type == n.type) {
+				counter++;
+			}
+		}
+		return counter < limit;
 	}
 	
 	public void unclaim(Node n) {
