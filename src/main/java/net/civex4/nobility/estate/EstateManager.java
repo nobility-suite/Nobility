@@ -18,8 +18,10 @@ import org.bukkit.inventory.meta.SkullMeta;
 import io.github.kingvictoria.Region;
 import io.github.kingvictoria.nodes.Node;
 import net.civex4.nobility.Nobility;
+import net.civex4.nobility.development.Camp;
 import net.civex4.nobility.development.Development;
 import net.civex4.nobility.development.DevelopmentBlueprint;
+import net.civex4.nobility.development.DevelopmentType;
 import net.civex4.nobility.group.Group;
 import net.civex4.nobility.group.GroupPermission;
 import net.civex4.nobility.gui.ButtonLibrary;
@@ -299,8 +301,14 @@ public class EstateManager {
 		gui.setSlot(ButtonLibrary.HOME.clickable(),49);
 		
 		for(Development d : built) {
-			ItemStack icon = ButtonLibrary.createIcon(Material.STONE, d.name);
-			
+			ItemStack icon = ButtonLibrary.createIcon(d.icon, d.name);
+			if(d.getType() == DevelopmentType.CAMP) {
+				Camp camp = (Camp) d;
+				if(camp != null) { ItemAPI.addLore(icon, ChatColor.BLUE + "Node Limit: " + ChatColor.WHITE + camp.getNodeLimit()); }
+			}
+			ItemAPI.addLore(icon, ChatColor.BLUE + "Type: " + ChatColor.WHITE + d.getType().toString(),
+					ChatColor.BLUE + "Description: ",
+					ChatColor.GRAY + d.useDescription);
 			Clickable dicon = new DecorationStack(icon);
 			gui.addSlot(dicon);
 		}
@@ -631,6 +639,14 @@ public class EstateManager {
 			if(!b.hasPrereqs) {
 				String formattedName = b.result.name;
 				ItemStack icon = ButtonLibrary.createIcon(b.result.icon, formattedName);
+				ItemAPI.addLore(icon, ChatColor.BLUE + "Type: " + ChatColor.WHITE + b.result.getType().toString());
+				
+				if(b.result.getType() == DevelopmentType.CAMP) {
+					Camp camp = (Camp) b.result;
+					if(camp != null) { ItemAPI.addLore(icon, ChatColor.BLUE + "Node Limit: " + ChatColor.WHITE + camp.getNodeLimit());}
+					
+				}
+				
 				ItemAPI.addLore(icon, ChatColor.BLUE + "Cost:");
 				
 				for(String s : b.cost.keySet()) {

@@ -2,13 +2,13 @@ package net.civex4.nobility.developments;
 
 import org.bukkit.Material;
 
-import net.civex4.nobility.development.Development;
+import net.civex4.nobility.development.Camp;
 import net.civex4.nobility.development.DevelopmentType;
 
-public class MiningCamp extends Development{
+public class MiningCamp extends Camp{
 
 	public MiningCamp() {
-		super(DevelopmentType.CAMP);
+		super();
 		this.isActive = true;
 		this.name = "Mining Camp";
 		this.icon = Material.IRON_ORE;
