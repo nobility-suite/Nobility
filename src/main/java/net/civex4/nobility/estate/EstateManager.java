@@ -399,6 +399,7 @@ public class EstateManager {
 			ItemStack resourceIcon = ButtonLibrary.createIcon(Material.STONE, name);
 			Clickable resourceButton = new DecorationStack(resourceIcon);
 			ItemAPI.addLore(resourceIcon, ChatColor.BLUE + "Slots: (0/" + n.slots + ")",
+					ChatColor.BLUE + "Type: " + ChatColor.WHITE + n.type,
 					ChatColor.BLUE + "Output:");
 			
 			if(output != null && output.size() > 0) {
@@ -501,6 +502,7 @@ public class EstateManager {
 			ItemStack resourceIcon = ButtonLibrary.createIcon(Material.STONE, name);
 			Clickable resourceButton = new DecorationStack(resourceIcon);
 			ItemAPI.addLore(resourceIcon, ChatColor.BLUE + "Slots: (0/" + n.slots + ")",
+					ChatColor.BLUE + "Type: " + ChatColor.WHITE + n.type,
 					ChatColor.BLUE + "Output:");
 			
 			if(output != null && output.size() > 0) {
