@@ -35,6 +35,7 @@ public class ClaimManager {
 	
 	public boolean underNodeLimit(Node n, Estate e) {
 		Camp camp = e.getCamp(n.type);
+		if(camp == null) { return false; }
 		int limit = camp.getNodeLimit();
 		int counter = 0;
 		for(Node node : this.claims.keySet()) {
