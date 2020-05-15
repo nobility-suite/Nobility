@@ -182,7 +182,7 @@ public class EstateManager {
 		estateGUI.addSlot(devButton);
 		
 		// VIEW STOCKPILES
-		ItemStack stockIcon = ButtonLibrary.createIcon(Material.CHEST, "View Stockpiles");
+		ItemStack stockIcon = ButtonLibrary.createIcon(Material.CHEST, "Workshops & Stockpiles");
 		Clickable stockButton = new Clickable(stockIcon) {
 
 			@Override
@@ -195,7 +195,7 @@ public class EstateManager {
 		
 		
 		// DEFENCE
-		ItemStack defIcon = ButtonLibrary.createIcon(Material.STONE_BRICKS, "Defence");
+		ItemStack defIcon = ButtonLibrary.createIcon(Material.STONE_BRICKS, "Siege");
 		Clickable defButton = new Clickable(defIcon) {
 
 			@Override
@@ -426,7 +426,7 @@ public class EstateManager {
 		Region region = estate.getRegion();
 		ClickableInventory gui = new ClickableInventory(9, "Select a Camp");
 		
-		gui.setSlot(ButtonLibrary.HOME.clickable(), 8);
+		gui.setSlot(ButtonLibrary.HOME.clickable(), 7);
 
 		int[] decoSlots = {0,6,8};
 		
@@ -455,7 +455,73 @@ public class EstateManager {
 	}
 	
 	private void openCampGUI(Player player, Camp camp) {
+		Estate estate = getEstateOfPlayer(player);
+		Region region = estate.getRegion();
+		ClickableInventory gui = new ClickableInventory(54, "Assign Workers");
 		
+		int[] decoSlots = {0,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,26,27,35,36,44,45,46,47,48,50,51,52,53};
+		
+		// DECORATION STACKS
+		for (int i : decoSlots) {
+			if (!(gui.getSlot(i) instanceof Clickable)) {
+				Clickable c = new DecorationStack(ButtonLibrary.createIcon(Material.BLACK_STAINED_GLASS_PANE, " "));
+				gui.setSlot(c, i);
+			}
+		}
+		
+		gui.setSlot(ButtonLibrary.HOME.clickable(), 49);
+		
+	
+		ItemStack playerIcon = ButtonLibrary.createIcon(Material.PLAYER_HEAD, player.getName());
+		SkullMeta im = (SkullMeta) ItemAPI.getItemMeta(playerIcon);
+		im.setOwningPlayer(player);
+		playerIcon.setItemMeta(im);
+		ItemAPI.addLore(playerIcon, ChatColor.BLUE + "Workers: " + ChatColor.WHITE + "NYI",
+				ChatColor.BLUE + "Activity Level: " + ChatColor.WHITE + "NYI",
+				ChatColor.GRAY + "Your activity level determines how many",
+				ChatColor.GRAY + "Workers you recieve per day.");
+		Clickable pcon = new DecorationStack(playerIcon);
+		gui.addSlot(pcon);
+		
+
+		ArrayList<Node> nodes = estate.getNodes();
+		
+		for(Node n : nodes) {
+			//Populate worker list with nodes
+			if(n.type == camp.nodeType) {
+				String name = ChatColor.YELLOW + n.name + ChatColor.WHITE + " (" + ChatColor.GREEN + estate.getGroup().getName() + ChatColor.WHITE + ")";
+				ArrayList<ItemStack> output = n.output;
+				ItemStack resourceIcon = ButtonLibrary.createIcon(Material.STONE, name);
+				Clickable resourceButton = new DecorationStack(resourceIcon);
+				ItemAPI.addLore(resourceIcon, ChatColor.BLUE + "Slots: (0/" + n.slots + ")",
+						ChatColor.BLUE + "Type: " + ChatColor.WHITE + n.type,
+						ChatColor.BLUE + "Output:");
+				//Node output lore
+				if(output != null && output.size() > 0) {
+					for(ItemStack i : output) {
+						
+						String iname = "";
+						
+						if(i.hasItemMeta() && i.getItemMeta().hasDisplayName()) {
+							iname = i.getItemMeta().getDisplayName();
+						}else iname = i.getType().name();
+						
+						ItemAPI.addLore(resourceIcon, ChatColor.GRAY + "  " + i.getAmount() + "x " + ChatColor.WHITE + iname );
+					}
+				}
+				
+				Clickable workerNode = new Clickable(resourceIcon) {
+
+					@Override
+					public void clicked(Player p) {
+
+					}
+				};
+				gui.addSlot(workerNode);
+				
+			}
+		}
+		gui.showInventory(player);
 	}
 	
 	private void openClaimGUI(Player player) {
@@ -554,7 +620,7 @@ public class EstateManager {
 							p.closeInventory();
 							return;
 						}
-						p.sendMessage(ChatColor.GREEN + "Claimed " + n.name + " for" + estate.getGroup().getName());
+						p.sendMessage(ChatColor.GREEN + "Claimed " + ChatColor.WHITE + n.name + " for " + ChatColor.WHITE + estate.getGroup().getName());
 						p.closeInventory();
 						Nobility.getClaimManager().claim(n, estate);
 					}

@@ -12,7 +12,9 @@ import org.bukkit.inventory.Inventory;
 import io.github.kingvictoria.NobilityRegions;
 import io.github.kingvictoria.Region;
 import io.github.kingvictoria.RegionResource;
+import io.github.kingvictoria.nodes.Node;
 import io.github.kingvictoria.nodes.NodeType;
+import net.civex4.nobility.Nobility;
 import net.civex4.nobility.development.Camp;
 import net.civex4.nobility.development.Development;
 import net.civex4.nobility.development.DevelopmentType;
@@ -174,4 +176,14 @@ public class Estate {
 		return null;
 	}
 	
+	public ArrayList<Node> getNodes(){
+		HashMap<Node,Estate> map = Nobility.getClaimManager().claims;
+		ArrayList<Node> ret = new ArrayList<Node>();
+		for(Node n : map.keySet()) {
+			if(map.get(n) == this) {
+				ret.add(n);
+			}
+		}
+		return ret;
+	}
 }
