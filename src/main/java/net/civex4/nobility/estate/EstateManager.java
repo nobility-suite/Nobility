@@ -151,7 +151,7 @@ public class EstateManager {
 
 			@Override
 			public void clicked(Player p) {
-
+				openCampSelectorGUI(p);
 			}
 			
 		};
@@ -418,6 +418,43 @@ public class EstateManager {
 		
 		gui.showInventory(player);		
 		
+		
+	}
+	
+	private void openCampSelectorGUI(Player player) {
+		Estate estate = getEstateOfPlayer(player);
+		Region region = estate.getRegion();
+		ClickableInventory gui = new ClickableInventory(9, "Select a Camp");
+		
+		gui.setSlot(ButtonLibrary.HOME.clickable(), 49);
+
+		int[] decoSlots = {0,6,8};
+		
+		// DECORATION STACKS
+		for (int i : decoSlots) {
+			if (!(gui.getSlot(i) instanceof Clickable)) {
+				Clickable c = new DecorationStack(ButtonLibrary.createIcon(Material.BLACK_STAINED_GLASS_PANE, " "));
+				gui.setSlot(c, i);
+			}
+		}
+		
+		for(Camp c : estate.getCamps()) {
+			ItemStack info = ButtonLibrary.createIcon(c.icon, c.name);
+			ItemAPI.addLore(info, ChatColor.BLUE + "Node Limit: " + ChatColor.WHITE + c.getNodeLimit());
+			Clickable click = new Clickable(info) {
+
+				@Override
+				public void clicked(Player p) {
+					openCampGUI(p,c);
+				}
+				
+			};
+			gui.addSlot(click);
+		}
+		gui.showInventory(player);
+	}
+	
+	private void openCampGUI(Player player, Camp camp) {
 		
 	}
 	
