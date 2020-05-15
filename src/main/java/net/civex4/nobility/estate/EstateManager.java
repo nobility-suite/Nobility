@@ -426,7 +426,7 @@ public class EstateManager {
 		Region region = estate.getRegion();
 		ClickableInventory gui = new ClickableInventory(9, "Select a Camp");
 		
-		gui.setSlot(ButtonLibrary.HOME.clickable(), 49);
+		gui.setSlot(ButtonLibrary.HOME.clickable(), 8);
 
 		int[] decoSlots = {0,6,8};
 		
