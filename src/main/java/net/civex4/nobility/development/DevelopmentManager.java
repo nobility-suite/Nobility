@@ -5,6 +5,8 @@ import java.util.List;
 
 import org.bukkit.entity.Player;
 
+import net.civex4.nobility.developments.BasicWorkshop;
+import net.civex4.nobility.developments.FarmingCamp;
 import net.civex4.nobility.developments.LumberCamp;
 import net.civex4.nobility.developments.MiningCamp;
 import net.civex4.nobility.estate.Estate;
@@ -55,6 +57,16 @@ public class DevelopmentManager {
 		lumberCamp.result = new LumberCamp();
 		lumberCamp.cost = costs;
 		ret.put(lumberCamp.result.name,lumberCamp);
+		
+		DevelopmentBlueprint farmCamp = new DevelopmentBlueprint();
+		farmCamp.result = new FarmingCamp();
+		farmCamp.cost = costs;
+		ret.put(farmCamp.result.name,farmCamp);
+		
+		DevelopmentBlueprint basicWorkshop = new DevelopmentBlueprint();
+		basicWorkshop.result = new BasicWorkshop();
+		basicWorkshop.cost = costs;
+		ret.put(basicWorkshop.result.name,basicWorkshop);
 		
 		return ret;
 	}
