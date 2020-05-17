@@ -1,6 +1,5 @@
 package net.civex4.nobility;
 
-import net.civex4.nobility.database.utility.DatabaseBuilder;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -17,10 +16,9 @@ import net.civex4.nobility.customItem.listeners.GlassRecipe;
 import net.civex4.nobility.customItem.listeners.InteractDisable;
 import net.civex4.nobility.customItem.listeners.OpenSmithingTable;
 import net.civex4.nobility.customItem.listeners.RecipeDisable;
+import net.civex4.nobility.database.utility.DatabaseBuilder;
 import net.civex4.nobility.development.Development;
 import net.civex4.nobility.development.DevelopmentManager;
-import net.civex4.nobility.development.DevelopmentType;
-import net.civex4.nobility.development.behaviors.CollectorManager;
 import net.civex4.nobility.estate.Estate;
 import net.civex4.nobility.estate.EstateManager;
 import net.civex4.nobility.group.GroupManager;
@@ -29,12 +27,11 @@ import net.civex4.nobility.listeners.ChestClick;
 import net.civex4.nobility.listeners.CommandListener;
 import net.civex4.nobility.listeners.CreateCommand;
 import net.civex4.nobility.listeners.EstateCommandListener;
-import net.civex4.nobility.listeners.EstateCreate;
+import net.civex4.nobility.workers.WorkerManager;
 import net.md_5.bungee.api.ChatColor;
 import vg.civcraft.mc.civmodcore.ACivMod;
 import vg.civcraft.mc.civmodcore.playersettings.PlayerSettingAPI;
 import vg.civcraft.mc.civmodcore.playersettings.gui.MenuSection;
-import vg.civcraft.mc.civmodcore.playersettings.impl.StringSetting;
 
 public class Nobility extends ACivMod {
 	
@@ -43,7 +40,8 @@ public class Nobility extends ACivMod {
 	private static Nobility nobility;
 	private static NobilityRegions nobilityRegions;
 	private static DevelopmentManager developmentManager;
-
+	private static WorkerManager workerManager;
+	
 	private static ClaimManager claimManager;
 	private static MenuSection nobilityMenu = PlayerSettingAPI.getMainMenu().createMenuSection("Nobility", "Settings");
 	
@@ -88,6 +86,7 @@ public class Nobility extends ACivMod {
 		estateMan = new EstateManager();
 		developmentManager = new DevelopmentManager();
 		claimManager = new ClaimManager();
+		workerManager = new WorkerManager();
 	}
 	
 	public static GroupManager getGroupManager() {
@@ -104,6 +103,10 @@ public class Nobility extends ACivMod {
 	
 	public static ClaimManager getClaimManager() {
 		return claimManager;
+	}
+	
+	public static WorkerManager getWorkerManager() {
+		return workerManager;
 	}
 	
 	
