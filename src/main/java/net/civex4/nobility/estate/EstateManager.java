@@ -10,6 +10,7 @@ import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -381,7 +382,7 @@ public class EstateManager {
 			ArrayList<ItemStack> output = n.output;
 			ItemStack resourceIcon = ButtonLibrary.createIcon(Material.STONE, name);
 			Clickable resourceButton = new DecorationStack(resourceIcon);
-			ItemAPI.addLore(resourceIcon, ChatColor.BLUE + "Slots: (0/" + n.slots + ")",
+			ItemAPI.addLore(resourceIcon, ChatColor.BLUE + "Slots: (" + n.getUsedSlots() +"/" + n.slots + ")",
 					ChatColor.BLUE + "Type: " + ChatColor.WHITE + n.type,
 					ChatColor.BLUE + "Output:");
 			
@@ -498,7 +499,7 @@ public class EstateManager {
 				ArrayList<ItemStack> output = n.output;
 				ItemStack resourceIcon = ButtonLibrary.createIcon(Material.STONE, name);
 				Clickable resourceButton = new DecorationStack(resourceIcon);
-				ItemAPI.addLore(resourceIcon, ChatColor.BLUE + "Slots: (0/" + n.slots + ")",
+				ItemAPI.addLore(resourceIcon, ChatColor.BLUE + "Slots: (" + n.getUsedSlots() + "/" + n.slots + ")",
 						ChatColor.BLUE + "Type: " + ChatColor.WHITE + n.type,
 						ChatColor.BLUE + "Output:");
 				//Node output lore
@@ -519,7 +520,14 @@ public class EstateManager {
 
 					@Override
 					public void clicked(Player p) {
-
+						if(Nobility.getWorkerManager().getWorkers(p) > 0)
+						if(n.addWorker(p)) {
+							Nobility.getWorkerManager().spendWorker(p);
+							p.playSound(p.getLocation(), Sound.BLOCK_NOTE_BLOCK_CHIME,1,(float) (1 + 0.1*n.getUsedSlots()));
+							openCampGUI(p,camp);
+						}else {
+							p.playSound(p.getLocation(), Sound.BLOCK_NOTE_BLOCK_SNARE,1,1);
+						}
 					}
 				};
 				gui.addSlot(workerNode);
@@ -596,7 +604,7 @@ public class EstateManager {
 			ArrayList<ItemStack> output = n.output;
 			ItemStack resourceIcon = ButtonLibrary.createIcon(Material.STONE, name);
 			Clickable resourceButton = new DecorationStack(resourceIcon);
-			ItemAPI.addLore(resourceIcon, ChatColor.BLUE + "Slots: (0/" + n.slots + ")",
+			ItemAPI.addLore(resourceIcon, ChatColor.BLUE + "Slots: (" + n.getUsedSlots() + "/" + n.slots + ")",
 					ChatColor.BLUE + "Type: " + ChatColor.WHITE + n.type,
 					ChatColor.BLUE + "Output:");
 			
