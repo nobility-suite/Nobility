@@ -459,6 +459,8 @@ public class EstateManager {
 		Region region = estate.getRegion();
 		ClickableInventory gui = new ClickableInventory(54, "Assign Workers");
 		
+		int workers = Nobility.getWorkerManager().getWorkers(player);
+		
 		int[] decoSlots = {0,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,26,27,35,36,44,45,46,47,48,50,51,52,53};
 		
 		// DECORATION STACKS
@@ -473,11 +475,12 @@ public class EstateManager {
 		
 	
 		ItemStack playerIcon = ButtonLibrary.createIcon(Material.PLAYER_HEAD, player.getName());
+		playerIcon.setAmount(workers);
 		SkullMeta im = (SkullMeta) ItemAPI.getItemMeta(playerIcon);
 		im.setOwningPlayer(player);
 		playerIcon.setItemMeta(im);
-		ItemAPI.addLore(playerIcon, ChatColor.BLUE + "Workers: " + ChatColor.WHITE + "NYI",
-				ChatColor.BLUE + "Activity Level: " + ChatColor.WHITE + "NYI",
+		ItemAPI.addLore(playerIcon, ChatColor.BLUE + "Workers: " + ChatColor.WHITE + workers,
+				ChatColor.BLUE + "Activity Level: " + ChatColor.WHITE + "" + Nobility.getWorkerManager().getActivityLevel(player),
 				ChatColor.GRAY + "Your activity level determines how many",
 				ChatColor.GRAY + "Workers you recieve per day.");
 		Clickable pcon = new DecorationStack(playerIcon);

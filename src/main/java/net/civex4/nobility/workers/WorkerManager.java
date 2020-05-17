@@ -38,4 +38,8 @@ public class WorkerManager {
 			return true;
 		}else return false;
 	}
+	
+	public ActivityLevel getActivityLevel(Player p) {
+		return this.activityMap.get(p.getUniqueId());
+	}
 }
