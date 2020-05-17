@@ -257,6 +257,8 @@ public class EstateManager {
 				Player pl = Bukkit.getPlayer(u);
 				ItemStack playerIcon = ButtonLibrary.createIcon(Material.PLAYER_HEAD, pl.getName());
 				ItemAPI.addLore(playerIcon, ChatColor.BLUE + "Rank: " + ChatColor.WHITE + estate.getGroup().getPermission(pl));
+				ItemAPI.addLore(playerIcon, ChatColor.BLUE + "Workers: " + ChatColor.WHITE + Nobility.getWorkerManager().getWorkers(pl),
+						ChatColor.BLUE + "Activity Level: " + ChatColor.WHITE + "" + Nobility.getWorkerManager().getActivityLevel(pl));
 				SkullMeta im = (SkullMeta) ItemAPI.getItemMeta(playerIcon);
 				im.setOwningPlayer(Bukkit.getOfflinePlayer(u));
 				playerIcon.setItemMeta(im);
