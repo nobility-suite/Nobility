@@ -2,6 +2,7 @@ package net.civex4.nobility;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.PluginManager;
@@ -171,6 +172,8 @@ public class Nobility extends ACivMod {
 		getConfig().options().copyDefaults(true);
 		saveConfig();
 	}
+	
+	
 	
 	public static MenuSection getMenu() {
 		return nobilityMenu;
