@@ -20,15 +20,18 @@ public class ConfigStorehouse implements Storehouse {
 	public static final String STOREHOUSES = "storehouses"; // section header
 	
 	
-	Inventory inv;
-	UUID id;
+	private Inventory inv;
+	private UUID id;
 		
 	public ConfigStorehouse(Inventory inv) {
 		this.inv = inv;
-		this.id = UUID.randomUUID();
-		
+		this.id = UUID.randomUUID();		
 	}
-
+	
+	public ConfigStorehouse(UUID id) {
+		setID(id);
+	}
+	
 	@Override
 	public Inventory loadInventory() {
 		FileConfiguration config = Nobility.getNobility().getConfig();
@@ -47,15 +50,13 @@ public class ConfigStorehouse implements Storehouse {
 		
 		this.inv = inv;
 		
-		return inv;
-		
-		
-		
-		
+		return inv;		
 	}
 
 	@Override
 	public void saveInventory() {
+		if (inv == null) return;
+		
 		FileConfiguration config = Nobility.getNobility().getConfig();
 		if (!config.contains(STOREHOUSES)) {
 			config.createSection(STOREHOUSES);
@@ -83,6 +84,28 @@ public class ConfigStorehouse implements Storehouse {
 	@Override
 	public UUID getID() {
 		return id;
+	}
+
+
+	@Override
+	public void setInventory(Inventory inv) {
+		this.inv = inv;		
+	}
+	
+	@Override
+	public Inventory getInventory() {
+		return inv;
+	}
+
+	@Override
+	public void setID(UUID id) {
+		this.id = id;
+		if (Nobility.getNobility().getConfig().contains(STOREHOUSES + "." + id.toString())) {
+			this.loadInventory();
+		} else {
+			throw new IllegalArgumentException("This storehouse doesn't exist");
+		}
+		
 	}
 
 }
