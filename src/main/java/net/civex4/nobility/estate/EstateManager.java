@@ -520,6 +520,7 @@ public class EstateManager {
 
 					@Override
 					public void clicked(Player p) {
+						
 						if(Nobility.getWorkerManager().getWorkers(p) > 0)
 						if(n.addWorker(p)) {
 							Nobility.getWorkerManager().spendWorker(p);
@@ -737,15 +738,17 @@ public class EstateManager {
 		Clickable tipsIcon = new DecorationStack(tips);
 		gui.addSlot(tipsIcon);
 		
+		HashMap<String, DevelopmentBlueprint> blueprints_safe = (HashMap<String, DevelopmentBlueprint>) blueprints.clone();
+		
 		//Remove built developments
 		for(Development d : built) {
 
-			if(blueprints.containsKey(d.name)) {
-				blueprints.remove(d.name);
+			if(blueprints_safe.containsKey(d.name)) {
+				blueprints_safe.remove(d.name);
 			}
 		}
 		
-		for(DevelopmentBlueprint b : blueprints.values()) {
+		for(DevelopmentBlueprint b : blueprints_safe.values()) {
 			if(!b.hasPrereqs) {
 				String formattedName = b.result.name;
 				ItemStack icon = ButtonLibrary.createIcon(b.result.icon, formattedName);
