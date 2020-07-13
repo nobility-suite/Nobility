@@ -182,13 +182,13 @@ public class EstateManager {
 		};
 		estateGUI.addSlot(devButton);
 		
-		// VIEW STOCKPILES
+		// VIEW WORKSHOPS
 		ItemStack stockIcon = ButtonLibrary.createIcon(Material.CHEST, "Workshops & Stockpiles");
 		Clickable stockButton = new Clickable(stockIcon) {
 
 			@Override
 			public void clicked(Player p) {
-				
+				openWorkshopsGUI(p);
 			}
 			
 		};
@@ -223,6 +223,63 @@ public class EstateManager {
 		estateGUI.showInventory(player);
 		
 		
+	}
+	
+	private void openWorkshopsGUI(Player p) {
+		Estate estate = getEstateOfPlayer(p);
+		ClickableInventory gui = new ClickableInventory(54, "Workshops and Research");
+		
+       int[] decoSlots = {0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,45,46,47,48,50,51,52,53};
+		
+		// DECORATION STACKS
+		for (int i : decoSlots) {
+			if (!(gui.getSlot(i) instanceof Clickable)) {
+				Clickable c = new DecorationStack(ButtonLibrary.createIcon(Material.BLACK_STAINED_GLASS_PANE, " "));
+				gui.setSlot(c, i);
+			}
+		}
+		
+		ItemStack info = ButtonLibrary.createIcon(Material.BOOK,ChatColor.WHITE + "Research Info");
+		ItemAPI.addLore(info, ChatColor.WHITE + "Research" + ChatColor.GRAY + " allows you to spend materials to create",
+				ChatColor.GRAY + "Blueprints, which you can use in Workshops.",
+				ChatColor.GRAY + "Select a category to get started.");
+		Clickable info2 = new DecorationStack(info);
+		gui.setSlot(info2,1);
+		
+		ItemStack weapons = ButtonLibrary.createIcon(Material.DIAMOND_SWORD, "Weapons");
+		Clickable wepbutton = new Clickable(weapons) {
+
+			@Override
+			public void clicked(Player p) {
+			
+			}
+			
+		};
+		gui.setSlot(wepbutton,2);
+		
+		ItemStack armors = ButtonLibrary.createIcon(Material.DIAMOND_CHESTPLATE, "Weapons");
+		Clickable armorsbutton = new Clickable(armors) {
+
+			@Override
+			public void clicked(Player p) {
+			
+			}
+			
+		};
+		gui.setSlot(armorsbutton,3);
+
+		for(Development d : estate.getBuiltDevelopments()) {
+			if(d.getType() == DevelopmentType.WORKSHOP) {
+				ItemStack icon = ButtonLibrary.createIcon(d.icon, d.name);
+				ItemAPI.addLore(icon, ChatColor.BLUE + "Type: " + ChatColor.WHITE + d.getType().toString(),
+						ChatColor.BLUE + "Description: ",
+						ChatColor.GRAY + d.useDescription);
+				Clickable dicon = new DecorationStack(icon);
+				gui.addSlot(dicon);
+			}
+		}
+		
+		gui.showInventory(p);
 	}
 	
 	

@@ -10,6 +10,7 @@ public class BasicWorkshop extends Development{
 	public BasicWorkshop() {
 		super(DevelopmentType.WORKSHOP);
 		this.icon = Material.CRAFTING_TABLE;
+		this.name = "Workshop";
 		this.isActive = true;
 		this.buildDescription = "Building workshops unlocks new crafting recipes for your city.";
 		this.useDescription = "Workshops can be used to craft powerful upgrades for your city and its citizens.";
