@@ -257,7 +257,7 @@ public class EstateManager {
 		};
 		gui.setSlot(wepbutton,2);
 		
-		ItemStack armors = ButtonLibrary.createIcon(Material.DIAMOND_CHESTPLATE, "Weapons");
+		ItemStack armors = ButtonLibrary.createIcon(Material.DIAMOND_CHESTPLATE, "Armor");
 		Clickable armorsbutton = new Clickable(armors) {
 
 			@Override
@@ -267,6 +267,50 @@ public class EstateManager {
 			
 		};
 		gui.setSlot(armorsbutton,3);
+		
+		ItemStack tools = ButtonLibrary.createIcon(Material.DIAMOND_PICKAXE, "Tools");
+		Clickable toolsbutton = new Clickable(tools) {
+
+			@Override
+			public void clicked(Player p) {
+			
+			}
+			
+		};
+		gui.setSlot(toolsbutton,4);
+		
+		ItemStack comp = ButtonLibrary.createIcon(Material.ANVIL, "Components");
+		Clickable compbutton = new Clickable(comp) {
+
+			@Override
+			public void clicked(Player p) {
+			
+			}
+			
+		};
+		gui.setSlot(compbutton,5);
+		
+		ItemStack icon5 = ButtonLibrary.createIcon(Material.TNT, "Siege");
+		Clickable button5 = new Clickable(icon5) {
+
+			@Override
+			public void clicked(Player p) {
+			
+			}
+			
+		};
+		gui.setSlot(button5,6);
+		
+		ItemStack icon6 = ButtonLibrary.createIcon(Material.OBSIDIAN, "Block Protection");
+		Clickable button6 = new Clickable(icon6) {
+
+			@Override
+			public void clicked(Player p) {
+			
+			}
+			
+		};
+		gui.setSlot(button6,7);
 
 		for(Development d : estate.getBuiltDevelopments()) {
 			if(d.getType() == DevelopmentType.WORKSHOP) {
