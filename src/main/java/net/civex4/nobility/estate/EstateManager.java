@@ -317,15 +317,41 @@ public class EstateManager {
 				ItemStack icon = ButtonLibrary.createIcon(d.icon, d.name);
 				ItemAPI.addLore(icon, ChatColor.BLUE + "Type: " + ChatColor.WHITE + d.getType().toString(),
 						ChatColor.BLUE + "Description: ",
-						ChatColor.GRAY + d.useDescription);
-				Clickable dicon = new DecorationStack(icon);
+						ChatColor.GRAY + d.useDescription,
+						ChatColor.YELLOW + "",
+						ChatColor.YELLOW + "Click to use this Workshop!");
+				Clickable dicon = new Clickable(icon) {
+
+					@Override
+					public void clicked(Player p) {
+						openWorkshopCraftGUI(p,d);
+					}
+					
+				};
 				gui.addSlot(dicon);
 			}
 		}
 		
+		gui.setSlot(ButtonLibrary.HOME.clickable(),49);
+		
 		gui.showInventory(p);
 	}
-	
+
+	private void openWorkshopCraftGUI(Player p, Development d) {
+		Estate estate = getEstateOfPlayer(p);
+		ClickableInventory gui = new ClickableInventory(54, d.name);
+		
+       int[] decoSlots = {1,2,3,4,5,6,7,8,9,10,17,19,28,37,45,46,47,48,50,51,52,53};
+		
+		// DECORATION STACKS
+		for (int i : decoSlots) {
+			if (!(gui.getSlot(i) instanceof Clickable)) {
+				Clickable c = new DecorationStack(ButtonLibrary.createIcon(Material.BLACK_STAINED_GLASS_PANE, " "));
+				gui.setSlot(c, i);
+			}
+		}
+		gui.showInventory(p);
+	}
 	
 	private void openMembersGUI(Player p) {
 		Estate estate = getEstateOfPlayer(p);
