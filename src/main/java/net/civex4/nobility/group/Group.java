@@ -6,6 +6,7 @@ import java.util.Set;
 import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
 public class Group {
@@ -79,11 +80,11 @@ public class Group {
 		this.hasEstate = hasEstate;
 	}
 
-  public Player getLeader() {
+  public OfflinePlayer getLeader() {
     // TODO Auto-generated method stub
     for(UUID u : members.keySet()) {
       if(members.get(u) == GroupPermission.LEADER) {
-        return Bukkit.getPlayer(u);
+        return Bukkit.getOfflinePlayer(u);
       }
     }
     return null;

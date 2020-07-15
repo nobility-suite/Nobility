@@ -94,20 +94,8 @@ public class EstateManager {
 		}
 		
 		//INFO BOOK
-		ItemStack info = ButtonLibrary.createIcon(Material.BOOK, ChatColor.GOLD + estate.getGroup().getName());
-		ItemAPI.addLore(info, ChatColor.BLUE + "Members: " + ChatColor.WHITE + "" + estate.getGroup().getMembers().size(),
-				ChatColor.BLUE + "Leader: " + ChatColor.WHITE + "" + estate.getGroup().getLocalization(GroupPermission.LEADER) + " " + estate.getGroup().getLeader().getDisplayName(),
-				ChatColor.BLUE + "Region: " + ChatColor.WHITE + estate.getRegion().getName(),
-				ChatColor.BLUE + "Location: " + ChatColor.WHITE + estate.getBlock().getX() + "X, " + estate.getBlock().getZ() + "Z",
-				ChatColor.BLUE + "Vulnerability Hour: " + ChatColor.WHITE + estate.getVulnerabilityHour());
-		Clickable infoIcon = new Clickable(info) {
+		Clickable infoIcon = ButtonLibrary.createEstateInfo(estate);
 
-			@Override
-			public void clicked(Player p) {
-
-			}
-		};
-		estateGUI.addSlot(infoIcon);
 		
 		// REGION INFO
 		
@@ -246,6 +234,9 @@ public class EstateManager {
 		Clickable info2 = new DecorationStack(info);
 		gui.setSlot(info2,1);
 		
+		Clickable workerInfo = ButtonLibrary.createWorkerInfo(p);
+		gui.setSlot(workerInfo, 29);
+		
 		ItemStack weapons = ButtonLibrary.createIcon(Material.DIAMOND_SWORD, "Weapons");
 		Clickable wepbutton = new Clickable(weapons) {
 
@@ -341,7 +332,7 @@ public class EstateManager {
 		Estate estate = getEstateOfPlayer(p);
 		ClickableInventory gui = new ClickableInventory(54, d.name);
 		
-       int[] decoSlots = {1,2,3,4,5,6,7,8,9,10,17,19,28,37,45,46,47,48,50,51,52,53};
+       int[] decoSlots = {1,2,3,4,5,6,7,8,9,10,17,19,26,35,44,28,37,45,46,47,48,50,51,52,53};
 		
 		// DECORATION STACKS
 		for (int i : decoSlots) {
@@ -366,15 +357,7 @@ public class EstateManager {
 				}
 			}
 			
-			Estate e = estate;
-			
-			ItemStack info = ButtonLibrary.createIcon(Material.BOOK, ChatColor.GOLD + e.getGroup().getName());
-			ItemAPI.addLore(info, ChatColor.BLUE + "Members: " + ChatColor.WHITE + "" + e.getGroup().getMembers().size(),
-					ChatColor.BLUE + "Leader: " + ChatColor.WHITE + "" + e.getGroup().getLocalization(GroupPermission.LEADER) + " " + estate.getGroup().getLeader().getDisplayName(),
-					ChatColor.BLUE + "Region: " + ChatColor.WHITE + e.getRegion().getName(),
-					ChatColor.BLUE + "Location: " + ChatColor.WHITE + e.getBlock().getX() + "X, " + e.getBlock().getZ() + "Z",
-					ChatColor.BLUE + "Vulnerability Hour: " + ChatColor.WHITE + e.getVulnerabilityHour());
-			Clickable infoIcon = new DecorationStack(info);
+			Clickable infoIcon = ButtonLibrary.createEstateInfo(estate);
 			gui.addSlot(infoIcon);
 			
 			gui.setSlot(ButtonLibrary.HOME.clickable(),49);
@@ -417,15 +400,8 @@ public class EstateManager {
 			}
 		}
 		
-		Estate e = estate;
-		
-		ItemStack info = ButtonLibrary.createIcon(Material.BOOK, ChatColor.GOLD + e.getGroup().getName());
-		ItemAPI.addLore(info, ChatColor.BLUE + "Members: " + ChatColor.WHITE + "" + e.getGroup().getMembers().size(),
-				ChatColor.BLUE + "Leader: " + ChatColor.WHITE + "" + e.getGroup().getLocalization(GroupPermission.LEADER) + " " + estate.getGroup().getLeader().getDisplayName(),
-				ChatColor.BLUE + "Region: " + ChatColor.WHITE + e.getRegion().getName(),
-				ChatColor.BLUE + "Location: " + ChatColor.WHITE + e.getBlock().getX() + "X, " + e.getBlock().getZ() + "Z",
-				ChatColor.BLUE + "Vulnerability Hour: " + ChatColor.WHITE + e.getVulnerabilityHour());
-		Clickable infoIcon = new DecorationStack(info);
+		Clickable infoIcon = ButtonLibrary.createEstateInfo(estate);
+
 		gui.addSlot(infoIcon);
 		
 		gui.setSlot(ButtonLibrary.HOME.clickable(),49);
@@ -468,18 +444,8 @@ public class EstateManager {
 		for(Estate e : estates) {
 			//TODO refactor estate info button into its own method for reusability
 			ItemStack info = ButtonLibrary.createIcon(Material.BOOK, ChatColor.GOLD + e.getGroup().getName());
-			ItemAPI.addLore(info, ChatColor.BLUE + "Members: " + ChatColor.WHITE + "" + e.getGroup().getMembers().size(),
-					ChatColor.BLUE + "Leader: " + ChatColor.WHITE + "" + e.getGroup().getLocalization(GroupPermission.LEADER) + " " + e.getGroup().getLeader().getDisplayName(),
-					ChatColor.BLUE + "Region: " + ChatColor.WHITE + e.getRegion().getName(),
-					ChatColor.BLUE + "Location: " + ChatColor.WHITE + e.getBlock().getX() + "X, " + e.getBlock().getZ() + "Z",
-					ChatColor.BLUE + "Vulnerability Hour: " + ChatColor.WHITE + e.getVulnerabilityHour());
-			Clickable infoIcon = new Clickable(info) {
+			Clickable infoIcon = ButtonLibrary.createEstateInfo(estate);
 
-				@Override
-				public void clicked(Player p) {
-
-				}
-			};
 			gui.addSlot(infoIcon);
 			count++;
 		}
@@ -603,17 +569,7 @@ public class EstateManager {
 		
 		gui.setSlot(ButtonLibrary.HOME.clickable(), 49);
 		
-	
-		ItemStack playerIcon = ButtonLibrary.createIcon(Material.PLAYER_HEAD, player.getName());
-		playerIcon.setAmount(workers);
-		SkullMeta im = (SkullMeta) ItemAPI.getItemMeta(playerIcon);
-		im.setOwningPlayer(player);
-		playerIcon.setItemMeta(im);
-		ItemAPI.addLore(playerIcon, ChatColor.BLUE + "Workers: " + ChatColor.WHITE + workers,
-				ChatColor.BLUE + "Activity Level: " + ChatColor.WHITE + "" + Nobility.getWorkerManager().getActivityLevel(player),
-				ChatColor.GRAY + "Your activity level determines how many",
-				ChatColor.GRAY + "Workers you recieve per day.");
-		Clickable pcon = new DecorationStack(playerIcon);
+		Clickable pcon = ButtonLibrary.createWorkerInfo(player);
 		gui.addSlot(pcon);
 		
 
@@ -686,7 +642,7 @@ public class EstateManager {
 			//TODO refactor estate info button into its own method for reusability
 			ItemStack info = ButtonLibrary.createIcon(Material.BOOK, ChatColor.GOLD + e.getGroup().getName());
 			ItemAPI.addLore(info, ChatColor.BLUE + "Members: " + ChatColor.WHITE + "" + e.getGroup().getMembers().size(),
-					ChatColor.BLUE + "Leader: " + ChatColor.WHITE + "" + e.getGroup().getLocalization(GroupPermission.LEADER) + " " + estate.getGroup().getLeader().getDisplayName(),
+					ChatColor.BLUE + "Leader: " + ChatColor.WHITE + "" + e.getGroup().getLocalization(GroupPermission.LEADER) + " " + estate.getGroup().getLeader().getName(),
 					ChatColor.BLUE + "Region: " + ChatColor.WHITE + e.getRegion().getName(),
 					ChatColor.BLUE + "Location: " + ChatColor.WHITE + e.getBlock().getX() + "X, " + e.getBlock().getZ() + "Z",
 					ChatColor.BLUE + "Vulnerability Hour: " + ChatColor.WHITE + e.getVulnerabilityHour(),
@@ -848,15 +804,9 @@ public class EstateManager {
 			}
 		}
 		
-		Estate e = estate;
 		
-		ItemStack info = ButtonLibrary.createIcon(Material.BOOK, ChatColor.GOLD + e.getGroup().getName());
-		ItemAPI.addLore(info, ChatColor.BLUE + "Members: " + ChatColor.WHITE + "" + e.getGroup().getMembers().size(),
-				ChatColor.BLUE + "Leader: " + ChatColor.WHITE + "" + e.getGroup().getLocalization(GroupPermission.LEADER) + " " + estate.getGroup().getLeader().getDisplayName(),
-				ChatColor.BLUE + "Region: " + ChatColor.WHITE + e.getRegion().getName(),
-				ChatColor.BLUE + "Location: " + ChatColor.WHITE + e.getBlock().getX() + "X, " + e.getBlock().getZ() + "Z",
-				ChatColor.BLUE + "Vulnerability Hour: " + ChatColor.WHITE + e.getVulnerabilityHour());
-		Clickable infoIcon = new DecorationStack(info);
+		Clickable infoIcon = ButtonLibrary.createEstateInfo(estate);
+
 		gui.addSlot(infoIcon);
 		
 		gui.setSlot(ButtonLibrary.HOME.clickable(),49);
@@ -900,7 +850,7 @@ public class EstateManager {
 
 					@Override
 					public void clicked(Player p) {
-						Nobility.getDevelopmentManager().build(b, e, player);
+						Nobility.getDevelopmentManager().build(b, estate, player);
 					}
 				};
 				gui.addSlot(button);
