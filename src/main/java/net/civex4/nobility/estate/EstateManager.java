@@ -95,6 +95,7 @@ public class EstateManager {
 		
 		//INFO BOOK
 		Clickable infoIcon = ButtonLibrary.createEstateInfo(estate);
+		estateGUI.addSlot(infoIcon);
 
 		
 		// REGION INFO
@@ -234,8 +235,7 @@ public class EstateManager {
 		Clickable info2 = new DecorationStack(info);
 		gui.setSlot(info2,1);
 		
-		Clickable workerInfo = ButtonLibrary.createWorkerInfo(p);
-		gui.setSlot(workerInfo, 29);
+	
 		
 		ItemStack weapons = ButtonLibrary.createIcon(Material.DIAMOND_SWORD, "Weapons");
 		Clickable wepbutton = new Clickable(weapons) {
@@ -332,7 +332,7 @@ public class EstateManager {
 		Estate estate = getEstateOfPlayer(p);
 		ClickableInventory gui = new ClickableInventory(54, d.name);
 		
-       int[] decoSlots = {1,2,3,4,5,6,7,8,9,10,17,19,26,35,44,28,37,45,46,47,48,50,51,52,53};
+       int[] decoSlots = {1,2,3,4,5,6,7,8,9,10,12,17,19,20,21,26,30,35,39,44,28,37,45,46,47,48,50,51,52,53};
 		
 		// DECORATION STACKS
 		for (int i : decoSlots) {
@@ -341,6 +341,13 @@ public class EstateManager {
 				gui.setSlot(c, i);
 			}
 		}
+		
+		Clickable workerInfo = ButtonLibrary.createWorkerInfo(p);
+		gui.setSlot(workerInfo, 29);
+		
+		gui.setSlot(ButtonLibrary.HOME.clickable(),49);
+
+		
 		gui.showInventory(p);
 	}
 	
