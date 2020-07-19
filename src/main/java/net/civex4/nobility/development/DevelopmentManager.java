@@ -5,10 +5,12 @@ import java.util.List;
 
 import org.bukkit.entity.Player;
 
+import net.civex4.nobility.developments.Arsenal;
 import net.civex4.nobility.developments.BasicWorkshop;
 import net.civex4.nobility.developments.FarmingCamp;
 import net.civex4.nobility.developments.LumberCamp;
 import net.civex4.nobility.developments.MiningCamp;
+import net.civex4.nobility.developments.SiegeWorkshop;
 import net.civex4.nobility.estate.Estate;
 import net.md_5.bungee.api.ChatColor;
 
@@ -48,6 +50,7 @@ public class DevelopmentManager {
 		costs.put("Iron Ingot", 10);
 		costs.put("Log", 50);
 		
+		//CAMPS
 		DevelopmentBlueprint miningCamp = new DevelopmentBlueprint();
 		miningCamp.result = new MiningCamp();
 		miningCamp.cost = costs;
@@ -63,10 +66,22 @@ public class DevelopmentManager {
 		farmCamp.cost = costs;
 		ret.put(farmCamp.result.name,farmCamp);
 		
+		//WORKSHOPS
 		DevelopmentBlueprint basicWorkshop = new DevelopmentBlueprint();
 		basicWorkshop.result = new BasicWorkshop();
 		basicWorkshop.cost = costs;
 		ret.put(basicWorkshop.result.name,basicWorkshop);
+		
+		DevelopmentBlueprint siegeWorkshop = new DevelopmentBlueprint();
+		siegeWorkshop.result = new SiegeWorkshop();
+		siegeWorkshop.cost = costs;
+		ret.put(siegeWorkshop.result.name,siegeWorkshop);
+		
+		//ARSENAL
+		DevelopmentBlueprint basicArsenal = new DevelopmentBlueprint();
+		basicArsenal.result = new Arsenal();
+		basicArsenal.cost = costs;
+		ret.put(basicArsenal.result.name,basicArsenal);
 		
 		return ret;
 	}

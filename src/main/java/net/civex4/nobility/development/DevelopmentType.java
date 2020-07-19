@@ -5,6 +5,7 @@ import org.bukkit.Material;
 public enum DevelopmentType {
 	CAMP,
 	WORKSHOP,
+	ARSENAL,
 	GENERIC;
 
 	public Material getIcon() {

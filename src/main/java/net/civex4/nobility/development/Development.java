@@ -1,22 +1,8 @@
 package net.civex4.nobility.development;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
 
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
-import org.bukkit.entity.Player;
-import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemStack;
-
-import net.civex4.nobility.Nobility;
-import net.civex4.nobility.estate.Estate;
-import net.civex4.nobility.gui.ButtonLibrary;
-import vg.civcraft.mc.civmodcore.api.ItemAPI;
-import vg.civcraft.mc.civmodcore.api.ItemNames;
-import vg.civcraft.mc.civmodcore.inventorygui.Clickable;
-import vg.civcraft.mc.civmodcore.inventorygui.ClickableInventory;
 
 public abstract class Development {
 	private DevelopmentType type;
@@ -28,6 +14,7 @@ public abstract class Development {
 	public Material icon;
 	public String useDescription;
 	public String buildDescription;
+	public HashMap<String,Integer> attributes;
 	
 	public Development(DevelopmentType type) {
 		this.type = type;
