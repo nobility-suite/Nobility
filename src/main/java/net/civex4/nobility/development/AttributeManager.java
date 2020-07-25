@@ -1,8 +1,13 @@
 package net.civex4.nobility.development;
 
 import net.civex4.nobility.estate.Estate;
+import net.md_5.bungee.api.ChatColor;
 
 public class AttributeManager {
+	
+	public static String getAttributeText(DevAttribute attr, Integer amt) {
+		return ChatColor.BLUE + attr.name + ": " + ChatColor.WHITE + amt;
+	}
 	
 	public static int getCityLimit(Estate e) {
 		int ret = 0;

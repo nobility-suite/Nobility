@@ -19,7 +19,9 @@ import org.bukkit.inventory.meta.SkullMeta;
 import io.github.kingvictoria.Region;
 import io.github.kingvictoria.nodes.Node;
 import net.civex4.nobility.Nobility;
+import net.civex4.nobility.development.AttributeManager;
 import net.civex4.nobility.development.Camp;
+import net.civex4.nobility.development.DevAttribute;
 import net.civex4.nobility.development.Development;
 import net.civex4.nobility.development.DevelopmentBlueprint;
 import net.civex4.nobility.development.DevelopmentType;
@@ -422,6 +424,9 @@ public class EstateManager {
 			ItemAPI.addLore(icon, ChatColor.BLUE + "Type: " + ChatColor.WHITE + d.getType().toString(),
 					ChatColor.BLUE + "Description: ",
 					ChatColor.GRAY + d.useDescription);
+			for(DevAttribute attr : d.attributes.keySet()) {
+				ItemAPI.addLore(icon, AttributeManager.getAttributeText(attr,d.attributes.get(attr)));
+			}
 			Clickable dicon = new DecorationStack(icon);
 			gui.addSlot(dicon);
 		}

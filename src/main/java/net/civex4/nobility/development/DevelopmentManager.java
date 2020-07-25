@@ -6,7 +6,9 @@ import java.util.List;
 import org.bukkit.entity.Player;
 
 import net.civex4.nobility.developments.Arsenal;
+import net.civex4.nobility.developments.BasicWall;
 import net.civex4.nobility.developments.BasicWorkshop;
+import net.civex4.nobility.developments.CommunityWell;
 import net.civex4.nobility.developments.FarmingCamp;
 import net.civex4.nobility.developments.LumberCamp;
 import net.civex4.nobility.developments.MiningCamp;
@@ -82,6 +84,18 @@ public class DevelopmentManager {
 		basicArsenal.result = new Arsenal();
 		basicArsenal.cost = costs;
 		ret.put(basicArsenal.result.name,basicArsenal);
+		
+		//WALLS
+		DevelopmentBlueprint basicWall = new DevelopmentBlueprint();
+		basicWall.result = new BasicWall();
+		basicWall.cost = costs;
+		ret.put(basicWall.result.name,basicWall);
+		
+		//CITY RADIUS
+		DevelopmentBlueprint basicWell = new DevelopmentBlueprint();
+		basicWell.result = new CommunityWell();
+		basicWell.cost = costs;
+		ret.put(basicWell.result.name,basicWell);
 		
 		return ret;
 	}
