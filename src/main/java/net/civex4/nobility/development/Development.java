@@ -14,7 +14,7 @@ public abstract class Development {
 	public Material icon;
 	public String useDescription;
 	public String buildDescription;
-	public HashMap<String,Integer> attributes;
+	public HashMap<DevAttribute,Integer> attributes;
 	
 	public Development(DevelopmentType type) {
 		this.type = type;

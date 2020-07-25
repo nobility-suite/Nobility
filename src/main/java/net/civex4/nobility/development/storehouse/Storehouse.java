@@ -3,7 +3,7 @@ package net.civex4.nobility.development.storehouse;
 import java.util.UUID;
 
 import org.bukkit.inventory.Inventory;
-
+//DEPRECATED
 /**
  * Interface for storehouse.
  * 
