@@ -59,11 +59,11 @@ public class Nobility extends ACivMod {
 		initializeManagers();
 		registerConfig();
 		reloadConfig();
-		getCommand("nobility").setExecutor(new CommandListener());
-		getCommand("test").setExecutor(new GUICommand());
-		getCommand("estate").setExecutor(new EstateCommandListener());
-		getCommand("create").setExecutor(new CreateCommand());
-
+		this.getCommand("nobility").setExecutor(new CommandListener());
+		this.getCommand("test").setExecutor(new GUICommand());
+		this.getCommand("estate").setExecutor(new EstateCommandListener());
+		this.getCommand("create").setExecutor(new CreateCommand());
+		
 		//DevelopmentType.loadDevelopmentTypes(getConfig().getConfigurationSection("developments"));
 
 		registerEvents();
@@ -122,6 +122,7 @@ public class Nobility extends ACivMod {
 		pm.registerEvents(new InteractDisable(), this);
 		pm.registerEvents(new AnvilDisable(), this);
 		pm.registerEvents(new OpenSmithingTable(), this);
+		
 		
 	}
 

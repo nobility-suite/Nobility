@@ -1,5 +1,7 @@
 package net.civex4.nobility.developments;
 
+import java.util.HashMap;
+
 import org.bukkit.Material;
 
 import net.civex4.nobility.development.DevAttribute;
@@ -15,6 +17,7 @@ public class CommunityWell extends Development{
 		this.icon = Material.CAULDRON;
 		this.buildDescription = "Increases the radius of your city.";
 		this.useDescription = "Increases the radius of your city.";
+		this.attributes = new HashMap<DevAttribute, Integer>();
 		this.attributes.put(DevAttribute.CITY_RADIUS, 50);
 		// TODO Auto-generated constructor stub
 	}

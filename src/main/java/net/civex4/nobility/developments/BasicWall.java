@@ -1,5 +1,7 @@
 package net.civex4.nobility.developments;
 
+import java.util.HashMap;
+
 import org.bukkit.Material;
 
 import net.civex4.nobility.development.DevAttribute;
@@ -15,6 +17,7 @@ public class BasicWall extends Development{
 		this.icon = Material.DARK_OAK_FENCE;
 		this.buildDescription = "Walls increase your City HP, making you more protected from Siege.";
 		this.useDescription = "Walls increase your City HP, making you more protected from Siege.";
+		this.attributes = new HashMap<DevAttribute, Integer>();
 		this.attributes.put(DevAttribute.CITY_HEALTH, 1000);
 		// TODO Auto-generated constructor stub
 	}
