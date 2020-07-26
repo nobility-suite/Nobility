@@ -13,6 +13,7 @@ public class AttributeManager {
 		int ret = 0;
 		for(Development d : e.getBuiltDevelopments()) {
 			if(d.isActive) {
+				if(d.attributes != null)
 				if(d.attributes.containsKey(DevAttribute.CITY_RADIUS)) {
 					int radius = d.attributes.get(DevAttribute.CITY_RADIUS);
 					if(radius > ret) {
@@ -28,6 +29,7 @@ public class AttributeManager {
 		int ret = 0;
 		for(Development d : e.getBuiltDevelopments()) {
 			if(d.isActive) {
+				if(d.attributes != null)
 				if(d.attributes.containsKey(DevAttribute.CANNON_LIMIT)) {
 					int amt = d.attributes.get(DevAttribute.CANNON_LIMIT);
 					if(amt > ret) {

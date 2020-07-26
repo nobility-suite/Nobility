@@ -7,6 +7,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 
 import net.civex4.nobility.Nobility;
+import net.civex4.nobility.development.AttributeManager;
 import net.civex4.nobility.estate.Estate;
 import net.civex4.nobility.group.GroupPermission;
 import vg.civcraft.mc.civmodcore.api.ItemAPI;
@@ -61,6 +62,8 @@ public enum ButtonLibrary {
 				ChatColor.BLUE + "Region: " + ChatColor.WHITE + e.getRegion().getName(),
 				ChatColor.BLUE + "Location: " + ChatColor.WHITE + e.getBlock().getX() + "X, " + e.getBlock().getZ() + "Z",
 				ChatColor.BLUE + "Vulnerability Hour: " + ChatColor.WHITE + e.getVulnerabilityHour());
+		int radius = AttributeManager.getCityLimit(e);
+		ItemAPI.addLore(info, ChatColor.BLUE + "City Radius: " + ChatColor.WHITE + radius);
 		Clickable infoIcon = new DecorationStack(info);
 		return infoIcon;
 	}

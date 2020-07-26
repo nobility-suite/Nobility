@@ -424,6 +424,7 @@ public class EstateManager {
 			ItemAPI.addLore(icon, ChatColor.BLUE + "Type: " + ChatColor.WHITE + d.getType().toString(),
 					ChatColor.BLUE + "Description: ",
 					ChatColor.GRAY + d.useDescription);
+			if(d.attributes != null)
 			for(DevAttribute attr : d.attributes.keySet()) {
 				ItemAPI.addLore(icon, AttributeManager.getAttributeText(attr,d.attributes.get(attr)));
 			}
@@ -456,7 +457,7 @@ public class EstateManager {
 		for(Estate e : estates) {
 			//TODO refactor estate info button into its own method for reusability
 			ItemStack info = ButtonLibrary.createIcon(Material.BOOK, ChatColor.GOLD + e.getGroup().getName());
-			Clickable infoIcon = ButtonLibrary.createEstateInfo(estate);
+			Clickable infoIcon = ButtonLibrary.createEstateInfo(e);
 
 			gui.addSlot(infoIcon);
 			count++;
@@ -856,6 +857,11 @@ public class EstateManager {
 				}
 				ItemAPI.addLore(icon, ChatColor.BLUE + "Description: ");
 				ItemAPI.addLore(icon, ChatColor.GRAY + b.result.buildDescription);
+				
+				if(b.result.attributes != null)
+				for(DevAttribute attr : b.result.attributes.keySet()) {
+					ItemAPI.addLore(icon, AttributeManager.getAttributeText(attr,b.result.attributes.get(attr)));
+				}
 
 				
 				Clickable button = new Clickable(icon) {
