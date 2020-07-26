@@ -9,14 +9,6 @@ import org.bukkit.plugin.PluginManager;
 
 import io.github.kingvictoria.NobilityRegions;
 import net.civex4.nobility.claim.ClaimManager;
-import net.civex4.nobility.customItem.CustomItem;
-import net.civex4.nobility.customItem.listeners.AnvilDisable;
-import net.civex4.nobility.customItem.listeners.BlockPlaceDisable;
-import net.civex4.nobility.customItem.listeners.BottleBreak;
-import net.civex4.nobility.customItem.listeners.GlassRecipe;
-import net.civex4.nobility.customItem.listeners.InteractDisable;
-import net.civex4.nobility.customItem.listeners.OpenSmithingTable;
-import net.civex4.nobility.customItem.listeners.RecipeDisable;
 import net.civex4.nobility.database.utility.DatabaseBuilder;
 import net.civex4.nobility.development.Development;
 import net.civex4.nobility.development.DevelopmentManager;
@@ -48,8 +40,6 @@ public class Nobility extends ACivMod {
 	
 	public static int currentDay = 0;
 	
-	public static CustomItem gun = CustomItem.create(Material.SPECTRAL_ARROW, "Gun");
-	public static CustomItem butter = CustomItem.create(Material.GOLD_INGOT, "Butter");
 	
 	@Override
 	public void onEnable() {
@@ -67,17 +57,6 @@ public class Nobility extends ACivMod {
 		//DevelopmentType.loadDevelopmentTypes(getConfig().getConfigurationSection("developments"));
 
 		registerEvents();
-		
-		ItemStack glassAmount = CustomItem.create(Material.GLASS, "Broken Glass").getItem();
-		glassAmount.setAmount(9);
-		CustomItem.createRecipe(new ItemStack(Material.GLASS), glassAmount);
-		
-		String happinessMessage = "Happiness is just an abstract concept";
-		CustomItem happiness = CustomItem.create(Material.EGG, "Happiness", happinessMessage);
-
-		CustomItem.createRecipe(happiness.getItem(), gun.getItem(), butter.getItem());
-		//StringInputSetting<String> string = new StringSetting(this, "Broken Glass", "Glass Name", "glassName", new ItemStack(Material.GLASS), "changes name of glass");
-		//PlayerSettingAPI.registerSetting(string, DevelopmentType.getDevelopmentMenu());
 
 		new DatabaseBuilder().setUpDatabase();
 	}
@@ -115,14 +94,7 @@ public class Nobility extends ACivMod {
 		PluginManager pm = getServer().getPluginManager();
 		//pm.registerEvents(new EstateCreate(), this);
 		pm.registerEvents(new ChestClick(), this);
-		pm.registerEvents(new BottleBreak(), this);
-		pm.registerEvents(new BlockPlaceDisable(), this);
-		pm.registerEvents(new GlassRecipe(), this);
-		pm.registerEvents(new RecipeDisable(), this);
-		pm.registerEvents(new InteractDisable(), this);
-		pm.registerEvents(new AnvilDisable(), this);
-		pm.registerEvents(new OpenSmithingTable(), this);
-		
+
 		
 	}
 
