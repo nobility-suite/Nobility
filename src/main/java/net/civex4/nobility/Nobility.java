@@ -1,10 +1,7 @@
 package net.civex4.nobility;
 
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.PluginManager;
 
 import io.github.kingvictoria.NobilityRegions;
@@ -20,6 +17,7 @@ import net.civex4.nobility.listeners.ChestClick;
 import net.civex4.nobility.listeners.CommandListener;
 import net.civex4.nobility.listeners.CreateCommand;
 import net.civex4.nobility.listeners.EstateCommandListener;
+import net.civex4.nobility.listeners.ProtectionListener;
 import net.civex4.nobility.workers.WorkerManager;
 import net.md_5.bungee.api.ChatColor;
 import vg.civcraft.mc.civmodcore.ACivMod;
@@ -94,6 +92,7 @@ public class Nobility extends ACivMod {
 		PluginManager pm = getServer().getPluginManager();
 		//pm.registerEvents(new EstateCreate(), this);
 		pm.registerEvents(new ChestClick(), this);
+		pm.registerEvents(new ProtectionListener(), this);
 
 		
 	}

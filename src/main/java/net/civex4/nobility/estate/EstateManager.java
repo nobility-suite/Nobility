@@ -9,8 +9,10 @@ import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
+import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -39,6 +41,43 @@ public class EstateManager {
 	private HashMap<UUID, Estate> estateOfPlayer = new HashMap<>();
 	
 	private static final int rowLength = 9;
+	
+	public int getDistance(Location loc, Estate e) {
+		World world = loc.getWorld();
+		if(e.getBlock().getLocation().getWorld() == world) {
+			Location to = e.getBlock().getLocation();
+			return TwoDDist(to,loc);
+		}else return Integer.MAX_VALUE;
+	}
+	
+	public Estate getNearestEstate(Location loc) {
+		World world = loc.getWorld();
+		int closest = Integer.MAX_VALUE;
+		Estate chose = null;
+		for(Estate e : estates) {
+			if(e.getBlock().getLocation().getWorld() == world) {
+				Location to = e.getBlock().getLocation();
+				int distance = TwoDDist(to,loc);
+				if(distance < closest) {
+					closest = distance;
+					chose = e;
+				}
+			}
+		}
+		return chose;
+	}
+	
+	public int TwoDDist(Location to, Location from) {
+		if(to.getWorld() == from.getWorld()) {
+			int tox = to.getBlockX();
+			int toz = to.getBlockZ();
+			
+			int fromx = from.getBlockX();
+			int fromz = from.getBlockZ();
+			
+			return (int) Math.sqrt(Math.pow(fromx-tox, 2) + Math.pow(fromz-toz, 2));
+		}else { return (int) Integer.MAX_VALUE; }
+	}
 	
 	public boolean isVulnerable(Estate e) {
 		int h = e.getVulnerabilityHour(); //should be between 0 and 23;
