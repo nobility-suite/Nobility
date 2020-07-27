@@ -17,6 +17,21 @@ public class ProtectionListener implements Listener{
 	
 	final static String BLOCK_PREVENTED_MSG = ChatColor.RED + "You cannot build within the city limits of ";
 
+	public boolean withinSquare(int radius, Location target, Location current) {
+		int tarx = target.getBlockX();
+		int tarz = target.getBlockZ();
+		
+		int curx = current.getBlockX();
+		int curz = current.getBlockZ();
+		
+		Bukkit.getServer().getLogger().info("Tracking withinSquare: " + (tarx-curx) + " " + (tarz-curz) + ".");
+		if(Math.abs(tarx-curx) <= radius && Math.abs(tarz-curz) <= radius) {
+			return true;
+		}
+		
+		return false;
+	}
+	
 	@EventHandler
 	public void breakPrevent(BlockBreakEvent event){
 		Location loc = event.getBlock().getLocation();
@@ -24,10 +39,8 @@ public class ProtectionListener implements Listener{
 		if(e == null) { return; }
 		
 		int radius = AttributeManager.getCityLimit(e);
-		int distance = Nobility.getEstateManager().getDistance(loc, e);
-		Bukkit.getServer().getLogger().info(ChatColor.DARK_RED + "Registered break event: " + distance + "/" + radius + ", Estate: " + e.getGroup().getName());
 		
-		if(radius < distance) { return; }
+		if(!withinSquare(radius,e.getBlock().getLocation(),loc)) { return; }
 		
 		Player p = event.getPlayer();
 		if(Nobility.getEstateManager().getEstateOfPlayer(p) == e) {
@@ -47,9 +60,8 @@ public class ProtectionListener implements Listener{
 		if(e == null) { return; }
 		
 		int radius = AttributeManager.getCityLimit(e);
-		int distance = Nobility.getEstateManager().getDistance(loc, e);
 		
-		if(radius < distance) { return; }
+		if(!withinSquare(radius,e.getBlock().getLocation(),loc)) { return; }
 		
 		Player p = event.getPlayer();
 		if(Nobility.getEstateManager().getEstateOfPlayer(p) == e) {
