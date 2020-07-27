@@ -27,7 +27,7 @@ public class ProtectionListener implements Listener{
 		int distance = Nobility.getEstateManager().getDistance(loc, e);
 		Bukkit.getServer().getLogger().info(ChatColor.DARK_RED + "Registered break event: " + distance + "/" + radius + ", Estate: " + e.getGroup().getName());
 		
-		if(radius > distance) { return; }
+		if(radius < distance) { return; }
 		
 		Player p = event.getPlayer();
 		if(Nobility.getEstateManager().getEstateOfPlayer(p) == e) {
@@ -49,7 +49,7 @@ public class ProtectionListener implements Listener{
 		int radius = AttributeManager.getCityLimit(e);
 		int distance = Nobility.getEstateManager().getDistance(loc, e);
 		
-		if(radius > distance) { return; }
+		if(radius < distance) { return; }
 		
 		Player p = event.getPlayer();
 		if(Nobility.getEstateManager().getEstateOfPlayer(p) == e) {
