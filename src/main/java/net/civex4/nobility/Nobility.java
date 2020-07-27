@@ -5,6 +5,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 
 import io.github.kingvictoria.NobilityRegions;
+import net.civex4.nobility.cannons.CannonManager;
 import net.civex4.nobility.claim.ClaimManager;
 import net.civex4.nobility.database.utility.DatabaseBuilder;
 import net.civex4.nobility.development.Development;
@@ -32,6 +33,7 @@ public class Nobility extends ACivMod {
 	private static NobilityRegions nobilityRegions;
 	private static DevelopmentManager developmentManager;
 	private static WorkerManager workerManager;
+	private static CannonManager cannonManager;
 	
 	private static ClaimManager claimManager;
 	private static MenuSection nobilityMenu = PlayerSettingAPI.getMainMenu().createMenuSection("Nobility", "Settings");
@@ -65,6 +67,7 @@ public class Nobility extends ACivMod {
 		developmentManager = new DevelopmentManager();
 		claimManager = new ClaimManager();
 		workerManager = new WorkerManager();
+		cannonManager = new CannonManager();
 	}
 	
 	public static GroupManager getGroupManager() {

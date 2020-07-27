@@ -18,5 +18,6 @@ public class Arsenal extends Development {
 		this.useDescription = "Stores and maintains Siege Equipment.";
 		this.attributes = new HashMap<DevAttribute, Integer>();
 		this.attributes.put(DevAttribute.CANNON_LIMIT,5);
+		this.attributes.put(DevAttribute.CANNON_STORED, 0);
 	}
 }

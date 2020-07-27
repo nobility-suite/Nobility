@@ -1,5 +1,6 @@
 package net.civex4.nobility.listeners;
 
+import java.util.HashMap;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
@@ -9,6 +10,9 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import net.civex4.nobility.Nobility;
+import net.civex4.nobility.development.DevAttribute;
+import net.civex4.nobility.development.Development;
+import net.civex4.nobility.development.DevelopmentType;
 import net.civex4.nobility.estate.Estate;
 import net.civex4.nobility.group.Group;
 import net.md_5.bungee.api.ChatColor;
@@ -50,6 +54,9 @@ public class CommandListener implements CommandExecutor{
 			
 		} else if (args.length == 2) {
 			//nobility create <NAME>
+			if(args[0].equalsIgnoreCase("cannon") && args[1].equalsIgnoreCase("place")) {
+				
+			}
 			if(args[0].equalsIgnoreCase("create") && args[1].length() >= 2) {
 
 				for (int i = 0; i < Nobility.getGroupManager().groups.size(); i++) {
@@ -136,6 +143,27 @@ public class CommandListener implements CommandExecutor{
 					player.sendMessage(ChatColor.RED + "Could not find group " + ChatColor.WHITE + args[1]);
 				}
 				return true;
+			}
+		}
+		if(args.length == 3) {
+			if(args[0].equalsIgnoreCase("admin") && args[1].equalsIgnoreCase("cannon")) {
+				Estate e = Nobility.getEstateManager().getEstateOfPlayer(player);
+				if(e != null) {
+					for(Development d : e.getBuiltDevelopments()) {
+						if(d.getType() == DevelopmentType.ARSENAL) {
+							HashMap<DevAttribute,Integer> attributes = d.attributes;
+							if(attributes != null) {
+								if(attributes.containsKey(DevAttribute.CANNON_LIMIT) && attributes.containsKey(DevAttribute.CANNON_STORED)) {
+									int amt = Integer.parseInt(args[2]);
+									amt = Math.max(attributes.get(DevAttribute.CANNON_LIMIT), amt);
+									attributes.put(DevAttribute.CANNON_STORED, amt);
+									player.sendMessage(ChatColor.DARK_RED + "[ADMIN MODE]: Added " + ChatColor.WHITE + amt + ChatColor.DARK_RED + " cannons to your estate.");
+									
+								}
+							}
+						}
+					}
+				}
 			}
 		}
 		return false;

@@ -41,6 +41,22 @@ public class AttributeManager {
 		return ret;
 	}
 	
+	public static int getCannons(Estate e) {
+		int ret = 0;
+		for(Development d : e.getBuiltDevelopments()) {
+			if(d.isActive) {
+				if(d.attributes != null)
+				if(d.attributes.containsKey(DevAttribute.CANNON_STORED)) {
+					int amt = d.attributes.get(DevAttribute.CANNON_STORED);
+					if(amt > ret) {
+						ret += amt;
+					}
+				}
+			}
+		}
+		return ret;
+	}
+	
 	
 
 }
