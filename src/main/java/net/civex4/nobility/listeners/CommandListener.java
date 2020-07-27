@@ -9,6 +9,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import net.civex4.nobility.Nobility;
+import net.civex4.nobility.estate.Estate;
 import net.civex4.nobility.group.Group;
 import net.md_5.bungee.api.ChatColor;
 
@@ -38,6 +39,13 @@ public class CommandListener implements CommandExecutor{
 			if (args[0].equalsIgnoreCase("nextday")) {
 				Nobility.tickDay();
 				return true;
+			}
+			
+			if(args[0].equalsIgnoreCase("info")) {
+				if(Nobility.getEstateManager().getEstateOfPlayer(player) != null) {
+					Estate e = Nobility.getEstateManager().getEstateOfPlayer(player);
+					player.sendMessage(ChatColor.BLUE + "You are a part of the Estate " + ChatColor.WHITE + e.getGroup().getName());
+				}
 			}
 			
 		} else if (args.length == 2) {
@@ -88,6 +96,7 @@ public class CommandListener implements CommandExecutor{
 				if(inGroup) {
 					tempGroup.getPendingInvites().add(reciever);
 					recieverPlayer.sendMessage(ChatColor.GOLD + "You have been invited to join the Nobility Group " + ChatColor.BLUE + tempGroup.getName());
+					player.sendMessage(ChatColor.GREEN + "You have invited " + ChatColor.WHITE + recieverPlayer.getName() + ChatColor.GREEN + "to" + ChatColor.WHITE + tempGroup.getName());
 				}else {
 					player.sendMessage(ChatColor.RED + "You are not part of a Nobility Group.");
 					return true;
@@ -117,8 +126,14 @@ public class CommandListener implements CommandExecutor{
 					if(tempGroup.getPendingInvites().contains(playerId)) {
 						tempGroup.getPendingInvites().remove(playerId);
 						tempGroup.addMember(playerId);
+						if(tempGroup.hasEstate()) {
+							Nobility.getEstateManager().setEstateOfPlayer(Bukkit.getPlayer(playerId), Nobility.getEstateManager().getEstate(tempGroup));
+						}
 						player.sendMessage(ChatColor.GREEN + "You have been added to " + tempGroup.getName());
+						tempGroup.announce(ChatColor.GREEN + "New Member: " + ChatColor.WHITE + player.getName() + ChatColor.DARK_GREEN + " has joined " + ChatColor.WHITE + tempGroup.getName());
 					}
+				}else {
+					player.sendMessage(ChatColor.RED + "Could not find group " + ChatColor.WHITE + args[1]);
 				}
 				return true;
 			}

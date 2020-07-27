@@ -24,7 +24,6 @@ public class ProtectionListener implements Listener{
 		int curx = current.getBlockX();
 		int curz = current.getBlockZ();
 		
-		Bukkit.getServer().getLogger().info("Tracking withinSquare: " + (tarx-curx) + " " + (tarz-curz) + ".");
 		if(Math.abs(tarx-curx) <= radius && Math.abs(tarz-curz) <= radius) {
 			return true;
 		}
@@ -45,7 +44,6 @@ public class ProtectionListener implements Listener{
 		Player p = event.getPlayer();
 		if(Nobility.getEstateManager().getEstateOfPlayer(p) == e) {
 			//remove this after debugging
-			p.sendMessage(ChatColor.GREEN + "You are a part of " + ChatColor.WHITE + e.getGroup().getName());
 			return;
 		}else { 
 			event.setCancelled(true); 

@@ -29,10 +29,6 @@ public class CreateCommand implements CommandExecutor {
 			return true;
 		}
 		
-		Group tempGroup = new Group(player.getDisplayName(), player.getUniqueId());
-		Nobility.getGroupManager().groups.add(tempGroup);
-		player.sendMessage(ChatColor.GOLD + "You created the group " + tempGroup.getName());
-		
 		Block block = player.getLocation().getBlock();
 		
 		Nobility.getEstateManager().createEstate(block, player);

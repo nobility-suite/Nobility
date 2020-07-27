@@ -67,6 +67,15 @@ public class EstateManager {
 		return chose;
 	}
 	
+	public Estate getEstate(Group g) {
+		for(Estate e : this.estates) {
+			if(e.getGroup() == g) {
+				return e;
+			}
+		}
+		return null;
+	}
+	
 	public int TwoDDist(Location to, Location from) {
 		if(to.getWorld() == from.getWorld()) {
 			int tox = to.getBlockX();
@@ -94,7 +103,9 @@ public class EstateManager {
 		estates.add(estate);
 		
 		player.sendMessage("You have created an estate for " + group.getName());
-		setEstateOfPlayer(player, estate);
+		for(UUID p : group.getMembers()) {
+			setEstateOfPlayer(Bukkit.getPlayer(p), estate);
+		}
 		
 		return estate;
 		

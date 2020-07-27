@@ -24,6 +24,12 @@ public class Group {
 		this.rankLocalizations = GroupPermission.getDefaultRanks();
 	}
 	
+	public void announce(String message) {
+		for(UUID u : this.members.keySet()) {
+			Bukkit.getPlayer(u).sendMessage(message);
+		}
+	}
+	
 	public void addMember(Player p) {
 		addMember(p.getUniqueId());
 	}
