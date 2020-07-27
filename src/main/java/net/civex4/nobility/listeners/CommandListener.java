@@ -96,7 +96,7 @@ public class CommandListener implements CommandExecutor{
 				if(inGroup) {
 					tempGroup.getPendingInvites().add(reciever);
 					recieverPlayer.sendMessage(ChatColor.GOLD + "You have been invited to join the Nobility Group " + ChatColor.BLUE + tempGroup.getName());
-					player.sendMessage(ChatColor.GREEN + "You have invited " + ChatColor.WHITE + recieverPlayer.getName() + ChatColor.GREEN + "to" + ChatColor.WHITE + tempGroup.getName());
+					player.sendMessage(ChatColor.GREEN + "You have invited " + ChatColor.WHITE + recieverPlayer.getName() + ChatColor.GREEN + " to " + ChatColor.WHITE + tempGroup.getName());
 				}else {
 					player.sendMessage(ChatColor.RED + "You are not part of a Nobility Group.");
 					return true;
@@ -130,7 +130,7 @@ public class CommandListener implements CommandExecutor{
 							Nobility.getEstateManager().setEstateOfPlayer(Bukkit.getPlayer(playerId), Nobility.getEstateManager().getEstate(tempGroup));
 						}
 						player.sendMessage(ChatColor.GREEN + "You have been added to " + tempGroup.getName());
-						tempGroup.announce(ChatColor.GREEN + "New Member: " + ChatColor.WHITE + player.getName() + ChatColor.DARK_GREEN + " has joined " + ChatColor.WHITE + tempGroup.getName());
+						tempGroup.announce(ChatColor.GREEN + "New Member: " + ChatColor.WHITE + player.getName() + ChatColor.GREEN + " has joined " + ChatColor.WHITE + tempGroup.getName());
 					}
 				}else {
 					player.sendMessage(ChatColor.RED + "Could not find group " + ChatColor.WHITE + args[1]);
