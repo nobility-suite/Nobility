@@ -242,7 +242,7 @@ public class EstateManager {
 		
 		
 		ItemAPI.addLore(defIcon, ChatColor.BLUE + DevAttribute.CANNON_LIMIT.name + ": " + ChatColor.WHITE + AttributeManager.getCannonLimit(estate),
-				ChatColor.BLUE + DevAttribute.CANNON_STORED.name + ": " + ChatColor.WHITE + AttributeManager.getCannonsStored(estate));
+				ChatColor.BLUE + DevAttribute.CANNON_STORED.name + ": " + ChatColor.WHITE + AttributeManager.getCannons(estate));
 		Clickable defButton = new Clickable(defIcon) {
 
 			@Override
