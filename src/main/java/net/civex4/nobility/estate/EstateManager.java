@@ -238,6 +238,11 @@ public class EstateManager {
 		
 		// DEFENCE
 		ItemStack defIcon = ButtonLibrary.createIcon(Material.STONE_BRICKS, "Siege");
+		
+		
+		
+		ItemAPI.addLore(defIcon, ChatColor.BLUE + DevAttribute.CANNON_LIMIT.name + ": " + ChatColor.WHITE + AttributeManager.getCannonLimit(estate),
+				ChatColor.BLUE + DevAttribute.CANNON_STORED.name + ": " + ChatColor.WHITE + AttributeManager.getCannonsStored(estate));
 		Clickable defButton = new Clickable(defIcon) {
 
 			@Override
