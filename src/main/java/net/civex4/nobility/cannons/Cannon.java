@@ -11,4 +11,9 @@ public class Cannon {
 	private int maxHealth;
 	private Estate owner;
 	
+	public Cannon (Block b, Estate e) {
+		this.block = b;
+		this.owner = e;
+	}
+	
 }

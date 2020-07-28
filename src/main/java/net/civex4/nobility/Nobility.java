@@ -86,6 +86,10 @@ public class Nobility extends ACivMod {
 		return claimManager;
 	}
 	
+	public static CannonManager getCannonManager() {
+		return cannonManager;
+	}
+	
 	public static WorkerManager getWorkerManager() {
 		return workerManager;
 	}

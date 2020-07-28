@@ -3,6 +3,8 @@ package net.civex4.nobility.cannons;
 import java.util.ArrayList;
 
 import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
 import net.civex4.nobility.Nobility;
@@ -64,7 +66,12 @@ public class CannonManager {
 			}else return false;
 	}
 	
-	public void spawnCannon(Location loc) {
+	public void spawnCannon(Location loc, Estate e) {
+		loc.getWorld().getBlockAt(loc).setType(Material.COAL_BLOCK);
+		Block b = loc.getBlock();
+		
+		Cannon c = new Cannon(b,e);
+		//TODO implement use up cannons here.
 		
 	}
 	
@@ -76,7 +83,10 @@ public class CannonManager {
 				if(hasCannonPermission(p)) {
 					if(hasCannons(e)) {
 						if(validCannonSpot(loc)) {
-							spawnCannon(loc);
+							spawnCannon(loc,e);
+							p.sendMessage(ChatColor.GREEN + "Summoned cannon successfully.");
+							e.getGroup().announce(ChatColor.WHITE + p.getName() + ChatColor.GREEN + " has summoned a cannon at:" 
+									+ ChatColor.WHITE + " [" + loc.getBlockX() + "x, " + loc.getBlockY() + "y, " + loc.getBlockZ() + " z]");
 						}else {
 							p.sendMessage(ChatColor.RED + "This is not a valid cannon location");
 							return;

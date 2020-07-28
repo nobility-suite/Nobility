@@ -55,7 +55,8 @@ public class CommandListener implements CommandExecutor{
 		} else if (args.length == 2) {
 			//nobility create <NAME>
 			if(args[0].equalsIgnoreCase("cannon") && args[1].equalsIgnoreCase("place")) {
-				
+				Nobility.getCannonManager().summonCannon(player);
+				return true;
 			}
 			if(args[0].equalsIgnoreCase("create") && args[1].length() >= 2) {
 
