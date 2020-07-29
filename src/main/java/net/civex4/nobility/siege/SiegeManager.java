@@ -14,6 +14,7 @@ import net.civex4.nobility.Nobility;
 import net.civex4.nobility.estate.Estate;
 import net.civex4.nobility.group.Group;
 import net.md_5.bungee.api.ChatColor;
+import vg.civcraft.mc.civmodcore.scoreboard.side.CivScoreBoard;
 
 public class SiegeManager {
 	
@@ -33,7 +34,34 @@ public class SiegeManager {
 		playSiegeSoundToFarPlayers(s);
 		playSiegeSound(s);
 		
+		startScoreboard(s);
 		
+		
+		
+		
+	}
+	
+	public void startScoreboard(Siege s) {
+		Bukkit.getScheduler().runTaskTimer(Nobility.getNobility(), () -> {
+			for (Player p : Bukkit.getOnlinePlayers()) {
+				updateScoreboard(s,p);
+			}
+		}, 5L, 5L);
+	}
+	
+	public void updateScoreboard(Siege s, Player p) {
+		ArrayList<String> lines = new ArrayList<String>();
+		lines.add(ChatColor.BLACK + "a1 " + ChatColor.RED + ChatColor.BOLD + s.getDefender().getGroup().getName());
+		lines.add(ChatColor.BLACK + "a2 " + ChatColor.WHITE + "" + s.getOnlineDefenders() + ChatColor.RED + " Defenders ");
+		
+		lines.add(ChatColor.BLACK + "a3 " + ChatColor.RED + "Health: " + ChatColor.WHITE + "[" + s.getHealth() + "/" + s.getMaxHealth() + "]");
+		lines.add(ChatColor.BLACK + "a4 " + ChatColor.RED + "Siege ends in:");
+		lines.add(ChatColor.BLACK + "a5 " + ChatColor.WHITE + "" + s.formatTime());
+		int linenum = 0;
+		for(CivScoreBoard score : s.getScoreboard()) {
+			score.set(p, lines.get(Math.min(linenum,lines.size()-1)));
+			linenum++;
+		}
 	}
 	
 	public void playSiegeSoundToFarPlayers(Siege s) {
