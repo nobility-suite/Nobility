@@ -1,9 +1,12 @@
 package net.civex4.nobility.cannons;
 
 import java.util.ArrayList;
+import java.util.Random;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.World;
 import org.bukkit.block.Block;
@@ -128,17 +131,64 @@ public class CannonManager {
 		
 		Vector norm = fire.normalize();
 		World world = p.getWorld();
-		Location loc = c.block.getLocation();
+		Location lc = c.block.getLocation();
+		Location loc = lc.add(new Vector(0.5,0.5,0.5));
 		
-		Entity fireball = world.spawnEntity(c.block.getLocation().add(norm), EntityType.PRIMED_TNT);
-		fireball.setVelocity(fire);
-		fireball.setGravity(false);
-		TNTPrimed tnt = (TNTPrimed) fireball;
-		tnt.setGlowing(true);
-		tnt.setYield(0);
+		//world.spawnParticle(Particle.CAMPFIRE_SIGNAL_SMOKE, loc.add(0,1,0), 5, 0, 0, 0, 0.02);
+		playFireStorm(loc);
+		
+		Bukkit.getScheduler().scheduleSyncDelayedTask(Nobility.getNobility(), new Runnable() {
+		    @Override
+		    public void run() {
+				p.playSound(c.block.getLocation(), Sound.ENTITY_GENERIC_EXPLODE, 6, 1.2f);
+		    	Entity fireball = world.spawnEntity(loc.add(norm), EntityType.PRIMED_TNT);
+		    	Vector v = fire.normalize();
+		    	v.add(new Vector (0,0.8,0));
+		    	v.multiply(2);
+		    	
+		    	Random rand = new Random();
+		    	double rx = rand.nextDouble()/3;
+		    	double ry = rand.nextDouble()/8;
+		    	double rz = rand.nextDouble()/3;
+		    	int coinflip = rand.nextInt(1);
+		    	if(coinflip == 0) { coinflip = -1; }
+		    	rx = rx*coinflip;
+		    	coinflip = rand.nextInt(1);
+		    	if(coinflip == 0) { coinflip = -1; }
+		    	ry = ry*coinflip;
+		    	coinflip = rand.nextInt(1);
+		    	if(coinflip == 0) { coinflip = -1; }
+		    	rz = rz*coinflip;
+		    	v.add(new Vector(rx,ry,rz));
+		    	
+				fireball.setVelocity(v);
+				TNTPrimed tnt = (TNTPrimed) fireball;
+				tnt.setGlowing(true);
+				tnt.setYield(0);
+		    }
+		}, 40L); //20 Tick (1 Second) delay before run() is called
+		
+		
+	
 		
 		
 	}
+	
+    public void playFireStorm(final Location location) {
+      Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(Nobility.getNobility(), new Runnable() {
+    	  Location l = location;
+            @Override
+            public void run() {
+                try {
+                        l.getWorld().spawnParticle(Particle.SMOKE_LARGE, l, 15, 0.3f, 0, 0.3f, 0);
+
+       
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }, 0, 2);
+    }
 
 
 }
