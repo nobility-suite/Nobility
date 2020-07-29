@@ -56,6 +56,21 @@ public class AttributeManager {
 		}
 		return ret;
 	}
+	
+	public static void spendCannon(Estate e) {
+		for(Development d : e.getBuiltDevelopments()) {
+			if(d.isActive) {
+				if(d.attributes != null)
+				if(d.attributes.containsKey(DevAttribute.CANNON_STORED)) {
+					int amt = d.attributes.get(DevAttribute.CANNON_STORED);
+					if(amt > 0) {
+						d.attributes.put(DevAttribute.CANNON_STORED, amt-1);
+						return;
+					}
+				}
+			}
+		}
+	}
 
 	public static int getMaxHealth(Estate e) {
 		int ret = 0;

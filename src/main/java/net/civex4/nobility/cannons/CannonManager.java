@@ -101,6 +101,7 @@ public class CannonManager {
 					if(hasCannons(e)) {
 						if(validCannonSpot(loc)) {
 							spawnCannon(loc,e);
+							AttributeManager.spendCannon(e);
 							p.sendMessage(ChatColor.GREEN + "Summoned cannon successfully.");
 							e.getGroup().announce(ChatColor.WHITE + p.getName() + ChatColor.GREEN + " has summoned a cannon at:" 
 									+ ChatColor.WHITE + " [" + loc.getBlockX() + "x, " + loc.getBlockY() + "y, " + loc.getBlockZ() + " z]");
