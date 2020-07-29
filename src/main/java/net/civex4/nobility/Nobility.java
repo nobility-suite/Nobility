@@ -20,6 +20,7 @@ import net.civex4.nobility.listeners.CommandListener;
 import net.civex4.nobility.listeners.CreateCommand;
 import net.civex4.nobility.listeners.EstateCommandListener;
 import net.civex4.nobility.listeners.ProtectionListener;
+import net.civex4.nobility.siege.SiegeManager;
 import net.civex4.nobility.workers.WorkerManager;
 import net.md_5.bungee.api.ChatColor;
 import vg.civcraft.mc.civmodcore.ACivMod;
@@ -35,6 +36,7 @@ public class Nobility extends ACivMod {
 	private static DevelopmentManager developmentManager;
 	private static WorkerManager workerManager;
 	private static CannonManager cannonManager;
+	private static SiegeManager siegeManager;
 	
 	private static ClaimManager claimManager;
 	private static MenuSection nobilityMenu = PlayerSettingAPI.getMainMenu().createMenuSection("Nobility", "Settings");
@@ -93,6 +95,10 @@ public class Nobility extends ACivMod {
 	
 	public static WorkerManager getWorkerManager() {
 		return workerManager;
+	}
+	
+	public static SiegeManager getSiegeManager() {
+		return siegeManager;		
 	}
 	
 	

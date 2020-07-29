@@ -4,9 +4,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Set;
 import java.util.UUID;
+
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 
 public class Group {
@@ -29,6 +30,14 @@ public class Group {
 			Bukkit.getPlayer(u).sendMessage(message);
 		}
 	}
+	
+	public void announceTitle(String message, String subtitle) {
+		for(UUID u : this.members.keySet()) {
+			if(Bukkit.getPlayer(u).isOnline())
+			Bukkit.getPlayer(u).sendTitle(message, subtitle);
+		}
+	}
+
 	
 	public void addMember(Player p) {
 		addMember(p.getUniqueId());

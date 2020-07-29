@@ -15,6 +15,7 @@ import net.civex4.nobility.development.Development;
 import net.civex4.nobility.development.DevelopmentType;
 import net.civex4.nobility.estate.Estate;
 import net.civex4.nobility.group.Group;
+import net.civex4.nobility.siege.Siege;
 import net.md_5.bungee.api.ChatColor;
 
 public class CommandListener implements CommandExecutor{
@@ -147,6 +148,27 @@ public class CommandListener implements CommandExecutor{
 			}
 		}
 		if(args.length == 3) {
+			Player p = (Player) sender;
+			if(args[0].equalsIgnoreCase("admin") && args[1].equalsIgnoreCase("siege")) {
+				String target = args[2];
+				Estate e = null;
+				for(Group g : Nobility.getGroupManager().groups) {
+					if(g.getName().equalsIgnoreCase(target)) {
+						if(g.hasEstate()) {
+							e = Nobility.getEstateManager().getEstate(g);
+						}else {
+							p.sendMessage(ChatColor.DARK_RED + "That group does not have an estate");
+						}
+					}
+				}
+				if(e == null) { p.sendMessage(ChatColor.DARK_RED + "That group does not exist.");
+					return true;
+				}else {
+					Siege s = new Siege(e);
+					Nobility.getSiegeManager().addSiege(s);
+					return true;
+				}
+			}
 			if(args[0].equalsIgnoreCase("admin") && args[1].equalsIgnoreCase("cannon")) {
 				Estate e = Nobility.getEstateManager().getEstateOfPlayer(player);
 				if(e != null) {
