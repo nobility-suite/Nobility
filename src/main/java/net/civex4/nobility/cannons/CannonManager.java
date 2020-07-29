@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
@@ -38,8 +39,15 @@ public class CannonManager {
 	}
 	
 	public Cannon getCannon(Location loc) {
+		for(Cannon c : activeCannons) {
+				Location can = c.block.getLocation();
+				if(can.getWorld() == loc.getWorld()) {
+					if(can.distance(loc) <= 2) {
+						return c;
+					}
+				}
+		}
 		return null;
-		//TODO
 	}
 	
 	public void damageCannon(Cannon c, int amt) {
@@ -71,6 +79,7 @@ public class CannonManager {
 		Block b = loc.getBlock();
 		
 		Cannon c = new Cannon(b,e);
+		this.activeCannons.add(c);
 		//TODO implement use up cannons here.
 		
 	}
@@ -105,6 +114,12 @@ public class CannonManager {
 			}
 
 		}
+	}
+
+	public void fireCannon(Cannon c, Player p) {
+		// TODO Auto-generated method stub
+		p.sendMessage(ChatColor.DARK_RED + "Boom.");
+		p.playSound(c.block.getLocation(), Sound.ENTITY_TNT_PRIMED, 6, 1);
 	}
 
 

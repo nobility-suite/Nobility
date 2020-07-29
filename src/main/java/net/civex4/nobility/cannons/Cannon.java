@@ -6,10 +6,10 @@ import net.civex4.nobility.estate.Estate;
 
 public class Cannon {
 	
-	private Block block;
-	private int health;
-	private int maxHealth;
-	private Estate owner;
+	public Block block;
+	public int health;
+	public int maxHealth;
+	public Estate owner;
 	
 	public Cannon (Block b, Estate e) {
 		this.block = b;
