@@ -71,6 +71,7 @@ public class Nobility extends ACivMod {
 		claimManager = new ClaimManager();
 		workerManager = new WorkerManager();
 		cannonManager = new CannonManager();
+		siegeManager = new SiegeManager();
 	}
 	
 	public static GroupManager getGroupManager() {
