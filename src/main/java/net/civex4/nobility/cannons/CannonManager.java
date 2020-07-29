@@ -5,8 +5,13 @@ import java.util.ArrayList;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
+import org.bukkit.World;
 import org.bukkit.block.Block;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.TNTPrimed;
+import org.bukkit.util.Vector;
 
 import net.civex4.nobility.Nobility;
 import net.civex4.nobility.development.AttributeManager;
@@ -116,10 +121,23 @@ public class CannonManager {
 		}
 	}
 
-	public void fireCannon(Cannon c, Player p) {
+	public void fireCannon(Cannon c, Player p, Vector fire) {
 		// TODO Auto-generated method stub
 		p.sendMessage(ChatColor.DARK_RED + "Boom.");
 		p.playSound(c.block.getLocation(), Sound.ENTITY_TNT_PRIMED, 6, 1);
+		
+		Vector norm = fire.normalize();
+		World world = p.getWorld();
+		Location loc = c.block.getLocation();
+		
+		Entity fireball = world.spawnEntity(c.block.getLocation().add(norm), EntityType.PRIMED_TNT);
+		fireball.setVelocity(fire);
+		fireball.setGravity(false);
+		TNTPrimed tnt = (TNTPrimed) fireball;
+		tnt.setGlowing(true);
+		tnt.setYield(0);
+		
+		
 	}
 
 

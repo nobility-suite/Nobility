@@ -10,6 +10,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.util.Vector;
 
 import net.civex4.nobility.Nobility;
 import net.civex4.nobility.cannons.Cannon;
@@ -40,7 +41,13 @@ public class CannonListener implements Listener {
 				Estate e = Nobility.getEstateManager().getEstateOfPlayer(p);
 				if(c.owner == e) {
 					//TODO implement cannon cooldown here
-					Nobility.getCannonManager().fireCannon(c,p);
+					Block bore = c.block;
+					Location bor = bore.getLocation();
+					Location start = b.getLocation();
+					
+					Vector fire = bor.toVector().subtract(start.toVector());
+					
+					Nobility.getCannonManager().fireCannon(c,p,fire);
 				}else {
 					p.sendMessage(ChatColor.RED + "Your estate does not own this cannon.");
 				}
