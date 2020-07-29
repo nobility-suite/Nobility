@@ -127,7 +127,7 @@ public class CannonManager {
 	public void fireCannon(Cannon c, Player p, Vector fire) {
 		// TODO Auto-generated method stub
 		p.sendMessage(ChatColor.DARK_RED + "Boom.");
-		p.playSound(c.block.getLocation(), Sound.ENTITY_TNT_PRIMED, 6, 1);
+		p.getWorld().playSound(c.block.getLocation(), Sound.ENTITY_TNT_PRIMED, 6, 1);
 		
 		Vector norm = fire.normalize();
 		World world = p.getWorld();
@@ -140,7 +140,7 @@ public class CannonManager {
 		Bukkit.getScheduler().scheduleSyncDelayedTask(Nobility.getNobility(), new Runnable() {
 		    @Override
 		    public void run() {
-				p.playSound(c.block.getLocation(), Sound.ENTITY_GENERIC_EXPLODE, 6, 1.2f);
+				world.playSound(c.block.getLocation(), Sound.ENTITY_GENERIC_EXPLODE, 6, 1.2f);
 		    	Entity fireball = world.spawnEntity(loc.add(norm), EntityType.PRIMED_TNT);
 		    	Vector v = fire.normalize();
 		    	v.add(new Vector (0,0.8,0));
@@ -175,19 +175,27 @@ public class CannonManager {
 	}
 	
     public void playFireStorm(final Location location) {
-      Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(Nobility.getNobility(), new Runnable() {
+    	final int id = Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(Nobility.getNobility(), new Runnable() {
     	  Location l = location;
             @Override
             public void run() {
                 try {
-                        l.getWorld().spawnParticle(Particle.SMOKE_LARGE, l, 15, 0.3f, 0, 0.3f, 0);
+                        l.getWorld().spawnParticle(Particle.SMOKE_LARGE, l, 5, 0.3f, 0, 0.3f, 0);
 
-       
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
         }, 0, 2);
+    	
+    	Bukkit.getScheduler().scheduleSyncDelayedTask(Nobility.getNobility(), new Runnable() {
+		    @Override
+		    public void run() {
+		    	Bukkit.getScheduler().cancelTask(id);
+		    }
+		}, 40L); //20 Tick (1 Second) delay before run() is called
+				
+    	
     }
 
 
