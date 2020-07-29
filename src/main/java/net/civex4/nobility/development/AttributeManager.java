@@ -56,6 +56,34 @@ public class AttributeManager {
 		}
 		return ret;
 	}
+
+	public static int getMaxHealth(Estate e) {
+		int ret = 0;
+		for(Development d : e.getBuiltDevelopments()) {
+			if(d.isActive) {
+				if(d.attributes != null)
+				if(d.attributes.containsKey(DevAttribute.CITY_HEALTH)) {
+					int amt = d.attributes.get(DevAttribute.CITY_HEALTH);
+					if(amt > ret) {
+						ret = amt;
+					}
+				}
+			}
+		}
+		
+		for(Development d : e.getBuiltDevelopments()) {
+			if(d.isActive) {
+				if(d.attributes != null)
+				if(d.attributes.containsKey(DevAttribute.ADD_CITY_HEALTH)) {
+					int amt = d.attributes.get(DevAttribute.ADD_CITY_HEALTH);
+						ret += amt;
+				}
+			}
+		}
+		
+		
+		return ret;
+	}
 	
 	
 

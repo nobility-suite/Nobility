@@ -10,6 +10,14 @@ public class Siege {
 	public Siege(Estate e) {
 		this.defender = e;
 	}
+	
+	public int getHealth() {
+		return defender.getCurrentHealth();
+	}
+	
+	public int getMaxHealth() {
+		return defender.getMaxHealth();
+	}
 
 	public Estate getDefender() {
 		return defender;

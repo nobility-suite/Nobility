@@ -64,14 +64,14 @@ public class SiegeManager {
 							p.playSound(p.getLocation(), Sound.BLOCK_BELL_USE, 20, 0.5f);
 
 					    }
-					}, 20L); //20 Tick (1 Second) delay before run() is called
+					}, 30L); //20 Tick (1 Second) delay before run() is called
 					Bukkit.getScheduler().scheduleSyncDelayedTask(Nobility.getNobility(), new Runnable() {
 					    @Override
 					    public void run() {
 							p.playSound(p.getLocation(), Sound.BLOCK_BELL_USE, 20, 0.5f);
 
 					    }
-					}, 40L); //20 Tick (1 Second) delay before run() is called
+					}, 60L); //20 Tick (1 Second) delay before run() is called
 				}
 
 				}
@@ -90,7 +90,7 @@ public class SiegeManager {
 				loc = loc.add(new Vector(0,12,0));
 		    	loc.getWorld().playSound(loc, Sound.BLOCK_BELL_USE, 20, 0.5f);
 		    }
-		}, 20L); //20 Tick (1 Second) delay before run() is called
+		}, 30L); //20 Tick (1 Second) delay before run() is called
 		Bukkit.getScheduler().scheduleSyncDelayedTask(Nobility.getNobility(), new Runnable() {
 		    @Override
 		    public void run() {
@@ -98,7 +98,7 @@ public class SiegeManager {
 				loc = loc.add(new Vector(0,12,0));
 		    	loc.getWorld().playSound(loc, Sound.BLOCK_BELL_USE, 20, 0.5f);
 		    }
-		}, 40L); //20 Tick (1 Second) delay before run() is called
+		}, 60L); //20 Tick (1 Second) delay before run() is called
 	}
 
 }

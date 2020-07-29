@@ -15,6 +15,7 @@ import io.github.kingvictoria.RegionResource;
 import io.github.kingvictoria.nodes.Node;
 import io.github.kingvictoria.nodes.NodeType;
 import net.civex4.nobility.Nobility;
+import net.civex4.nobility.development.AttributeManager;
 import net.civex4.nobility.development.Camp;
 import net.civex4.nobility.development.Development;
 import net.civex4.nobility.development.DevelopmentType;
@@ -28,6 +29,7 @@ public class Estate {
 	private Map<Estate, Relationship> relationships = new HashMap<>();
 	
 	private int vulnerabilityHour = 0;
+	private int currentHealth;
 	
 	public Estate(Block block, Group group) {
 		this.setGroup(group);
@@ -185,5 +187,24 @@ public class Estate {
 			}
 		}
 		return ret;
+	}
+
+	public int getCurrentHealth() {
+		// TODO Auto-generated method stub
+		return currentHealth;
+	}
+	
+	public void setCurrentHealth(int hp) {
+		this.currentHealth = hp;
+	}
+	
+	public void reduceHealth(int amt) {
+		this.currentHealth -= amt;
+		this.currentHealth = Math.max(0, this.currentHealth);
+	}
+
+	public int getMaxHealth() {
+		// TODO Auto-generated method stub
+		return AttributeManager.getMaxHealth(this);
 	}
 }
