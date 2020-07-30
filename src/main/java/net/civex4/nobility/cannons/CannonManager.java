@@ -102,7 +102,7 @@ public class CannonManager {
 		try (EditSession editSession = WorldEdit.getInstance().getEditSessionFactory().getEditSession(BukkitAdapter.adapt(world), -1)) {
 		    Operation operation = new ClipboardHolder(schem)
 		            .createPaste(editSession)
-		            .to(BlockVector3.at(loc.getBlockX(), loc.getBlockY()-1, loc.getBlockZ()))
+		            .to(BlockVector3.at(loc.getBlockX(), loc.getBlockY()-2, loc.getBlockZ()))
 		            // configure here
 		            .build();
 		    Operations.complete(operation);
