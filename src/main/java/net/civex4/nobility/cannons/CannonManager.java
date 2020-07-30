@@ -139,7 +139,7 @@ public class CannonManager {
 		    	s.getDefender().reduceHealth(amount);
 		    	
 		    }
-		}, 100L);
+		}, 135L);
 	}
 
 	public void fireCannon(Cannon c, Player p, Vector fire) {

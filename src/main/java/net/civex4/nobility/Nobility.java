@@ -1,8 +1,19 @@
 package net.civex4.nobility;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
+
+import com.sk89q.worldedit.extent.clipboard.Clipboard;
+import com.sk89q.worldedit.extent.clipboard.io.ClipboardFormat;
+import com.sk89q.worldedit.extent.clipboard.io.ClipboardFormats;
+import com.sk89q.worldedit.extent.clipboard.io.ClipboardReader;
 
 import io.github.kingvictoria.NobilityRegions;
 import net.civex4.nobility.cannons.CannonManager;
@@ -42,6 +53,7 @@ public class Nobility extends ACivMod {
 	private static MenuSection nobilityMenu = PlayerSettingAPI.getMainMenu().createMenuSection("Nobility", "Settings");
 	
 	public static int currentDay = 0;
+	public static Map<String, Clipboard> schematics = new HashMap<>();
 	
 	
 	@Override
@@ -60,6 +72,8 @@ public class Nobility extends ACivMod {
 		//DevelopmentType.loadDevelopmentTypes(getConfig().getConfigurationSection("developments"));
 
 		registerEvents();
+		
+		
 
 		new DatabaseBuilder().setUpDatabase();
 	}
@@ -165,6 +179,37 @@ public class Nobility extends ACivMod {
 	
 	public static MenuSection getMenu() {
 		return nobilityMenu;
+	}
+	
+	public static Clipboard getSchematic(String name) {
+		Clipboard schematic = Nobility.schematics.get(name);
+		if (schematic != null) {
+			return schematic;
+		}
+		File schemDir = new File(Nobility.getNobility().getDataFolder(), "schematics");
+		if (!schemDir.exists()) {
+			//noinspection ResultOfMethodCallIgnored
+			schemDir.mkdirs();
+		}
+
+		File schemFile = new File(schemDir, name + ".schem");
+		if (!schemFile.exists()) {
+			return null;
+		}
+
+		ClipboardFormat format = ClipboardFormats.findByFile(schemFile);
+		if (format == null) {
+			return null;
+		}
+		try (ClipboardReader reader = format.getReader(new FileInputStream(schemFile))) {
+			schematic = reader.read();
+		} catch (IOException e) {
+			e.printStackTrace();
+			return null;
+		}
+
+		Nobility.getNobility().schematics.put(name, schematic);
+		return schematic;
 	}
 
 }
