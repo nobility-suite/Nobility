@@ -43,6 +43,9 @@ public class CommandListener implements CommandExecutor{
 			
 			if (args[0].equalsIgnoreCase("nextday")) {
 				Nobility.tickDay();
+				for(Estate e : Nobility.getEstateManager().getEstates()) {
+					e.setCurrentHealth(e.getMaxHealth());
+				}
 				return true;
 			}
 			

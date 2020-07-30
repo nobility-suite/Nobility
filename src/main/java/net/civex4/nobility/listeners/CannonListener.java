@@ -14,8 +14,8 @@ import org.bukkit.util.Vector;
 
 import net.civex4.nobility.Nobility;
 import net.civex4.nobility.cannons.Cannon;
-import net.civex4.nobility.cannons.CannonManager;
 import net.civex4.nobility.estate.Estate;
+import net.civex4.nobility.siege.Siege;
 import net.md_5.bungee.api.ChatColor;
 
 public class CannonListener implements Listener {
@@ -48,6 +48,7 @@ public class CannonListener implements Listener {
 					Vector fire = bor.toVector().subtract(start.toVector());
 					
 					Nobility.getCannonManager().fireCannon(c,p,fire);
+					
 				}else {
 					p.sendMessage(ChatColor.RED + "Your estate does not own this cannon.");
 				}

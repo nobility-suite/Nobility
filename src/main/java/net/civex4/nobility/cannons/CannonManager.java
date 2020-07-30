@@ -19,6 +19,7 @@ import org.bukkit.util.Vector;
 import net.civex4.nobility.Nobility;
 import net.civex4.nobility.development.AttributeManager;
 import net.civex4.nobility.estate.Estate;
+import net.civex4.nobility.siege.Siege;
 import net.md_5.bungee.api.ChatColor;
 
 public class CannonManager {
@@ -124,6 +125,22 @@ public class CannonManager {
 
 		}
 	}
+	
+	public void damageNearbyEstate(Location loc, int amount, Player p) {
+		Bukkit.getScheduler().scheduleSyncDelayedTask(Nobility.getNobility(), new Runnable() {
+			Siege s = Nobility.getSiegeManager().getNearbySiege(loc);
+			
+			
+			@Override
+		    public void run() {
+				if(s == null) {
+					p.sendMessage(ChatColor.DARK_RED + "Could not find a siege nearby. No damage was dealt.");
+					return; }
+		    	s.getDefender().reduceHealth(amount);
+		    	
+		    }
+		}, 100L);
+	}
 
 	public void fireCannon(Cannon c, Player p, Vector fire) {
 		// TODO Auto-generated method stub
@@ -137,6 +154,7 @@ public class CannonManager {
 		
 		//world.spawnParticle(Particle.CAMPFIRE_SIGNAL_SMOKE, loc.add(0,1,0), 5, 0, 0, 0, 0.02);
 		playFireStorm(loc);
+		damageNearbyEstate(loc,5,p);
 		
 		Bukkit.getScheduler().scheduleSyncDelayedTask(Nobility.getNobility(), new Runnable() {
 		    @Override

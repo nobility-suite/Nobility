@@ -11,6 +11,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
 import net.civex4.nobility.Nobility;
+import net.civex4.nobility.development.AttributeManager;
 import net.civex4.nobility.estate.Estate;
 import net.civex4.nobility.group.Group;
 import net.md_5.bungee.api.ChatColor;
@@ -19,9 +20,31 @@ import vg.civcraft.mc.civmodcore.scoreboard.side.CivScoreBoard;
 public class SiegeManager {
 	
 	ArrayList<Siege> activeSieges;
+	private final int CANNON_MAX_DISTANCE = 60;
 	
 	public SiegeManager() {
 		activeSieges = new ArrayList<Siege>();
+	}
+	
+	public Siege getNearbySiege(Location loc) {
+		if(activeSieges.size() == 0) {
+			Bukkit.getServer().getLogger().info("No sieges active. Is this a bug?");
+		}
+		for(Siege s : activeSieges) {
+			Location to = s.getDefender().getBlock().getLocation();
+			
+			if(to.getWorld() == loc.getWorld()) {
+				int dist = Nobility.getEstateManager().TwoDDist(to, loc);
+				Bukkit.getServer().getLogger().info(dist + "_distance");
+				if(dist > 300) { continue; }
+				Estate e = s.getDefender();
+				int radius = AttributeManager.getCityLimit(e);
+				if(dist-radius < CANNON_MAX_DISTANCE) {
+					return s;
+				}
+			}
+		}
+		return null;
 	}
 	
 	public void addSiege(Siege s) {
