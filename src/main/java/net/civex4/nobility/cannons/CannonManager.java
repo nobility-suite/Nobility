@@ -5,7 +5,6 @@ import java.util.Random;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.World;
@@ -15,6 +14,16 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.TNTPrimed;
 import org.bukkit.util.Vector;
+
+import com.sk89q.worldedit.EditSession;
+import com.sk89q.worldedit.WorldEdit;
+import com.sk89q.worldedit.WorldEditException;
+import com.sk89q.worldedit.bukkit.BukkitAdapter;
+import com.sk89q.worldedit.extent.clipboard.Clipboard;
+import com.sk89q.worldedit.function.operation.Operation;
+import com.sk89q.worldedit.function.operation.Operations;
+import com.sk89q.worldedit.math.BlockVector3;
+import com.sk89q.worldedit.session.ClipboardHolder;
 
 import net.civex4.nobility.Nobility;
 import net.civex4.nobility.development.AttributeManager;
@@ -83,10 +92,22 @@ public class CannonManager {
 			}else return false;
 	}
 	
-	public void spawnCannon(Location loc, Estate e) {
-		loc.getWorld().getBlockAt(loc).setType(Material.COAL_BLOCK);
-		Block b = loc.getBlock();
+	public void spawnCannon(Location loc, Estate e) throws WorldEditException {
+		//loc.getWorld().getBlockAt(loc).setType(Material.COAL_BLOCK);
+		Location loc2 = loc.add(new Vector(0,1,0));
+		Block b = loc2.getBlock();
 		
+		Clipboard schem = Nobility.getSchematic("cannon");
+		World world = loc.getWorld();
+		try (EditSession editSession = WorldEdit.getInstance().getEditSessionFactory().getEditSession(BukkitAdapter.adapt(world), -1)) {
+		    Operation operation = new ClipboardHolder(schem)
+		            .createPaste(editSession)
+		            .to(BlockVector3.at(loc.getBlockX(), loc.getBlockY()-1, loc.getBlockZ()))
+		            // configure here
+		            .build();
+		    Operations.complete(operation);
+		}
+        
 		Cannon c = new Cannon(b,e);
 		this.activeCannons.add(c);
 		//TODO implement use up cannons here.
@@ -101,7 +122,12 @@ public class CannonManager {
 				if(hasCannonPermission(p)) {
 					if(hasCannons(e)) {
 						if(validCannonSpot(loc)) {
-							spawnCannon(loc,e);
+							try {
+								spawnCannon(loc,e);
+							} catch (WorldEditException e1) {
+								// TODO Auto-generated catch block
+								e1.printStackTrace();
+							}
 							AttributeManager.spendCannon(e);
 							p.sendMessage(ChatColor.GREEN + "Summoned cannon successfully.");
 							e.getGroup().announce(ChatColor.WHITE + p.getName() + ChatColor.GREEN + " has summoned a cannon at:" 
