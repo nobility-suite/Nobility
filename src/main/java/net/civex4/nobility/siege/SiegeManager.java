@@ -35,7 +35,6 @@ public class SiegeManager {
 			
 			if(to.getWorld() == loc.getWorld()) {
 				int dist = Nobility.getEstateManager().TwoDDist(to, loc);
-				Bukkit.getServer().getLogger().info(dist + "_distance");
 				if(dist > 300) { continue; }
 				Estate e = s.getDefender();
 				int radius = AttributeManager.getCityLimit(e);

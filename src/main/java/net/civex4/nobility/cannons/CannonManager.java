@@ -23,6 +23,7 @@ import com.sk89q.worldedit.extent.clipboard.Clipboard;
 import com.sk89q.worldedit.function.operation.Operation;
 import com.sk89q.worldedit.function.operation.Operations;
 import com.sk89q.worldedit.math.BlockVector3;
+import com.sk89q.worldedit.math.transform.AffineTransform;
 import com.sk89q.worldedit.session.ClipboardHolder;
 
 import net.civex4.nobility.Nobility;
@@ -92,15 +93,19 @@ public class CannonManager {
 			}else return false;
 	}
 	
-	public void spawnCannon(Location loc, Estate e) throws WorldEditException {
+	public void spawnCannon(Location loc, Estate e, Vector v) throws WorldEditException {
 		//loc.getWorld().getBlockAt(loc).setType(Material.COAL_BLOCK);
 		Location loc2 = loc.add(new Vector(0,1,0));
 		Block b = loc2.getBlock();
 		
 		Clipboard schem = Nobility.getSchematic("cannon");
-		World world = loc.getWorld();
+        AffineTransform transform = getRotatedTransform(v);
+        
+        World world = loc.getWorld();
+        ClipboardHolder clipHolder = new ClipboardHolder(schem);
+        clipHolder.setTransform(transform);
 		try (EditSession editSession = WorldEdit.getInstance().getEditSessionFactory().getEditSession(BukkitAdapter.adapt(world), -1)) {
-		    Operation operation = new ClipboardHolder(schem)
+		    Operation operation = clipHolder
 		            .createPaste(editSession)
 		            .to(BlockVector3.at(loc.getBlockX(), loc.getBlockY()-2, loc.getBlockZ()))
 		            // configure here
@@ -114,6 +119,32 @@ public class CannonManager {
 		
 	}
 	
+	private AffineTransform getRotatedTransform(Vector v) {
+		// TODO Auto-generated method stub
+		AffineTransform transform = new AffineTransform();
+		v = v.clone();
+		
+		double vx = Math.abs(v.getX());
+		double vz = Math.abs(v.getZ());
+		
+		if(vx > vz) {
+			if(v.getX() > 0) {
+				//the schematic is facing east already
+			}else {
+				transform = transform.rotateY(180);
+			}
+		}else {
+			if(v.getZ() > 0) {
+				transform = transform.rotateY(-90);
+			}else {
+				transform = transform.rotateY(90);
+			}
+		}
+		
+		
+		return transform;
+	}
+
 	public void summonCannon(Player p) {
 		Estate e = Nobility.getEstateManager().getEstateOfPlayer(p);
 		if(e != null) {
@@ -123,7 +154,7 @@ public class CannonManager {
 					if(hasCannons(e)) {
 						if(validCannonSpot(loc)) {
 							try {
-								spawnCannon(loc,e);
+								spawnCannon(loc,e,p.getEyeLocation().getDirection());
 							} catch (WorldEditException e1) {
 								// TODO Auto-generated catch block
 								e1.printStackTrace();
