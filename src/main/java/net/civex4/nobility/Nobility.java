@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
@@ -33,6 +34,7 @@ import net.civex4.nobility.listeners.EstateCommandListener;
 import net.civex4.nobility.listeners.ProtectionListener;
 import net.civex4.nobility.siege.SiegeManager;
 import net.civex4.nobility.workers.WorkerManager;
+import net.civex4.nobility.gui.EstateGui;
 import net.md_5.bungee.api.ChatColor;
 import vg.civcraft.mc.civmodcore.ACivMod;
 import vg.civcraft.mc.civmodcore.playersettings.PlayerSettingAPI;
@@ -48,7 +50,8 @@ public class Nobility extends ACivMod {
 	private static WorkerManager workerManager;
 	private static CannonManager cannonManager;
 	private static SiegeManager siegeManager;
-	
+	private static EstateGui estateGui;
+
 	private static ClaimManager claimManager;
 	private static MenuSection nobilityMenu = PlayerSettingAPI.getMainMenu().createMenuSection("Nobility", "Settings");
 	
@@ -68,6 +71,7 @@ public class Nobility extends ACivMod {
 		this.getCommand("test").setExecutor(new GUICommand());
 		this.getCommand("estate").setExecutor(new EstateCommandListener());
 		this.getCommand("create").setExecutor(new CreateCommand());
+
 		
 		//DevelopmentType.loadDevelopmentTypes(getConfig().getConfigurationSection("developments"));
 
@@ -86,6 +90,7 @@ public class Nobility extends ACivMod {
 		workerManager = new WorkerManager();
 		cannonManager = new CannonManager();
 		siegeManager = new SiegeManager();
+		estateGui = new EstateGui();
 	}
 	
 	public static GroupManager getGroupManager() {
@@ -115,7 +120,8 @@ public class Nobility extends ACivMod {
 	public static SiegeManager getSiegeManager() {
 		return siegeManager;		
 	}
-	
+
+	public static EstateGui getEstateGui() { return estateGui; }
 	
 	private void registerEvents() {
 		PluginManager pm = getServer().getPluginManager();
