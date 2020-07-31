@@ -19,7 +19,7 @@ public enum ButtonLibrary {
 		new Clickable(createIcon(Material.PAPER, "Home")) {
 			@Override
 			public void clicked(Player p) {
-				Nobility.getEstateManager().openEstateGUI(p);
+				Nobility.getEstateGui().openEstateGUI(p);
 			}			
 		}),
 	;

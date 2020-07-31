@@ -20,7 +20,7 @@ public class ChestClick implements Listener {
 		Block b = e.getClickedBlock();
 		if(b != null && b.getType() == Material.ENDER_CHEST) {
 			if (e.getHand() == EquipmentSlot.HAND) {
-				Nobility.getEstateManager().openEstateGUI(player);
+				Nobility.getEstateGui().openEstateGUI(player);
 				e.setCancelled(true);
 			}			
 		}

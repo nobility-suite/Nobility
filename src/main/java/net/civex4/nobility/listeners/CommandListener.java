@@ -1,8 +1,10 @@
 package net.civex4.nobility.listeners;
 
 import java.util.HashMap;
+import java.util.Set;
 import java.util.UUID;
 
+import net.civex4.nobility.group.GroupPermission;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -81,19 +83,19 @@ public class CommandListener implements CommandExecutor{
 			//nobility invite <name>
 			if (args[0].equalsIgnoreCase("invite")) {
 				UUID inviter = playerId;
-				Player recieverPlayer = Bukkit.getPlayer(args[1]);				
-				if (recieverPlayer == null) {
+				Player receiverPlayer = Bukkit.getPlayer(args[1]);
+				if (receiverPlayer == null) {
 					player.sendMessage("That player is not online");
 					return true;
 				}				
-				UUID reciever = recieverPlayer.getUniqueId();			
+				UUID receiver = receiverPlayer.getUniqueId();
 				
 				boolean inGroup = false;
 				Group tempGroup = null;
 				for (int i = 0; i < Nobility.getGroupManager().groups.size(); i++) {
 					Group group = Nobility.getGroupManager().groups.get(i);
 					for (UUID id : group.getMembers()) {
-						if (id.equals(reciever)) {
+						if (id.equals(receiver)) {
 							player.sendMessage(ChatColor.RED + "That player is already part of an Estate.");
 							return true;
 						}
@@ -106,9 +108,9 @@ public class CommandListener implements CommandExecutor{
 				}
 				
 				if(inGroup) {
-					tempGroup.getPendingInvites().add(reciever);
-					recieverPlayer.sendMessage(ChatColor.GOLD + "You have been invited to join the Nobility Group " + ChatColor.BLUE + tempGroup.getName());
-					player.sendMessage(ChatColor.GREEN + "You have invited " + ChatColor.WHITE + recieverPlayer.getName() + ChatColor.GREEN + " to " + ChatColor.WHITE + tempGroup.getName());
+					tempGroup.getPendingInvites().add(receiver);
+					receiverPlayer.sendMessage(ChatColor.GOLD + "You have been invited to join the Nobility Group " + ChatColor.BLUE + tempGroup.getName());
+					player.sendMessage(ChatColor.GREEN + "You have invited " + ChatColor.WHITE + receiverPlayer.getName() + ChatColor.GREEN + " to " + ChatColor.WHITE + tempGroup.getName());
 				}else {
 					player.sendMessage(ChatColor.RED + "You are not part of a Nobility Group.");
 					return true;
@@ -144,10 +146,41 @@ public class CommandListener implements CommandExecutor{
 						player.sendMessage(ChatColor.GREEN + "You have been added to " + tempGroup.getName());
 						tempGroup.announce(ChatColor.GREEN + "New Member: " + ChatColor.WHITE + player.getName() + ChatColor.GREEN + " has joined " + ChatColor.WHITE + tempGroup.getName());
 					}
+					player.sendMessage(ChatColor.RED + "You have not been invited to " + ChatColor.WHITE + tempGroup.getName() + ChatColor.GREEN + ".");
 				}else {
 					player.sendMessage(ChatColor.RED + "Could not find group " + ChatColor.WHITE + args[1]);
 				}
 				return true;
+			}
+
+			//nobility kick <name>
+			if(args[0].equalsIgnoreCase("kick")) {   // TODO integrate permissions
+
+				Player targetPlayer = Bukkit.getPlayer(args[1]);
+				if (targetPlayer == null) {
+					player.sendMessage("That player is not online");  // TODO Use Bukkit saved name/Mojang API requests to allow offline player kicking.
+					return true;
+				}
+				if(targetPlayer == player) {
+					player.sendMessage("You cannot kick yourself.");
+					return true;
+				}
+				Group group = Nobility.getGroupManager().getGroup(player);
+				if(group != null) {
+					if(group == Nobility.getGroupManager().getGroup(targetPlayer)) {
+						group.removeMember(targetPlayer);
+						player.sendMessage(targetPlayer.getDisplayName() + ChatColor.GREEN + " has been kicked.");
+						targetPlayer.sendMessage(ChatColor.RED + "You have been kicked from " + ChatColor.WHITE + group.getName() + ChatColor.RED + ".");
+						return true;
+					}
+
+					player.sendMessage(targetPlayer.getDisplayName() + ChatColor.RED + " is not in your Nobility group.");
+					return true;
+				}
+				else {
+					player.sendMessage(ChatColor.RED + "You are not part of a Nobility group.");
+					return true;
+				}
 			}
 		}
 		if(args.length == 3) {

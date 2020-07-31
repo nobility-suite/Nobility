@@ -30,7 +30,7 @@ public class EstateCommandListener implements CommandExecutor {
       if(man.playerHasEstate(p) == false) {
         p.sendMessage(ERROR_NO_ESTATE);
       }else {
-        man.openEstateGUI(p);
+        Nobility.getEstateGui().openEstateGUI(p);
       }
     }
     
