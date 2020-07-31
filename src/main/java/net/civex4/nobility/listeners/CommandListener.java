@@ -153,35 +153,6 @@ public class CommandListener implements CommandExecutor{
 				return true;
 			}
 
-			//nobility kick <name>
-			if(args[0].equalsIgnoreCase("kick")) {   // TODO integrate permissions
-
-				Player targetPlayer = Bukkit.getPlayer(args[1]);
-				if (targetPlayer == null) {
-					player.sendMessage("That player is not online");  // TODO Use Bukkit saved name/Mojang API requests to allow offline player kicking.
-					return true;
-				}
-				if(targetPlayer == player) {
-					player.sendMessage("You cannot kick yourself.");
-					return true;
-				}
-				Group group = Nobility.getGroupManager().getGroup(player);
-				if(group != null) {
-					if(group == Nobility.getGroupManager().getGroup(targetPlayer)) {
-						group.removeMember(targetPlayer);
-						player.sendMessage(targetPlayer.getDisplayName() + ChatColor.GREEN + " has been kicked.");
-						targetPlayer.sendMessage(ChatColor.RED + "You have been kicked from " + ChatColor.WHITE + group.getName() + ChatColor.RED + ".");
-						return true;
-					}
-
-					player.sendMessage(targetPlayer.getDisplayName() + ChatColor.RED + " is not in your Nobility group.");
-					return true;
-				}
-				else {
-					player.sendMessage(ChatColor.RED + "You are not part of a Nobility group.");
-					return true;
-				}
-			}
 		}
 		if(args.length == 3) {
 			Player p = (Player) sender;
