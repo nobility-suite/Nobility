@@ -884,7 +884,9 @@ public class EstateManager {
 		gui.addSlot(tipsIcon);
 		
 		HashMap<String, DevelopmentBlueprint> blueprints_safe = (HashMap<String, DevelopmentBlueprint>) blueprints.clone();
-		
+
+		ArrayList<DevelopmentBlueprint> prerequisite_blueprints = new ArrayList<>();
+
 		//Remove built developments
 		for(Development d : built) {
 
@@ -892,7 +894,8 @@ public class EstateManager {
 				blueprints_safe.remove(d.name);
 			}
 		}
-		
+
+
 		for(DevelopmentBlueprint b : blueprints_safe.values()) {
 			if(!b.hasPrereqs) {
 				String formattedName = b.result.name;
@@ -928,8 +931,41 @@ public class EstateManager {
 				};
 				gui.addSlot(button);
 			}
+			else {
+				prerequisite_blueprints.add(b);
+			}
 		}
-		
+
+		for(DevelopmentBlueprint b: prerequisite_blueprints) {
+			String formattedName = b.result.name;
+			ItemStack icon = ButtonLibrary.createIcon(Material.RED_STAINED_GLASS_PANE, ChatColor.RED + formattedName);
+			ItemAPI.addLore(icon, ChatColor.RED + "Has Prerequisites");
+			ItemAPI.addLore(icon, ChatColor.BLUE + "Type: " + ChatColor.WHITE + b.result.getType().toString());
+
+			if(b.result.getType() == DevelopmentType.CAMP) {
+				Camp camp = (Camp) b.result;
+				if(camp != null) { ItemAPI.addLore(icon, ChatColor.BLUE + "Node Limit: " + ChatColor.WHITE + camp.getNodeLimit());}
+
+			}
+
+			ItemAPI.addLore(icon, ChatColor.BLUE + "Cost:");
+
+			for(String s : b.cost.keySet()) {
+				ItemAPI.addLore(icon, ChatColor.GRAY + "  " + b.cost.get(s) + "x" + ChatColor.WHITE + " " + s);
+			}
+			ItemAPI.addLore(icon, ChatColor.BLUE + "Description: ");
+			ItemAPI.addLore(icon, ChatColor.GRAY + b.result.buildDescription);
+
+			if(b.result.attributes != null)
+				for(DevAttribute attr : b.result.attributes.keySet()) {
+					ItemAPI.addLore(icon, AttributeManager.getAttributeText(attr,b.result.attributes.get(attr)));
+				}
+
+			Clickable button = new DecorationStack(icon);
+
+			gui.addSlot(button);
+		}
+
 		gui.showInventory(player);
 	}
 	
