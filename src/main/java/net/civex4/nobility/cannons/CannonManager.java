@@ -1,7 +1,9 @@
 package net.civex4.nobility.cannons;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Random;
+import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -36,6 +38,8 @@ import net.md_5.bungee.api.ChatColor;
 public class CannonManager {
 	
 	public ArrayList<Cannon> activeCannons;
+	public HashMap<Cannon, Long> cannonCooldowns;
+	public HashMap<UUID, Long> playerCooldowns;
 
 	public CannonManager() {
 		this.activeCannons = new ArrayList<Cannon>();
