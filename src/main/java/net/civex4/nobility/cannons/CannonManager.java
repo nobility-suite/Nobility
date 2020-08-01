@@ -5,6 +5,7 @@ import java.util.Random;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.World;
@@ -53,8 +54,9 @@ public class CannonManager {
 	}
 	
 	public boolean isCannon(Location loc) {
-		return false;
-		//TODO
+		if(getCannon(loc) != null) {
+			return true;
+		}else return false;
 	}
 	
 	public Cannon getCannon(Location loc) {
@@ -78,7 +80,68 @@ public class CannonManager {
 		return true;
 	}
 	
-	public boolean validCannonSpot(Location loc) {
+	public boolean validCannonSpot(Location loc, Player p) {
+		
+		if(onSolidGround(loc)) {
+			
+		}else {
+			p.sendMessage(ChatColor.RED + "This cannon isn't on solid ground.");
+			p.sendMessage(ChatColor.RED + "A cannon requires a 5x5x3 cube of blocks beneath it in order to fire.");
+			return false;
+		}
+		
+		if(hasClearance(loc)) {
+			
+		}else {
+			p.sendMessage(ChatColor.RED + "You don't have enough clearance to use a cannon here.");
+			p.sendMessage(ChatColor.RED + "A cannon requires a 9x9x9 cube to be clear of blocks surrounding it.");
+			return false;
+		}
+		
+		return true;
+	}
+	
+	public boolean hasClearance(Location loc) {
+		Location ground = loc.clone().add(new Vector(0,0,0));
+		Location corner = ground.clone().add(new Vector(-4,0,-4));
+		int x = corner.getBlockX();
+		int y = corner.getBlockY();
+		int z = corner.getBlockZ();
+		World world = ground.getWorld();
+		for(int tx = 0; tx < 9; tx++) {
+			for(int tz = 0; tz < 9; tz++) {
+				for(int ty = 0; ty < 9; ty++) {
+					Block b = world.getBlockAt(new Location(world,x+tx,Math.max(1,y+ty),z+tz));
+					Material m = b.getType();
+					if(m != Material.AIR) {
+						Bukkit.getServer().getLogger().info("Cannon failed, solid block at " + b.getLocation()); 
+						return false;
+					}
+				}
+			}
+		}
+		return true;
+	}
+	
+	public boolean onSolidGround(Location loc) {
+		Location ground = loc.clone().add(new Vector(0,-1,0));
+		Location corner = ground.clone().add(new Vector(-2,-2,-2));
+		World world = ground.getWorld();
+		int x = corner.getBlockX();
+		int y = corner.getBlockY();
+		int z = corner.getBlockZ();
+		for(int tx = 0; tx < 5; tx++) {
+			for(int tz = 0; tz < 5; tz++) {
+				for(int ty = 0; ty < 3; ty++) {
+					Block b = world.getBlockAt(new Location(world,x+tx,Math.max(1,y+ty),z+tz));
+					Material m = b.getType();
+					if(m == Material.AIR || m == Material.WATER) {
+						Bukkit.getServer().getLogger().info("Cannon failed, air block at " + b.getLocation()); 
+						return false;
+					}
+				}
+			}
+		}
 		return true;
 	}
 	
@@ -152,7 +215,7 @@ public class CannonManager {
 			if(canPlaceCannons(e)) {
 				if(hasCannonPermission(p)) {
 					if(hasCannons(e)) {
-						if(validCannonSpot(loc)) {
+						if(validCannonSpot(loc,p)) {
 							try {
 								spawnCannon(loc,e,p.getEyeLocation().getDirection());
 							} catch (WorldEditException e1) {
@@ -164,7 +227,7 @@ public class CannonManager {
 							e.getGroup().announce(ChatColor.WHITE + p.getName() + ChatColor.GREEN + " has summoned a cannon at:" 
 									+ ChatColor.WHITE + " [" + loc.getBlockX() + "x, " + loc.getBlockY() + "y, " + loc.getBlockZ() + " z]");
 						}else {
-							p.sendMessage(ChatColor.RED + "This is not a valid cannon location");
+							//p.sendMessage(ChatColor.RED + "This is not a valid cannon location");
 							return;
 						}
 					}else{
