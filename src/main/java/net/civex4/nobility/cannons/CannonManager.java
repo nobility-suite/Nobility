@@ -123,6 +123,39 @@ public class CannonManager {
 		return true;
 	}
 	
+	public boolean hasClearanceToFire(Location loc) {
+		Location ground = loc.clone().add(new Vector(0,0,0));
+		Location corner = ground.clone().add(new Vector(-4,0,-4));
+		int x = corner.getBlockX();
+		int y = corner.getBlockY();
+		int z = corner.getBlockZ();
+		World world = ground.getWorld();
+		int blockCount = 0;
+		for(int tx = 0; tx < 9; tx++) {
+			for(int tz = 0; tz < 9; tz++) {
+				for(int ty = 0; ty < 9; ty++) {
+					Block b = world.getBlockAt(new Location(world,x+tx,Math.max(1,y+ty),z+tz));
+					Material m = b.getType();
+					if(m != Material.AIR) {
+						if(m == Material.COAL_BLOCK || m == Material.SPRUCE_STAIRS || m == Material.SPRUCE_WOOD
+								|| m == Material.LEVER || m == Material.STONE_BUTTON || m == Material.SPRUCE_TRAPDOOR || m == Material.SPRUCE_LOG) {
+							blockCount += 1;
+							if(blockCount >= 15) {
+								Bukkit.getServer().getLogger().info("Cannon failed, too many solid block at " + b.getLocation()); 
+								return false;
+							}
+						}else {
+							Bukkit.getServer().getLogger().info("Cannon failed, solid block at " + b.getLocation()); 
+							return false;
+						}
+
+					}
+				}
+			}
+		}
+		return true;
+	}
+	
 	public boolean onSolidGround(Location loc) {
 		Location ground = loc.clone().add(new Vector(0,-1,0));
 		Location corner = ground.clone().add(new Vector(-2,-2,-2));
