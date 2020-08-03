@@ -309,6 +309,10 @@ public class CannonManager {
 		Location lc = c.block.getLocation();
 		Location loc = lc.add(new Vector(0.5,0.5,0.5));
 		
+		long time = System.currentTimeMillis();
+		cannonCooldowns.put(c, time);
+		playerCooldowns.put(p.getUniqueId(), time);
+		
 		//world.spawnParticle(Particle.CAMPFIRE_SIGNAL_SMOKE, loc.add(0,1,0), 5, 0, 0, 0, 0.02);
 		playFireStorm(loc);
 		damageNearbyEstate(loc,5,p);

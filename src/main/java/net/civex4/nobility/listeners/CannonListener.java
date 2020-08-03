@@ -21,6 +21,9 @@ import net.md_5.bungee.api.ChatColor;
 
 public class CannonListener implements Listener {
 	
+	public final long CANNON_COOLDOWN_FIRE_MS = 1000*60;
+	public final long CANNON_COOLDOWN_PICKUP_MS = 1000*60*5;
+	
 	@EventHandler
 	public void onButtonPress(PlayerInteractEvent event) {
 		
@@ -47,6 +50,23 @@ public class CannonListener implements Listener {
 					Location start = b.getLocation();
 					
 					Vector fire = bor.toVector().subtract(start.toVector());
+					
+					long time = System.currentTimeMillis();
+					long diff = Nobility.getCannonManager().cannonCooldowns.get(c) - time;
+					int formatted = (int) (diff/1000);
+					if(diff < this.CANNON_COOLDOWN_FIRE_MS) {
+						p.sendMessage(ChatColor.RED + "This cannon cannot be fire again for " + ChatColor.WHITE + formatted + ChatColor.RED + " seconds." );
+						event.setCancelled(true);
+						return;
+					}
+					
+				    diff = Nobility.getCannonManager().playerCooldowns.get(p) - time;
+					
+				    if(diff < this.CANNON_COOLDOWN_FIRE_MS) {
+						p.sendMessage(ChatColor.RED + "You cannot fire another cannon for " + ChatColor.WHITE + formatted + ChatColor.RED + " seconds." );
+						event.setCancelled(true);
+						return;
+				    }
 					
 					if(Nobility.getCannonManager().hasClearanceToFire(bor.clone().add(new Vector(0,-1,0)))) {
 						if(Nobility.getCannonManager().onSolidGround(bor.clone().add(new Vector(0,-1,0)))) {
