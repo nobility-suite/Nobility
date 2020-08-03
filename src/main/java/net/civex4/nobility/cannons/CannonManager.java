@@ -43,6 +43,8 @@ public class CannonManager {
 
 	public CannonManager() {
 		this.activeCannons = new ArrayList<Cannon>();
+		this.cannonCooldowns = new HashMap<Cannon, Long>();
+	    this.playerCooldowns = new HashMap<UUID, Long>();
 	}
 	
 	public void addCannon(Cannon c) {

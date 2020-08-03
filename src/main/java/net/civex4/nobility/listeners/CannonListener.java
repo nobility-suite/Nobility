@@ -43,30 +43,42 @@ public class CannonListener implements Listener {
 			Cannon c = Nobility.getCannonManager().getCannon(loc2);
 			if(c != null) {
 				Estate e = Nobility.getEstateManager().getEstateOfPlayer(p);
+				//You must be part of the cannon's estate to use the cannon
 				if(c.owner == e) {
-					//TODO implement cannon cooldown here
 					Block bore = c.block;
 					Location bor = bore.getLocation();
 					Location start = b.getLocation();
-					
+					//Get vector away from cannon
 					Vector fire = bor.toVector().subtract(start.toVector());
 					
+					long diff = 0;
 					long time = System.currentTimeMillis();
-					long diff = Nobility.getCannonManager().cannonCooldowns.get(c) - time;
-					int formatted = (int) (diff/1000);
-					if(diff < this.CANNON_COOLDOWN_FIRE_MS) {
-						p.sendMessage(ChatColor.RED + "This cannon cannot be fire again for " + ChatColor.WHITE + formatted + ChatColor.RED + " seconds." );
-						event.setCancelled(true);
-						return;
+					
+					//Cannon Cooldown
+					if(Nobility.getCannonManager().cannonCooldowns.containsKey(c)) {
+						diff =Nobility.getCannonManager().cannonCooldowns.get(c) - time;
+						int formatted = (int) (diff/1000);
+						if(diff < this.CANNON_COOLDOWN_FIRE_MS) {
+							p.sendMessage(ChatColor.RED + "This cannon cannot be fire again for " + ChatColor.WHITE + formatted + ChatColor.RED + " seconds." );
+							event.setCancelled(true);
+							return;
+						}
 					}
+					//Player cooldown
+					if(Nobility.getCannonManager().playerCooldowns.containsKey(p.getUniqueId())) {
+
+					    diff = Nobility.getCannonManager().playerCooldowns.get(p.getUniqueId()) - time;
+						int formatted = (int) (diff/1000);
+
+					    if(diff < this.CANNON_COOLDOWN_FIRE_MS) {
+							p.sendMessage(ChatColor.RED + "You cannot fire another cannon for " + ChatColor.WHITE + formatted + ChatColor.RED + " seconds." );
+							event.setCancelled(true);
+							return;
+					    }
+					}
+	
 					
-				    diff = Nobility.getCannonManager().playerCooldowns.get(p) - time;
 					
-				    if(diff < this.CANNON_COOLDOWN_FIRE_MS) {
-						p.sendMessage(ChatColor.RED + "You cannot fire another cannon for " + ChatColor.WHITE + formatted + ChatColor.RED + " seconds." );
-						event.setCancelled(true);
-						return;
-				    }
 					
 					if(Nobility.getCannonManager().hasClearanceToFire(bor.clone().add(new Vector(0,-1,0)))) {
 						if(Nobility.getCannonManager().onSolidGround(bor.clone().add(new Vector(0,-1,0)))) {
