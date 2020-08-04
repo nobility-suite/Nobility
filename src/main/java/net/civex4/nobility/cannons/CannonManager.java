@@ -74,6 +74,7 @@ public class CannonManager {
 		if(e == null) { return false; }
 		
 		for(Cannon c : this.activeCannons) {
+			if(c == null) { continue; }
 			Location to = c.block.getLocation();
 			if(to.getWorld() == loc.getWorld()) {
 				if(to.distance(loc) <= 4) {
@@ -86,14 +87,18 @@ public class CannonManager {
 									p.sendMessage(ChatColor.GREEN + "Cannon recovered.");
 									e.getGroup().announce(ChatColor.WHITE + p.getName() + ChatColor.GREEN + " has recovered a cannon at:" 
 											+ ChatColor.WHITE + " [" + loc.getBlockX() + "x, " + loc.getBlockY() + "y, " + loc.getBlockZ() + " z]");
+									return true;
 								}else {
 									p.sendMessage(ChatColor.RED + "Your estate cannot store any more cannons.");
+									return false;
 								}
 							}else {
 								p.sendMessage(ChatColor.RED + "You do not own this cannon.");
+								return false;
 							}
 						}else {
 							p.sendMessage(ChatColor.RED + "You must wait five minutes without firing to pick up this cannon.");
+							return false;
 						}
 					}
 				}
@@ -256,6 +261,7 @@ public class CannonManager {
         
 		Cannon c = new Cannon(b,e);
 		this.activeCannons.add(c);
+		this.cannonCooldowns.put(c,System.currentTimeMillis());
 		//TODO implement use up cannons here.
 		
 	}

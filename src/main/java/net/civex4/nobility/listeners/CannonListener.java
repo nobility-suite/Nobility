@@ -109,24 +109,22 @@ public class CannonListener implements Listener {
 			Location to = c.block.getLocation();
 			if(to.getWorld() == loc.getWorld()) {
 				int distance = (int) loc.distance(to);
-				if(distance < 10) {
+				if(distance < 14) {
 					int x = Math.abs(loc.getBlockX() - to.getBlockX());
 					int y = loc.getBlockY() - to.getBlockY();
 					int z = Math.abs(loc.getBlockZ()-to.getBlockZ());
 					
-					if(x <= 3 || z <= 3) {
+					if(x <= 4 && z <= 4) {
 						//cancel
-						Player p = event.getPlayer();
-						event.setCancelled(true);
-						p.sendMessage(ChatColor.RED + "You cannot place a block within a cannon's border (9x9x9 around and above)");
+						if(y >= -1 && y < 10) {
+							Player p = event.getPlayer();
+							event.setCancelled(true);
+							p.sendMessage(ChatColor.RED + "You cannot place a block within a cannon's border (9x9x9 around and above)");
+							
+						}
 					}
 					
-					if(y >= 0 && y < 10) {
-						Player p = event.getPlayer();
-						event.setCancelled(true);
-						p.sendMessage(ChatColor.RED + "You cannot place a block within a cannon's border (9x9x9 around and above)");
 					
-					}
 				}
 			}
 		}
@@ -140,29 +138,25 @@ public class CannonListener implements Listener {
 			Location to = c.block.getLocation();
 			if(to.getWorld() == loc.getWorld()) {
 				int distance = (int) loc.distance(to);
-				if(distance < 10) {
+				if(distance < 14) {
 					int x = Math.abs(loc.getBlockX() - to.getBlockX());
 					int y = loc.getBlockY() - to.getBlockY();
 					int z = Math.abs(loc.getBlockZ()-to.getBlockZ());
-					
-					if(x <= 3 || z <= 3) {
+					if(x <= 4 && z <= 4) {
 						//cancel
-						Player p = event.getPlayer();
-						event.setCancelled(true);
-						p.sendMessage(ChatColor.RED + "You cannot place a block within a cannon's border (9x9x9 around and above)");
-					}
-					
-					if(y >= 0 && y < 10) {
-						Player p = event.getPlayer();
-						event.setCancelled(true);
-						p.sendMessage(ChatColor.RED + "You cannot place a block within a cannon's border (9x9x9 around and above)");
-					
+						if(y >= 1 && y < 10) {
+							Player p = event.getPlayer();
+							event.setCancelled(true);
+							p.sendMessage(ChatColor.RED + "You cannot place a block within a cannon's border (9x9x9 around and above)");
+							
+						}
 					}
 				}
 			}
 		}
 	}
 	
+	@EventHandler
 	public void onBlockBreak(BlockBreakEvent event) {
 		Material m = event.getBlock().getType();
 		
