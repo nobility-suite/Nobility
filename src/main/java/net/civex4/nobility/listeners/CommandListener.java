@@ -64,6 +64,10 @@ public class CommandListener implements CommandExecutor{
 				Nobility.getCannonManager().summonCannon(player);
 				return true;
 			}
+			if(args[0].equalsIgnoreCase("cannon") && args[1].equalsIgnoreCase("recover")) {
+				Nobility.getCannonManager().attemptPickupCannon(player);
+				return true;
+			}
 			if(args[0].equalsIgnoreCase("create") && args[1].length() >= 2) {
 
 				for (int i = 0; i < Nobility.getGroupManager().groups.size(); i++) {

@@ -54,6 +54,8 @@ public class CannonManager {
 	
 	public void removeCannon(Cannon c) {
 		this.activeCannons.remove(c);
+		dismantleCannon(c.block.getLocation());
+		return;
 	}
 	
 	public void dismantleCannon(Location loc) {
@@ -81,6 +83,9 @@ public class CannonManager {
 								if(AttributeManager.getCannonLimit(e) > AttributeManager.getCannons(e)) {
 									this.removeCannon(c);
 									AttributeManager.addCannon(e);
+									p.sendMessage(ChatColor.GREEN + "Cannon recovered.");
+									e.getGroup().announce(ChatColor.WHITE + p.getName() + ChatColor.GREEN + " has recovered a cannon at:" 
+											+ ChatColor.WHITE + " [" + loc.getBlockX() + "x, " + loc.getBlockY() + "y, " + loc.getBlockZ() + " z]");
 								}else {
 									p.sendMessage(ChatColor.RED + "Your estate cannot store any more cannons.");
 								}
