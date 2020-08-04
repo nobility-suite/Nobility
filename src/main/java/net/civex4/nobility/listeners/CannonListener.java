@@ -9,6 +9,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.player.PlayerBucketEmptyEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -162,6 +163,27 @@ public class CannonListener implements Listener {
 		}
 	}
 	
+	public void onBlockBreak(BlockBreakEvent event) {
+		Material m = event.getBlock().getType();
+		
+		if(m == Material.COAL_BLOCK || m == Material.SPRUCE_STAIRS || m == Material.SPRUCE_WOOD
+				|| m == Material.LEVER || m == Material.STONE_BUTTON || m == Material.SPRUCE_TRAPDOOR || m == Material.SPRUCE_LOG) {
+			Location loc = event.getBlock().getLocation();
+			Cannon c = Nobility.getCannonManager().getCannon(loc);
+			if(c == null) {
+				return;
+			}
+			
+			if(m == Material.COAL_BLOCK) {
+				//TODO damage cannnon
+			}else {
+				event.setCancelled(true);
+				event.getPlayer().sendMessage(ChatColor.RED + "You cannot remove this cannon's blocks. If it is your cannon, use /n cannon recover.");
+			}
+			
+		}else return;
+			
+	}
 	
 
 }
