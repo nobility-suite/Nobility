@@ -56,10 +56,10 @@ public class CannonListener implements Listener {
 					
 					//Cannon Cooldown
 					if(Nobility.getCannonManager().cannonCooldowns.containsKey(c)) {
-						diff =Nobility.getCannonManager().cannonCooldowns.get(c) - time;
-						int formatted = (int) (diff/1000);
+						diff =time - Nobility.getCannonManager().cannonCooldowns.get(c) ;
+						int formatted = (int) (this.CANNON_COOLDOWN_FIRE_MS - diff)/1000;
 						if(diff < this.CANNON_COOLDOWN_FIRE_MS) {
-							p.sendMessage(ChatColor.RED + "This cannon cannot be fire again for " + ChatColor.WHITE + formatted + ChatColor.RED + " seconds." );
+							p.sendMessage(ChatColor.RED + "This cannon cannot be fired again for " + ChatColor.WHITE + formatted + ChatColor.RED + " seconds." );
 							event.setCancelled(true);
 							return;
 						}
@@ -67,8 +67,8 @@ public class CannonListener implements Listener {
 					//Player cooldown
 					if(Nobility.getCannonManager().playerCooldowns.containsKey(p.getUniqueId())) {
 
-					    diff = Nobility.getCannonManager().playerCooldowns.get(p.getUniqueId()) - time;
-						int formatted = (int) (diff/1000);
+					    diff = time - Nobility.getCannonManager().playerCooldowns.get(p.getUniqueId());
+						int formatted = (int) (this.CANNON_COOLDOWN_FIRE_MS - diff)/1000;
 
 					    if(diff < this.CANNON_COOLDOWN_FIRE_MS) {
 							p.sendMessage(ChatColor.RED + "You cannot fire another cannon for " + ChatColor.WHITE + formatted + ChatColor.RED + " seconds." );
