@@ -99,6 +99,23 @@ public class AttributeManager {
 		
 		return ret;
 	}
+
+	public static void addCannon(Estate e) {
+		for(Development d : e.getBuiltDevelopments()) {
+			if(d.isActive) {
+				if(d.attributes != null)
+				if(d.attributes.containsKey(DevAttribute.CANNON_STORED)) {
+					int amt = d.attributes.get(DevAttribute.CANNON_STORED);
+					if(d.attributes.containsKey(DevAttribute.CANNON_LIMIT)) {
+						if(d.attributes.get(DevAttribute.CANNON_LIMIT) > amt) {
+							d.attributes.put(DevAttribute.CANNON_STORED, amt+1);
+						}
+					}
+
+				}
+			}
+		}		
+	}
 	
 	
 

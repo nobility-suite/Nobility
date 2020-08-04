@@ -40,6 +40,7 @@ public class CannonManager {
 	public ArrayList<Cannon> activeCannons;
 	public HashMap<Cannon, Long> cannonCooldowns;
 	public HashMap<UUID, Long> playerCooldowns;
+	public final long CANNON_COOLDOWN_PICKUP_MS = 1000*60*5;
 
 	public CannonManager() {
 		this.activeCannons = new ArrayList<Cannon>();
@@ -63,6 +64,39 @@ public class CannonManager {
 		if(getCannon(loc) != null) {
 			return true;
 		}else return false;
+	}
+	
+	public boolean attemptPickupCannon(Player p) {
+		Location loc = p.getLocation();
+		Estate e = Nobility.getEstateManager().getEstateOfPlayer(p);
+		if(e == null) { return false; }
+		
+		for(Cannon c : this.activeCannons) {
+			Location to = c.block.getLocation();
+			if(to.getWorld() == loc.getWorld()) {
+				if(to.distance(loc) <= 4) {
+					if(this.cannonCooldowns.containsKey(c)) {
+						if(this.cannonCooldowns.get(c) > this.CANNON_COOLDOWN_PICKUP_MS) {
+							if(c.owner == e) {
+								if(AttributeManager.getCannonLimit(e) > AttributeManager.getCannons(e)) {
+									this.removeCannon(c);
+									AttributeManager.addCannon(e);
+								}else {
+									p.sendMessage(ChatColor.RED + "Your estate cannot store any more cannons.");
+								}
+							}else {
+								p.sendMessage(ChatColor.RED + "You do not own this cannon.");
+							}
+						}else {
+							p.sendMessage(ChatColor.RED + "You must wait five minutes without firing to pick up this cannon.");
+						}
+					}
+				}
+			}
+		}
+		
+		p.sendMessage(ChatColor.RED + "There is no cannon nearby.");
+		return false;
 	}
 	
 	public Cannon getCannon(Location loc) {

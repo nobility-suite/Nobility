@@ -22,7 +22,6 @@ import net.md_5.bungee.api.ChatColor;
 public class CannonListener implements Listener {
 	
 	public final long CANNON_COOLDOWN_FIRE_MS = 1000*60;
-	public final long CANNON_COOLDOWN_PICKUP_MS = 1000*60*5;
 	
 	@EventHandler
 	public void onButtonPress(PlayerInteractEvent event) {
@@ -145,7 +144,7 @@ public class CannonListener implements Listener {
 					int y = loc.getBlockY() - to.getBlockY();
 					int z = Math.abs(loc.getBlockZ()-to.getBlockZ());
 					
-					if(x <= 4 || z <= 4) {
+					if(x <= 3 || z <= 3) {
 						//cancel
 						Player p = event.getPlayer();
 						event.setCancelled(true);
