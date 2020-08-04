@@ -59,7 +59,36 @@ public class CannonManager {
 	}
 	
 	public void dismantleCannon(Location loc) {
-		//TODO
+		Location corner = loc.clone().add(new Vector(-2,-2,-2));
+		int x = corner.getBlockX();
+		int y = corner.getBlockY();
+		int z = corner.getBlockZ();
+		World world = corner.getWorld();
+		
+		world.playSound(loc, Sound.BLOCK_ANVIL_BREAK, 6, 0.8f);
+
+		
+		Bukkit.getScheduler().scheduleSyncDelayedTask(Nobility.getNobility(), new Runnable() {
+		    @Override
+		    public void run() {
+				world.playSound(loc, Sound.BLOCK_ANVIL_PLACE, 6, 0.8f);
+		    	for(int tx = 0; tx < 5; tx++) {
+					for(int ty = 0; ty < 5; ty++) {
+						for(int tz = 0; tz < 5; tz++) {
+							Block b = loc.getWorld().getBlockAt(x+tx, y+ty, z+tz);
+							Material m = b.getType();
+							if(m == Material.COAL_BLOCK || m == Material.SPRUCE_STAIRS || m == Material.SPRUCE_WOOD
+									|| m == Material.LEVER || m == Material.STONE_BUTTON || m == Material.SPRUCE_TRAPDOOR || m == Material.SPRUCE_LOG) {
+								b.setType(Material.AIR);
+							}
+							
+						}
+					}
+				}
+		    }
+		}, 40L); //20 Tick (1 Second) delay before run() is called
+		
+		
 	}
 	
 	public boolean isCannon(Location loc) {
