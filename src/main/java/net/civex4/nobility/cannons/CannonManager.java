@@ -152,6 +152,7 @@ public class CannonManager {
 	
 	public void damageCannon(Cannon c, int amt) {
 		//TODO
+		c.health = Math.max(0, c.health-amt);
 	}
 	
 	private boolean hasCannonPermission(Player p) {

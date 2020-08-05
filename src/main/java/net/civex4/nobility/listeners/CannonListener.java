@@ -2,6 +2,9 @@ package net.civex4.nobility.listeners;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.Particle;
+import org.bukkit.Sound;
+import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.type.Switch;
@@ -170,6 +173,12 @@ public class CannonListener implements Listener {
 			
 			if(m == Material.COAL_BLOCK) {
 				//TODO damage cannnon
+				Nobility.getCannonManager().damageCannon(c, 1);
+				World world = loc.getWorld();
+				world.playSound(loc,Sound.ENTITY_ZOMBIE_ATTACK_IRON_DOOR, 1,  0.8f);
+				Player p = event.getPlayer();
+				p.sendMessage(ChatColor.RED + "Cannon health: " + ChatColor.WHITE + c.health);
+				event.setCancelled(true);
 			}else {
 				event.setCancelled(true);
 				event.getPlayer().sendMessage(ChatColor.RED + "You cannot remove this cannon's blocks. If it is your cannon, use /n cannon recover.");

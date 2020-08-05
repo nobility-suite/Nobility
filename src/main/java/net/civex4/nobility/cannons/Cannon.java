@@ -14,6 +14,8 @@ public class Cannon {
 	public Cannon (Block b, Estate e) {
 		this.block = b;
 		this.owner = e;
+		this.health = 100;
+		this.maxHealth = 100;
 	}
 	
 }
