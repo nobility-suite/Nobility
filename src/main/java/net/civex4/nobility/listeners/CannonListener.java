@@ -1,5 +1,6 @@
 package net.civex4.nobility.listeners;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Particle;
@@ -48,51 +49,55 @@ public class CannonListener implements Listener {
 				Estate e = Nobility.getEstateManager().getEstateOfPlayer(p);
 				//You must be part of the cannon's estate to use the cannon
 				if(c.owner == e) {
-					Block bore = c.block;
-					Location bor = bore.getLocation();
-					Location start = b.getLocation();
-					//Get vector away from cannon
-					Vector fire = bor.toVector().subtract(start.toVector());
-					
-					long diff = 0;
-					long time = System.currentTimeMillis();
-					
-					//Cannon Cooldown
-					if(Nobility.getCannonManager().cannonCooldowns.containsKey(c)) {
-						diff =time - Nobility.getCannonManager().cannonCooldowns.get(c) ;
-						int formatted = (int) (this.CANNON_COOLDOWN_FIRE_MS - diff)/1000;
-						if(diff < this.CANNON_COOLDOWN_FIRE_MS) {
-							p.sendMessage(ChatColor.RED + "This cannon cannot be fired again for " + ChatColor.WHITE + formatted + ChatColor.RED + " seconds." );
-							event.setCancelled(true);
-							return;
+					if(c.health < c.maxHealth/2) {
+						Block bore = c.block;
+						Location bor = bore.getLocation();
+						Location start = b.getLocation();
+						//Get vector away from cannon
+						Vector fire = bor.toVector().subtract(start.toVector());
+						
+						long diff = 0;
+						long time = System.currentTimeMillis();
+						
+						//Cannon Cooldown
+						if(Nobility.getCannonManager().cannonCooldowns.containsKey(c)) {
+							diff =time - Nobility.getCannonManager().cannonCooldowns.get(c) ;
+							int formatted = (int) (this.CANNON_COOLDOWN_FIRE_MS - diff)/1000;
+							if(diff < this.CANNON_COOLDOWN_FIRE_MS) {
+								p.sendMessage(ChatColor.RED + "This cannon cannot be fired again for " + ChatColor.WHITE + formatted + ChatColor.RED + " seconds." );
+								event.setCancelled(true);
+								return;
+							}
 						}
-					}
-					//Player cooldown
-					if(Nobility.getCannonManager().playerCooldowns.containsKey(p.getUniqueId())) {
+						//Player cooldown
+						if(Nobility.getCannonManager().playerCooldowns.containsKey(p.getUniqueId())) {
 
-					    diff = time - Nobility.getCannonManager().playerCooldowns.get(p.getUniqueId());
-						int formatted = (int) (this.CANNON_COOLDOWN_FIRE_MS - diff)/1000;
+						    diff = time - Nobility.getCannonManager().playerCooldowns.get(p.getUniqueId());
+							int formatted = (int) (this.CANNON_COOLDOWN_FIRE_MS - diff)/1000;
 
-					    if(diff < this.CANNON_COOLDOWN_FIRE_MS) {
-							p.sendMessage(ChatColor.RED + "You cannot fire another cannon for " + ChatColor.WHITE + formatted + ChatColor.RED + " seconds." );
-							event.setCancelled(true);
-							return;
-					    }
-					}
-	
-					
-					
-					
-					if(Nobility.getCannonManager().hasClearanceToFire(bor.clone().add(new Vector(0,-1,0)))) {
-						if(Nobility.getCannonManager().onSolidGround(bor.clone().add(new Vector(0,-1,0)))) {
-							Nobility.getCannonManager().fireCannon(c,p,fire);
+						    if(diff < this.CANNON_COOLDOWN_FIRE_MS) {
+								p.sendMessage(ChatColor.RED + "You cannot fire another cannon for " + ChatColor.WHITE + formatted + ChatColor.RED + " seconds." );
+								event.setCancelled(true);
+								return;
+						    }
+						}
+		
+						
+						
+						
+						if(Nobility.getCannonManager().hasClearanceToFire(bor.clone().add(new Vector(0,-1,0)))) {
+							if(Nobility.getCannonManager().onSolidGround(bor.clone().add(new Vector(0,-1,0)))) {
+								Nobility.getCannonManager().fireCannon(c,p,fire);
+							}else {
+								p.sendMessage(ChatColor.RED + "This cannon isn't on solid ground.");
+								p.sendMessage(ChatColor.RED + "A cannon requires a 5x5x3 cube of blocks beneath it in order to fire.");
+							}
 						}else {
-							p.sendMessage(ChatColor.RED + "This cannon isn't on solid ground.");
-							p.sendMessage(ChatColor.RED + "A cannon requires a 5x5x3 cube of blocks beneath it in order to fire.");
+							p.sendMessage(ChatColor.RED + "You don't have enough clearance to use a cannon here.");
+							p.sendMessage(ChatColor.RED + "A cannon requires a 9x9x9 cube to be clear of blocks surrounding it.");
 						}
 					}else {
-						p.sendMessage(ChatColor.RED + "You don't have enough clearance to use a cannon here.");
-						p.sendMessage(ChatColor.RED + "A cannon requires a 9x9x9 cube to be clear of blocks surrounding it.");
+						p.sendMessage(ChatColor.RED + "This cannon is too damaged to fire!" + ChatColor.WHITE + " [" + c.health + "/" + c.maxHealth +"]");
 					}
 					
 				}else {
@@ -179,6 +184,25 @@ public class CannonListener implements Listener {
 				Player p = event.getPlayer();
 				p.sendMessage(ChatColor.RED + "Cannon health: " + ChatColor.WHITE + c.health);
 				event.setCancelled(true);
+				if(c.health == 0) {
+					this.cannonDestroyAnimation();
+					//TODO remove cannon
+					Nobility.getCannonManager().removeCannon(c);
+				
+				}
+				if(c.health < c.maxHealth/2) {
+					this.cannonDisableAnimation();
+					//TODO cannon comes back after 5 minutes?
+					Bukkit.getScheduler().scheduleSyncDelayedTask(Nobility.getNobility(), new Runnable() {
+					    @Override
+					    public void run() {
+					    	if(Nobility.getCannonManager().activeCannons.contains(c)) {
+								world.playSound(loc, Sound.BLOCK_ANVIL_USE, 6, 0.8f);
+								c.health = c.maxHealth;
+					    	}
+					    }
+					}, 20*60*5L); //20 Tick (1 Second) delay before run() is called
+				}
 			}else {
 				event.setCancelled(true);
 				event.getPlayer().sendMessage(ChatColor.RED + "You cannot remove this cannon's blocks. If it is your cannon, use /n cannon recover.");
@@ -186,6 +210,14 @@ public class CannonListener implements Listener {
 			
 		}else return;
 			
+	}
+	
+	public void cannonDisableAnimation() {
+		
+	}
+	
+	public void cannonDestroyAnimation() {
+		
 	}
 	
 
