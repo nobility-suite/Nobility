@@ -49,7 +49,7 @@ public class CannonListener implements Listener {
 				Estate e = Nobility.getEstateManager().getEstateOfPlayer(p);
 				//You must be part of the cannon's estate to use the cannon
 				if(c.owner == e) {
-					if(c.health < c.maxHealth/2) {
+					if(c.health > (c.maxHealth/2)) {
 						Block bore = c.block;
 						Location bor = bore.getLocation();
 						Location start = b.getLocation();

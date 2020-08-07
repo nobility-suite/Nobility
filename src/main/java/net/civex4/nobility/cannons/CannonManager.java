@@ -378,21 +378,28 @@ public class CannonManager {
 
 	public void fireCannon(Cannon c, Player p, Vector fire) {
 		// TODO Auto-generated method stub
-		p.sendMessage(ChatColor.DARK_RED + "Boom.");
-		p.getWorld().playSound(c.block.getLocation(), Sound.ENTITY_TNT_PRIMED, 6, 1);
-		
+
 		Vector norm = fire.normalize();
 		World world = p.getWorld();
 		Location lc = c.block.getLocation();
 		Location loc = lc.add(new Vector(0.5,0.5,0.5));
 		
+		world.playSound(c.block.getLocation(), Sound.ITEM_FLINTANDSTEEL_USE, 2, 0.8f);
+		world.spawnParticle(Particle.FLAME, c.block.getLocation().clone().add(new Vector(0,0.5,0)), 5, 0.2, 0.1, 0.2, 0.2);
+		
 		long time = System.currentTimeMillis();
 		cannonCooldowns.put(c, time);
 		playerCooldowns.put(p.getUniqueId(), time);
 		
-		//world.spawnParticle(Particle.CAMPFIRE_SIGNAL_SMOKE, loc.add(0,1,0), 5, 0, 0, 0, 0.02);
 		playFireStorm(loc);
 		damageNearbyEstate(loc,5,p);
+		
+		Bukkit.getScheduler().scheduleSyncDelayedTask(Nobility.getNobility(), new Runnable() {
+		    @Override
+		    public void run() {
+				world.playSound(c.block.getLocation(), Sound.ENTITY_TNT_PRIMED, 6, 1);
+		    }
+		}, 4L); //20 Tick (1 Second) delay before run() is called
 		
 		Bukkit.getScheduler().scheduleSyncDelayedTask(Nobility.getNobility(), new Runnable() {
 		    @Override
