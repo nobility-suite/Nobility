@@ -185,13 +185,13 @@ public class CannonListener implements Listener {
 				p.sendMessage(ChatColor.RED + "Cannon health: " + ChatColor.WHITE + c.health);
 				event.setCancelled(true);
 				if(c.health == 0) {
-					this.cannonDestroyAnimation();
+					this.cannonDestroyAnimation(loc);
 					//TODO remove cannon
 					Nobility.getCannonManager().removeCannon(c);
 				
 				}
 				if(c.health < c.maxHealth/2) {
-					this.cannonDisableAnimation();
+					this.cannonDisableAnimation(loc);
 					//TODO cannon comes back after 5 minutes?
 					Bukkit.getScheduler().scheduleSyncDelayedTask(Nobility.getNobility(), new Runnable() {
 					    @Override
@@ -212,12 +212,58 @@ public class CannonListener implements Listener {
 			
 	}
 	
-	public void cannonDisableAnimation() {
+	public void cannonDisableAnimation(Location loc) {
+		World world = loc.getWorld();
 		
+		world.playSound(loc, Sound.ENTITY_ZOMBIE_ATTACK_WOODEN_DOOR, 6, 1);
+
+		Bukkit.getScheduler().scheduleSyncDelayedTask(Nobility.getNobility(), new Runnable() {
+		    @Override
+		    public void run() {
+				world.playSound(loc, Sound.ENTITY_ZOMBIE_ATTACK_WOODEN_DOOR, 6, 1);
+		    }
+		}, 8L); //20 Tick (1 Second) delay before run() is called
+		
+		Bukkit.getScheduler().scheduleSyncDelayedTask(Nobility.getNobility(), new Runnable() {
+		    @Override
+		    public void run() {
+				world.playSound(loc, Sound.ENTITY_ZOMBIE_ATTACK_WOODEN_DOOR, 6, 1);
+		    }
+		}, 16L); //20 Tick (1 Second) delay before run() is called
+		
+		Bukkit.getScheduler().scheduleSyncDelayedTask(Nobility.getNobility(), new Runnable() {
+		    @Override
+		    public void run() {
+				world.playSound(loc, Sound.ENTITY_ZOMBIE_BREAK_WOODEN_DOOR, 6, 1);
+		    }
+		}, 28L); //20 Tick (1 Second) delay before run() is called
 	}
 	
-	public void cannonDestroyAnimation() {
+	public void cannonDestroyAnimation(Location loc) {
+World world = loc.getWorld();
 		
+		world.playSound(loc, Sound.ENTITY_ZOMBIE_ATTACK_WOODEN_DOOR, 6, 1);
+
+		Bukkit.getScheduler().scheduleSyncDelayedTask(Nobility.getNobility(), new Runnable() {
+		    @Override
+		    public void run() {
+				world.playSound(loc, Sound.ENTITY_ZOMBIE_ATTACK_WOODEN_DOOR, 6, 1);
+		    }
+		}, 8L); //20 Tick (1 Second) delay before run() is called
+		
+		Bukkit.getScheduler().scheduleSyncDelayedTask(Nobility.getNobility(), new Runnable() {
+		    @Override
+		    public void run() {
+				world.playSound(loc, Sound.ENTITY_ZOMBIE_ATTACK_WOODEN_DOOR, 6, 1);
+		    }
+		}, 16L); //20 Tick (1 Second) delay before run() is called
+		
+		Bukkit.getScheduler().scheduleSyncDelayedTask(Nobility.getNobility(), new Runnable() {
+		    @Override
+		    public void run() {
+				world.playSound(loc, Sound.ENTITY_BLAZE_DEATH, 6, 1);
+		    }
+		}, 28L); //20 Tick (1 Second) delay before run() is called
 	}
 	
 
