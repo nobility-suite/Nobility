@@ -22,6 +22,7 @@ import org.bukkit.util.Vector;
 import net.civex4.nobility.Nobility;
 import net.civex4.nobility.cannons.Cannon;
 import net.civex4.nobility.estate.Estate;
+import net.civex4.nobility.siege.Siege;
 import net.md_5.bungee.api.ChatColor;
 
 public class CannonListener implements Listener {
@@ -188,10 +189,26 @@ public class CannonListener implements Listener {
 					this.cannonDestroyAnimation(loc);
 					//TODO remove cannon
 					Nobility.getCannonManager().removeCannon(c);
-				
+					c.owner.getGroup().announce(ChatColor.DARK_RED + "[Siege] one of your cannons has been destroyed at " 
+							+ ChatColor.WHITE + " [" + loc.getBlockX() + "x, " + loc.getBlockY() + "y, " + loc.getBlockZ() + " z]");
+					Siege s = Nobility.getSiegeManager().getNearbySiege(loc);
+					if(s != null && s.getDefender() != null) {
+						Estate def = s.getDefender();
+						def.getGroup().announce(ChatColor.GREEN + "[Siege] an enemy cannon has been" + ChatColor.BOLD + " destroyed" + ChatColor.RESET + ChatColor.RED +" at "
+								+ ChatColor.WHITE + " [" + loc.getBlockX() + "x, " + loc.getBlockY() + "y, " + loc.getBlockZ() + " z]");
+					}
 				}
-				if(c.health < c.maxHealth/2) {
+				if(c.health == (int) c.maxHealth/2) {
 					this.cannonDisableAnimation(loc);
+					c.owner.getGroup().announce(ChatColor.RED + "[Siege] one of your cannons has been disabled at " 
+							+ ChatColor.WHITE + " [" + loc.getBlockX() + "x, " + loc.getBlockY() + "y, " + loc.getBlockZ() + " z]");
+					Siege s = Nobility.getSiegeManager().getNearbySiege(loc);
+					if(s != null && s.getDefender() != null) {
+						Estate def = s.getDefender();
+						def.getGroup().announce(ChatColor.GREEN + "[Siege] an enemy cannon has been disabled at "
+								+ ChatColor.WHITE + " [" + loc.getBlockX() + "x, " + loc.getBlockY() + "y, " + loc.getBlockZ() + " z]");
+					}
+					
 					//TODO cannon comes back after 5 minutes?
 					Bukkit.getScheduler().scheduleSyncDelayedTask(Nobility.getNobility(), new Runnable() {
 					    @Override
@@ -199,6 +216,14 @@ public class CannonListener implements Listener {
 					    	if(Nobility.getCannonManager().activeCannons.contains(c)) {
 								world.playSound(loc, Sound.BLOCK_ANVIL_USE, 6, 0.8f);
 								c.health = c.maxHealth;
+								c.owner.getGroup().announce(ChatColor.GREEN + "[Siege] one of your cannons has been repaired at " 
+										+ ChatColor.WHITE + " [" + loc.getBlockX() + "x, " + loc.getBlockY() + "y, " + loc.getBlockZ() + " z]");
+								Siege s = Nobility.getSiegeManager().getNearbySiege(loc);
+								if(s != null && s.getDefender() != null) {
+									Estate def = s.getDefender();
+									def.getGroup().announce(ChatColor.RED + "[Siege] an enemy cannon has been" + ChatColor.BOLD + " repaired" + ChatColor.RESET + ChatColor.RED +" at "
+											+ ChatColor.WHITE + " [" + loc.getBlockX() + "x, " + loc.getBlockY() + "y, " + loc.getBlockZ() + " z]");
+								}
 					    	}
 					    }
 					}, 20*60*5L); //20 Tick (1 Second) delay before run() is called
