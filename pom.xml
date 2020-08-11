@@ -18,10 +18,6 @@
 			<url>https://build.devotedmc.com/plugin/repository/everything/</url>
 		</repository>
 		<repository>
-			<id>regions-repo</id>
-			<url>https://github.com/nobility-suite/NobilityRegions/releases/tag/v0.6</url>
-		</repository>
-		<repository>
 			<id>jitpack.io</id>
 			<url>https://jitpack.io</url>
 		</repository>
@@ -46,7 +42,7 @@
 		<dependency>
 			<groupId>io.github.kingvictoria</groupId>
 			<artifactId>NobilityRegions</artifactId>
-			<version>0.6</version>
+			<version>master-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>org.xerial</groupId>
