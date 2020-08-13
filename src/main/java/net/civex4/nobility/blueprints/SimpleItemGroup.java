@@ -37,7 +37,7 @@ public class SimpleItemGroup extends ItemGroup{
   
   public void setItemCount(int min, int max) {
     this.itemCountMax = max;
-    this.itemCountMax = min;
+    this.itemCountMin = min;
   }
   
   public Map<ItemStack,Integer> generate() {
@@ -51,7 +51,6 @@ public class SimpleItemGroup extends ItemGroup{
       items.remove(picker);
       
       ret.put(select,count);
-      return ret;
     }
     
     return ret;

@@ -17,6 +17,7 @@ import com.sk89q.worldedit.extent.clipboard.io.ClipboardFormats;
 import com.sk89q.worldedit.extent.clipboard.io.ClipboardReader;
 
 import io.github.kingvictoria.NobilityRegions;
+import net.civex4.nobility.blueprints.BlueprintManager;
 import net.civex4.nobility.cannons.CannonManager;
 import net.civex4.nobility.claim.ClaimManager;
 import net.civex4.nobility.database.utility.DatabaseBuilder;
@@ -50,6 +51,7 @@ public class Nobility extends ACivMod {
 	private static WorkerManager workerManager;
 	private static CannonManager cannonManager;
 	private static SiegeManager siegeManager;
+	private static BlueprintManager blueprintManager;
 	private static EstateGui estateGui;
 
 	private static ClaimManager claimManager;
@@ -72,7 +74,7 @@ public class Nobility extends ACivMod {
 		this.getCommand("estate").setExecutor(new EstateCommandListener());
 		this.getCommand("create").setExecutor(new CreateCommand());
 
-		
+		blueprintManager.init(new File(getDataFolder(), "blueprints.yml"));
 		//DevelopmentType.loadDevelopmentTypes(getConfig().getConfigurationSection("developments"));
 
 		registerEvents();
@@ -90,6 +92,7 @@ public class Nobility extends ACivMod {
 		workerManager = new WorkerManager();
 		cannonManager = new CannonManager();
 		siegeManager = new SiegeManager();
+		blueprintManager = new BlueprintManager();
 		estateGui = new EstateGui();
 	}
 	
@@ -119,6 +122,10 @@ public class Nobility extends ACivMod {
 	
 	public static SiegeManager getSiegeManager() {
 		return siegeManager;		
+	}
+
+	public  static BlueprintManager getBlueprintManager() {
+		return blueprintManager;
 	}
 
 	public static EstateGui getEstateGui() { return estateGui; }
