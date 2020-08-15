@@ -77,7 +77,7 @@ public class CannonManager {
 						for(int tz = 0; tz < 5; tz++) {
 							Block b = loc.getWorld().getBlockAt(x+tx, y+ty, z+tz);
 							Material m = b.getType();
-							if(m == Material.COAL_BLOCK || m == Material.SPRUCE_STAIRS || m == Material.SPRUCE_WOOD
+							if(m == Material.PACKED_ICE || m == Material.SPRUCE_STAIRS || m == Material.SPRUCE_WOOD
 									|| m == Material.LEVER || m == Material.STONE_BUTTON || m == Material.SPRUCE_TRAPDOOR || m == Material.SPRUCE_LOG) {
 								b.setType(Material.AIR);
 							}
@@ -217,7 +217,7 @@ public class CannonManager {
 					Block b = world.getBlockAt(new Location(world,x+tx,Math.max(1,y+ty),z+tz));
 					Material m = b.getType();
 					if(m != Material.AIR) {
-						if(m == Material.COAL_BLOCK || m == Material.SPRUCE_STAIRS || m == Material.SPRUCE_WOOD
+						if(m == Material.PACKED_ICE || m == Material.SPRUCE_STAIRS || m == Material.SPRUCE_WOOD
 								|| m == Material.LEVER || m == Material.STONE_BUTTON || m == Material.SPRUCE_TRAPDOOR || m == Material.SPRUCE_LOG) {
 							blockCount += 1;
 							if(blockCount >= 15) {
@@ -270,7 +270,7 @@ public class CannonManager {
 	}
 	
 	public void spawnCannon(Location loc, Estate e, Vector v) throws WorldEditException {
-		//loc.getWorld().getBlockAt(loc).setType(Material.COAL_BLOCK);
+		//loc.getWorld().getBlockAt(loc).setType(Material.PACKED_ICE);
 		Location loc2 = loc.add(new Vector(0,1,0));
 		Block b = loc2.getBlock();
 		

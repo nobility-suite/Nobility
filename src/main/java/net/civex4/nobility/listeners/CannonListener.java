@@ -169,7 +169,7 @@ public class CannonListener implements Listener {
 	public void onBlockBreak(BlockBreakEvent event) {
 		Material m = event.getBlock().getType();
 		
-		if(m == Material.COAL_BLOCK || m == Material.SPRUCE_STAIRS || m == Material.SPRUCE_WOOD
+		if(m == Material.PACKED_ICE || m == Material.SPRUCE_STAIRS || m == Material.SPRUCE_WOOD
 				|| m == Material.LEVER || m == Material.STONE_BUTTON || m == Material.SPRUCE_TRAPDOOR || m == Material.SPRUCE_LOG) {
 			Location loc = event.getBlock().getLocation();
 			Cannon c = Nobility.getCannonManager().getCannon(loc);
@@ -177,13 +177,20 @@ public class CannonListener implements Listener {
 				return;
 			}
 			
-			if(m == Material.COAL_BLOCK) {
+			if(m == Material.PACKED_ICE) {
 				//TODO damage cannnon
 				Nobility.getCannonManager().damageCannon(c, 1);
 				World world = loc.getWorld();
-				world.playSound(loc,Sound.ENTITY_ZOMBIE_ATTACK_IRON_DOOR, 1,  0.8f);
 				Player p = event.getPlayer();
-				p.sendMessage(ChatColor.RED + "Cannon health: " + ChatColor.WHITE + c.health);
+
+				if(c.health % 100 == 0) {
+					world.playSound(loc,Sound.ENTITY_ZOMBIE_ATTACK_IRON_DOOR, 1,  0.8f);
+					p.sendMessage(ChatColor.RED + "Cannon health: " + ChatColor.WHITE + c.health);
+				}else if(c.health % 20 == 0) {
+					world.playSound(loc,Sound.BLOCK_METAL_BREAK, 1,  0.8f);
+					p.sendMessage(ChatColor.RED + "Cannon health: " + ChatColor.WHITE + c.health);
+				}
+				
 				event.setCancelled(true);
 				if(c.health == 0) {
 					this.cannonDestroyAnimation(loc);
