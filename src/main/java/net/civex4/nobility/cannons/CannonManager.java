@@ -391,7 +391,7 @@ public class CannonManager {
 		cannonCooldowns.put(c, time);
 		playerCooldowns.put(p.getUniqueId(), time);
 		
-		playFireStorm(loc);
+		playFireStorm(loc,40);
 		damageNearbyEstate(loc,5,p);
 		
 		Bukkit.getScheduler().scheduleSyncDelayedTask(Nobility.getNobility(), new Runnable() {
@@ -438,7 +438,7 @@ public class CannonManager {
 		
 	}
 	
-    public void playFireStorm(final Location location) {
+    public void playFireStorm(final Location location, int duration) {
     	final int id = Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(Nobility.getNobility(), new Runnable() {
     	  Location l = location;
             @Override
@@ -457,7 +457,7 @@ public class CannonManager {
 		    public void run() {
 		    	Bukkit.getScheduler().cancelTask(id);
 		    }
-		}, 40L); //20 Tick (1 Second) delay before run() is called
+		}, duration); //20 Tick (1 Second) delay before run() is called
 				
     	
     }

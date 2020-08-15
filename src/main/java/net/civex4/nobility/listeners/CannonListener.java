@@ -226,7 +226,7 @@ public class CannonListener implements Listener {
 								}
 					    	}
 					    }
-					}, 20*60*5L); //20 Tick (1 Second) delay before run() is called
+					}, 20*60*15L); //20 Tick (1 Second) delay before run() is called
 				}
 			}else {
 				event.setCancelled(true);
@@ -260,6 +260,7 @@ public class CannonListener implements Listener {
 		    @Override
 		    public void run() {
 				world.playSound(loc, Sound.ENTITY_ZOMBIE_BREAK_WOODEN_DOOR, 6, 1);
+				Nobility.getCannonManager().playFireStorm(loc,20*60*15);
 		    }
 		}, 28L); //20 Tick (1 Second) delay before run() is called
 	}
@@ -287,6 +288,7 @@ World world = loc.getWorld();
 		    @Override
 		    public void run() {
 				world.playSound(loc, Sound.ENTITY_BLAZE_DEATH, 6, 1);
+				world.spawnParticle(Particle.CLOUD, loc, 5, 0.5, 0.5, 0.5, 0.2);
 		    }
 		}, 28L); //20 Tick (1 Second) delay before run() is called
 	}
