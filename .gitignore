@@ -27,3 +27,5 @@ bin/pom.xml
 bin/.gitattributes
 *.prefs
 /bin/
+.factorypath
+.vscode/settings.json
