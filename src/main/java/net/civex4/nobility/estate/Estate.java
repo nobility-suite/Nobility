@@ -11,7 +11,6 @@ import org.bukkit.inventory.Inventory;
 
 import io.github.kingvictoria.NobilityRegions;
 import io.github.kingvictoria.Region;
-import io.github.kingvictoria.RegionResource;
 import io.github.kingvictoria.nodes.Node;
 import io.github.kingvictoria.nodes.NodeType;
 import net.civex4.nobility.Nobility;
@@ -146,17 +145,6 @@ public class Estate {
 		return relationships.get(estate);
 		}
 	}
-
-	public int getCollectionPower(RegionResource resource) {
-		int power = 0;
-//		for (Development development : this.getActiveDevelopments()) {
-//			if (development.getType().isCollector() && development.getType().getResource() == resource) {
-//				power += development.getCollector().getCollectionPower();
-//			}
-//		}
-		return power;
-	}
-	
 	
 	
 	public ArrayList<Camp> getCamps(){
