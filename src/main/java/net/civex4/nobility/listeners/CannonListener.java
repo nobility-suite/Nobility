@@ -169,7 +169,7 @@ public class CannonListener implements Listener {
 	public void onBlockBreak(BlockBreakEvent event) {
 		Material m = event.getBlock().getType();
 		
-		if(m == Material.COAL_BLOCK || m == Material.SPRUCE_STAIRS || m == Material.SPRUCE_WOOD
+		if(m == Material.PACKED_ICE || m == Material.SPRUCE_STAIRS || m == Material.SPRUCE_WOOD
 				|| m == Material.LEVER || m == Material.STONE_BUTTON || m == Material.SPRUCE_TRAPDOOR || m == Material.SPRUCE_LOG) {
 			Location loc = event.getBlock().getLocation();
 			Cannon c = Nobility.getCannonManager().getCannon(loc);
@@ -177,13 +177,20 @@ public class CannonListener implements Listener {
 				return;
 			}
 			
-			if(m == Material.COAL_BLOCK) {
+			if(m == Material.PACKED_ICE) {
 				//TODO damage cannnon
 				Nobility.getCannonManager().damageCannon(c, 1);
 				World world = loc.getWorld();
-				world.playSound(loc,Sound.ENTITY_ZOMBIE_ATTACK_IRON_DOOR, 1,  0.8f);
 				Player p = event.getPlayer();
-				p.sendMessage(ChatColor.RED + "Cannon health: " + ChatColor.WHITE + c.health);
+
+				if(c.health % 100 == 0) {
+					world.playSound(loc,Sound.ENTITY_ZOMBIE_ATTACK_IRON_DOOR, 1,  0.8f);
+					p.sendMessage(ChatColor.RED + "Cannon health: " + ChatColor.WHITE + c.health);
+				}else if(c.health % 20 == 0) {
+					world.playSound(loc,Sound.BLOCK_METAL_BREAK, 1,  0.8f);
+					p.sendMessage(ChatColor.RED + "Cannon health: " + ChatColor.WHITE + c.health);
+				}
+				
 				event.setCancelled(true);
 				if(c.health == 0) {
 					this.cannonDestroyAnimation(loc);
@@ -226,7 +233,7 @@ public class CannonListener implements Listener {
 								}
 					    	}
 					    }
-					}, 20*60*5L); //20 Tick (1 Second) delay before run() is called
+					}, 20*60*15L); //20 Tick (1 Second) delay before run() is called
 				}
 			}else {
 				event.setCancelled(true);
@@ -260,6 +267,7 @@ public class CannonListener implements Listener {
 		    @Override
 		    public void run() {
 				world.playSound(loc, Sound.ENTITY_ZOMBIE_BREAK_WOODEN_DOOR, 6, 1);
+				Nobility.getCannonManager().playFireStorm(loc,20*60*15);
 		    }
 		}, 28L); //20 Tick (1 Second) delay before run() is called
 	}
@@ -287,6 +295,7 @@ World world = loc.getWorld();
 		    @Override
 		    public void run() {
 				world.playSound(loc, Sound.ENTITY_BLAZE_DEATH, 6, 1);
+				world.spawnParticle(Particle.CLOUD, loc, 5, 0.5, 0.5, 0.5, 0.2);
 		    }
 		}, 28L); //20 Tick (1 Second) delay before run() is called
 	}

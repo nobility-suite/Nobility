@@ -6,9 +6,9 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 
 import com.sk89q.worldedit.extent.clipboard.Clipboard;
@@ -26,6 +26,7 @@ import net.civex4.nobility.development.DevelopmentManager;
 import net.civex4.nobility.estate.Estate;
 import net.civex4.nobility.estate.EstateManager;
 import net.civex4.nobility.group.GroupManager;
+import net.civex4.nobility.gui.EstateGui;
 import net.civex4.nobility.gui.GUICommand;
 import net.civex4.nobility.listeners.CannonListener;
 import net.civex4.nobility.listeners.ChestClick;
@@ -35,8 +36,9 @@ import net.civex4.nobility.listeners.EstateCommandListener;
 import net.civex4.nobility.listeners.ProtectionListener;
 import net.civex4.nobility.siege.SiegeManager;
 import net.civex4.nobility.workers.WorkerManager;
-import net.civex4.nobility.gui.EstateGui;
 import net.md_5.bungee.api.ChatColor;
+//import vg.civcraft.mc.citadel.Citadel;
+//import vg.civcraft.mc.citadel.ReinforcementManager;
 import vg.civcraft.mc.civmodcore.ACivMod;
 import vg.civcraft.mc.civmodcore.playersettings.PlayerSettingAPI;
 import vg.civcraft.mc.civmodcore.playersettings.gui.MenuSection;
@@ -53,6 +55,8 @@ public class Nobility extends ACivMod {
 	private static SiegeManager siegeManager;
 	private static BlueprintManager blueprintManager;
 	private static EstateGui estateGui;
+	//private static Citadel CitadelManager;
+	//public static ReinforcementManager reinforcementManager;
 
 	private static ClaimManager claimManager;
 	private static MenuSection nobilityMenu = PlayerSettingAPI.getMainMenu().createMenuSection("Nobility", "Settings");
@@ -137,6 +141,12 @@ public class Nobility extends ACivMod {
 		pm.registerEvents(new ProtectionListener(), this);
 		pm.registerEvents(new CannonListener(), this);
 
+		
+		if(pm.isPluginEnabled("Citadel")) {
+			Plugin pl = pm.getPlugin("Citadel");
+			//this.CitadelManager = (Citadel) pl;
+			//this.reinforcementManager = CitadelManager.getReinforcementManager();
+		}
 		
 	}
 
