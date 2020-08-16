@@ -10,10 +10,11 @@ import org.bukkit.block.Block;
 import org.bukkit.inventory.Inventory;
 
 import io.github.kingvictoria.NobilityRegions;
-import io.github.kingvictoria.Region;
-import io.github.kingvictoria.nodes.Node;
-import io.github.kingvictoria.nodes.NodeType;
+import io.github.kingvictoria.regions.Region;
+import io.github.kingvictoria.regions.nodes.Node;
+import io.github.kingvictoria.regions.nodes.NodeType;
 import net.civex4.nobility.Nobility;
+import net.civex4.nobility.estate.Estate;
 import net.civex4.nobility.development.AttributeManager;
 import net.civex4.nobility.development.Camp;
 import net.civex4.nobility.development.Development;
@@ -33,7 +34,7 @@ public class Estate {
 	public Estate(Block block, Group group) {
 		this.setGroup(group);
 		this.setBlock(block);
-		region = NobilityRegions.getRegionMaster().getRegionByLocation(block.getLocation());
+		region = NobilityRegions.getRegionManager().getRegionByLocation(block.getLocation());
 	}
 	
 	public void addDevelopment(Development d) {

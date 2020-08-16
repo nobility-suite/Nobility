@@ -1,13 +1,11 @@
 package net.civex4.nobility.gui;
 
-import io.github.kingvictoria.Region;
-import io.github.kingvictoria.nodes.Node;
+import io.github.kingvictoria.regions.Region;
+import io.github.kingvictoria.regions.nodes.Node;
 import net.civex4.nobility.Nobility;
 import net.civex4.nobility.development.*;
 import net.civex4.nobility.estate.Estate;
-import net.civex4.nobility.estate.EstateManager;
 import net.civex4.nobility.estate.Relationship;
-import net.civex4.nobility.group.Group;
 import net.civex4.nobility.group.GroupPermission;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -20,7 +18,6 @@ import vg.civcraft.mc.civmodcore.api.ItemAPI;
 import vg.civcraft.mc.civmodcore.inventorygui.Clickable;
 import vg.civcraft.mc.civmodcore.inventorygui.ClickableInventory;
 import vg.civcraft.mc.civmodcore.inventorygui.DecorationStack;
-import net.civex4.nobility.Nobility;
 import java.util.*;
 
 public class EstateGui {
@@ -428,7 +425,7 @@ public class EstateGui {
 			}
 		}
 
-		ArrayList<Node> nodes = Nobility.getNobilityRegions().getNodeManager().getNodes(region);
+		List<Node> nodes = region.getNodes();
 
 		for(Node n : nodes) {
 			Estate owner = Nobility.getClaimManager().claims.get(n);
@@ -438,12 +435,12 @@ public class EstateGui {
 			}else if(owner == estate) { ownerName = ChatColor.GREEN + estate.getGroup().getName();
 			}else ownerName = ChatColor.RED + owner.getGroup().getName();
 
-			String name = ChatColor.YELLOW + n.name + ChatColor.WHITE + " (" + ownerName + ChatColor.WHITE + ")";
-			ArrayList<ItemStack> output = n.output;
+			String name = ChatColor.YELLOW + n.getName() + ChatColor.WHITE + " (" + ownerName + ChatColor.WHITE + ")";
+			List<ItemStack> output = n.getOutput();
 			ItemStack resourceIcon = ButtonLibrary.createIcon(Material.STONE, name);
 			Clickable resourceButton = new DecorationStack(resourceIcon);
-			ItemAPI.addLore(resourceIcon, ChatColor.BLUE + "Slots: (" + n.getUsedSlots() +"/" + n.slots + ")",
-					ChatColor.BLUE + "Type: " + ChatColor.WHITE + n.type,
+			ItemAPI.addLore(resourceIcon, ChatColor.BLUE + "Slots: (" + n.getUsedSlots() +"/" + n.getSlots() + ")",
+					ChatColor.BLUE + "Type: " + ChatColor.WHITE + n.getType(),
 					ChatColor.BLUE + "Output:");
 
 			if(output != null && output.size() > 0) {
@@ -544,13 +541,13 @@ public class EstateGui {
 
 		for(Node n : nodes) {
 			//Populate worker list with nodes
-			if(n.type == camp.nodeType) {
-				String name = ChatColor.YELLOW + n.name + ChatColor.WHITE + " (" + ChatColor.GREEN + estate.getGroup().getName() + ChatColor.WHITE + ")";
-				ArrayList<ItemStack> output = n.output;
+			if(n.getType() == camp.nodeType) {
+				String name = ChatColor.YELLOW + n.getName() + ChatColor.WHITE + " (" + ChatColor.GREEN + estate.getGroup().getName() + ChatColor.WHITE + ")";
+				List<ItemStack> output = n.getOutput();
 				ItemStack resourceIcon = ButtonLibrary.createIcon(Material.STONE, name);
 				Clickable resourceButton = new DecorationStack(resourceIcon);
-				ItemAPI.addLore(resourceIcon, ChatColor.BLUE + "Slots: (" + n.getUsedSlots() + "/" + n.slots + ")",
-						ChatColor.BLUE + "Type: " + ChatColor.WHITE + n.type,
+				ItemAPI.addLore(resourceIcon, ChatColor.BLUE + "Slots: (" + n.getUsedSlots() + "/" + n.getSlots() + ")",
+						ChatColor.BLUE + "Type: " + ChatColor.WHITE + n.getType(),
 						ChatColor.BLUE + "Output:");
 				//Node output lore
 				if(output != null && output.size() > 0) {
@@ -641,7 +638,7 @@ public class EstateGui {
 			}
 		}
 
-		ArrayList<Node> nodes = Nobility.getNobilityRegions().getNodeManager().getNodes(region);
+		List<Node> nodes = region.getNodes();
 
 		for(Node n : nodes) {
 			Estate owner = Nobility.getClaimManager().claims.get(n);
@@ -651,12 +648,12 @@ public class EstateGui {
 			}else if(owner == estate) { ownerName = ChatColor.GREEN + estate.getGroup().getName();
 			}else ownerName = ChatColor.RED + owner.getGroup().getName();
 
-			String name = ChatColor.YELLOW + n.name + ChatColor.WHITE + " (" + ownerName + ChatColor.WHITE + ")";
-			ArrayList<ItemStack> output = n.output;
+			String name = ChatColor.YELLOW + n.getName() + ChatColor.WHITE + " (" + ownerName + ChatColor.WHITE + ")";
+			List<ItemStack> output = n.getOutput();
 			ItemStack resourceIcon = ButtonLibrary.createIcon(Material.STONE, name);
 			Clickable resourceButton = new DecorationStack(resourceIcon);
-			ItemAPI.addLore(resourceIcon, ChatColor.BLUE + "Slots: (" + n.getUsedSlots() + "/" + n.slots + ")",
-					ChatColor.BLUE + "Type: " + ChatColor.WHITE + n.type,
+			ItemAPI.addLore(resourceIcon, ChatColor.BLUE + "Slots: (" + n.getUsedSlots() + "/" + n.getSlots() + ")",
+					ChatColor.BLUE + "Type: " + ChatColor.WHITE + n.getType(),
 					ChatColor.BLUE + "Output:");
 
 			if(output != null && output.size() > 0) {
@@ -680,11 +677,11 @@ public class EstateGui {
 					@Override
 					public void clicked(Player p) {
 						if(!Nobility.getClaimManager().underNodeLimit(n, estate)) {
-							p.sendMessage(ChatColor.RED + "You cannot claim any more nodes of type " + ChatColor.WHITE + n.type + ChatColor.RED + ", you must upgrade your camps first.");
+							p.sendMessage(ChatColor.RED + "You cannot claim any more nodes of type " + ChatColor.WHITE + n.getType() + ChatColor.RED + ", you must upgrade your camps first.");
 							p.closeInventory();
 							return;
 						}
-						p.sendMessage(ChatColor.GREEN + "Claimed " + ChatColor.WHITE + n.name + " for " + ChatColor.WHITE + estate.getGroup().getName());
+						p.sendMessage(ChatColor.GREEN + "Claimed " + ChatColor.WHITE + n.getName() + " for " + ChatColor.WHITE + estate.getGroup().getName());
 						p.closeInventory();
 						Nobility.getClaimManager().claim(n, estate);
 					}

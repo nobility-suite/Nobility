@@ -2,7 +2,7 @@ package net.civex4.nobility.developments;
 
 import org.bukkit.Material;
 
-import io.github.kingvictoria.nodes.NodeType;
+import io.github.kingvictoria.regions.nodes.NodeType;
 import net.civex4.nobility.development.Camp;
 import net.civex4.nobility.development.Development;
 import net.civex4.nobility.development.DevelopmentType;

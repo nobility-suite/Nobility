@@ -42,7 +42,7 @@
 		<dependency>
 			<groupId>io.github.kingvictoria</groupId>
 			<artifactId>NobilityRegions</artifactId>
-			<version>master-SNAPSHOT</version>
+			<version>v0.8</version>
 		</dependency>
 		<dependency>
 			<groupId>org.xerial</groupId>

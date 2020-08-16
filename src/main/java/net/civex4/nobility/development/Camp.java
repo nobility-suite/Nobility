@@ -1,6 +1,6 @@
 package net.civex4.nobility.development;
 
-import io.github.kingvictoria.nodes.NodeType;
+import io.github.kingvictoria.regions.nodes.NodeType;
 
 public class Camp extends Development{
 	private int nodeLimit;

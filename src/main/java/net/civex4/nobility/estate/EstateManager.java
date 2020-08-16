@@ -1,6 +1,6 @@
 package net.civex4.nobility.estate;
 
-import io.github.kingvictoria.Region;
+import io.github.kingvictoria.regions.Region;
 import net.civex4.nobility.Nobility;
 import net.civex4.nobility.group.Group;
 import net.civex4.nobility.group.GroupPermission;
