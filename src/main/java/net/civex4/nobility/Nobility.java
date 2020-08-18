@@ -28,6 +28,7 @@ import net.civex4.nobility.estate.EstateManager;
 import net.civex4.nobility.group.GroupManager;
 import net.civex4.nobility.gui.EstateGui;
 import net.civex4.nobility.gui.GUICommand;
+import net.civex4.nobility.listeners.BlueprintCommandListener;
 import net.civex4.nobility.listeners.CannonListener;
 import net.civex4.nobility.listeners.ChestClick;
 import net.civex4.nobility.listeners.CommandListener;
@@ -77,6 +78,7 @@ public class Nobility extends ACivMod {
 		this.getCommand("test").setExecutor(new GUICommand());
 		this.getCommand("estate").setExecutor(new EstateCommandListener());
 		this.getCommand("create").setExecutor(new CreateCommand());
+		this.getCommand("blueprints").setExecutor(new BlueprintCommandListener());
 
 		blueprintManager.init(new File(getDataFolder(), "blueprints.yml"));
 		//DevelopmentType.loadDevelopmentTypes(getConfig().getConfigurationSection("developments"));

@@ -17,3 +17,6 @@ commands:
       description: Creates an estate at player's feet
       usage: /create or /c
       aliases: [ c ]
+   blueprints:
+      description: (DEBUG) Commands related to blueprints
+      usage: /blueprints (argument) [other]

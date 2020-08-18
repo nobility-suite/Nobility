@@ -43,12 +43,13 @@ public class SimpleItemGroup extends ItemGroup{
   public Map<NobilityItem,Integer> generate() {
     Map<NobilityItem,Integer> ret = new HashMap<>();
   
+    ArrayList<NobilityItem> selectItems = new ArrayList<>(items);
     for(int i = 0; i < selectionCount; i++) {
       int count = Util.randrange(itemCountMin, itemCountMax);
-      int picker = Util.randrange(0, items.size()-1);
+      int picker = Util.randrange(0, selectItems.size()-1);
       
-      NobilityItem select = items.get(picker);
-      items.remove(picker);
+      NobilityItem select = selectItems.get(picker);
+      selectItems.remove(picker);
       
       ret.put(select,count);
     }
