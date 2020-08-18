@@ -3,16 +3,13 @@ package net.civex4.nobility.blueprints;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.logging.Logger;
-
-import javax.sound.midi.MidiDevice.Info;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.Warning;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 
+import net.civex4.nobilityitems.NobilityItem;
+import net.civex4.nobilityitems.NobilityItems;
 import net.md_5.bungee.api.ChatColor;
 import vg.civcraft.mc.civmodcore.api.ItemAPI;
 	
@@ -26,9 +23,9 @@ public class Blueprint {
 	
 	private static final String TIME_INSTANT = "Time: Instant";
 	
-	private ItemStack result;
+	private NobilityItem result;
 	private int resultAmount;
-	private HashMap<ItemStack, Integer> ingredients;
+	private HashMap<NobilityItem, Integer> ingredients;
 	private int runs;
 	private String name;
 	
@@ -44,15 +41,11 @@ public class Blueprint {
 	 *   36x Liferod
 	 */
 	
-	public static ItemStack getItemStackFromName(String str) {
-		//TODO, this should be a lookup from the yaml doc.
-		ItemStack item = new ItemStack(Material.PAPER);
-		ItemAPI.setDisplayName(item, str);
-		return item;
+	public static NobilityItem getItemStackFromName(String str) {
+		return NobilityItems.getItemByName(str);
 	}
-	// TODO Custom Items need
 	
-	public Blueprint(ItemStack result, HashMap<ItemStack, Integer> ingredients, 
+	public Blueprint(NobilityItem result, HashMap<NobilityItem, Integer> ingredients, 
 			int runs, String name, int resultAmount) {
 		
 		this.result = result;
@@ -77,7 +70,7 @@ public class Blueprint {
 				+ RESULT_AMOUNT_PREFIX 
 				+ Integer.toString(this.resultAmount)
 				+ AMOUNT_DELIMITER 
-				+ ItemAPI.getDisplayName(this.result);
+				+ result.getInternalName();
 	 
 		//TODO not needed for first test
 		String parsedTime = TIME_INSTANT;
@@ -85,11 +78,11 @@ public class Blueprint {
 		//Parse all ingredients
 		List<String> parsedIngredients = new ArrayList<>();
 
-		for(ItemStack item : ingredients.keySet()) {
+		for(NobilityItem item : ingredients.keySet()) {
 			String parsedItem = INGREDIENT_AMOUNT_PREFIX 
 					+ Integer.toString(ingredients.get(item)) 
 					+ AMOUNT_DELIMITER 
-					+ ItemAPI.getDisplayName(item);
+					+ item.getInternalName();
 			parsedIngredients.add(parsedItem);
 		}
 
@@ -133,7 +126,7 @@ public class Blueprint {
 		String[] numberAndResult = parsedResult.split(RESULT_AMOUNT_PREFIX);
 		int resultAmount = Integer.parseInt(numberAndResult[0]);
 		parsedResult = numberAndResult[1];
-		ItemStack result = getItemStackFromName(parsedResult);
+		NobilityItem result = getItemStackFromName(parsedResult);
 		
 		//Runs Amount
 		parsedRuns.replaceFirst(RUNS_PREFIX, "");
@@ -141,7 +134,7 @@ public class Blueprint {
 		
 		//ParsedTime is currently unused
 		
-		HashMap<ItemStack, Integer> ingredientsMap = new HashMap<ItemStack, Integer>();
+		HashMap<NobilityItem, Integer> ingredientsMap = new HashMap<>();
 		
 		for(String str : ingredientStrings) {
 			str.replaceFirst(INGREDIENT_AMOUNT_PREFIX, "");

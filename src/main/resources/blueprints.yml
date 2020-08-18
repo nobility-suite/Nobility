@@ -9,32 +9,16 @@ example_blueprint:            # A blueprint template
   minReturn: 15               # The minimum number of items this blueprint can create on each use
   maxRuns: 10                 # The maximum number of times the blueprint can be used
   maxReturn: 20               # The maximum number of items this blueprint can create on each use
-  result:                                        # The result of the blueprint recipe as a serialized ItemStack
-    ==: org.bukkit.inventory.ItemStack
-    type: PAPER
-    meta:
-      ==: ItemMeta
-      meta-type: UNSPECIFIC
-      display-name: "§c§lExample Result"
-      lore:
-        - "§cExample Lore"
-        - ""
-        - "§eLore is good for describing things"
-  itemGroups:                                # The recipe definition for ingredients (composed of several itemgroups)
-    example-simple_itemgroup:                # An itemgroup: a group of items from which a selection is made to generate a Blueprint.
-      type: SIMPLE                           # Defines this as a 'SIMPLE' itemgroup, Simple item groups make at random X selections 
-                                             # from their list, with each selection containing a stack of between Y and Z items.
-                                             # They do not have any sort of weighting. The same item name cannot be selected twice.
-      selectionCount: 2                      # The number of selections to make from this itemgroup
-      minItemCount: 3                        # The minimum number of items to require for a selection
-      maxItemCount: 5                        # The maximum number of items to require for a selection
-      items:                                 # The items in this itemgroup as a list of serialized ItemStacks
-        coal:
-          ==: org.bukkit.inventory.ItemStack
-          type: COAL
-        iron_ingot:
-          ==: org.bukkit.inventory.ItemStack
-          type: IRON_INGOT
-        gold_ingot:
-          ==: org.bukkit.inventory.ItemStack
-          type: GOLD_INGOT
+  result: example_result      # The result of the blueprint recipe as a NobilityItem
+  itemGroups:                 # The recipe definition for ingredients (composed of several itemgroups)
+    example-simple_itemgroup: # An itemgroup: a group of items from which a selection is made to generate a Blueprint.
+      type: SIMPLE            # Defines this as a 'SIMPLE' itemgroup, Simple item groups make at random X selections 
+                              # from their list, with each selection containing a stack of between Y and Z items.
+                              # They do not have any sort of weighting. The same item name cannot be selected twice.
+      selectionCount: 2       # The number of selections to make from this itemgroup
+      minItemCount: 3         # The minimum number of items to require for a selection
+      maxItemCount: 5         # The maximum number of items to require for a selection
+      items:                  # The items in this itemgroup as a list of NobilityItems
+        - example_coal
+        - example_iron_ingot
+        - example_gold_ingot

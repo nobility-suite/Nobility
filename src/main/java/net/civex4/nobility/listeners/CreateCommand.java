@@ -7,8 +7,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import net.civex4.nobility.Nobility;
-import net.civex4.nobility.group.Group;
-import net.md_5.bungee.api.ChatColor;
 
 /* This command is to speed up test iterations by making estate creation a simple command
  * 

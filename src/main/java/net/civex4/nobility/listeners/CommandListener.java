@@ -1,10 +1,8 @@
 package net.civex4.nobility.listeners;
 
 import java.util.HashMap;
-import java.util.Set;
 import java.util.UUID;
 
-import net.civex4.nobility.group.GroupPermission;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;

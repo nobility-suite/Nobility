@@ -1,7 +1,7 @@
 name: ${project.name}
 main: net.civex4.nobility.Nobility
 version: ${project.version}
-depend: [NobilityRegions]
+depend: [NobilityRegions, NobilityItems]
 api-version: 1.14
 commands:
    nobility:

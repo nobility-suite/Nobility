@@ -2,13 +2,16 @@ package net.civex4.nobility.blueprints;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
+
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.inventory.ItemStack;
 
 import net.civex4.nobility.Nobility;
+import net.civex4.nobilityitems.NobilityItem;
+import net.civex4.nobilityitems.NobilityItems;
 
 public class BlueprintManager {
   
@@ -56,7 +59,7 @@ public class BlueprintManager {
       return null;
     }
 
-    ItemStack result = null;
+    NobilityItem result = null;
     int minRuns = 0;
     int maxRuns = 0;
     String name = "";
@@ -103,8 +106,14 @@ public class BlueprintManager {
       returnNull = true;
     }
     
-    if (header.getString("result") != null) {
-      result = header.getItemStack("result");
+    if (header.isString("result")) {
+      try {
+        result = NobilityItems.getItemByName(header.getString("result"));
+      } catch (IllegalArgumentException e) {
+        Bukkit.getLogger().warning("Blueprint " + header.getCurrentPath() + " has invalid NobilityItem in result!");
+        returnNull = true;
+      }
+
     } else {
       Bukkit.getLogger().warning("Blueprint " + header.getCurrentPath() + " has no result!");
       returnNull = true;
@@ -167,7 +176,7 @@ public class BlueprintManager {
     int minItemCount = 1;
     int maxItemCount = 1;
     
-    ArrayList<ItemStack> items = new ArrayList<ItemStack>();
+    ArrayList<NobilityItem> items = new ArrayList<NobilityItem>();
     boolean returnNull = false;
     
     if(group.getString("selectionCount") != null) {
@@ -192,27 +201,24 @@ public class BlueprintManager {
     }
     
     ConfigurationSection list = group.getConfigurationSection("items");
-    if (list != null) {
-      items = getItemStackList(list);
+    if (group.isList("items")) {
+      List<String> stringItems = group.getStringList("items");
+      for (String string : stringItems) {
+        try {
+          items.add(NobilityItems.getItemByName(string));
+        } catch (IllegalArgumentException e) {
+          Bukkit.getLogger().severe("itemGroup " + group.getCurrentPath() + " has invalid NobilityItem " + string + " in items!");
+          returnNull = true;
+        }
+      }
     } else {
-      Bukkit.getLogger().warning("itemGroup " + group.getCurrentPath() + " has no items section!");
+      Bukkit.getLogger().warning("itemGroup " + group.getCurrentPath() + " has no items!");
       returnNull = true;
     }
     
     if (returnNull) return null;
     return new SimpleItemGroup(items, selectionCount, minItemCount, maxItemCount);
     
-  }
-  
-  private ArrayList<ItemStack> getItemStackList(ConfigurationSection list){
-    ArrayList<ItemStack> ret = new ArrayList<ItemStack>();
-    
-    for(String itemKey : list.getKeys(false)) {
-      ItemStack i = list.getItemStack(itemKey);
-      ret.add(i);
-    }
-    
-    return ret;
   }
 
 }

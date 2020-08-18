@@ -3,8 +3,8 @@ package net.civex4.nobility.blueprints;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import org.bukkit.inventory.ItemStack;
 import net.civex4.nobility.util.Util;
+import net.civex4.nobilityitems.NobilityItem;
 
 public class SimpleItemGroup extends ItemGroup{
   
@@ -17,12 +17,12 @@ public class SimpleItemGroup extends ItemGroup{
    * They do not have any sort of weighting. The same item name cannot be selected twice.
    */
   
-  public ArrayList<ItemStack> items;
+  public ArrayList<NobilityItem> items;
   public int selectionCount;
   public int itemCountMin;
   public int itemCountMax;
   
-  public SimpleItemGroup(ArrayList<ItemStack> items, int selectionCount, int itemCountMin,
+  public SimpleItemGroup(ArrayList<NobilityItem> items, int selectionCount, int itemCountMin,
       int itemCountMax) {
 
     this.items = items;
@@ -40,14 +40,14 @@ public class SimpleItemGroup extends ItemGroup{
     this.itemCountMin = min;
   }
   
-  public Map<ItemStack,Integer> generate() {
-    Map<ItemStack,Integer> ret = new HashMap<ItemStack,Integer>();
+  public Map<NobilityItem,Integer> generate() {
+    Map<NobilityItem,Integer> ret = new HashMap<>();
   
     for(int i = 0; i < selectionCount; i++) {
       int count = Util.randrange(itemCountMin, itemCountMax);
       int picker = Util.randrange(0, items.size()-1);
       
-      ItemStack select = items.get(picker);
+      NobilityItem select = items.get(picker);
       items.remove(picker);
       
       ret.put(select,count);

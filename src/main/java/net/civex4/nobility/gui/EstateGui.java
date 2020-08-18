@@ -7,6 +7,8 @@ import net.civex4.nobility.development.*;
 import net.civex4.nobility.estate.Estate;
 import net.civex4.nobility.estate.Relationship;
 import net.civex4.nobility.group.GroupPermission;
+import net.civex4.nobilityitems.NobilityItem;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -436,23 +438,21 @@ public class EstateGui {
 			}else ownerName = ChatColor.RED + owner.getGroup().getName();
 
 			String name = ChatColor.YELLOW + n.getName() + ChatColor.WHITE + " (" + ownerName + ChatColor.WHITE + ")";
-			List<ItemStack> output = n.getOutput();
+			Map<NobilityItem, Integer> output = n.getOutput();
 			ItemStack resourceIcon = ButtonLibrary.createIcon(Material.STONE, name);
 			Clickable resourceButton = new DecorationStack(resourceIcon);
-			ItemAPI.addLore(resourceIcon, ChatColor.BLUE + "Slots: (" + n.getUsedSlots() +"/" + n.getSlots() + ")",
+			ItemAPI.addLore(resourceIcon, 
+					ChatColor.BLUE + "Slots: (" + n.getUsedSlots() +"/" + n.getSlots() + ")",
 					ChatColor.BLUE + "Type: " + ChatColor.WHITE + n.getType(),
 					ChatColor.BLUE + "Output:");
 
 			if(output != null && output.size() > 0) {
-				for(ItemStack i : output) {
+				for(NobilityItem i : output.keySet()) {
 
-					String iname = "";
+					String iname = i.getDisplayName();
+					int amount = output.get(i);
 
-					if(i.hasItemMeta() && i.getItemMeta().hasDisplayName()) {
-						iname = i.getItemMeta().getDisplayName();
-					}else iname = i.getType().name();
-
-					ItemAPI.addLore(resourceIcon, ChatColor.GRAY + "  " + i.getAmount() + "x " + ChatColor.WHITE + iname );
+					ItemAPI.addLore(resourceIcon, ChatColor.GRAY + "  " + amount + "x " + ChatColor.WHITE + iname );
 				}
 			}
 
@@ -543,7 +543,7 @@ public class EstateGui {
 			//Populate worker list with nodes
 			if(n.getType() == camp.nodeType) {
 				String name = ChatColor.YELLOW + n.getName() + ChatColor.WHITE + " (" + ChatColor.GREEN + estate.getGroup().getName() + ChatColor.WHITE + ")";
-				List<ItemStack> output = n.getOutput();
+				Map<NobilityItem, Integer> output = n.getOutput();
 				ItemStack resourceIcon = ButtonLibrary.createIcon(Material.STONE, name);
 				Clickable resourceButton = new DecorationStack(resourceIcon);
 				ItemAPI.addLore(resourceIcon, ChatColor.BLUE + "Slots: (" + n.getUsedSlots() + "/" + n.getSlots() + ")",
@@ -551,15 +551,12 @@ public class EstateGui {
 						ChatColor.BLUE + "Output:");
 				//Node output lore
 				if(output != null && output.size() > 0) {
-					for(ItemStack i : output) {
+					for(NobilityItem i : output.keySet()) {
 
-						String iname = "";
+						String iname = i.getDisplayName();
+						int amount = output.get(i);
 
-						if(i.hasItemMeta() && i.getItemMeta().hasDisplayName()) {
-							iname = i.getItemMeta().getDisplayName();
-						}else iname = i.getType().name();
-
-						ItemAPI.addLore(resourceIcon, ChatColor.GRAY + "  " + i.getAmount() + "x " + ChatColor.WHITE + iname );
+						ItemAPI.addLore(resourceIcon, ChatColor.GRAY + "  " + amount + "x " + ChatColor.WHITE + iname );
 					}
 				}
 
@@ -649,7 +646,7 @@ public class EstateGui {
 			}else ownerName = ChatColor.RED + owner.getGroup().getName();
 
 			String name = ChatColor.YELLOW + n.getName() + ChatColor.WHITE + " (" + ownerName + ChatColor.WHITE + ")";
-			List<ItemStack> output = n.getOutput();
+			Map<NobilityItem, Integer> output = n.getOutput();
 			ItemStack resourceIcon = ButtonLibrary.createIcon(Material.STONE, name);
 			Clickable resourceButton = new DecorationStack(resourceIcon);
 			ItemAPI.addLore(resourceIcon, ChatColor.BLUE + "Slots: (" + n.getUsedSlots() + "/" + n.getSlots() + ")",
@@ -657,15 +654,12 @@ public class EstateGui {
 					ChatColor.BLUE + "Output:");
 
 			if(output != null && output.size() > 0) {
-				for(ItemStack i : output) {
+				for(NobilityItem i : output.keySet()) {
 
-					String iname = "";
+					String iname = i.getDisplayName();
+					int amount = output.get(i);
 
-					if(i.hasItemMeta() && i.getItemMeta().hasDisplayName()) {
-						iname = i.getItemMeta().getDisplayName();
-					}else iname = i.getType().name();
-
-					ItemAPI.addLore(resourceIcon, ChatColor.GRAY + "  " + i.getAmount() + "x " + ChatColor.WHITE + iname );
+					ItemAPI.addLore(resourceIcon, ChatColor.GRAY + "  " + amount + "x " + ChatColor.WHITE + iname );
 				}
 			}
 

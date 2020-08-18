@@ -40,9 +40,14 @@
 			<version>1.7.5</version>
 		</dependency>
 		<dependency>
+			<groupId>com.github.nobility-suite</groupId>
+			<artifactId>NobilityItems</artifactId>
+			<version>v0.1.4</version>
+		</dependency>
+		<dependency>
 			<groupId>io.github.kingvictoria</groupId>
 			<artifactId>NobilityRegions</artifactId>
-			<version>v0.8</version>
+			<version>v0.9.1</version>
 		</dependency>
 		<dependency>
 			<groupId>org.xerial</groupId>

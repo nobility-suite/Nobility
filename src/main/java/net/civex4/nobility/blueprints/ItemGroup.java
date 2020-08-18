@@ -1,10 +1,11 @@
 package net.civex4.nobility.blueprints;
 
 import java.util.Map;
-import org.bukkit.inventory.ItemStack;
+
+import net.civex4.nobilityitems.NobilityItem;
 
 public abstract class ItemGroup {
   
-  public abstract Map<ItemStack, Integer> generate();
+  public abstract Map<NobilityItem, Integer> generate();
 
 }

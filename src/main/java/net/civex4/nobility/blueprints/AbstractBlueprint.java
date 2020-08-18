@@ -3,13 +3,13 @@ package net.civex4.nobility.blueprints;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import org.bukkit.inventory.ItemStack;
 import net.civex4.nobility.util.Util;
+import net.civex4.nobilityitems.NobilityItem;
 
 public class AbstractBlueprint {
   
   private ArrayList<ItemGroup> groups;
-  public ItemStack result;
+  public NobilityItem result;
   public int minRuns;
   public int maxRuns;
   public String name;
@@ -17,7 +17,7 @@ public class AbstractBlueprint {
   public int maxReturn;
   
   
-  public AbstractBlueprint(ArrayList<ItemGroup> groups, ItemStack result, int minRuns, int maxRuns,
+  public AbstractBlueprint(ArrayList<ItemGroup> groups, NobilityItem result, int minRuns, int maxRuns,
       String name, int minReturn, int maxReturn) {
     super();
     this.groups = groups;
@@ -35,21 +35,21 @@ public class AbstractBlueprint {
    * @return Blueprint
    */
   public Blueprint generate() {
-    Map<ItemStack, Integer> ingredients = new HashMap<ItemStack, Integer>();
+    Map<NobilityItem, Integer> ingredients = new HashMap<>();
     
     int resultAmount = Util.randrange(minReturn, maxReturn);
     int runs = Util.randrange(minRuns, maxRuns);
     
     //For each ItemGroup g, generate their result, and add all results to ingredients map.
     for(ItemGroup g : groups) {
-      Map<ItemStack, Integer> generated = g.generate();
+      Map<NobilityItem, Integer> generated = g.generate();
       
-      for(ItemStack i : generated.keySet()) {
+      for(NobilityItem i : generated.keySet()) {
         ingredients.put(i, generated.get(i));
       }
     }
     
-    Blueprint ret = new Blueprint(result, (HashMap<ItemStack, Integer>) ingredients, runs, name, resultAmount);
+    Blueprint ret = new Blueprint(result, (HashMap<NobilityItem, Integer>) ingredients, runs, name, resultAmount);
     return ret;
   }
 
