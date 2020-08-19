@@ -23,11 +23,11 @@ public class Blueprint {
 	
 	private static final String TIME_INSTANT = "Time: Instant";
 	
-	private NobilityItem result;
-	private int resultAmount;
-	private HashMap<NobilityItem, Integer> ingredients;
-	private int runs;
-	private String name;
+	public NobilityItem result;
+	public int resultAmount;
+	public HashMap<NobilityItem, Integer> ingredients;
+	public int runs;
+	public String name;
 	
 	/* Example Blueprint
 	 * 
@@ -42,7 +42,7 @@ public class Blueprint {
 	 */
 	
 	public static NobilityItem getItemStackFromName(String str) {
-		return NobilityItems.getItemByName(str);
+		return NobilityItems.getItemByDisplayName(str);
 	}
 	
 	public Blueprint(NobilityItem result, HashMap<NobilityItem, Integer> ingredients, 
@@ -70,7 +70,7 @@ public class Blueprint {
 				+ RESULT_AMOUNT_PREFIX 
 				+ Integer.toString(this.resultAmount)
 				+ AMOUNT_DELIMITER 
-				+ result.getInternalName();
+				+ result.getDisplayName();
 	 
 		//TODO not needed for first test
 		String parsedTime = TIME_INSTANT;
@@ -82,7 +82,7 @@ public class Blueprint {
 			String parsedItem = INGREDIENT_AMOUNT_PREFIX 
 					+ Integer.toString(ingredients.get(item)) 
 					+ AMOUNT_DELIMITER 
-					+ item.getInternalName();
+					+ item.getDisplayName();
 			parsedIngredients.add(parsedItem);
 		}
 
@@ -117,19 +117,21 @@ public class Blueprint {
 		//Ingredient Delimiter = Line 3
 		
 		List<String> ingredientStrings = new ArrayList<>();
-		ingredientStrings.addAll(4, lore);
+		for (int i = 4; i < lore.size(); i++) {
+			ingredientStrings.add(lore.get(i));
+		}
 		
 		//Parse strings into AbstractBlueprint information
 		
 		//Result Item
-		parsedResult.replaceFirst(RESULT_PREFIX, "");
-		String[] numberAndResult = parsedResult.split(RESULT_AMOUNT_PREFIX);
+		parsedResult = parsedResult.replaceFirst(RESULT_PREFIX, "");
+		String[] numberAndResult = parsedResult.split(AMOUNT_DELIMITER);
 		int resultAmount = Integer.parseInt(numberAndResult[0]);
 		parsedResult = numberAndResult[1];
 		NobilityItem result = getItemStackFromName(parsedResult);
 		
 		//Runs Amount
-		parsedRuns.replaceFirst(RUNS_PREFIX, "");
+		parsedRuns = parsedRuns.replaceFirst(RUNS_PREFIX, "");
 		int runsAmount = Integer.parseInt(parsedRuns);
 		
 		//ParsedTime is currently unused
@@ -137,7 +139,7 @@ public class Blueprint {
 		HashMap<NobilityItem, Integer> ingredientsMap = new HashMap<>();
 		
 		for(String str : ingredientStrings) {
-			str.replaceFirst(INGREDIENT_AMOUNT_PREFIX, "");
+			str = str.replaceFirst(INGREDIENT_AMOUNT_PREFIX, "");
 			String[] amountAndName = str.split(AMOUNT_DELIMITER);
 			int amount = Integer.parseInt(amountAndName[0]);
 			String name = amountAndName[1];
