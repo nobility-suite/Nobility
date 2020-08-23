@@ -8,6 +8,7 @@ import org.bukkit.inventory.meta.SkullMeta;
 
 import net.civex4.nobility.Nobility;
 import net.civex4.nobility.development.AttributeManager;
+import net.civex4.nobility.development.Development;
 import net.civex4.nobility.estate.Estate;
 import net.civex4.nobility.group.GroupPermission;
 import vg.civcraft.mc.civmodcore.api.ItemAPI;
@@ -38,6 +39,13 @@ public enum ButtonLibrary {
 		ItemStack icon = new ItemStack(mat);
 		ItemAPI.setDisplayName(icon, ChatColor.WHITE + name);
 		return icon;
+	}
+	
+	public static Clickable createWorkshopInfo(Development d) {
+		ItemStack icon = createIcon(Material.BOOK, "Workshop Info");
+		ItemAPI.addLore(icon, ChatColor.BLUE + "Workshop Type: " +  ChatColor.WHITE + d.name, ChatColor.GRAY + d.useDescription);
+		Clickable ret = new DecorationStack(icon);
+		return ret;
 	}
 	
 	public static Clickable createWorkerInfo(Player p) {

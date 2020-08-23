@@ -4,6 +4,7 @@ import io.github.kingvictoria.regions.Region;
 import io.github.kingvictoria.regions.nodes.Node;
 import net.civex4.nobility.Nobility;
 import net.civex4.nobility.development.*;
+import net.civex4.nobility.developments.AbstractWorkshop;
 import net.civex4.nobility.estate.Estate;
 import net.civex4.nobility.estate.Relationship;
 import net.civex4.nobility.group.GroupPermission;
@@ -270,7 +271,7 @@ public class EstateGui {
 
 					@Override
 					public void clicked(Player p) {
-						openWorkshopCraftGUI(p,d);
+						openWorkshopCraftGUI(p,(AbstractWorkshop) d);
 					}
 
 				};
@@ -283,7 +284,7 @@ public class EstateGui {
 		gui.showInventory(p);
 	}
 
-	private void openWorkshopCraftGUI(Player p, Development d) {
+	private void openWorkshopCraftGUI(Player p, AbstractWorkshop d) {
 		Estate estate = Nobility.getEstateManager().getEstateOfPlayer(p);
 		ClickableInventory gui = new ClickableInventory(54, d.name);
 
@@ -296,10 +297,46 @@ public class EstateGui {
 				gui.setSlot(c, i);
 			}
 		}
+		
+		Clickable workshopInfo = ButtonLibrary.createWorkshopInfo(d);
+		gui.setSlot(workshopInfo, 0);
 
 		Clickable workerInfo = ButtonLibrary.createWorkerInfo(p);
 		gui.setSlot(workerInfo, 29);
+		
+		
+		ItemStack recipe = ButtonLibrary.createIcon(Material.BARRIER, ChatColor.WHITE + "Select Blueprint");
+		Clickable rec = new DecorationStack(recipe);
+		gui.setSlot(rec, 11);
+		
+		ItemStack fuel = ButtonLibrary.createIcon(Material.BARRIER, ChatColor.WHITE + "Fuel");
+		Clickable fue = new DecorationStack(recipe);
+		gui.setSlot(fue, 11);
+		
+		ItemStack startRecipe = ButtonLibrary.createIcon(Material.PAPER, ChatColor.GREEN + "Start Recipe");
+		Clickable start = new Clickable(startRecipe) {
+				@Override
+				public void clicked(Player p) {
 
+				}};
+		gui.setSlot(start, 18);
+		
+		ItemStack assignOutput = ButtonLibrary.createIcon(Material.CHEST, ChatColor.GREEN + "Assign Output Chest");
+		Clickable output = new Clickable(assignOutput) {
+				@Override
+				public void clicked(Player p) {
+
+				}};
+		gui.setSlot(output, 27);
+		
+		ItemStack assignInput = ButtonLibrary.createIcon(Material.HOPPER, ChatColor.GREEN + "Assign Input Chest");
+		Clickable input = new Clickable(assignInput) {
+				@Override
+				public void clicked(Player p) {
+
+				}};
+		gui.setSlot(input, 36);
+		
 		gui.setSlot(ButtonLibrary.HOME.clickable(),49);
 
 
