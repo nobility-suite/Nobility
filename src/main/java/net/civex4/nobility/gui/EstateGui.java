@@ -8,6 +8,7 @@ import net.civex4.nobility.developments.AbstractWorkshop;
 import net.civex4.nobility.estate.Estate;
 import net.civex4.nobility.estate.Relationship;
 import net.civex4.nobility.group.GroupPermission;
+import net.civex4.nobility.siege.Siege;
 import net.civex4.nobilityitems.NobilityItem;
 
 import org.bukkit.Bukkit;
@@ -321,19 +322,48 @@ public class EstateGui {
 				}};
 		gui.setSlot(start, 18);
 		
-		ItemStack assignOutput = ButtonLibrary.createIcon(Material.CHEST, ChatColor.GREEN + "Assign Output Chest");
+		ItemStack assignOutput = ButtonLibrary.createIcon(Material.CHEST, ChatColor.GREEN + "Output Chest");
+		if(d.outputChest != null) { ItemAPI.addLore(assignOutput, ChatColor.BLUE + "Output Chest: " + ChatColor.WHITE + "[" + d.outputChest.getBlockX() + "x," + d.outputChest.getBlockY() + "y," + d.outputChest.getBlockZ() + "z]", "", ChatColor.YELLOW + "Click to reassign an output chest!"); }
+		else {ItemAPI.addLore(assignOutput, ChatColor.YELLOW + "" + ChatColor.BOLD + "Click to assign an output chest!"); }
 		Clickable output = new Clickable(assignOutput) {
 				@Override
 				public void clicked(Player p) {
-
+					p.closeInventory();
+					Nobility.getChestSelector().outputQueue.put(p.getUniqueId(),d);
+					p.sendMessage(ChatColor.BLUE + "Punch a chest to select it as an output chest.");
+					
+					Bukkit.getScheduler().scheduleSyncDelayedTask(Nobility.getNobility(), new Runnable() {
+					    @Override
+					    public void run() {
+					    	if(Nobility.getChestSelector().outputQueue.containsKey(p.getUniqueId())) {
+						    	Nobility.getChestSelector().outputQueue.remove(p.getUniqueId());
+								p.sendMessage(ChatColor.RED + "Chest selection cancelled.");
+					    	}
+					    }
+					}, 20*10L); //20 Tick (1 Second) delay before run() is called
 				}};
 		gui.setSlot(output, 27);
 		
-		ItemStack assignInput = ButtonLibrary.createIcon(Material.HOPPER, ChatColor.GREEN + "Assign Input Chest");
+		ItemStack assignInput = ButtonLibrary.createIcon(Material.HOPPER, ChatColor.WHITE + "Input Chest");
+		if(d.inputChest != null) { ItemAPI.addLore(assignInput, ChatColor.BLUE + "Input Chest: " + ChatColor.WHITE + "[" + d.inputChest.getBlockX() + "x," + d.inputChest.getBlockY() + "y," + d.inputChest.getBlockZ() + "z]", "", ChatColor.YELLOW + "Click to reassign an output chest!"); }
+		else {ItemAPI.addLore(assignInput, ChatColor.YELLOW + "" + ChatColor.BOLD + "Click to assign an input chest!"); }
 		Clickable input = new Clickable(assignInput) {
 				@Override
 				public void clicked(Player p) {
+					p.closeInventory();
 
+					Nobility.getChestSelector().inputQueue.put(p.getUniqueId(),d);
+					p.sendMessage(ChatColor.BLUE + "Punch a chest to select it as an input chest.");
+					
+					Bukkit.getScheduler().scheduleSyncDelayedTask(Nobility.getNobility(), new Runnable() {
+					    @Override
+					    public void run() {
+					    	if(Nobility.getChestSelector().inputQueue.containsKey(p.getUniqueId())) {
+						    	Nobility.getChestSelector().inputQueue.remove(p.getUniqueId());
+								p.sendMessage(ChatColor.RED + "Chest selection cancelled.");	
+					    	}
+					    }
+					}, 20*10L); //20 Tick (1 Second) delay before run() is called
 				}};
 		gui.setSlot(input, 36);
 		
