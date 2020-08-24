@@ -9,6 +9,10 @@
 		Factions. Built for Spigot 1.12.
 	</description>
 
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
+
 	<repositories>
 		<repository>
 			<id>spigot-repo</id>
@@ -48,7 +52,7 @@
 		<dependency>
 			<groupId>io.github.kingvictoria</groupId>
 			<artifactId>NobilityRegions</artifactId>
-			<version>v0.9.1</version>
+			<version>v0.10.0</version>
 		</dependency>
 		<dependency>
 			<groupId>org.xerial</groupId>
