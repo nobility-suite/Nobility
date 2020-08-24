@@ -31,6 +31,7 @@ import net.civex4.nobility.gui.GUICommand;
 import net.civex4.nobility.listeners.BlueprintCommandListener;
 import net.civex4.nobility.listeners.CannonListener;
 import net.civex4.nobility.listeners.ChestClick;
+import net.civex4.nobility.listeners.ChestSelectionListener;
 import net.civex4.nobility.listeners.CommandListener;
 import net.civex4.nobility.listeners.CreateCommand;
 import net.civex4.nobility.listeners.EstateCommandListener;
@@ -56,6 +57,7 @@ public class Nobility extends ACivMod {
 	private static SiegeManager siegeManager;
 	private static BlueprintManager blueprintManager;
 	private static EstateGui estateGui;
+	private static ChestSelectionListener chestSelect;
 	//private static Citadel CitadelManager;
 	//public static ReinforcementManager reinforcementManager;
 
@@ -100,6 +102,7 @@ public class Nobility extends ACivMod {
 		siegeManager = new SiegeManager();
 		blueprintManager = new BlueprintManager();
 		estateGui = new EstateGui();
+		chestSelect = new ChestSelectionListener();
 	}
 	
 	public static GroupManager getGroupManager() {
@@ -142,6 +145,7 @@ public class Nobility extends ACivMod {
 		pm.registerEvents(new ChestClick(), this);
 		pm.registerEvents(new ProtectionListener(), this);
 		pm.registerEvents(new CannonListener(), this);
+		pm.registerEvents(chestSelect, this);
 
 		
 		if(pm.isPluginEnabled("Citadel")) {
@@ -235,6 +239,10 @@ public class Nobility extends ACivMod {
 
 		Nobility.getNobility().schematics.put(name, schematic);
 		return schematic;
+	}
+	
+	public static ChestSelectionListener getChestSelector() {
+		return chestSelect;
 	}
 
 }

@@ -4,9 +4,11 @@ import io.github.kingvictoria.regions.Region;
 import io.github.kingvictoria.regions.nodes.Node;
 import net.civex4.nobility.Nobility;
 import net.civex4.nobility.development.*;
+import net.civex4.nobility.developments.AbstractWorkshop;
 import net.civex4.nobility.estate.Estate;
 import net.civex4.nobility.estate.Relationship;
 import net.civex4.nobility.group.GroupPermission;
+import net.civex4.nobility.siege.Siege;
 import net.civex4.nobilityitems.NobilityItem;
 
 import org.bukkit.Bukkit;
@@ -270,7 +272,7 @@ public class EstateGui {
 
 					@Override
 					public void clicked(Player p) {
-						openWorkshopCraftGUI(p,d);
+						openWorkshopCraftGUI(p,(AbstractWorkshop) d);
 					}
 
 				};
@@ -283,7 +285,7 @@ public class EstateGui {
 		gui.showInventory(p);
 	}
 
-	private void openWorkshopCraftGUI(Player p, Development d) {
+	private void openWorkshopCraftGUI(Player p, AbstractWorkshop d) {
 		Estate estate = Nobility.getEstateManager().getEstateOfPlayer(p);
 		ClickableInventory gui = new ClickableInventory(54, d.name);
 
@@ -296,10 +298,75 @@ public class EstateGui {
 				gui.setSlot(c, i);
 			}
 		}
+		
+		Clickable workshopInfo = ButtonLibrary.createWorkshopInfo(d);
+		gui.setSlot(workshopInfo, 0);
 
 		Clickable workerInfo = ButtonLibrary.createWorkerInfo(p);
 		gui.setSlot(workerInfo, 29);
+		
+		
+		ItemStack recipe = ButtonLibrary.createIcon(Material.BARRIER, ChatColor.WHITE + "Select Blueprint");
+		Clickable rec = new DecorationStack(recipe);
+		gui.setSlot(rec, 11);
+		
+		ItemStack fuel = ButtonLibrary.createIcon(Material.BARRIER, ChatColor.WHITE + "Fuel");
+		Clickable fue = new DecorationStack(recipe);
+		gui.setSlot(fue, 11);
+		
+		ItemStack startRecipe = ButtonLibrary.createIcon(Material.PAPER, ChatColor.GREEN + "Start Recipe");
+		Clickable start = new Clickable(startRecipe) {
+				@Override
+				public void clicked(Player p) {
 
+				}};
+		gui.setSlot(start, 18);
+		
+		ItemStack assignOutput = ButtonLibrary.createIcon(Material.CHEST, ChatColor.GREEN + "Output Chest");
+		if(d.outputChest != null) { ItemAPI.addLore(assignOutput, ChatColor.BLUE + "Output Chest: " + ChatColor.WHITE + "[" + d.outputChest.getBlockX() + "x," + d.outputChest.getBlockY() + "y," + d.outputChest.getBlockZ() + "z]", "", ChatColor.YELLOW + "Click to reassign an output chest!"); }
+		else {ItemAPI.addLore(assignOutput, ChatColor.YELLOW + "" + ChatColor.BOLD + "Click to assign an output chest!"); }
+		Clickable output = new Clickable(assignOutput) {
+				@Override
+				public void clicked(Player p) {
+					p.closeInventory();
+					Nobility.getChestSelector().outputQueue.put(p.getUniqueId(),d);
+					p.sendMessage(ChatColor.BLUE + "Punch a chest to select it as an output chest.");
+					
+					Bukkit.getScheduler().scheduleSyncDelayedTask(Nobility.getNobility(), new Runnable() {
+					    @Override
+					    public void run() {
+					    	if(Nobility.getChestSelector().outputQueue.containsKey(p.getUniqueId())) {
+						    	Nobility.getChestSelector().outputQueue.remove(p.getUniqueId());
+								p.sendMessage(ChatColor.RED + "Chest selection cancelled.");
+					    	}
+					    }
+					}, 20*10L); //20 Tick (1 Second) delay before run() is called
+				}};
+		gui.setSlot(output, 27);
+		
+		ItemStack assignInput = ButtonLibrary.createIcon(Material.HOPPER, ChatColor.WHITE + "Input Chest");
+		if(d.inputChest != null) { ItemAPI.addLore(assignInput, ChatColor.BLUE + "Input Chest: " + ChatColor.WHITE + "[" + d.inputChest.getBlockX() + "x," + d.inputChest.getBlockY() + "y," + d.inputChest.getBlockZ() + "z]", "", ChatColor.YELLOW + "Click to reassign an output chest!"); }
+		else {ItemAPI.addLore(assignInput, ChatColor.YELLOW + "" + ChatColor.BOLD + "Click to assign an input chest!"); }
+		Clickable input = new Clickable(assignInput) {
+				@Override
+				public void clicked(Player p) {
+					p.closeInventory();
+
+					Nobility.getChestSelector().inputQueue.put(p.getUniqueId(),d);
+					p.sendMessage(ChatColor.BLUE + "Punch a chest to select it as an input chest.");
+					
+					Bukkit.getScheduler().scheduleSyncDelayedTask(Nobility.getNobility(), new Runnable() {
+					    @Override
+					    public void run() {
+					    	if(Nobility.getChestSelector().inputQueue.containsKey(p.getUniqueId())) {
+						    	Nobility.getChestSelector().inputQueue.remove(p.getUniqueId());
+								p.sendMessage(ChatColor.RED + "Chest selection cancelled.");	
+					    	}
+					    }
+					}, 20*10L); //20 Tick (1 Second) delay before run() is called
+				}};
+		gui.setSlot(input, 36);
+		
 		gui.setSlot(ButtonLibrary.HOME.clickable(),49);
 
 

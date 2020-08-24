@@ -1,11 +1,15 @@
 package net.civex4.nobility.developments;
 
+import org.bukkit.Location;
 import org.bukkit.Material;
 
 import net.civex4.nobility.development.Development;
 import net.civex4.nobility.development.DevelopmentType;
 
-public class SiegeWorkshop extends Development{
+public class SiegeWorkshop extends AbstractWorkshop{
+	
+	public Location inputChest;
+	public Location outputChest;
 
 	public SiegeWorkshop() {
 		super(DevelopmentType.WORKSHOP);

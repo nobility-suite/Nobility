@@ -16,12 +16,12 @@ import vg.civcraft.mc.civmodcore.api.ItemAPI;
 public class Blueprint {
 	private static final String AMOUNT_DELIMITER = "x ";
 	private static final String RESULT_AMOUNT_PREFIX = "";
-	private static final String RESULT_PREFIX = ChatColor.YELLOW + "Result: ";
-	private static final String INGREDIENT_AMOUNT_PREFIX = ChatColor.GOLD + "  ";
-	private static final String RUNS_PREFIX = "Uses: ";
-	private static final String INGREDIENTS_LINE_DELIMITER = "Components:";
+	private static final String RESULT_PREFIX = ChatColor.BLUE + "Result: " + ChatColor.WHITE;
+	private static final String INGREDIENT_AMOUNT_PREFIX = ChatColor.WHITE + "  ";
+	private static final String RUNS_PREFIX = ChatColor.BLUE + "Uses: " + ChatColor.WHITE;
+	private static final String INGREDIENTS_LINE_DELIMITER = ChatColor.BLUE + "Components:" + ChatColor.WHITE;
 	
-	private static final String TIME_INSTANT = "Time: Instant";
+	private static final String TIME_INSTANT = ChatColor.BLUE + "Time:" + ChatColor.WHITE + " Instant";
 	
 	public NobilityItem result;
 	public int resultAmount;
