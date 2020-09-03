@@ -5,11 +5,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
+import org.bukkit.block.Block;
+import org.bukkit.block.Chest;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
 
 import net.civex4.nobility.Nobility;
+import net.civex4.nobility.developments.AbstractWorkshop;
 import net.civex4.nobilityitems.NobilityItem;
 import net.civex4.nobilityitems.NobilityItems;
 
@@ -32,6 +38,31 @@ public class BlueprintManager {
       Bukkit.getLogger().severe("Blueprint config does not exist.");
       e.printStackTrace();
     }
+  }
+  
+  public boolean recipeExists(ItemStack i, AbstractWorkshop d) {
+		Block b = d.inputChest.getBlock();
+		if(b.getType() == Material.CHEST || b.getType() == Material.TRAPPED_CHEST) {
+			Chest chest = (Chest) b.getState();
+			Inventory inv = chest.getInventory();
+			if(inv.contains(i)) {
+				return true;
+			}else return false;
+		}
+		return false;
+  }
+  
+  public ArrayList<ItemStack> listBlueprints(Inventory inv){
+	  ArrayList<ItemStack> ret = new ArrayList<ItemStack>();
+	  for(ItemStack i : inv.getContents()) {
+		  if(i != null)
+		  if(i.getType() == Material.PAPER) {
+			  if(i.hasItemMeta() && i.getItemMeta().getDisplayName().contains("Blueprint")) {
+				  ret.add(i);
+			  }
+		  }
+	  }
+	  return ret;
   }
 
   private ArrayList<AbstractBlueprint> loadBlueprints(FileConfiguration config) {

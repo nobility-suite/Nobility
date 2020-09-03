@@ -1,28 +1,41 @@
 package net.civex4.nobility.gui;
 
-import io.github.kingvictoria.regions.Region;
-import io.github.kingvictoria.regions.nodes.Node;
-import net.civex4.nobility.Nobility;
-import net.civex4.nobility.development.*;
-import net.civex4.nobility.developments.AbstractWorkshop;
-import net.civex4.nobility.estate.Estate;
-import net.civex4.nobility.estate.Relationship;
-import net.civex4.nobility.group.GroupPermission;
-import net.civex4.nobility.siege.Siege;
-import net.civex4.nobilityitems.NobilityItem;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.Sound;
+import org.bukkit.block.Block;
+import org.bukkit.block.Chest;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
+
+import io.github.kingvictoria.regions.Region;
+import io.github.kingvictoria.regions.nodes.Node;
+import net.civex4.nobility.Nobility;
+import net.civex4.nobility.development.AttributeManager;
+import net.civex4.nobility.development.Camp;
+import net.civex4.nobility.development.DevAttribute;
+import net.civex4.nobility.development.Development;
+import net.civex4.nobility.development.DevelopmentBlueprint;
+import net.civex4.nobility.development.DevelopmentType;
+import net.civex4.nobility.developments.AbstractWorkshop;
+import net.civex4.nobility.estate.Estate;
+import net.civex4.nobility.estate.Relationship;
+import net.civex4.nobility.group.GroupPermission;
+import net.civex4.nobilityitems.NobilityItem;
 import vg.civcraft.mc.civmodcore.api.ItemAPI;
 import vg.civcraft.mc.civmodcore.inventorygui.Clickable;
 import vg.civcraft.mc.civmodcore.inventorygui.ClickableInventory;
 import vg.civcraft.mc.civmodcore.inventorygui.DecorationStack;
-import java.util.*;
 
 public class EstateGui {
 
@@ -285,6 +298,48 @@ public class EstateGui {
 		gui.showInventory(p);
 	}
 
+	private void openBlueprintSelector(Player p, AbstractWorkshop d) {
+		if(d.inputChest == null) { 
+			p.sendMessage(ChatColor.DARK_RED + "No input chest");
+		return;}
+		
+		ClickableInventory gui = new ClickableInventory(54, "Select a Blueprint");
+
+		int[] decoSlots = {0,1,2,3,4,5,6,7,8};
+
+		// DECORATION STACKS
+		for (int i : decoSlots) {
+			if (!(gui.getSlot(i) instanceof Clickable)) {
+				Clickable c = new DecorationStack(ButtonLibrary.createIcon(Material.BLACK_STAINED_GLASS_PANE, " "));
+				gui.setSlot(c, i);
+			}
+		}
+		
+		Block b = d.inputChest.getBlock();
+		if(b!= null && b.getType() == Material.CHEST || b.getType() == Material.TRAPPED_CHEST) {
+			Chest chest = (Chest) b.getState();
+			Inventory inv = chest.getInventory();
+			ArrayList<ItemStack> blueprints = Nobility.getBlueprintManager().listBlueprints(inv);
+			
+			//Display Blueprints
+			for(ItemStack i : blueprints) {
+				Clickable bp = new Clickable(i) {
+						@Override
+						public void clicked(Player p) {
+							d.selectedRecipe = i;
+							openWorkshopCraftGUI(p,d);
+						}};
+				gui.addSlot(bp);
+			}
+			gui.showInventory(p);
+
+			
+		}else {
+			p.sendMessage(ChatColor.RED + "Workshop input chest location is invalid.");
+		}
+	
+	}
+	
 	private void openWorkshopCraftGUI(Player p, AbstractWorkshop d) {
 		Estate estate = Nobility.getEstateManager().getEstateOfPlayer(p);
 		ClickableInventory gui = new ClickableInventory(54, d.name);
@@ -305,14 +360,21 @@ public class EstateGui {
 		Clickable workerInfo = ButtonLibrary.createWorkerInfo(p);
 		gui.setSlot(workerInfo, 29);
 		
-		
-		ItemStack recipe = ButtonLibrary.createIcon(Material.BARRIER, ChatColor.WHITE + "Select Blueprint");
-		Clickable rec = new DecorationStack(recipe);
+		ItemStack selected = d.selectedRecipe;
+		if(selected != null && Nobility.getBlueprintManager().recipeExists(selected, d)) {
+			
+		}else { selected = ButtonLibrary.createIcon(Material.BARRIER, ChatColor.WHITE + "Select Blueprint"); }
+		ItemAPI.addLore(selected, true, ChatColor.YELLOW + "" + ChatColor.BOLD + "Click to change Blueprint!");
+		Clickable rec = new Clickable(selected) {
+			@Override
+			public void clicked(Player p) {
+				openBlueprintSelector(p,d);
+			}};
 		gui.setSlot(rec, 11);
 		
 		ItemStack fuel = ButtonLibrary.createIcon(Material.BARRIER, ChatColor.WHITE + "Fuel");
-		Clickable fue = new DecorationStack(recipe);
-		gui.setSlot(fue, 11);
+		Clickable fue = new DecorationStack(fuel);
+		gui.setSlot(fue, 38);
 		
 		ItemStack startRecipe = ButtonLibrary.createIcon(Material.PAPER, ChatColor.GREEN + "Start Recipe");
 		Clickable start = new Clickable(startRecipe) {
