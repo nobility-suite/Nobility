@@ -29,3 +29,5 @@ bin/.gitattributes
 /bin/
 .factorypath
 .vscode/settings.json
+out/artifacts/Nobility_jar/Nobility.jar
+Nobility.iml
