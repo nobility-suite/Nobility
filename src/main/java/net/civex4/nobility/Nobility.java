@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import net.civex4.nobility.listeners.*;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
@@ -28,14 +29,6 @@ import net.civex4.nobility.estate.EstateManager;
 import net.civex4.nobility.group.GroupManager;
 import net.civex4.nobility.gui.EstateGui;
 import net.civex4.nobility.gui.GUICommand;
-import net.civex4.nobility.listeners.BlueprintCommandListener;
-import net.civex4.nobility.listeners.CannonListener;
-import net.civex4.nobility.listeners.ChestClick;
-import net.civex4.nobility.listeners.ChestSelectionListener;
-import net.civex4.nobility.listeners.CommandListener;
-import net.civex4.nobility.listeners.CreateCommand;
-import net.civex4.nobility.listeners.EstateCommandListener;
-import net.civex4.nobility.listeners.ProtectionListener;
 import net.civex4.nobility.siege.SiegeManager;
 import net.civex4.nobility.workers.WorkerManager;
 import net.md_5.bungee.api.ChatColor;
@@ -141,7 +134,7 @@ public class Nobility extends ACivMod {
 	
 	private void registerEvents() {
 		PluginManager pm = getServer().getPluginManager();
-		//pm.registerEvents(new EstateCreate(), this);
+		pm.registerEvents(new EstateCreate(), this);
 		pm.registerEvents(new ChestClick(), this);
 		pm.registerEvents(new ProtectionListener(), this);
 		pm.registerEvents(new CannonListener(), this);
