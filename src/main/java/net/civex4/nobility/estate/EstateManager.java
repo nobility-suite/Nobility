@@ -78,7 +78,7 @@ public class EstateManager {
 		Estate estate = new Estate(block, group);		
 		estates.add(estate);
 		
-		player.sendMessage("You have created an estate for " + group.getName());
+		player.sendMessage(ChatColor.GOLD + "You have created an estate for "+ ChatColor.AQUA + group.getName());
 		for(UUID p : group.getMembers()) {
 			setEstateOfPlayer(Bukkit.getPlayer(p), estate);
 		}
