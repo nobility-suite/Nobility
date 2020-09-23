@@ -61,7 +61,10 @@ public class EstateCommandListener implements CommandExecutor {
     			  	}
     			  
     		  }else { p.sendMessage(ChatColor.RED + "You are already part of an Estate! You must leave your current estate before creating a new one.");}
-    		  
+
+			  /**
+			   * @REPLACED by EstateCreate Listener. (ChestClickEvent checks for iron and shit.)
+			   */
 //  		Player p = e.getPlayer();
 //  		if (Nobility.getGroupManager().getGroup(p) == null) return;
 //  		Block b = e.getClickedBlock();
