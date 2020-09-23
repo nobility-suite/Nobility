@@ -20,3 +20,13 @@ commands:
    blueprints:
       description: (DEBUG) Commands related to blueprints
       usage: /blueprints (argument) [other]
+   nobility promote:
+     description: Promotes a player on a nobility group.
+     usage: /nobility promote <player>
+     aliases:
+       - /n promote
+   nobility demote:
+     description: Demotes a player on a nobility group.
+     usage: /nobility demote <player>
+     aliases:
+       - /n demote

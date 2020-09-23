@@ -138,7 +138,9 @@ public class CommandListener implements CommandExecutor{
 					//Promote Moderator to Officer.
 					if(promotePerm == GroupPermission.TRUSTED && perm == GroupPermission.LEADER) {
 						g.setPermission(promotePlayer, GroupPermission.OFFICER);
-						Bukkit.getServer().getLogger().info("Updated player's rank to: " + promotePerm.name());
+						Bukkit.getServer().getLogger().info("Updated player's rank to: " + g.getPermission(promotePlayer));
+						Group f = Nobility.getGroupManager().getGroup(player); //Reload variable that for some weird fucking reason fixes promotion bug.
+						Bukkit.getServer().getLogger().info("Player rank recheck to: " + f.getPermission(promotePlayer));
 						player.sendMessage(ChatColor.GOLD + "Successfully promoted " + ChatColor.AQUA + promotePlayer.getName() + ".");
 						if(promotePlayer.isOnline()) {
 							promotePlayer.getPlayer().sendMessage(ChatColor.GREEN + "You have been promoted!");
@@ -146,7 +148,16 @@ public class CommandListener implements CommandExecutor{
 						return true;
 					}
 					//Promote Member to Moderator.
-					if(promotePerm == GroupPermission.DEFAULT && perm == GroupPermission.OFFICER || perm == GroupPermission.LEADER) {
+					if(promotePerm == GroupPermission.DEFAULT && perm == GroupPermission.OFFICER) {
+						g.setPermission(promotePlayer, GroupPermission.TRUSTED);
+						player.sendMessage(ChatColor.GOLD + "Successfully promoted " + ChatColor.AQUA + promotePlayer.getName() + ".");
+						if(promotePlayer.isOnline()) {
+							promotePlayer.getPlayer().sendMessage(ChatColor.GREEN + "You have been promoted!");
+						}
+						return true;
+					}
+					//Promote Member to Moderator. (As leader)
+					if(promotePerm == GroupPermission.DEFAULT && perm == GroupPermission.LEADER) {
 						g.setPermission(promotePlayer, GroupPermission.TRUSTED);
 						player.sendMessage(ChatColor.GOLD + "Successfully promoted " + ChatColor.AQUA + promotePlayer.getName() + ".");
 						if(promotePlayer.isOnline()) {
