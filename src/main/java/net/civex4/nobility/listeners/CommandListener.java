@@ -3,7 +3,11 @@ package net.civex4.nobility.listeners;
 import java.util.HashMap;
 import java.util.UUID;
 
+import net.civex4.nobility.estate.EstateManager;
+import net.civex4.nobility.group.GroupManager;
+import net.civex4.nobility.group.GroupPermission;
 import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -23,6 +27,7 @@ public class CommandListener implements CommandExecutor{
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 		Player player = (Player) sender;
 		UUID playerId = player.getUniqueId();
+
 		
 		if(args.length == 0) {
 			player.sendMessage(ChatColor.BLUE + "-== Nobility Commands ==- \n"
@@ -54,6 +59,9 @@ public class CommandListener implements CommandExecutor{
 					Estate e = Nobility.getEstateManager().getEstateOfPlayer(player);
 					player.sendMessage(ChatColor.BLUE + "You are a part of the Estate " + ChatColor.WHITE + e.getGroup().getName());
 				}
+			if(args[0].equalsIgnoreCase("kick")) {
+				player.sendMessage(ChatColor.GOLD + "This command kicks a player from a nobility group. \n" + ChatColor.GOLD + "Proper usage is /nobility kick <player>");
+			}
 			}
 			
 		} else if (args.length == 2) {
@@ -64,6 +72,43 @@ public class CommandListener implements CommandExecutor{
 			}
 			if(args[0].equalsIgnoreCase("cannon") && args[1].equalsIgnoreCase("recover")) {
 				Nobility.getCannonManager().attemptPickupCannon(player);
+				return true;
+			}
+			if(args[0].equalsIgnoreCase("kick")) {
+				//nobility kick <player>
+				Group g = Nobility.getGroupManager().getGroup(player);
+				if(g == null) {
+					player.sendMessage(ChatColor.RED + "You are not a part of a nobility group!");
+					return true;
+				}
+
+				/**
+				 * Above makes sure you are in group before checking perms since you get an NPE otherwise.
+				 */
+				GroupPermission perm = g.getPermission(player);
+				if(perm == GroupPermission.OFFICER || perm == GroupPermission.LEADER) {
+					String kickString = args[1].toString();
+					OfflinePlayer kickedPlayer = Bukkit.getOfflinePlayer(kickString);
+					GroupPermission kickPerm = g.getPermission(kickedPlayer);
+					if(kickPerm == null) {
+						player.sendMessage(ChatColor.RED + "That player is not in your nobility group!");
+						return true;
+					}
+					if(perm == GroupPermission.LEADER && kickPerm == GroupPermission.OFFICER) {
+						player.sendMessage(ChatColor.GOLD + "Successfully removed " + ChatColor.AQUA + kickedPlayer.getName() + ChatColor.GOLD + " from your nobility group!");
+						g.removeMember(kickedPlayer);
+						return true;
+					}
+					if(kickPerm == GroupPermission.OFFICER || kickPerm == GroupPermission.LEADER) {
+						player.sendMessage(ChatColor.RED + "You cannot kick players of equal, or above rank as you!");
+						return true;
+					}
+					g.removeMember(kickedPlayer);
+					player.sendMessage(ChatColor.GOLD + "Successfully removed " + ChatColor.AQUA + kickedPlayer.getName() + ChatColor.GOLD + " from your nobility group!");
+				} else {
+					player.sendMessage(ChatColor.RED + "You don't have permission to kick players from your nobility group!");
+					return true;
+				}
 				return true;
 			}
 			if(args[0].equalsIgnoreCase("create") && args[1].length() >= 2) {

@@ -47,7 +47,7 @@ public class Group {
 		members.put(id, GroupPermission.DEFAULT);
 	}
 	
-	public void removeMember(Player p) {
+	public void removeMember(OfflinePlayer p) {
 		members.remove(p.getUniqueId());
 	}
 	
@@ -55,7 +55,7 @@ public class Group {
 		return members.keySet();
 	}
 	
-	public GroupPermission getPermission(Player p) {
+	public GroupPermission getPermission(OfflinePlayer p) {
 		return members.get(p.getUniqueId());
 	}
 	
