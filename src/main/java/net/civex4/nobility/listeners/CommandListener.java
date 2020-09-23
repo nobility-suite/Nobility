@@ -2,6 +2,7 @@ package net.civex4.nobility.listeners;
 
 import java.util.HashMap;
 import java.util.UUID;
+import java.util.logging.Level;
 
 import net.civex4.nobility.estate.EstateManager;
 import net.civex4.nobility.group.GroupManager;
@@ -21,6 +22,7 @@ import net.civex4.nobility.estate.Estate;
 import net.civex4.nobility.group.Group;
 import net.civex4.nobility.siege.Siege;
 import net.md_5.bungee.api.ChatColor;
+import org.slf4j.Logger;
 
 public class CommandListener implements CommandExecutor{
 	
@@ -133,18 +135,19 @@ public class CommandListener implements CommandExecutor{
 						player.sendMessage(ChatColor.RED + "You don't have enough power to do that!");
 						return true;
 					}
-					//Promote Member to Moderator.
-					if(promotePerm == GroupPermission.DEFAULT && perm == GroupPermission.OFFICER || perm == GroupPermission.LEADER) {
-						g.setPermission(promotePlayer, GroupPermission.TRUSTED);
+					//Promote Moderator to Officer.
+					if(promotePerm == GroupPermission.TRUSTED && perm == GroupPermission.LEADER) {
+						g.setPermission(promotePlayer, GroupPermission.OFFICER);
+						Bukkit.getServer().getLogger().info("Updated player's rank to: " + promotePerm.name());
 						player.sendMessage(ChatColor.GOLD + "Successfully promoted " + ChatColor.AQUA + promotePlayer.getName() + ".");
 						if(promotePlayer.isOnline()) {
 							promotePlayer.getPlayer().sendMessage(ChatColor.GREEN + "You have been promoted!");
 						}
 						return true;
 					}
-					//Promote Moderator to Officer.
-					if(promotePerm == GroupPermission.TRUSTED && perm == GroupPermission.LEADER) {
-						g.setPermission(promotePlayer, GroupPermission.OFFICER);
+					//Promote Member to Moderator.
+					if(promotePerm == GroupPermission.DEFAULT && perm == GroupPermission.OFFICER || perm == GroupPermission.LEADER) {
+						g.setPermission(promotePlayer, GroupPermission.TRUSTED);
 						player.sendMessage(ChatColor.GOLD + "Successfully promoted " + ChatColor.AQUA + promotePlayer.getName() + ".");
 						if(promotePlayer.isOnline()) {
 							promotePlayer.getPlayer().sendMessage(ChatColor.GREEN + "You have been promoted!");
