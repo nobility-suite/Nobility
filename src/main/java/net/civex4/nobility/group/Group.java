@@ -59,7 +59,7 @@ public class Group {
 		return members.get(p.getUniqueId());
 	}
 	
-	public void setPermission(Player p, GroupPermission permission) {
+	public void setPermission(OfflinePlayer p, GroupPermission permission) {
 		members.put(p.getUniqueId(), permission);
 	}
 	
