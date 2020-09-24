@@ -37,9 +37,11 @@ public class CommandListener implements CommandExecutor{
 		if(args.length == 0) {
 			player.sendMessage(ChatColor.BLUE + "-== Nobility Commands ==- \n"
 					+ ChatColor.GOLD + "/nobility create <name>" + ChatColor.GRAY + "| " + ChatColor.AQUA + "Creates a Nobility group. \n"
+					+ ChatColor.GOLD + "/nobility rename <name>" + ChatColor.GRAY + "| " + ChatColor.AQUA + "Renames a Nobility group. \n"
 					+ ChatColor.GOLD + "/nobility info" + ChatColor.GRAY + "| " + ChatColor.AQUA + "Lists information about your Nobility group. \n"
 					+ ChatColor.GOLD + "/nobility info <name>" + ChatColor.GRAY + "| " + ChatColor.AQUA + "Lists information about a Nobility group. \n"
 					+ ChatColor.GOLD + "/nobility join <name>" + ChatColor.GRAY + "| " + ChatColor.AQUA + "Joins a Nobility group, if you have an invite. \n"
+					+ ChatColor.GOLD + "/nobility leave" + ChatColor.GRAY + "| " + ChatColor.AQUA + "Leaves a Nobility group, if you are a part of one. \n"
 					+ ChatColor.GOLD + "/nobility estate" + ChatColor.GRAY + "| " + ChatColor.AQUA + "Access estate-related commands. Nobility groups without an estate are considered Nomads. \n"
 					+ ChatColor.GOLD + "/nobility invite <name>" + ChatColor.GRAY + "| " + ChatColor.AQUA + "Invites a player to your Nobility group.\n"
 					+ ChatColor.GOLD + "/nobility kick <name>" + ChatColor.GRAY + "| " + ChatColor.AQUA + "Kicks a player from your Nobility group. \n"
@@ -88,6 +90,10 @@ public class CommandListener implements CommandExecutor{
 			if(args[0].equalsIgnoreCase("rankrename")) {
 				player.sendMessage(ChatColor.GOLD + "This command renames a rank in your nobility group. \n" + ChatColor.GOLD + "Proper usage is /nobility rankrename <rank> <name>");
 			}
+			if(args[0].equalsIgnoreCase("leave")) {
+				player.sendMessage(ChatColor.GOLD + "This command makes you leave the current nobility group you are in, \n"
+				+ "to confirm you want to leave your current group, type " + ChatColor.AQUA + "/nobility leave confirm");
+			}
 			}
 			
 		} else if (args.length == 2) {
@@ -98,6 +104,53 @@ public class CommandListener implements CommandExecutor{
 			}
 			if(args[0].equalsIgnoreCase("cannon") && args[1].equalsIgnoreCase("recover")) {
 				Nobility.getCannonManager().attemptPickupCannon(player);
+				return true;
+			}
+
+			/**
+			 * Rename Command for Nobility Groups.
+			 */
+			if(args[0].equalsIgnoreCase("rename")) {
+				Group g = Nobility.getGroupManager().getGroup(player);
+				//Check if player is in group.
+				if(g == null) {
+					player.sendMessage(ChatColor.RED + "You need to be in a nobility group to use this command!");
+					return true;
+				}
+
+				GroupPermission perms = g.getPermission(player);
+				//Checks to make sure player is owner.
+				if(perms == GroupPermission.LEADER) {
+					String newName = args[1].toString();
+					player.sendMessage(ChatColor.GOLD + "You renamed your nobility group to " + ChatColor.AQUA + newName + ChatColor.GOLD + " successfully.");
+					g.setName(newName);
+					return true;
+				}
+				player.sendMessage(ChatColor.RED + "You must be a leader in order to rename a nobility group.");
+				return true;
+			}
+
+			/**
+			 * Leave Command for Nobility Groups.
+			 */
+			if(args[0].equalsIgnoreCase("leave") && args[1].equalsIgnoreCase("confirm")) {
+				Group g = Nobility.getGroupManager().getGroup(player);
+				//Check to see if player is in a group to avoid NPE.
+				if(g == null) {
+					player.sendMessage(ChatColor.RED + "You need to be in a nobility group to use this command!");
+					return true;
+				}
+
+				GroupPermission perm = g.getPermission(player);
+
+
+				//Check to make sure player is not the owner of a group.
+				if(perm == GroupPermission.LEADER) {
+					player.sendMessage(ChatColor.RED + "You need to set a new primary leader of this nobility group, or delete it.");
+					return true;
+				}
+				player.sendMessage(ChatColor.GOLD + "You have left the nobility group " + ChatColor.AQUA + g.getName() + ".");
+				g.removeMember(player);
 				return true;
 			}
 
