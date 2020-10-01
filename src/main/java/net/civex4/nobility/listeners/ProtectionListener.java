@@ -5,6 +5,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockPistonExtendEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 
 import net.civex4.nobility.Nobility;
@@ -67,6 +68,26 @@ public class ProtectionListener implements Listener{
 			event.setCancelled(true); 
 			p.sendMessage(BLOCK_PREVENTED_MSG + ChatColor.WHITE + e.getGroup().getName()); 
 		}
+	}
+
+	@EventHandler
+	public void pistonCheck(BlockPistonExtendEvent event) {
+		Location loc = event.getBlock().getLocation();
+		Estate e = Nobility.getEstateManager().getNearestEstate(loc);
+		//Estate Check, that way we don't throw NPE's
+		if(e == null) { return; }
+
+		int radius = AttributeManager.getCityLimit(e) + 15; //+15 Meter Limit.
+
+		if(!withinSquare(radius, e.getBlock().getLocation(), loc)) {
+			//Check to see if piston is within Radius deemed "Bad"
+			return;
+		}
+
+		//Just, Does the job until I can figure out a better way to do it. Wish I could permit Pistons within estate fields
+		//but, thats not looking like a possibility.
+		event.setCancelled(true);
+
 	}
 	
 	

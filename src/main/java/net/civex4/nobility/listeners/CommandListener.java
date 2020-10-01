@@ -58,11 +58,22 @@ public class CommandListener implements CommandExecutor{
 				return true;
 			}
 
+			if (args[0].equalsIgnoreCase("rankrename")) {
+				player.sendMessage(ChatColor.GOLD + "You can rename a rank's displayname with this command, here are the ranks below \n"
+						+ ChatColor.AQUA + "LEADER \n"
+						+ ChatColor.AQUA + "OFFICER \n"
+						+ ChatColor.AQUA + "TRUSTED \n"
+						+ ChatColor.AQUA + "DEFAULT \n"
+						+ ChatColor.GOLD + "Use /nobility rankrename <rank> <name> to name the rank!");
+				return true;
+			}
+
 			//checks players current rank.
 			if (args[0].equalsIgnoreCase("rank")) {
 				Group g = Nobility.getGroupManager().getGroup(player);
 				GroupPermission perm = g.getPermission(player);
-				player.sendMessage(ChatColor.GOLD + "You are the rank: " + ChatColor.AQUA + perm.name());
+				player.sendMessage(ChatColor.GOLD + "You are a, " + ChatColor.AQUA + g.getLocalization(perm) + ".");
+				return true;
 			}
 			
 			if (args[0].equalsIgnoreCase("nextday")) {
@@ -77,22 +88,28 @@ public class CommandListener implements CommandExecutor{
 				if(Nobility.getEstateManager().getEstateOfPlayer(player) != null) {
 					Estate e = Nobility.getEstateManager().getEstateOfPlayer(player);
 					player.sendMessage(ChatColor.BLUE + "You are a part of the Estate " + ChatColor.WHITE + e.getGroup().getName());
+					return true;
 				}
 			if(args[0].equalsIgnoreCase("kick")) {
 				player.sendMessage(ChatColor.GOLD + "This command kicks a player from a nobility group. \n" + ChatColor.GOLD + "Proper usage is /nobility kick <player>");
+				return true;
 			}
 			if(args[0].equalsIgnoreCase("promote")) {
 				player.sendMessage(ChatColor.GOLD + "This command promotes a member of your nobility group. \n" + ChatColor.GOLD + "Proper usage is /nobility promote <player>");
+				return true;
 			}
 			if(args[0].equalsIgnoreCase("demote")) {
 				player.sendMessage(ChatColor.GOLD + "This command demotes a member of your nobility group. \n" + ChatColor.GOLD + "Proper usage is /nobility demote <player>");
+				return true;
 			}
 			if(args[0].equalsIgnoreCase("rankrename")) {
 				player.sendMessage(ChatColor.GOLD + "This command renames a rank in your nobility group. \n" + ChatColor.GOLD + "Proper usage is /nobility rankrename <rank> <name>");
+				return true;
 			}
 			if(args[0].equalsIgnoreCase("leave")) {
 				player.sendMessage(ChatColor.GOLD + "This command makes you leave the current nobility group you are in, \n"
 				+ "to confirm you want to leave your current group, type " + ChatColor.AQUA + "/nobility leave confirm");
+				return true;
 			}
 			}
 			
@@ -106,6 +123,7 @@ public class CommandListener implements CommandExecutor{
 				Nobility.getCannonManager().attemptPickupCannon(player);
 				return true;
 			}
+
 
 			/**
 			 * Rename Command for Nobility Groups.
@@ -412,6 +430,63 @@ public class CommandListener implements CommandExecutor{
 		}
 		if(args.length == 3) {
 			Player p = (Player) sender;
+
+			/**
+			 * Localization Rename Command for Nobility Groups.
+			 */
+			if(args[0].equalsIgnoreCase("rankrename")) {
+				Group g = Nobility.getGroupManager().getGroup(player);
+				if(g == null) {
+					player.sendMessage(ChatColor.RED + "You need to be in a nobility group to use this command!");
+					return true;
+				}
+
+				GroupPermission perms = g.getPermission(player);
+
+				//Check if player has LEADER Permission.
+				if(!(perms == GroupPermission.LEADER)) {
+				player.sendMessage(ChatColor.RED + "You need to be the leader of this nobility group to change rank names!");
+				return true;
+				}
+
+				//Mess of IF statements below cause idk how to do this better.
+
+				if(args[1].equalsIgnoreCase("leader")) {
+					GroupPermission rank = GroupPermission.LEADER;
+					String newLocalization = args[2].toString();
+					player.sendMessage(ChatColor.GOLD + "Sucessfully changed rank name to " + ChatColor.AQUA + newLocalization + ".");
+					g.setLocalization(rank, newLocalization);
+					return true;
+				}
+
+				if(args[1].equalsIgnoreCase("officer")) {
+					GroupPermission rank = GroupPermission.OFFICER;
+					String newLocalization = args[2].toString();
+					player.sendMessage(ChatColor.GOLD + "Sucessfully changed rank name to " + ChatColor.AQUA + newLocalization + ".");
+					g.setLocalization(rank, newLocalization);
+					return true;
+				}
+
+				if(args[1].equalsIgnoreCase("trusted")) {
+					GroupPermission rank = GroupPermission.TRUSTED;
+					String newLocalization = args[2].toString();
+					player.sendMessage(ChatColor.GOLD + "Sucessfully changed rank name to " + ChatColor.AQUA + newLocalization + ".");
+					g.setLocalization(rank, newLocalization);
+					return true;
+				}
+
+				if(args[1].equalsIgnoreCase("default")) {
+					GroupPermission rank = GroupPermission.DEFAULT;
+					String newLocalization = args[2].toString();
+					player.sendMessage(ChatColor.GOLD + "Sucessfully changed rank name to " + ChatColor.AQUA + newLocalization + ".");
+					g.setLocalization(rank, newLocalization);
+					return true;
+				}
+				player.sendMessage(ChatColor.DARK_RED + "Something went wrong...");
+				Bukkit.getServer().getLogger().log(Level.SEVERE, "-=<CommandListener>=- Error in rankrename Command! (No If Statement Fired.)");
+				return true;
+			}
+
 			if(args[0].equalsIgnoreCase("admin") && args[1].equalsIgnoreCase("siege")) {
 				String target = args[2];
 				Estate e = null;
