@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
+import net.civex4.nobility.group.Group;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -799,6 +800,15 @@ public class EstateGui {
 
 					@Override
 					public void clicked(Player p) {
+						Group g = Nobility.getGroupManager().getGroup(p);
+						GroupPermission perm = g.getPermission(p);
+
+						if(!(perm == GroupPermission.OFFICER || perm == GroupPermission.LEADER)) {
+							p.sendMessage(ChatColor.RED + "You don't have permission to claim nodes!");
+							p.closeInventory();
+							return;
+						}
+
 						if(!Nobility.getClaimManager().underNodeLimit(n, estate)) {
 							p.sendMessage(ChatColor.RED + "You cannot claim any more nodes of type " + ChatColor.WHITE + n.getType() + ChatColor.RED + ", you must upgrade your camps first.");
 							p.closeInventory();
@@ -946,6 +956,18 @@ public class EstateGui {
 
 					@Override
 					public void clicked(Player p) {
+						Group g = Nobility.getGroupManager().getGroup(p);
+						if(g == null) {
+							return;
+						}
+						GroupPermission perm = g.getPermission(p);
+
+						if(!(perm == GroupPermission.OFFICER || perm == GroupPermission.LEADER)) {
+							p.sendMessage(ChatColor.RED + "You don't have enough permission to build developments.");
+							p.closeInventory();
+							return;
+						}
+
 						Nobility.getDevelopmentManager().build(b, estate, player);
 					}
 				};

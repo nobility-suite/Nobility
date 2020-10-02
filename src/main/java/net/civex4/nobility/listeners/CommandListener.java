@@ -68,6 +68,21 @@ public class CommandListener implements CommandExecutor{
 				return true;
 			}
 
+			if (args[0].equalsIgnoreCase("disband")) {
+				Group g = Nobility.getGroupManager().getGroup(player);
+				if (g == null) { return true; }
+				GroupPermission perm = g.getPermission(player);
+
+				if(!(perm == GroupPermission.LEADER)) {
+					player.sendMessage(ChatColor.RED + "You don't have enough permission to do that!");
+					return true;
+				}
+
+				player.sendMessage(ChatColor.GOLD + "Are you sure you want to disband your group? \n"
+				+ "type " + ChatColor.AQUA + "/nobility disband confirm" + ChatColor.GOLD + " if you do.");
+				return true;
+			}
+
 			//checks players current rank.
 			if (args[0].equalsIgnoreCase("rank")) {
 				Group g = Nobility.getGroupManager().getGroup(player);
@@ -145,6 +160,27 @@ public class CommandListener implements CommandExecutor{
 					return true;
 				}
 				player.sendMessage(ChatColor.RED + "You must be a leader in order to rename a nobility group.");
+				return true;
+			}
+
+			/**
+			 * Disband Command for Nobility Groups.
+			 */
+			if(args[0].equalsIgnoreCase("disband") && args[1].equalsIgnoreCase("confirm")) {
+				Group g = Nobility.getGroupManager().getGroup(player);
+				//ChEcK GRouP REEEEEEEEEEEE
+				if(g == null) {
+					player.sendMessage(ChatColor.RED + "You need to be in a nobility group to use this command!");
+					return true;
+				}
+
+				GroupPermission perm = g.getPermission(player);
+
+				if(!(perm == GroupPermission.LEADER)) {
+					player.sendMessage(ChatColor.RED + "You need to be a leader to run this command.");
+					return true;
+				}
+				Nobility.getGroupManager().disbandGroup(player, g);
 				return true;
 			}
 

@@ -86,6 +86,19 @@ public class EstateManager {
 		return estate;
 		
 	}
+
+	public Estate removeEstate(Player player) {
+		Group group = Nobility.getGroupManager().getGroup(player);
+		Estate estate = Nobility.getEstateManager().getEstate(group);
+		Block block = estate.getBlock();
+		group.setHasEstate(false);
+		block.setType(Material.AIR);
+		estates.remove(estate);
+
+		player.sendMessage(ChatColor.GOLD + "Successfully removed Estate for " + ChatColor.AQUA + group.getName());
+
+		return estate;
+	}
 	
 
 /* ============================================================
