@@ -40,6 +40,9 @@ public class Estate {
 	public void addDevelopment(Development d) {
 		builtDevelopments.add(d);
 	}
+	public void removeDevelopment(Development d){
+		builtDevelopments.remove(d);
+	}
 	
 	public Inventory getInventory() {
 		for (Development development : builtDevelopments) {
