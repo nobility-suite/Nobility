@@ -80,6 +80,11 @@ public class ProtectionListener implements Listener{
 		
 		Player p = event.getPlayer();
 		Group g = Nobility.getGroupManager().getGroup(p);
+		if(g == null) {
+			event.setCancelled(true);
+			p.sendMessage(BLOCK_PREVENTED_MSG + ChatColor.WHITE + e.getGroup().getName());
+			return;
+		}
 		GroupPermission perm = g.getPermission(p);
 		if(Nobility.getEstateManager().getEstateOfPlayer(p) == e) {
 			if(perm == GroupPermission.DEFAULT) {
@@ -106,6 +111,11 @@ public class ProtectionListener implements Listener{
 		
 		Player p = event.getPlayer();
 		Group g = Nobility.getGroupManager().getGroup(p);
+		if(g == null) {
+			event.setCancelled(true);
+			p.sendMessage(BLOCK_PREVENTED_MSG + ChatColor.WHITE + e.getGroup().getName());
+			return;
+		}
 		GroupPermission perm = g.getPermission(p);
 		if(Nobility.getEstateManager().getEstateOfPlayer(p) == e) {
 			if(perm == GroupPermission.DEFAULT) {
