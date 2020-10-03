@@ -1,5 +1,6 @@
 package net.civex4.nobility.gui;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -678,7 +679,10 @@ public class EstateGui {
 				Clickable resourceButton = new DecorationStack(resourceIcon);
 				ItemAPI.addLore(resourceIcon, ChatColor.BLUE + "Slots: (" + n.getUsedSlots() + "/" + n.getSlots() + ")",
 						ChatColor.BLUE + "Type: " + ChatColor.WHITE + n.getType(),
-						ChatColor.BLUE + "Output:");
+						ChatColor.BLUE + "Output:",
+						ChatColor.GREEN + "LEFT CLICK to add",
+				ChatColor.RED + "RIGHT CLICK to remove",
+				ChatColor.YELLOW + "SHIFT CLICK to view workers");
 				//Node output lore
 				if(output != null && output.size() > 0) {
 					for(NobilityItem i : output.keySet()) {
@@ -693,7 +697,11 @@ public class EstateGui {
 				Clickable workerNode = new Clickable(resourceIcon) {
 
 					@Override
-					public void clicked(Player p) {
+					public void clicked(Player player) {
+					}
+
+					@Override
+					public void onLeftClick(Player p) {
 
 						if(Nobility.getWorkerManager().getWorkers(p) > 0)
 							if(n.addWorker(p)) {
@@ -704,12 +712,114 @@ public class EstateGui {
 								p.playSound(p.getLocation(), Sound.BLOCK_NOTE_BLOCK_SNARE,1,1);
 							}
 					}
+
+					@Override
+					public void onShiftLeftClick(Player p) {
+						openNodeGUI(n, p);
+					}
+
+					@Override
+					public void onRightClick(Player p) {
+
+						if(n.removeWorker(p)) {
+							try {
+								if(n.getUsedSlots() == 0) {
+									return;
+								}
+								Nobility.getWorkerManager().removeWorker(n, p);
+								p.playSound(p.getLocation(), Sound.BLOCK_ANVIL_BREAK, 1, (float) (n.getUsedSlots()-1));
+								openCampGUI(p, camp);
+							} catch (Exception e) {
+								p.playSound(p.getLocation(), Sound.BLOCK_NOTE_BLOCK_SNARE, 1, 1);
+								p.sendMessage(ChatColor.DARK_RED + "A serious error has occurred.");
+								p.closeInventory();
+								e.printStackTrace();
+							}
+
+						}
+					}
 				};
 				gui.addSlot(workerNode);
 
 			}
 		}
 		gui.showInventory(player);
+	}
+
+	private void openNodeGUI(Node node, Player player) {
+		Estate estate = Nobility.getEstateManager().getEstateOfPlayer(player);
+		Region region = estate.getRegion();
+
+		List<UUID> workers = node.getWorkers();
+
+		ClickableInventory gui = new ClickableInventory(54, "Node Workers");
+
+		gui.setSlot(ButtonLibrary.HOME.clickable(), 49);
+
+		int[] decoSlots = {0,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,26,27,35,36,44,45,46,47,48,50,51,52,53};
+
+		// DECORATION STACKS
+		for (int i : decoSlots) {
+			if (!(gui.getSlot(i) instanceof Clickable)) {
+				Clickable c = new DecorationStack(ButtonLibrary.createIcon(Material.BLACK_STAINED_GLASS_PANE, " "));
+				gui.setSlot(c, i);
+			}
+		}
+
+		ItemStack nodeIcon = ButtonLibrary.createIcon(node.getType().icon, node.getName());
+		ItemAPI.addLore(nodeIcon, ChatColor.BLUE + "Region: " + region.getName());
+		ItemAPI.addLore(nodeIcon, ChatColor.BLUE + "Workers: " + node.getUsedSlots());
+		Clickable info = new DecorationStack(nodeIcon);
+		gui.setSlot(info, 1);
+
+		for (UUID u : workers) {
+			Player pl = Bukkit.getPlayer(u);
+			ItemStack playerIcon = ButtonLibrary.createIcon(Material.PLAYER_HEAD, pl.getName());
+			ItemAPI.addLore(playerIcon, ChatColor.BLUE + "Username: " + pl.getDisplayName());
+			ItemAPI.addLore(playerIcon, ChatColor.RED + "RIGHT CLICK to remove this worker");
+			SkullMeta im = (SkullMeta) ItemAPI.getItemMeta(playerIcon);
+			im.setOwningPlayer(Bukkit.getOfflinePlayer(u));
+			playerIcon.setItemMeta(im);
+			Clickable pcon = new Clickable(playerIcon) {
+				@Override
+				public void clicked(Player player) {
+
+				}
+
+				@Override
+				public void onRightClick(Player player) {
+					Group g = Nobility.getGroupManager().getGroup(player);
+					GroupPermission perm = g.getPermission(player);
+
+					if(!(perm == GroupPermission.OFFICER || perm == GroupPermission.LEADER)) {
+						player.sendMessage(ChatColor.RED + "You don't have permission to do that!");
+						player.closeInventory();
+						return;
+					}
+
+					if(node.removeWorker(pl)) {
+						try {
+							if(node.getUsedSlots() == 0) {
+								return;
+							}
+							Nobility.getWorkerManager().removeWorker(node, pl);
+							player.playSound(player.getLocation(), Sound.BLOCK_ANVIL_BREAK, 1, (float) (node.getUsedSlots()-1));
+							openNodeGUI(node, player);
+						} catch (Exception e) {
+							player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_SNARE, 1, 1);
+							player.sendMessage(ChatColor.DARK_RED + "A serious error has occurred.");
+							player.closeInventory();
+							e.printStackTrace();
+						}
+
+					}
+
+				}
+			};
+			gui.addSlot(pcon);
+		}
+		gui.showInventory(player);
+
 	}
 
 	private void openClaimGUI(Player player) {
