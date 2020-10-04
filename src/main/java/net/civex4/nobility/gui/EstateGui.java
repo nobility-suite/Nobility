@@ -9,10 +9,7 @@ import java.util.Set;
 import java.util.UUID;
 
 import net.civex4.nobility.group.Group;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Material;
-import org.bukkit.Sound;
+import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.Chest;
 import org.bukkit.entity.Player;
@@ -721,22 +718,21 @@ public class EstateGui {
 					@Override
 					public void onRightClick(Player p) {
 
-						if(n.removeWorker(p)) {
-							try {
-								if(n.getUsedSlots() == 0) {
-									return;
-								}
-								Nobility.getWorkerManager().removeWorker(n, p);
-								p.playSound(p.getLocation(), Sound.BLOCK_ANVIL_BREAK, 1, (float) (n.getUsedSlots()-1));
-								openCampGUI(p, camp);
-							} catch (Exception e) {
-								p.playSound(p.getLocation(), Sound.BLOCK_NOTE_BLOCK_SNARE, 1, 1);
-								p.sendMessage(ChatColor.DARK_RED + "A serious error has occurred.");
-								p.closeInventory();
-								e.printStackTrace();
+						try {
+							if(n.getUsedSlots() == 0) {
+								openCampGUI(player, camp);
+								return;
 							}
-
+							Nobility.getWorkerManager().removeWorker(n, player);
+							player.playSound(player.getLocation(), Sound.BLOCK_ANVIL_BREAK, 1, (float) (n.getUsedSlots()-1));
+							openCampGUI(player, camp);
+						} catch (Exception e) {
+							player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_SNARE, 1, 1);
+							player.sendMessage(ChatColor.DARK_RED + "A serious error has occurred.");
+							player.closeInventory();
+							e.printStackTrace();
 						}
+
 					}
 				};
 				gui.addSlot(workerNode);
@@ -773,9 +769,16 @@ public class EstateGui {
 		gui.setSlot(info, 1);
 
 		for (UUID u : workers) {
-			Player pl = Bukkit.getPlayer(u);
+
+			if(workers.size() == 0) {
+				player.sendMessage(ChatColor.RED + "There are no workers on that node!");
+				player.closeInventory();
+				return;
+			}
+
+			OfflinePlayer pl = Bukkit.getOfflinePlayer(u);
 			ItemStack playerIcon = ButtonLibrary.createIcon(Material.PLAYER_HEAD, pl.getName());
-			ItemAPI.addLore(playerIcon, ChatColor.BLUE + "Username: " + pl.getDisplayName());
+			ItemAPI.addLore(playerIcon, ChatColor.BLUE + "Username: " + pl.getName());
 			ItemAPI.addLore(playerIcon, ChatColor.RED + "RIGHT CLICK to remove this worker");
 			SkullMeta im = (SkullMeta) ItemAPI.getItemMeta(playerIcon);
 			im.setOwningPlayer(Bukkit.getOfflinePlayer(u));
@@ -796,25 +799,23 @@ public class EstateGui {
 						player.closeInventory();
 						return;
 					}
-
-					if(node.removeWorker(pl)) {
-						try {
-							if(node.getUsedSlots() == 0) {
-								return;
-							}
-							Nobility.getWorkerManager().removeWorker(node, pl);
-							player.playSound(player.getLocation(), Sound.BLOCK_ANVIL_BREAK, 1, (float) (node.getUsedSlots()-1));
+					try {
+						if(node.getUsedSlots() == 0) {
 							openNodeGUI(node, player);
-						} catch (Exception e) {
-							player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_SNARE, 1, 1);
-							player.sendMessage(ChatColor.DARK_RED + "A serious error has occurred.");
-							player.closeInventory();
-							e.printStackTrace();
+							return;
+						}
+
+						Nobility.getWorkerManager().removeWorker(node, pl);
+						player.playSound(player.getLocation(), Sound.BLOCK_ANVIL_BREAK, 1, (float) (node.getUsedSlots()-1));
+						openNodeGUI(node, player);
+					} catch (Exception e) {
+						player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_SNARE, 1, 1);
+						player.sendMessage(ChatColor.DARK_RED + "A serious error has occurred.");
+						player.closeInventory();
+						e.printStackTrace();
 						}
 
 					}
-
-				}
 			};
 			gui.addSlot(pcon);
 		}
