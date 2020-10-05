@@ -3,9 +3,14 @@ package net.civex4.nobility;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import io.github.kingvictoria.regions.nodes.Node;
+import net.civex4.nobility.development.Camp;
+import net.civex4.nobility.development.DevelopmentType;
 import net.civex4.nobility.listeners.*;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -188,6 +193,31 @@ public class Nobility extends ACivMod {
 		for (Estate estate : estateMan.getEstates()) {
 			for (Development development : estate.getActiveDevelopments()) {
 				development.tick();
+			}
+		}
+
+		List<Estate> estates = Nobility.getEstateManager().getEstates();
+
+		for (Estate estate : estates) {
+			List<Development> developments = estate.getBuiltDevelopments();
+			ArrayList<Camp> camps = new ArrayList<Camp>();
+			ArrayList<Node> nodes = estate.getNodes();
+
+			for (Development development : developments) {
+				if (development.getType() == DevelopmentType.CAMP) {
+					camps.add((Camp) development);
+				}
+			}
+			for (Camp camp : camps) {
+				for (Node node : nodes) {
+					if (node.getType() == camp.nodeType) {
+						try {
+							camp.produceOutput(node);
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+					}
+				}
 			}
 		}
 	}
