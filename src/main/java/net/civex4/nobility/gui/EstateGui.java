@@ -679,7 +679,7 @@ public class EstateGui {
 						ChatColor.BLUE + "Output:",
 						ChatColor.GREEN + "LEFT CLICK to add",
 				ChatColor.RED + "RIGHT CLICK to remove",
-				ChatColor.YELLOW + "SHIFT CLICK to view workers");
+				ChatColor.YELLOW + "SHIFT CLICK to edit node");
 				//Node output lore
 				if(output != null && output.size() > 0) {
 					for(NobilityItem i : output.keySet()) {
@@ -712,7 +712,7 @@ public class EstateGui {
 
 					@Override
 					public void onShiftLeftClick(Player p) {
-						openNodeGUI(n, p);
+						openNodeGUI(n, p, camp);
 					}
 
 					@Override
@@ -742,7 +742,7 @@ public class EstateGui {
 		gui.showInventory(player);
 	}
 
-	private void openNodeGUI(Node node, Player player) {
+	private void openNodeGUI(Node node, Player player, Camp camp) {
 		Estate estate = Nobility.getEstateManager().getEstateOfPlayer(player);
 		Region region = estate.getRegion();
 
@@ -752,7 +752,7 @@ public class EstateGui {
 
 		gui.setSlot(ButtonLibrary.HOME.clickable(), 49);
 
-		int[] decoSlots = {0,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,26,27,35,36,44,45,46,47,48,50,51,52,53};
+		int[] decoSlots = {0,2,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,26,27,35,36,44,45,46,47,48,50,51,52,53};
 
 		// DECORATION STACKS
 		for (int i : decoSlots) {
@@ -767,6 +767,37 @@ public class EstateGui {
 		ItemAPI.addLore(nodeIcon, ChatColor.BLUE + "Workers: " + node.getUsedSlots());
 		Clickable info = new DecorationStack(nodeIcon);
 		gui.setSlot(info, 1);
+
+		ItemStack assignOutput = ButtonLibrary.createIcon(Material.CHEST, ChatColor.GREEN + "Output Chest");
+		if(camp.outputChest != null) { ItemAPI.addLore(assignOutput, ChatColor.BLUE + "Output Chest: " + ChatColor.WHITE + "[" + camp.outputChest.getBlockX() + "x," + camp.outputChest.getBlockY() + "y," + camp.outputChest.getBlockZ() + "z]", "", ChatColor.YELLOW + "Click to reassign an output chest!"); }
+		else {ItemAPI.addLore(assignOutput, ChatColor.YELLOW + "" + ChatColor.BOLD + "Click to assign an output chest!"); }
+		Clickable output = new Clickable(assignOutput) {
+			@Override
+			public void clicked(Player p) {
+				Group g = Nobility.getGroupManager().getGroup(p);
+				GroupPermission perm = g.getPermission(player);
+
+				if(!(perm == GroupPermission.OFFICER || perm == GroupPermission.LEADER)) {
+					player.sendMessage(ChatColor.RED + "You don't have permission to re-assign output chests!");
+					p.closeInventory();
+					return;
+				}
+
+				p.closeInventory();
+				Nobility.getChestSelector().outputQueueCamp.put(p.getUniqueId(), camp);
+				p.sendMessage(ChatColor.BLUE + "Punch a chest to select it as an output chest.");
+
+				Bukkit.getScheduler().scheduleSyncDelayedTask(Nobility.getNobility(), new Runnable() {
+					@Override
+					public void run() {
+						if(Nobility.getChestSelector().outputQueueCamp.containsKey(p.getUniqueId())) {
+							Nobility.getChestSelector().outputQueueCamp.remove(p.getUniqueId());
+							p.sendMessage(ChatColor.RED + "Chest selection cancelled.");
+						}
+					}
+				}, 20*10L); //20 Tick (1 Second) delay before run() is called
+			}};
+		gui.setSlot(output, 3);
 
 		for (UUID u : workers) {
 
@@ -801,13 +832,13 @@ public class EstateGui {
 					}
 					try {
 						if(node.getUsedSlots() == 0) {
-							openNodeGUI(node, player);
+							openNodeGUI(node, player, camp);
 							return;
 						}
 
 						Nobility.getWorkerManager().removeWorker(node, pl);
 						player.playSound(player.getLocation(), Sound.BLOCK_ANVIL_BREAK, 1, (float) (node.getUsedSlots()-1));
-						openNodeGUI(node, player);
+						openNodeGUI(node, player, camp);
 					} catch (Exception e) {
 						player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_SNARE, 1, 1);
 						player.sendMessage(ChatColor.DARK_RED + "A serious error has occurred.");
