@@ -959,6 +959,20 @@ public class EstateGui {
 						p.sendMessage(ChatColor.GREEN + "Claimed " + ChatColor.WHITE + n.getName() + " for " + ChatColor.WHITE + estate.getGroup().getName());
 						p.closeInventory();
 						Nobility.getClaimManager().claim(n, estate);
+						Camp camp = estate.getCamp(n.getType());
+						Nobility.getChestSelector().outputQueueCamp.put(p.getUniqueId(), camp);
+						p.sendMessage(ChatColor.BLUE + "Punch a chest to select it as an output chest.");
+
+						Bukkit.getScheduler().scheduleSyncDelayedTask(Nobility.getNobility(), new Runnable() {
+							@Override
+							public void run() {
+								if(Nobility.getChestSelector().outputQueueCamp.containsKey(p.getUniqueId())) {
+									Nobility.getChestSelector().outputQueueCamp.remove(p.getUniqueId());
+									p.sendMessage(ChatColor.RED + "Chest selection cancelled.");
+								}
+							}
+						}, 20*10L); //20 Tick (1 Second) delay before run() is called
+						p.closeInventory();
 					}
 				};
 				gui.addSlot(claimButton);

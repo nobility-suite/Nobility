@@ -1,9 +1,13 @@
 package net.civex4.nobility.listeners;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.UUID;
 import java.util.logging.Level;
 
+import io.github.kingvictoria.regions.nodes.Node;
+import net.civex4.nobility.development.Camp;
 import net.civex4.nobility.estate.EstateManager;
 import net.civex4.nobility.group.GroupManager;
 import net.civex4.nobility.group.GroupPermission;
@@ -25,7 +29,7 @@ import net.md_5.bungee.api.ChatColor;
 import org.slf4j.Logger;
 
 public class CommandListener implements CommandExecutor{
-	
+
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 		Player player = (Player) sender;
 		UUID playerId = player.getUniqueId();
@@ -461,6 +465,32 @@ public class CommandListener implements CommandExecutor{
 					player.sendMessage(ChatColor.RED + "Could not find group " + ChatColor.WHITE + args[1]);
 				}
 				return true;
+			}
+			if(args[0].equalsIgnoreCase("admin") && args[1].equalsIgnoreCase("campcycle")) {
+				List<Estate> estates = Nobility.getEstateManager().getEstates();
+
+				for (Estate estate : estates) {
+					List<Development> developments = estate.getBuiltDevelopments();
+					ArrayList<Camp> camps = new ArrayList<Camp>();
+					ArrayList<Node> nodes = estate.getNodes();
+
+					for (Development development : developments) {
+						if (development.getType() == DevelopmentType.CAMP) {
+							camps.add((Camp) development);
+						}
+					}
+					for (Camp camp : camps) {
+						for (Node node : nodes) {
+							if (node.getType() == camp.nodeType) {
+								try {
+									camp.produceOutput(node);
+								} catch (Exception e) {
+									e.printStackTrace();
+								}
+							}
+						}
+					}
+				}
 			}
 
 		}
