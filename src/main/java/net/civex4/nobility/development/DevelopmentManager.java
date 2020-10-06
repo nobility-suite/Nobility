@@ -3,6 +3,7 @@ package net.civex4.nobility.development;
 import java.util.HashMap;
 import java.util.List;
 
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
 import net.civex4.nobility.developments.Arsenal;
@@ -15,6 +16,8 @@ import net.civex4.nobility.developments.MiningCamp;
 import net.civex4.nobility.developments.SiegeWorkshop;
 import net.civex4.nobility.estate.Estate;
 import net.md_5.bungee.api.ChatColor;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
 
 public class DevelopmentManager {
 	private HashMap<String,DevelopmentBlueprint> blueprints;
@@ -138,6 +141,23 @@ public class DevelopmentManager {
 
 	public boolean checkCosts(DevelopmentBlueprint b, Player p) {
 		return true; //TODO implement
+	}
+
+	public void arsenalUpkeep(Development development, Estate estate) {
+
+		if(development.getType() != DevelopmentType.ARSENAL) {
+			return;
+		}
+
+		Integer stored = development.attributes.get(DevAttribute.CANNON_STORED);
+
+		development.attributes.put(DevAttribute.CANNON_DISREPAIRED, stored);
+
+		Integer disrepaired = development.attributes.get(DevAttribute.CANNON_DISREPAIRED);
+
+		Integer newstored = stored - disrepaired;
+
+		development.attributes.put(DevAttribute.CANNON_STORED, newstored);
 	}
 	
 //	public void subtractUpkeep(DevelopmentType type, Estate estate) {		

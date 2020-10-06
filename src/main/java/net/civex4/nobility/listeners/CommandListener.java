@@ -220,71 +220,72 @@ public class CommandListener implements CommandExecutor{
 				Group g = Nobility.getGroupManager().getGroup(player);
 
 				//Checking if player is in a group before continuing.
-				if(g == null) {
+				if (g == null) {
 					player.sendMessage(ChatColor.RED + "You are not a part of a nobility group!");
 					return true;
 				}
 
 				GroupPermission perm = g.getPermission(player);
-				if(perm == GroupPermission.OFFICER || perm == GroupPermission.LEADER) {
+				if (perm == GroupPermission.OFFICER || perm == GroupPermission.LEADER) {
 					String promoteString = args[1].toString();
 					OfflinePlayer promotePlayer = Bukkit.getOfflinePlayer(promoteString);
 					GroupPermission promotePerm = g.getPermission(promotePlayer);
 					//Large amount of If statements below, im sorry if these affect u ):
 
-					if(promotePerm == null) {
+					if (promotePerm == null) {
 						player.sendMessage(ChatColor.RED + "You can't demote someone not in your group!");
 					}
 
-					if(player.getUniqueId() == promotePlayer.getUniqueId()) {
+					if (player.getUniqueId() == promotePlayer.getUniqueId()) {
 						player.sendMessage(ChatColor.RED + "You can't promote yourself!");
 						return true;
 					}
 
 					//Check to make sure the player can promote.
-					if(perm == GroupPermission.DEFAULT || perm == GroupPermission.TRUSTED) {
+					if (perm == GroupPermission.DEFAULT || perm == GroupPermission.TRUSTED) {
 						player.sendMessage(ChatColor.RED + "You don't have enough power to do that!");
 						return true;
 					}
 					//Promote Moderator to Officer.
-					if(promotePerm == GroupPermission.TRUSTED && perm == GroupPermission.LEADER) {
+					if (promotePerm == GroupPermission.TRUSTED && perm == GroupPermission.LEADER) {
 						g.setPermission(promotePlayer, GroupPermission.OFFICER);
 						Bukkit.getServer().getLogger().info("Updated player's rank to: " + g.getPermission(promotePlayer));
 						Group f = Nobility.getGroupManager().getGroup(player); //Reload variable that for some weird fucking reason fixes promotion bug.
 						Bukkit.getServer().getLogger().info("Player rank recheck to: " + f.getPermission(promotePlayer));
 						player.sendMessage(ChatColor.GOLD + "Successfully promoted " + ChatColor.AQUA + promotePlayer.getName() + ".");
-						if(promotePlayer.isOnline()) {
+						if (promotePlayer.isOnline()) {
 							promotePlayer.getPlayer().sendMessage(ChatColor.GREEN + "You have been promoted!");
 						}
 						return true;
 					}
 					//Promote Member to Moderator.
-					if(promotePerm == GroupPermission.DEFAULT && perm == GroupPermission.OFFICER) {
+					if (promotePerm == GroupPermission.DEFAULT && perm == GroupPermission.OFFICER) {
 						g.setPermission(promotePlayer, GroupPermission.TRUSTED);
 						player.sendMessage(ChatColor.GOLD + "Successfully promoted " + ChatColor.AQUA + promotePlayer.getName() + ".");
-						if(promotePlayer.isOnline()) {
+						if (promotePlayer.isOnline()) {
 							promotePlayer.getPlayer().sendMessage(ChatColor.GREEN + "You have been promoted!");
 						}
 						return true;
 					}
 					//Promote Member to Moderator. (As leader)
-					if(promotePerm == GroupPermission.DEFAULT && perm == GroupPermission.LEADER) {
+					if (promotePerm == GroupPermission.DEFAULT && perm == GroupPermission.LEADER) {
 						g.setPermission(promotePlayer, GroupPermission.TRUSTED);
 						player.sendMessage(ChatColor.GOLD + "Successfully promoted " + ChatColor.AQUA + promotePlayer.getName() + ".");
-						if(promotePlayer.isOnline()) {
+						if (promotePlayer.isOnline()) {
 							promotePlayer.getPlayer().sendMessage(ChatColor.GREEN + "You have been promoted!");
 						}
 						return true;
 					}
 					//Prevent Officer promotion without group transfer.
-					if(promotePerm == GroupPermission.OFFICER && perm == GroupPermission.LEADER) {
+					if (promotePerm == GroupPermission.OFFICER && perm == GroupPermission.LEADER) {
 						player.sendMessage(ChatColor.RED + "You cannot transfer group ownership with this command! \n" +
-						ChatColor.GOLD + "Try using /nobility transfer <player> instead!");
+								ChatColor.GOLD + "Try using /nobility transfer <player> instead!");
 						return true;
 					}
+
+					player.sendMessage(ChatColor.RED + "You don't have permission to promote that player!");
+					return true;
 				}
-				player.sendMessage(ChatColor.RED + "You don't have permission to promote that player!");
-				return true;
 			}
 
 			/**

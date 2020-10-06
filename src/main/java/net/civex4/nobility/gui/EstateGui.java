@@ -8,10 +8,12 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
+import net.civex4.nobility.cannons.Cannon;
 import net.civex4.nobility.group.Group;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.Chest;
+import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -31,6 +33,7 @@ import net.civex4.nobility.estate.Estate;
 import net.civex4.nobility.estate.Relationship;
 import net.civex4.nobility.group.GroupPermission;
 import net.civex4.nobilityitems.NobilityItem;
+import org.w3c.dom.Attr;
 import vg.civcraft.mc.civmodcore.api.ItemAPI;
 import vg.civcraft.mc.civmodcore.inventorygui.Clickable;
 import vg.civcraft.mc.civmodcore.inventorygui.ClickableInventory;
@@ -154,12 +157,13 @@ public class EstateGui {
 
 
 		ItemAPI.addLore(defIcon, ChatColor.BLUE + DevAttribute.CANNON_LIMIT.name + ": " + ChatColor.WHITE + AttributeManager.getCannonLimit(estate),
-				ChatColor.BLUE + DevAttribute.CANNON_STORED.name + ": " + ChatColor.WHITE + AttributeManager.getCannons(estate));
+				ChatColor.BLUE + DevAttribute.CANNON_STORED.name + ": " + ChatColor.WHITE + AttributeManager.getCannons(estate),
+				ChatColor.BLUE + DevAttribute.CANNON_DISREPAIRED.name +": " + ChatColor.WHITE + AttributeManager.getDisrepairedCannons(estate));
 		Clickable defButton = new Clickable(defIcon) {
 
 			@Override
 			public void clicked(Player p) {
-
+				openCannonGUI(p);
 			}
 
 		};
@@ -298,10 +302,10 @@ public class EstateGui {
 	}
 
 	private void openBlueprintSelector(Player p, AbstractWorkshop d) {
-		if(d.inputChest == null) { 
+		if(d.inputChest == null) {
 			p.sendMessage(ChatColor.DARK_RED + "No input chest");
 		return;}
-		
+
 		ClickableInventory gui = new ClickableInventory(54, "Select a Blueprint");
 
 		int[] decoSlots = {0,1,2,3,4,5,6,7,8};
@@ -313,13 +317,13 @@ public class EstateGui {
 				gui.setSlot(c, i);
 			}
 		}
-		
+
 		Block b = d.inputChest.getBlock();
 		if(b!= null && b.getType() == Material.CHEST || b.getType() == Material.TRAPPED_CHEST) {
 			Chest chest = (Chest) b.getState();
 			Inventory inv = chest.getInventory();
 			ArrayList<ItemStack> blueprints = Nobility.getBlueprintManager().listBlueprints(inv);
-			
+
 			//Display Blueprints
 			for(ItemStack i : blueprints) {
 				Clickable bp = new Clickable(i) {
@@ -332,13 +336,13 @@ public class EstateGui {
 			}
 			gui.showInventory(p);
 
-			
+
 		}else {
 			p.sendMessage(ChatColor.RED + "Workshop input chest location is invalid.");
 		}
-	
+
 	}
-	
+
 	private void openWorkshopCraftGUI(Player p, AbstractWorkshop d) {
 		Estate estate = Nobility.getEstateManager().getEstateOfPlayer(p);
 		ClickableInventory gui = new ClickableInventory(54, d.name);
@@ -352,16 +356,16 @@ public class EstateGui {
 				gui.setSlot(c, i);
 			}
 		}
-		
+
 		Clickable workshopInfo = ButtonLibrary.createWorkshopInfo(d);
 		gui.setSlot(workshopInfo, 0);
 
 		Clickable workerInfo = ButtonLibrary.createWorkerInfo(p);
 		gui.setSlot(workerInfo, 29);
-		
+
 		ItemStack selected = d.selectedRecipe;
 		if(selected != null && Nobility.getBlueprintManager().recipeExists(selected, d)) {
-			
+
 		}else { selected = ButtonLibrary.createIcon(Material.BARRIER, ChatColor.WHITE + "Select Blueprint"); }
 		ItemAPI.addLore(selected, true, ChatColor.YELLOW + "" + ChatColor.BOLD + "Click to change Blueprint!");
 		Clickable rec = new Clickable(selected) {
@@ -370,11 +374,11 @@ public class EstateGui {
 				openBlueprintSelector(p,d);
 			}};
 		gui.setSlot(rec, 11);
-		
+
 		ItemStack fuel = ButtonLibrary.createIcon(Material.BARRIER, ChatColor.WHITE + "Fuel");
 		Clickable fue = new DecorationStack(fuel);
 		gui.setSlot(fue, 38);
-		
+
 		ItemStack startRecipe = ButtonLibrary.createIcon(Material.PAPER, ChatColor.GREEN + "Start Recipe");
 		Clickable start = new Clickable(startRecipe) {
 				@Override
@@ -382,7 +386,7 @@ public class EstateGui {
 
 				}};
 		gui.setSlot(start, 18);
-		
+
 		ItemStack assignOutput = ButtonLibrary.createIcon(Material.CHEST, ChatColor.GREEN + "Output Chest");
 		if(d.outputChest != null) { ItemAPI.addLore(assignOutput, ChatColor.BLUE + "Output Chest: " + ChatColor.WHITE + "[" + d.outputChest.getBlockX() + "x," + d.outputChest.getBlockY() + "y," + d.outputChest.getBlockZ() + "z]", "", ChatColor.YELLOW + "Click to reassign an output chest!"); }
 		else {ItemAPI.addLore(assignOutput, ChatColor.YELLOW + "" + ChatColor.BOLD + "Click to assign an output chest!"); }
@@ -392,7 +396,7 @@ public class EstateGui {
 					p.closeInventory();
 					Nobility.getChestSelector().outputQueue.put(p.getUniqueId(),d);
 					p.sendMessage(ChatColor.BLUE + "Punch a chest to select it as an output chest.");
-					
+
 					Bukkit.getScheduler().scheduleSyncDelayedTask(Nobility.getNobility(), new Runnable() {
 					    @Override
 					    public void run() {
@@ -404,7 +408,7 @@ public class EstateGui {
 					}, 20*10L); //20 Tick (1 Second) delay before run() is called
 				}};
 		gui.setSlot(output, 27);
-		
+
 		ItemStack assignInput = ButtonLibrary.createIcon(Material.HOPPER, ChatColor.WHITE + "Input Chest");
 		if(d.inputChest != null) { ItemAPI.addLore(assignInput, ChatColor.BLUE + "Input Chest: " + ChatColor.WHITE + "[" + d.inputChest.getBlockX() + "x," + d.inputChest.getBlockY() + "y," + d.inputChest.getBlockZ() + "z]", "", ChatColor.YELLOW + "Click to reassign an output chest!"); }
 		else {ItemAPI.addLore(assignInput, ChatColor.YELLOW + "" + ChatColor.BOLD + "Click to assign an input chest!"); }
@@ -415,19 +419,19 @@ public class EstateGui {
 
 					Nobility.getChestSelector().inputQueue.put(p.getUniqueId(),d);
 					p.sendMessage(ChatColor.BLUE + "Punch a chest to select it as an input chest.");
-					
+
 					Bukkit.getScheduler().scheduleSyncDelayedTask(Nobility.getNobility(), new Runnable() {
 					    @Override
 					    public void run() {
 					    	if(Nobility.getChestSelector().inputQueue.containsKey(p.getUniqueId())) {
 						    	Nobility.getChestSelector().inputQueue.remove(p.getUniqueId());
-								p.sendMessage(ChatColor.RED + "Chest selection cancelled.");	
+								p.sendMessage(ChatColor.RED + "Chest selection cancelled.");
 					    	}
 					    }
 					}, 20*10L); //20 Tick (1 Second) delay before run() is called
 				}};
 		gui.setSlot(input, 36);
-		
+
 		gui.setSlot(ButtonLibrary.HOME.clickable(),49);
 
 
@@ -569,7 +573,7 @@ public class EstateGui {
 			Map<NobilityItem, Integer> output = n.getOutput();
 			ItemStack resourceIcon = ButtonLibrary.createIcon(Material.STONE, name);
 			Clickable resourceButton = new DecorationStack(resourceIcon);
-			ItemAPI.addLore(resourceIcon, 
+			ItemAPI.addLore(resourceIcon,
 					ChatColor.BLUE + "Slots: (" + n.getUsedSlots() +"/" + n.getSlots() + ")",
 					ChatColor.BLUE + "Type: " + ChatColor.WHITE + n.getType(),
 					ChatColor.BLUE + "Output:");
@@ -740,6 +744,85 @@ public class EstateGui {
 			}
 		}
 		gui.showInventory(player);
+	}
+
+	private void openCannonGUI(Player player) {
+		Estate estate = Nobility.getEstateManager().getEstateOfPlayer(player);
+		Region region = estate.getRegion();
+		int cannons = AttributeManager.getCannons(estate);
+		ClickableInventory gui = new ClickableInventory(9, "Cannon Selection");
+
+		gui.setSlot(ButtonLibrary.HOME.clickable(), 7);
+
+		int[] decoSlots = {0, 6, 8};
+
+		// DECORATION STACKS
+		for (int i : decoSlots) {
+			if (!(gui.getSlot(i) instanceof Clickable)) {
+				Clickable c = new DecorationStack(ButtonLibrary.createIcon(Material.BLACK_STAINED_GLASS_PANE, " "));
+				gui.setSlot(c, i);
+			}
+		}
+		for (Development d : estate.getBuiltDevelopments()) {
+
+			if (d.isActive) {
+				if (d.attributes != null) {
+					if (d.attributes.containsKey(DevAttribute.CANNON_STORED)) {
+						Integer stored = d.attributes.get(DevAttribute.CANNON_STORED);
+						for (int i = 0; i < stored; i++) {
+							ItemStack info = ButtonLibrary.createIcon(Material.STONE_BRICKS, "Cannon");
+							ItemAPI.addLore(info, ChatColor.BLUE + "Cannon is fully repaired.");
+							Clickable click = new Clickable(info) {
+
+								@Override
+								public void clicked(Player p) {
+								}
+							};
+							gui.addSlot(click);
+
+						}
+					}
+					if (d.attributes.containsKey(DevAttribute.CANNON_DISREPAIRED)) {
+						Integer disrepaired = d.attributes.get(DevAttribute.CANNON_DISREPAIRED);
+						for (int i = 0; i < disrepaired; i++) {
+							ItemStack dis = ButtonLibrary.createIcon(Material.CRACKED_STONE_BRICKS, "Broken Cannon");
+							ItemAPI.addLore(dis, ChatColor.RED + "Cannon is in disrepair.");
+							ItemAPI.addLore(dis, ChatColor.YELLOW + "COST: 128 IRON");
+							ItemAPI.addLore(dis, ChatColor.GREEN + "CLICK to repair");
+							Clickable click = new Clickable(dis) {
+								@Override
+								public void clicked(Player player) {
+									Inventory inv = player.getInventory();
+									ItemStack cost = new ItemStack(Material.IRON_INGOT);
+									cost.setAmount(128);
+									if (inv.containsAtLeast(cost, 128)) {
+										if(disrepaired == 0) {
+											player.closeInventory();
+											player.sendMessage(ChatColor.RED + "You have no cannons in disrepair.");
+											return;
+										}
+										inv.removeItem(cost);
+										int disrepaired = d.attributes.get(DevAttribute.CANNON_DISREPAIRED);
+										int newdisrepaired = disrepaired - 1;
+										d.attributes.put(DevAttribute.CANNON_DISREPAIRED, newdisrepaired);
+										int stored = d.attributes.get(DevAttribute.CANNON_STORED);
+										int newstored = stored + 1;
+										d.attributes.put(DevAttribute.CANNON_STORED, newstored);
+										openCannonGUI(player);
+									} else {
+										player.sendMessage(ChatColor.RED + "You don't have enough materials to repair this!");
+										player.closeInventory();
+									}
+								}
+							};
+							gui.addSlot(click);
+
+						}
+					}
+					gui.showInventory(player);
+				}
+			}
+		}
 	}
 
 	private void openNodeGUI(Node node, Player player, Camp camp) {

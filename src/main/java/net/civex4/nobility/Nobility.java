@@ -64,8 +64,8 @@ public class Nobility extends ACivMod {
 	
 	public static int currentDay = 0;
 	public static Map<String, Clipboard> schematics = new HashMap<>();
-	
-	
+
+
 	@Override
 	public void onEnable() {
 		super.onEnable();
@@ -206,6 +206,9 @@ public class Nobility extends ACivMod {
 			for (Development development : developments) {
 				if (development.getType() == DevelopmentType.CAMP) {
 					camps.add((Camp) development);
+				}
+				if (development.getType() == DevelopmentType.ARSENAL) {
+					Nobility.getDevelopmentManager().arsenalUpkeep(development, estate);
 				}
 			}
 			for (Camp camp : camps) {
