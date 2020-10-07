@@ -439,7 +439,7 @@ public class EstateGui {
 		Clickable workerInfo = ButtonLibrary.createWorkerInfo(p);
 		gui.setSlot(workerInfo, 29);
 
-		ItemStack selected = d.selectedRecipe;
+		ItemStack selected = d.selectedRecipe.clone();
 		if(selected != null && Nobility.getBlueprintManager().recipeExists(selected, d)) {
 
 		}else { selected = ButtonLibrary.createIcon(Material.BARRIER, ChatColor.WHITE + "Select Blueprint"); }
@@ -1232,11 +1232,11 @@ public class EstateGui {
 						openDevelopmentsUpgradeGUI(p);
 					}
 				};
-				gui.addSlot(devUpgradeButton);
+				gui.setSlot(devUpgradeButton,7);
 
 		ItemStack tips = ButtonLibrary.createIcon(Material.PAPER, ChatColor.BLUE + "Tips");
 		Clickable tipsIcon = new DecorationStack(tips);
-		gui.addSlot(tipsIcon);
+		gui.setSlot(tipsIcon,4);
 
 		HashMap<String, DevelopmentBlueprint> blueprints_safe = (HashMap<String, DevelopmentBlueprint>) blueprints.clone();
 
