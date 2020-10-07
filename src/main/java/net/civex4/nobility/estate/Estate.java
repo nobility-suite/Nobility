@@ -32,6 +32,10 @@ public class Estate {
 	private int vulnerabilityHour = 0;
 	private int currentHealth;
 	
+	public void removeDevelopment(Development d){
+		builtDevelopments.remove(d);
+	}
+	
 	public Estate(Block block, Group group) {
 		this.setGroup(group);
 		this.setBlock(block);

@@ -343,6 +343,82 @@ public class EstateGui {
 
 	}
 
+	private void openDevelopmentsUpgradeGUI(Player p) {
+		// TODO Auto-generated method stub
+
+		Estate estate = Nobility.getEstateManager().getEstateOfPlayer(p);
+		// TODO Estate name length can't be longer than 32
+		ClickableInventory gui = new ClickableInventory(54, "View Development Upgrades");
+
+		//HashMap<String, DevelopmentBlueprint> blueprints = Nobility.getDevelopmentManager().getUpgrades();
+		List<Development> built = estate.getBuiltDevelopments();
+
+		int[] decoSlots = {0, 1, 2, 3, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 45, 46, 47, 48, 50, 51, 52, 53};
+
+
+		// DECORATION STACKS
+		for (int i : decoSlots) {
+			if (!(gui.getSlot(i) instanceof Clickable)) {
+				Clickable c = new DecorationStack(ButtonLibrary.createIcon(Material.BLACK_STAINED_GLASS_PANE, " "));
+				gui.setSlot(c, i);
+			}
+		}
+
+		Clickable infoIcon = ButtonLibrary.createEstateInfo(estate);
+
+		gui.addSlot(infoIcon);
+
+		gui.setSlot(ButtonLibrary.HOME.clickable(), 49);
+
+
+		// VIEW DEVELOPMENT UPGRADES
+		ItemStack devUpgradeIcon = ButtonLibrary.createIcon(Material.FURNACE, "View Development Upgrades");
+		Clickable devUpgradeButton = new Clickable(devUpgradeIcon) {
+			@Override
+			public void clicked(Player p) {
+				openDevelopmentsUpgradeGUI(p);
+			}
+		};
+		gui.addSlot(devUpgradeButton);
+
+		for (DevelopmentBlueprint d : Nobility.getDevelopmentManager().getUpgrades().values()) {
+			boolean hasPrereq = true;
+			for (Development prereq : d.prereqs) {
+				if (built.contains(prereq)) {
+					hasPrereq = false;
+					break;
+				}
+			}
+			if (!hasPrereq)
+				continue;
+
+			ItemStack icon = ButtonLibrary.createIcon(d.result.icon, d.result.name);
+			if (d.result.getType() == DevelopmentType.CAMP) {
+				Camp camp = (Camp) d.result;
+				if (camp != null) {
+					ItemAPI.addLore(icon, ChatColor.BLUE + "Node Limit: " + ChatColor.WHITE + camp.getNodeLimit());
+				}
+			}
+			ItemAPI.addLore(icon, ChatColor.BLUE + "Type: " + ChatColor.WHITE + d.result.getType().toString(),
+					ChatColor.BLUE + "Description: ",
+					ChatColor.GRAY + d.result.useDescription);
+			if (d.result.attributes != null)
+				for (DevAttribute attr : d.result.attributes.keySet()) {
+					ItemAPI.addLore(icon, AttributeManager.getAttributeText(attr, d.result.attributes.get(attr)));
+				}
+			//Clickable upgradeIcon = new DecorationStack(icon);
+			Clickable upgradeIcon = new Clickable(icon) {
+				@Override
+				public void clicked(Player player) {
+					estate.removeDevelopment(d.base);
+					estate.addDevelopment(d.result);
+				}
+			};
+			gui.addSlot(upgradeIcon);
+		}
+		gui.showInventory(p);
+	}
+	
 	private void openWorkshopCraftGUI(Player p, AbstractWorkshop d) {
 		Estate estate = Nobility.getEstateManager().getEstateOfPlayer(p);
 		ClickableInventory gui = new ClickableInventory(54, d.name);
@@ -1147,6 +1223,16 @@ public class EstateGui {
 		gui.addSlot(infoIcon);
 
 		gui.setSlot(ButtonLibrary.HOME.clickable(),49);
+		
+		// VIEW DEVELOPMENT UPGRADES
+				ItemStack devUpgradeIcon = ButtonLibrary.createIcon(Material.FURNACE, "View Development Upgrades");
+				Clickable devUpgradeButton = new Clickable(devUpgradeIcon) {
+					@Override
+					public void clicked(Player p) {
+						openDevelopmentsUpgradeGUI(p);
+					}
+				};
+				gui.addSlot(devUpgradeButton);
 
 		ItemStack tips = ButtonLibrary.createIcon(Material.PAPER, ChatColor.BLUE + "Tips");
 		Clickable tipsIcon = new DecorationStack(tips);
