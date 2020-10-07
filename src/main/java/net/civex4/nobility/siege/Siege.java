@@ -1,10 +1,16 @@
 package net.civex4.nobility.siege;
 
 import java.util.ArrayList;
+import java.util.Set;
+import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
+import net.civex4.nobility.Nobility;
 import net.civex4.nobility.estate.Estate;
 import net.md_5.bungee.api.ChatColor;
+import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
+import org.slf4j.event.Level;
 import vg.civcraft.mc.civmodcore.scoreboard.side.CivScoreBoard;
 import vg.civcraft.mc.civmodcore.scoreboard.side.ScoreBoardAPI;
 
@@ -62,7 +68,16 @@ public class Siege {
 	}
 	
 	public int getOnlineDefenders() {
-		return 0;
+		Set<UUID> estatePlayers = defender.getGroup().getMembers();
+		int onlinePlayers = 0;
+
+		for(UUID u : estatePlayers) {
+			OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(u);
+			if(offlinePlayer.isOnline()) {
+				onlinePlayers++;
+			}
+		}
+		return onlinePlayers;
 	}
 
 	public String formatTime() {

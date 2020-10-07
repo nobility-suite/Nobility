@@ -17,7 +17,8 @@ public class EstateManager {
 	private ArrayList<Estate> estates = new ArrayList<>();
 	private HashMap<UUID, Estate> estateOfPlayer = new HashMap<>();
 
-	
+
+
 	public int getDistance(Location loc, Estate e) {
 		World world = loc.getWorld();
 		if(e.getBlock().getLocation().getWorld() == world) {

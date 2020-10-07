@@ -1,9 +1,13 @@
 package net.civex4.nobility.listeners;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.UUID;
 import java.util.logging.Level;
 
+import io.github.kingvictoria.regions.nodes.Node;
+import net.civex4.nobility.development.Camp;
 import net.civex4.nobility.estate.EstateManager;
 import net.civex4.nobility.group.GroupManager;
 import net.civex4.nobility.group.GroupPermission;
@@ -25,7 +29,7 @@ import net.md_5.bungee.api.ChatColor;
 import org.slf4j.Logger;
 
 public class CommandListener implements CommandExecutor{
-	
+
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 		Player player = (Player) sender;
 		UUID playerId = player.getUniqueId();
@@ -216,71 +220,72 @@ public class CommandListener implements CommandExecutor{
 				Group g = Nobility.getGroupManager().getGroup(player);
 
 				//Checking if player is in a group before continuing.
-				if(g == null) {
+				if (g == null) {
 					player.sendMessage(ChatColor.RED + "You are not a part of a nobility group!");
 					return true;
 				}
 
 				GroupPermission perm = g.getPermission(player);
-				if(perm == GroupPermission.OFFICER || perm == GroupPermission.LEADER) {
+				if (perm == GroupPermission.OFFICER || perm == GroupPermission.LEADER) {
 					String promoteString = args[1].toString();
 					OfflinePlayer promotePlayer = Bukkit.getOfflinePlayer(promoteString);
 					GroupPermission promotePerm = g.getPermission(promotePlayer);
 					//Large amount of If statements below, im sorry if these affect u ):
 
-					if(promotePerm == null) {
+					if (promotePerm == null) {
 						player.sendMessage(ChatColor.RED + "You can't demote someone not in your group!");
 					}
 
-					if(player.getUniqueId() == promotePlayer.getUniqueId()) {
+					if (player.getUniqueId() == promotePlayer.getUniqueId()) {
 						player.sendMessage(ChatColor.RED + "You can't promote yourself!");
 						return true;
 					}
 
 					//Check to make sure the player can promote.
-					if(perm == GroupPermission.DEFAULT || perm == GroupPermission.TRUSTED) {
+					if (perm == GroupPermission.DEFAULT || perm == GroupPermission.TRUSTED) {
 						player.sendMessage(ChatColor.RED + "You don't have enough power to do that!");
 						return true;
 					}
 					//Promote Moderator to Officer.
-					if(promotePerm == GroupPermission.TRUSTED && perm == GroupPermission.LEADER) {
+					if (promotePerm == GroupPermission.TRUSTED && perm == GroupPermission.LEADER) {
 						g.setPermission(promotePlayer, GroupPermission.OFFICER);
 						Bukkit.getServer().getLogger().info("Updated player's rank to: " + g.getPermission(promotePlayer));
 						Group f = Nobility.getGroupManager().getGroup(player); //Reload variable that for some weird fucking reason fixes promotion bug.
 						Bukkit.getServer().getLogger().info("Player rank recheck to: " + f.getPermission(promotePlayer));
 						player.sendMessage(ChatColor.GOLD + "Successfully promoted " + ChatColor.AQUA + promotePlayer.getName() + ".");
-						if(promotePlayer.isOnline()) {
+						if (promotePlayer.isOnline()) {
 							promotePlayer.getPlayer().sendMessage(ChatColor.GREEN + "You have been promoted!");
 						}
 						return true;
 					}
 					//Promote Member to Moderator.
-					if(promotePerm == GroupPermission.DEFAULT && perm == GroupPermission.OFFICER) {
+					if (promotePerm == GroupPermission.DEFAULT && perm == GroupPermission.OFFICER) {
 						g.setPermission(promotePlayer, GroupPermission.TRUSTED);
 						player.sendMessage(ChatColor.GOLD + "Successfully promoted " + ChatColor.AQUA + promotePlayer.getName() + ".");
-						if(promotePlayer.isOnline()) {
+						if (promotePlayer.isOnline()) {
 							promotePlayer.getPlayer().sendMessage(ChatColor.GREEN + "You have been promoted!");
 						}
 						return true;
 					}
 					//Promote Member to Moderator. (As leader)
-					if(promotePerm == GroupPermission.DEFAULT && perm == GroupPermission.LEADER) {
+					if (promotePerm == GroupPermission.DEFAULT && perm == GroupPermission.LEADER) {
 						g.setPermission(promotePlayer, GroupPermission.TRUSTED);
 						player.sendMessage(ChatColor.GOLD + "Successfully promoted " + ChatColor.AQUA + promotePlayer.getName() + ".");
-						if(promotePlayer.isOnline()) {
+						if (promotePlayer.isOnline()) {
 							promotePlayer.getPlayer().sendMessage(ChatColor.GREEN + "You have been promoted!");
 						}
 						return true;
 					}
 					//Prevent Officer promotion without group transfer.
-					if(promotePerm == GroupPermission.OFFICER && perm == GroupPermission.LEADER) {
+					if (promotePerm == GroupPermission.OFFICER && perm == GroupPermission.LEADER) {
 						player.sendMessage(ChatColor.RED + "You cannot transfer group ownership with this command! \n" +
-						ChatColor.GOLD + "Try using /nobility transfer <player> instead!");
+								ChatColor.GOLD + "Try using /nobility transfer <player> instead!");
 						return true;
 					}
+
+					player.sendMessage(ChatColor.RED + "You don't have permission to promote that player!");
+					return true;
 				}
-				player.sendMessage(ChatColor.RED + "You don't have permission to promote that player!");
-				return true;
 			}
 
 			/**
@@ -461,6 +466,32 @@ public class CommandListener implements CommandExecutor{
 					player.sendMessage(ChatColor.RED + "Could not find group " + ChatColor.WHITE + args[1]);
 				}
 				return true;
+			}
+			if(args[0].equalsIgnoreCase("admin") && args[1].equalsIgnoreCase("campcycle")) {
+				List<Estate> estates = Nobility.getEstateManager().getEstates();
+
+				for (Estate estate : estates) {
+					List<Development> developments = estate.getBuiltDevelopments();
+					ArrayList<Camp> camps = new ArrayList<Camp>();
+					ArrayList<Node> nodes = estate.getNodes();
+
+					for (Development development : developments) {
+						if (development.getType() == DevelopmentType.CAMP) {
+							camps.add((Camp) development);
+						}
+					}
+					for (Camp camp : camps) {
+						for (Node node : nodes) {
+							if (node.getType() == camp.nodeType) {
+								try {
+									camp.produceOutput(node);
+								} catch (Exception e) {
+									e.printStackTrace();
+								}
+							}
+						}
+					}
+				}
 			}
 
 		}

@@ -54,7 +54,7 @@ public class EstateCommandListener implements CommandExecutor {
     			  		p.sendMessage(ChatColor.RED + "Your group already has an Estate!");
     			  	}else {
     			  		Block b = p.getLocation().getBlock();
-    			  		b.setType(Material.CHEST);
+    			  		b.setType(Material.ENDER_CHEST);
     			  		Nobility.getEstateManager().createEstate(b, p);
     			  		p.sendMessage(ChatColor.GREEN + "Successfully created estate " + group.getName());
     			  		return true;

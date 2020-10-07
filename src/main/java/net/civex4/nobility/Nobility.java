@@ -3,15 +3,20 @@ package net.civex4.nobility;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import io.github.kingvictoria.regions.nodes.Node;
+import net.civex4.nobility.development.Camp;
+import net.civex4.nobility.development.DevelopmentType;
 import net.civex4.nobility.listeners.*;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
-
+ 
 import com.sk89q.worldedit.extent.clipboard.Clipboard;
 import com.sk89q.worldedit.extent.clipboard.io.ClipboardFormat;
 import com.sk89q.worldedit.extent.clipboard.io.ClipboardFormats;
@@ -59,8 +64,8 @@ public class Nobility extends ACivMod {
 	
 	public static int currentDay = 0;
 	public static Map<String, Clipboard> schematics = new HashMap<>();
-	
-	
+
+
 	@Override
 	public void onEnable() {
 		super.onEnable();
@@ -188,6 +193,34 @@ public class Nobility extends ACivMod {
 		for (Estate estate : estateMan.getEstates()) {
 			for (Development development : estate.getActiveDevelopments()) {
 				development.tick();
+			}
+		}
+
+		List<Estate> estates = Nobility.getEstateManager().getEstates();
+
+		for (Estate estate : estates) {
+			List<Development> developments = estate.getBuiltDevelopments();
+			ArrayList<Camp> camps = new ArrayList<Camp>();
+			ArrayList<Node> nodes = estate.getNodes();
+
+			for (Development development : developments) {
+				if (development.getType() == DevelopmentType.CAMP) {
+					camps.add((Camp) development);
+				}
+				if (development.getType() == DevelopmentType.ARSENAL) {
+					Nobility.getDevelopmentManager().arsenalUpkeep(development, estate);
+				}
+			}
+			for (Camp camp : camps) {
+				for (Node node : nodes) {
+					if (node.getType() == camp.nodeType) {
+						try {
+							camp.produceOutput(node);
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+					}
+				}
 			}
 		}
 	}

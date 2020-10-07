@@ -1,5 +1,7 @@
 package net.civex4.nobility.listeners;
 
+import net.civex4.nobility.group.Group;
+import net.civex4.nobility.group.GroupPermission;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -77,7 +79,18 @@ public class ProtectionListener implements Listener{
 		if(!withinSquare(radius,e.getBlock().getLocation(),loc)) { return; }
 		
 		Player p = event.getPlayer();
+		Group g = Nobility.getGroupManager().getGroup(p);
+		if(g == null) {
+			event.setCancelled(true);
+			p.sendMessage(BLOCK_PREVENTED_MSG + ChatColor.WHITE + e.getGroup().getName());
+			return;
+		}
+		GroupPermission perm = g.getPermission(p);
 		if(Nobility.getEstateManager().getEstateOfPlayer(p) == e) {
+			if(perm == GroupPermission.DEFAULT) {
+				event.setCancelled(true);
+				p.sendMessage(BLOCK_PREVENTED_MSG + ChatColor.WHITE + e.getGroup().getName());
+			}
 			//remove this after debugging
 			return;
 		}else { 
@@ -97,7 +110,18 @@ public class ProtectionListener implements Listener{
 		if(!withinSquare(radius,e.getBlock().getLocation(),loc)) { return; }
 		
 		Player p = event.getPlayer();
+		Group g = Nobility.getGroupManager().getGroup(p);
+		if(g == null) {
+			event.setCancelled(true);
+			p.sendMessage(BLOCK_PREVENTED_MSG + ChatColor.WHITE + e.getGroup().getName());
+			return;
+		}
+		GroupPermission perm = g.getPermission(p);
 		if(Nobility.getEstateManager().getEstateOfPlayer(p) == e) {
+			if(perm == GroupPermission.DEFAULT) {
+				event.setCancelled(true);
+				p.sendMessage(BLOCK_PREVENTED_MSG + ChatColor.WHITE + e.getGroup().getName());
+			}
 			return;
 		}else { 
 			event.setCancelled(true); 

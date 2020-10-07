@@ -1,12 +1,15 @@
 package net.civex4.nobility.siege;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.World;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
@@ -62,13 +65,46 @@ public class SiegeManager {
 		
 		
 	}
+
+	public ArrayList getNearbyPlayers(Location location) {
+		ArrayList<Player> nearbyPlayers = new ArrayList<Player>();
+		double diameter = 750;
+		Collection<Entity> entities = location.getWorld().getNearbyEntities(location, diameter, diameter, diameter);
+		for(Entity entity : entities) {
+			if(entity instanceof Player) {
+				Player nearPlayer = (Player) entity;
+				nearbyPlayers.add(nearPlayer);
+			}
+		}
+		return nearbyPlayers;
+	}
+
 	
 	public void startScoreboard(Siege s) {
 		Bukkit.getScheduler().runTaskTimer(Nobility.getNobility(), () -> {
-			for (Player p : Bukkit.getOnlinePlayers()) {
-				updateScoreboard(s,p);
+			Estate defenseEstate = s.getDefender();
+			Location location = defenseEstate.getBlock().getLocation();
+			ArrayList<Player> nearbyPlayers = getNearbyPlayers(location);
+
+			for (Player p : nearbyPlayers) {
+				updateScoreboard(s, p);
 			}
-		}, 5L, 5L);
+
+			for (Player p : Bukkit.getOnlinePlayers()) {
+				Bukkit.getScheduler().runTaskLater(Nobility.getNobility(), () -> {
+					if(!nearbyPlayers.contains(p)) {
+						closeScoreboard(s, p);
+
+					}
+				}, 200);
+			}
+		}, 20, 20);
+	}
+
+	public void closeScoreboard(Siege s, Player p) {
+		for(CivScoreBoard score : s.getScoreboard()) {
+			score.hide(p);
+		}
 	}
 	
 	public void updateScoreboard(Siege s, Player p) {

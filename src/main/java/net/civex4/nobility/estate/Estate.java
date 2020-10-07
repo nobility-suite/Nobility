@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import net.civex4.nobility.cannons.Cannon;
 import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
 import org.bukkit.inventory.Inventory;
