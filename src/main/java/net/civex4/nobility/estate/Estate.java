@@ -31,6 +31,8 @@ public class Estate {
 	
 	private int vulnerabilityHour = 0;
 	private int currentHealth;
+
+	private boolean isAlert = false;
 	
 	public void removeDevelopment(Development d){
 		builtDevelopments.remove(d);
@@ -62,6 +64,19 @@ public class Estate {
 	
 	public void setVulnerabilityHour(int i) {
 	  this.vulnerabilityHour = i;
+	}
+
+	public boolean getAlert() { return  this.isAlert; }
+
+	public void setAlert(String string) {
+		if(string == "true") {
+			this.isAlert = true;
+			return;
+		}
+		if(string == "false") {
+			this.isAlert = false;
+			return;
+		}
 	}
 
 	public Group getGroup() {
