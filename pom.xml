@@ -3,10 +3,10 @@
 				 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>Nobility</artifactId>
-	<version>0.1.1</version>
+	<version>0.1.5</version>
 	<description>A plugin to allow for players to create nations with a focus on statecraft, warfare, and geopolitics.
 		Nobility aims to be a much more flexible and mechanically-lightweight plugin than traditional plugins like Towny or
-		Factions. Built for Spigot 1.12.
+		Factions. Built for Spigot 1.16.
 	</description>
 
 	<properties>
@@ -36,13 +36,13 @@
 		<dependency>
 			<groupId>org.spigotmc</groupId>
 			<artifactId>spigot-api</artifactId>
-			<version>1.14.4-R0.1-SNAPSHOT</version>
+			<version>1.16.3-R0.1-SNAPSHOT</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>vg.civcraft.mc.civmodcore</groupId>
 			<artifactId>CivModCore</artifactId>
-			<version>1.7.9</version>
+			<version>1.8.0</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
