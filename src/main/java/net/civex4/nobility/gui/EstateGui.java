@@ -22,6 +22,7 @@ import org.bukkit.inventory.meta.SkullMeta;
 import io.github.kingvictoria.regions.Region;
 import io.github.kingvictoria.regions.nodes.Node;
 import net.civex4.nobility.Nobility;
+import net.civex4.nobility.blueprints.Blueprint;
 import net.civex4.nobility.development.AttributeManager;
 import net.civex4.nobility.development.Camp;
 import net.civex4.nobility.development.DevAttribute;
@@ -509,6 +510,25 @@ public class EstateGui {
 		gui.setSlot(input, 36);
 
 		gui.setSlot(ButtonLibrary.HOME.clickable(),49);
+		
+		if(selected != null && Nobility.getBlueprintManager().recipeExists(selected, d)) {
+			Blueprint bp = Blueprint.parseBlueprintFromItem(d.selectedRecipe);
+			if(bp == null) { 
+				p.sendMessage(ChatColor.RED + "Error parsing blueprint."); 
+			}else {
+				for(NobilityItem it : bp.ingredients.keySet()) {
+					ItemStack i = it.getItemStack(1);
+					i.setAmount(Math.min(bp.ingredients.get(it), 64));
+					
+					if(!d.outputContains(i, bp.ingredients.get(it))) {
+						i.setType(Material.RED_STAINED_GLASS_PANE);
+					}
+					
+					Clickable icon = new DecorationStack(i);
+					gui.addSlot(icon);
+				}
+			}
+		}
 
 
 		gui.showInventory(p);
