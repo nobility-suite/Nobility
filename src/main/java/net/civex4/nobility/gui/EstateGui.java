@@ -440,8 +440,10 @@ public class EstateGui {
 		Clickable workerInfo = ButtonLibrary.createWorkerInfo(p);
 		gui.setSlot(workerInfo, 29);
 
-		ItemStack selected = d.selectedRecipe.clone();
-		if(selected != null && Nobility.getBlueprintManager().recipeExists(selected, d)) {
+		ItemStack selected = null;
+		if(d.selectedRecipe != null)
+		selected = d.selectedRecipe.clone();
+		if(selected != null  && Nobility.getBlueprintManager().recipeExists(selected, d)) {
 
 		}else { selected = ButtonLibrary.createIcon(Material.BARRIER, ChatColor.WHITE + "Select Blueprint"); }
 		ItemAPI.addLore(selected, true, ChatColor.YELLOW + "" + ChatColor.BOLD + "Click to change Blueprint!");
@@ -511,7 +513,7 @@ public class EstateGui {
 
 		gui.setSlot(ButtonLibrary.HOME.clickable(),49);
 		
-		if(selected != null && Nobility.getBlueprintManager().recipeExists(selected, d)) {
+		if(selected != null && selected.getType() != Material.BARRIER &&Nobility.getBlueprintManager().recipeExists(d.selectedRecipe, d)) {
 			Blueprint bp = Blueprint.parseBlueprintFromItem(d.selectedRecipe);
 			if(bp == null) { 
 				p.sendMessage(ChatColor.RED + "Error parsing blueprint."); 
