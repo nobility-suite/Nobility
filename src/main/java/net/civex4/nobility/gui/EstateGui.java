@@ -522,7 +522,7 @@ public class EstateGui {
 					ItemStack i = it.getItemStack(1);
 					i.setAmount(Math.min(bp.ingredients.get(it), 64));
 					
-					if(!d.outputContains(i, bp.ingredients.get(it))) {
+					if(!d.outputContains(it, bp.ingredients.get(it))) {
 						i.setType(Material.RED_STAINED_GLASS_PANE);
 					}
 					
