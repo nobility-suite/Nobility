@@ -6,6 +6,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
+import net.civex4.nobility.blueprints.AbstractBlueprint;
 import net.civex4.nobility.blueprints.Blueprint;
 import net.civex4.nobilityitems.NobilityItem;
 import net.md_5.bungee.api.ChatColor;
@@ -13,11 +14,14 @@ import vg.civcraft.mc.civmodcore.api.ItemAPI;
 
 public class Card {
 	
+	/**
+	 * A Card is a package of Actions meant to be applied to a specific AbstractBlueprint for a cost, in the Research minigame.
+	 */
 	private ArrayList<Action> actions;
-	private Blueprint blueprint;
+	private AbstractBlueprint blueprint;
 	private ArrayList<NobilityItem> cost;
 	
-	public Card(ArrayList<Action> actions, Blueprint b) {
+	public Card(ArrayList<Action> actions, AbstractBlueprint b) {
 		this.actions = actions;
 		this.blueprint = b;
 		cost = new ArrayList<NobilityItem>();

@@ -8,11 +8,14 @@ import org.bukkit.entity.Player;
 
 import net.civex4.nobility.blueprints.Blueprint;
 import net.civex4.nobility.developments.AbstractWorkshop;
+import net.md_5.bungee.api.ChatColor;
 
 public class CardManager {
 	
 	HashMap<String,ActionType> actionIdentifiers;
-	
+	/**
+	 * CardManager manages what Cards appear in the Research minigame, and controls how both Cards and Actions are parsed.
+	 */
 	public CardManager() {
 		actionIdentifiers = new HashMap<String,ActionType>();
 		
@@ -28,7 +31,11 @@ public class CardManager {
 	
 	public Action parseToAction(String line,Blueprint bp) {
 		 //TODO
+		line.replaceAll(ChatColor.BLUE + "", "");
+		line.replaceAll(ChatColor.GRAY + "", "");
+		line.replaceAll(ChatColor.WHITE + "", "");
 		String[] split = line.split("]");
+		
 		if(split.length != 2) {
 			Bukkit.getServer().getLogger().warning("Invalid Action parsed from Blueprint. Likely contains multiple ']' regex " + bp.name + ", " + bp.result.getDisplayName());
 			return null; }
