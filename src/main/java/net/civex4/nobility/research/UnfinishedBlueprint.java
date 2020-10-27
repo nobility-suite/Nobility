@@ -32,4 +32,8 @@ public class UnfinishedBlueprint {
 	public Blueprint generate() {
 		return null;
 	}
+	
+	public ArrayList<Card> getActions(){
+		return this.actions;
+	}
 }

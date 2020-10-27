@@ -13,12 +13,12 @@ import vg.civcraft.mc.civmodcore.api.ItemAPI;
 
 public class Card {
 	
-	private CardType type;
+	private ArrayList<Action> actions;
 	private Blueprint blueprint;
 	private ArrayList<NobilityItem> cost;
 	
-	public Card(CardType t, Blueprint b) {
-		this.type = t;
+	public Card(ArrayList<Action> actions, Blueprint b) {
+		this.actions = actions;
 		this.blueprint = b;
 		cost = new ArrayList<NobilityItem>();
 		this.init();
@@ -54,9 +54,16 @@ public class Card {
 	
 	public ItemStack getIcon() {
 		ItemStack ret = new ItemStack(Material.PAPER);
-		ItemAPI.setDisplayName(ret,type.toString());
+		
+		String devname = "";
+		for(Action a : this.actions) {
+			devname += a.type.name();
+		}
+		ItemAPI.setDisplayName(ret,devname);
 		//TODO ADD CARD EFFECT TO LORE.
 		return ret;
 	}
+	
+
 
 }
