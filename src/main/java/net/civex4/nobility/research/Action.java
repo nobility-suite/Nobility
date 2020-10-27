@@ -2,6 +2,7 @@ package net.civex4.nobility.research;
 
 import net.civex4.nobility.blueprints.AbstractBlueprint;
 import net.civex4.nobilityitems.NobilityItem;
+import net.md_5.bungee.api.ChatColor;
 
 public class Action {
 	
@@ -26,8 +27,24 @@ public class Action {
 	}
 	
 	public String formatLine() {
-		switch(this.type) {
+		String ret = "";
+		ret += ChatColor.BLUE + this.type.identifier;
 		
+		String affectedName = "";
+		if(affected != null) {
+			affectedName = this.affected.getDisplayName();
+			affectedName = ChatColor.WHITE + affectedName;
+		}
+		switch(this.type) {
+		case LOCK_IN:
+			ret += ChatColor.GRAY + "Guarantee that " + affectedName + ChatColor.GRAY + " appears in the recipe.";
+			break;
+		case LOCK_OUT:
+			ret += ChatColor.GRAY + "Prevent " + affectedName + ChatColor.GRAY + " from appearing in the recipe.";
+			break;
+		default:
+			break;
+			
 		}
 		return "";
 	}

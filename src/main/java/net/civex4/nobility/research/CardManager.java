@@ -47,21 +47,18 @@ public class CardManager {
 			return null;
 		}
 		
-		
+		String toParse = split[1]; //TODO
 		
 		
 		return null;
 	}
 	
-	public ArrayList<String> parseActionsToString(UnfinishedBlueprint bp){
+	public ArrayList<String> parseActionsToString(Card c, UnfinishedBlueprint bp){
 		ArrayList<String> ret = new ArrayList<String>();
-		for(Card c : bp.getActions()) {
-			ret.add(parseActionToString(c));
+		for(Action a : c.getActions()) {
+			ret.add(a.formatLine());
 		}
 		return ret;
 	}
 	
-	public String parseActionToString(Card c) {
-		return "";
-	}
 }

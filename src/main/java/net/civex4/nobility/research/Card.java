@@ -67,6 +67,11 @@ public class Card {
 		//TODO ADD CARD EFFECT TO LORE.
 		return ret;
 	}
+
+	public ArrayList<Action> getActions() {
+		// TODO Auto-generated method stub
+		return this.actions;
+	}
 	
 
 
