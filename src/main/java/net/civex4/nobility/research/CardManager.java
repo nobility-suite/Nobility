@@ -6,8 +6,10 @@ import java.util.HashMap;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
+import net.civex4.nobility.blueprints.AbstractBlueprint;
 import net.civex4.nobility.blueprints.Blueprint;
 import net.civex4.nobility.developments.AbstractWorkshop;
+import net.civex4.nobilityitems.NobilityItems;
 import net.md_5.bungee.api.ChatColor;
 
 public class CardManager {
@@ -29,7 +31,7 @@ public class CardManager {
 		return null;
 	}
 	
-	public Action parseToAction(String line,Blueprint bp) {
+	public Action parseToAction(String line,AbstractBlueprint bp) {
 		 //TODO
 		line.replaceAll(ChatColor.BLUE + "", "");
 		line.replaceAll(ChatColor.GRAY + "", "");
@@ -48,9 +50,30 @@ public class CardManager {
 		}
 		
 		String toParse = split[1]; //TODO
+		String[] parse;
+		String itemName;
+		String itemGroup;
+		Action action = null;
+		
+		switch(t) {
+		case LOCK_IN:
+			toParse.replace("<", "");
+			parse = toParse.split(">");
+			itemName = parse[0];
+			itemGroup = parse[1];
+			action = new Action(ActionType.LOCK_IN,bp,NobilityItems.getItemByDisplayName(itemName),Integer.parseInt(itemGroup));
+			break;
+		case LOCK_OUT:
+			toParse.replace("<", "");
+			parse = toParse.split(">");
+			itemName = parse[0];
+			itemGroup = parse[1];
+			action = new Action(ActionType.LOCK_IN,bp,NobilityItems.getItemByDisplayName(itemName),Integer.parseInt(itemGroup));
+			break;
+		}
 		
 		
-		return null;
+		return action;
 	}
 	
 	public ArrayList<String> parseActionsToString(Card c, UnfinishedBlueprint bp){

@@ -13,6 +13,7 @@ public class Action {
 	public ActionType type;
 	public AbstractBlueprint bp;
 	public int amount = 0;
+	public int itemGroupIndex = -1;
 	public NobilityItem affected;
 	
 	public Action(ActionType t, AbstractBlueprint b) {
@@ -20,10 +21,11 @@ public class Action {
 		this.bp = b;
 	}
 	
-	public Action(ActionType t, AbstractBlueprint b, NobilityItem item) {
+	public Action(ActionType t, AbstractBlueprint b, NobilityItem item, int index) {
 		this.type = t;
 		this.bp = b;
 		this.affected = item;
+		this.itemGroupIndex = index;
 	}
 	
 	public String formatLine() {
@@ -33,14 +35,13 @@ public class Action {
 		String affectedName = "";
 		if(affected != null) {
 			affectedName = this.affected.getDisplayName();
-			affectedName = ChatColor.WHITE + affectedName;
 		}
 		switch(this.type) {
 		case LOCK_IN:
-			ret += ChatColor.GRAY + "Guarantee that " + affectedName + ChatColor.GRAY + " appears in the recipe.";
+			ret += ChatColor.GRAY + "Guarantee that <" + affectedName + ChatColor.GRAY + "> appears in the recipe. <" + itemGroupIndex + ">";
 			break;
 		case LOCK_OUT:
-			ret += ChatColor.GRAY + "Prevent " + affectedName + ChatColor.GRAY + " from appearing in the recipe.";
+			ret += ChatColor.GRAY + "Prevent " + affectedName + ChatColor.GRAY + " from appearing in the recipe. <" + itemGroupIndex + ">";
 			break;
 		default:
 			break;
