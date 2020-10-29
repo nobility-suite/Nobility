@@ -28,10 +28,10 @@ public class Card {
 		this.init();
 	}
 	
-	public boolean activate(Player activator) {
+	public boolean activate(Player activator, ItemStack unfinishedBlueprint) {
 		if(checkCost(activator)) {
 			payCosts(activator);
-			execute();
+			execute(unfinishedBlueprint);
 			return true;
 		}else {
 			activator.sendMessage(ChatColor.RED + "You do not have the required items to use this action!");
@@ -39,7 +39,10 @@ public class Card {
 		}
 	}
 	
-	public void execute() {
+	public void execute(ItemStack unfinishedBlueprint) {
+		for(Action a : this.actions) {
+			ItemAPI.addLore(unfinishedBlueprint, a.formatLine());
+		}
 		
 	}
 	

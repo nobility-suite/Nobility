@@ -25,6 +25,16 @@ public class UnfinishedBlueprint {
 		return null;
 	}
 	
+	public ItemStack createNewUnfinishedBlueprint(AbstractBlueprint baseRecipe) {
+		UnfinishedBlueprint bp = new UnfinishedBlueprint(baseRecipe);
+		bp.init();
+		return bp.parseToItem();
+	}
+	
+	public void init() {
+		
+	}
+	
 	public ItemStack parseToItem() {
 		return null;
 	}
@@ -36,4 +46,7 @@ public class UnfinishedBlueprint {
 	public ArrayList<Card> getActions(){
 		return this.actions;
 	}
+	
+
+
 }
