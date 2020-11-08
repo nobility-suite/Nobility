@@ -251,5 +251,14 @@ public class BlueprintManager {
     return new SimpleItemGroup(items, selectionCount, minItemCount, maxItemCount);
     
   }
+  
+  public AbstractBlueprint getAbstractBlueprintFromItem(NobilityItem ni) {
+	  for(AbstractBlueprint abp : this.blueprints) {
+		  if(abp.result.equals(ni)) {
+			  return abp;
+		  }
+	  }
+	  return null;
+  }
 
 }

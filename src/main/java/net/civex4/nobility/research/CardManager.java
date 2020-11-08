@@ -25,6 +25,8 @@ public class CardManager {
 			actionIdentifiers.put(t.identifier,t);
 		}
 	}
+	
+	
 
 	//TODO
 	public Card generateCard(Blueprint bp, Player p, AbstractWorkshop w) {
