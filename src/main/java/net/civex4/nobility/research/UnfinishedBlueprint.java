@@ -27,6 +27,9 @@ public class UnfinishedBlueprint {
 	
 	final static String SEED_PREFIX = ChatColor.BLUE + "  Seed: " + ChatColor.WHITE;
 	
+	final static String ROUND_PREFIX = ChatColor.BLUE + "Cards Chosen: " + ChatColor.WHITE + "[";
+	final static String ROUND_SUFFIX = "]";
+	
 	public UnfinishedBlueprint(AbstractBlueprint recipe) {
 		this.seed = new Random().nextLong();
 		this.baseBlueprint = recipe;
@@ -66,6 +69,9 @@ public class UnfinishedBlueprint {
 		
 		String seedString =  SEED_PREFIX + seed;  
 		ItemAPI.addLore(ret, seedString);
+	
+		String roundString = this.ROUND_PREFIX + this.rounds + "/" + this.maxRounds + this.ROUND_SUFFIX;
+		ItemAPI.addLore(ret, roundString);
 		
 		for(Card c : this.actions) {
 			for(Action a : c.getActions()) {
