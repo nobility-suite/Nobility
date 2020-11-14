@@ -9,6 +9,7 @@ import java.util.Set;
 import java.util.UUID;
 
 import net.civex4.nobility.cannons.Cannon;
+import net.civex4.nobility.developments.Inn;
 import net.civex4.nobility.group.Group;
 import org.bukkit.*;
 import org.bukkit.block.Block;
@@ -611,7 +612,37 @@ public class EstateGui {
 				for(DevAttribute attr : d.attributes.keySet()) {
 					ItemAPI.addLore(icon, AttributeManager.getAttributeText(attr,d.attributes.get(attr)));
 				}
-			Clickable dicon = new DecorationStack(icon);
+			//Not really a good way to do this but whatever.
+			if(d.getType() == DevelopmentType.INN) {
+				Inn inn = (Inn) d;
+				if(inn.defaultSpawn != null) {
+					ItemAPI.addLore(icon, ChatColor.BLUE + "Spawn: " + ChatColor.WHITE + inn.defaultSpawn.getBlockX() + " " + inn.defaultSpawn.getBlockY() + " " + inn.defaultSpawn.getBlockZ());
+				}
+				ItemAPI.addLore(icon, ChatColor.GREEN + "LEFT CLICK to set spawn");
+			}
+			Clickable dicon = new Clickable(icon) {
+				@Override
+				protected void clicked(Player player) {
+					if(d.name == "Town Inn") {
+						Estate estate = Nobility.getEstateManager().getEstateOfPlayer(player);
+						GroupPermission perm = estate.getGroup().getPermission(player);
+						if(perm == GroupPermission.LEADER || perm == GroupPermission.OFFICER) {
+							Nobility.getChestSelector().defaultSpawnQueue.put(player.getUniqueId(), (Inn) d);
+
+							player.sendMessage(ChatColor.YELLOW + "Punch a bed within 10 seconds to set the default Estate spawn.");
+							Bukkit.getScheduler().scheduleSyncDelayedTask(Nobility.getNobility(), new Runnable() {
+								@Override
+								public void run() {
+									if(Nobility.getChestSelector().defaultSpawnQueue.containsKey(p.getUniqueId())) {
+										Nobility.getChestSelector().defaultSpawnQueue.remove(p.getUniqueId());
+										p.sendMessage(ChatColor.RED + "Spawn selection cancelled.");
+									}
+								}
+							}, 20*10L); //20 Tick (1 Second) delay before run() is called
+						}
+					}
+				}
+			};
 			gui.addSlot(dicon);
 		}
 
