@@ -3,11 +3,15 @@ package net.civex4.nobility.developments;
 import net.civex4.nobility.development.DevAttribute;
 import net.civex4.nobility.development.Development;
 import net.civex4.nobility.development.DevelopmentType;
+import net.civex4.nobilityitems.NobilityItem;
 import org.bukkit.Material;
 
 import java.util.HashMap;
 
 public class Armory extends Development {
+
+	public NobilityItem upgradeItem;
+
 	public Armory() {
 		super(DevelopmentType.ARMORY);
 		this.icon = Material.IRON_BLOCK;

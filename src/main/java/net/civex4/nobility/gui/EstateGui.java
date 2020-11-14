@@ -9,6 +9,7 @@ import java.util.Set;
 import java.util.UUID;
 
 import net.civex4.nobility.cannons.Cannon;
+import net.civex4.nobility.developments.Armory;
 import net.civex4.nobility.developments.Inn;
 import net.civex4.nobility.group.Group;
 import org.bukkit.*;
@@ -18,6 +19,7 @@ import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.SkullMeta;
 
 import io.github.kingvictoria.regions.Region;
@@ -612,7 +614,13 @@ public class EstateGui {
 				for(DevAttribute attr : d.attributes.keySet()) {
 					ItemAPI.addLore(icon, AttributeManager.getAttributeText(attr,d.attributes.get(attr)));
 				}
-			//Not really a good way to do this but whatever.
+			if(d.getType() == DevelopmentType.ARMORY) {
+				Armory armory = (Armory) d;
+				if(!(armory.upgradeItem == null)) {
+					ItemAPI.addLore(icon, ChatColor.BLUE + "Upgrade Cost: " + armory.upgradeItem.getDisplayName());
+					ItemAPI.addLore(icon, ChatColor.GREEN + "RIGHT CLICK to upgrade Armory");
+				}
+			}
 			if(d.getType() == DevelopmentType.INN) {
 				Inn inn = (Inn) d;
 				if(inn.defaultSpawn != null) {
@@ -639,6 +647,23 @@ public class EstateGui {
 									}
 								}
 							}, 20*10L); //20 Tick (1 Second) delay before run() is called
+						}
+					}
+					if(d.getType() == DevelopmentType.ARMORY) {
+						Armory armory = (Armory) d;
+						Integer level = d.attributes.get(DevAttribute.ARMORY_LEVEL);
+						if(level == 3) { return; }
+						PlayerInventory inventory = player.getInventory();
+
+						ItemStack upgradeItem = armory.upgradeItem.getItemStack(1);
+
+						if(inventory.containsAtLeast(upgradeItem, upgradeItem.getAmount())) {
+							inventory.remove(upgradeItem);
+							player.sendMessage("Successfully upgraded Armory.");
+							int newlevel = level + 1;
+							armory.attributes.replace(DevAttribute.ARMORY_LEVEL, newlevel);
+						} else {
+							player.sendMessage(ChatColor.RED + "You don't have enough materials to upgrade this.");
 						}
 					}
 				}
