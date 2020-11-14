@@ -5,7 +5,7 @@ public enum DevAttribute {
 	CANNON_LIMIT("Cannon Limit"),
 	CANNON_STORED("Cannons Stored"),
 	CANNON_DISREPAIRED("Cannons Disrepaired"),
-	CITY_BED_SPAWN("City Bed Spawn"),
+	ARMORY_LEVEL("Armory Level"),
 	CITY_HEALTH("City Health"),
 	CITY_RADIUS("City Radius"),
 	ADD_CITY_HEALTH("Add City Health");

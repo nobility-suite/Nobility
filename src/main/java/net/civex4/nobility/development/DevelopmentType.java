@@ -6,6 +6,7 @@ public enum DevelopmentType {
 	CAMP,
 	WORKSHOP,
 	ARSENAL,
+	ARMORY,
 	INN,
 	GENERIC;
 

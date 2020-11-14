@@ -4,13 +4,10 @@ import java.util.HashMap;
 import java.util.List;
 
 import net.civex4.nobility.developments.*;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
 import net.civex4.nobility.estate.Estate;
 import net.md_5.bungee.api.ChatColor;
-import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemStack;
 
 public class DevelopmentManager {
 	private HashMap<String,DevelopmentBlueprint> blueprints;
@@ -98,6 +95,12 @@ public class DevelopmentManager {
 		basicInn.result = new Inn();
 		basicInn.cost = costs;
 		ret.put(basicInn.result.name, basicInn);
+
+		//ARMORY
+		DevelopmentBlueprint armoryT1 = new DevelopmentBlueprint();
+		armoryT1.result = new Armory();
+		armoryT1.cost = costs;
+		ret.put(armoryT1.result.name, armoryT1);
 		
 		return ret;
 	}
