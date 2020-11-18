@@ -1,6 +1,7 @@
 package net.civex4.nobility.research;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 import org.bukkit.Material;
@@ -17,7 +18,7 @@ import vg.civcraft.mc.civmodcore.api.ItemAPI;
 public class UnfinishedBlueprint {
 	
 	private AbstractBlueprint baseBlueprint;
-	private ArrayList<Card> actions;
+	private ArrayList<Action> actions;
 	private long seed;
 	private int rounds;
 	private int maxRounds;
@@ -45,10 +46,26 @@ public class UnfinishedBlueprint {
 		//get abstractblueprint from item
 		
 		UnfinishedBlueprint ubp = new UnfinishedBlueprint(abp);
+		List<String> lore = ItemAPI.getLore(i);
 		
-		//TODO get UnfinishedBlueprint attributes and parse from item
+		ubp.seed = Long.parseLong(lore.get(0));
 		
-		return null;
+		String rounds = lore.get(1);
+		String[] arr = rounds.split("/");
+		arr[0].replace(ROUND_PREFIX,"");
+		arr[1].replace(ROUND_SUFFIX, "");
+		int spentRounds = Integer.parseInt(arr[0]);
+		int maxRounds = Integer.parseInt(arr[1]);
+		ubp.maxRounds = maxRounds;
+		ubp.rounds = spentRounds;
+		
+		for(int j = 2; j < lore.size(); j++) {
+			String actionString = lore.get(j);
+			Action action = Nobility.getCardManager().parseToAction(actionString, abp);
+			ubp.addAction(action);
+		}
+				
+		return ubp;
 	}
 	
 	public ItemStack createNewUnfinishedBlueprint(AbstractBlueprint baseRecipe) {
@@ -73,11 +90,11 @@ public class UnfinishedBlueprint {
 		String roundString = this.ROUND_PREFIX + this.rounds + "/" + this.maxRounds + this.ROUND_SUFFIX;
 		ItemAPI.addLore(ret, roundString);
 		
-		for(Card c : this.actions) {
-			for(Action a : c.getActions()) {
-				ItemAPI.addLore(ret,a.formatLine());
-			}
+	
+		for(Action a :this.getActions()) {
+			ItemAPI.addLore(ret,a.formatLine());
 		}
+	
 		
 		return ret;
 		
@@ -87,8 +104,12 @@ public class UnfinishedBlueprint {
 		return null;
 	}
 	
-	public ArrayList<Card> getActions(){
+	public ArrayList<Action> getActions(){
 		return this.actions;
+	}
+	
+	public void addAction(Action a) {
+		this.actions.add(a);
 	}
 	
 
