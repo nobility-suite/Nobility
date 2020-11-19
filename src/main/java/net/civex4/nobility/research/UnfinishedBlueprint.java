@@ -36,7 +36,27 @@ public class UnfinishedBlueprint {
 		this.baseBlueprint = recipe;
 	}
 	
-	public UnfinishedBlueprint parseFromItem(ItemStack i) {
+	public AbstractBlueprint getBaseBlueprint() {
+		return this.baseBlueprint;
+	}
+	
+	public int getRounds() {
+		return this.rounds;
+	}
+	
+	public int getMaxRounds() {
+		return this.maxRounds;
+	}
+	
+	public long getSeed() {
+		return this.seed;
+	}
+	
+	public void resetSeed() {
+		this.seed = new Random().nextLong();
+	}
+	
+	public static UnfinishedBlueprint parseFromItem(ItemStack i) {
 		String name = i.getItemMeta().getDisplayName();
 		name.replace(UNFINISHED_BLUEPRINT_PREFIX, "");
 		name.replace(UNFINISHED_BLUEPRINT_SUFFIX,"");
