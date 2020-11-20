@@ -3,21 +3,11 @@ package net.civex4.nobility.development;
 import java.util.HashMap;
 import java.util.List;
 
-import org.bukkit.Material;
+import net.civex4.nobility.developments.*;
 import org.bukkit.entity.Player;
 
-import net.civex4.nobility.developments.Arsenal;
-import net.civex4.nobility.developments.BasicWall;
-import net.civex4.nobility.developments.BasicWorkshop;
-import net.civex4.nobility.developments.CommunityWell;
-import net.civex4.nobility.developments.FarmingCamp;
-import net.civex4.nobility.developments.LumberCamp;
-import net.civex4.nobility.developments.MiningCamp;
-import net.civex4.nobility.developments.SiegeWorkshop;
 import net.civex4.nobility.estate.Estate;
 import net.md_5.bungee.api.ChatColor;
-import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemStack;
 
 public class DevelopmentManager {
 	private HashMap<String,DevelopmentBlueprint> blueprints;
@@ -99,6 +89,18 @@ public class DevelopmentManager {
 		basicWell.result = new CommunityWell();
 		basicWell.cost = costs;
 		ret.put(basicWell.result.name,basicWell);
+
+		//INNS
+		DevelopmentBlueprint basicInn = new DevelopmentBlueprint();
+		basicInn.result = new Inn();
+		basicInn.cost = costs;
+		ret.put(basicInn.result.name, basicInn);
+
+		//ARMORY
+		DevelopmentBlueprint armoryT1 = new DevelopmentBlueprint();
+		armoryT1.result = new Armory();
+		armoryT1.cost = costs;
+		ret.put(armoryT1.result.name, armoryT1);
 		
 		return ret;
 	}
