@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
@@ -23,10 +24,10 @@ public class UnfinishedBlueprint {
 	private int rounds;
 	private int maxRounds;
 	
-	final static String UNFINISHED_BLUEPRINT_PREFIX = ChatColor.WHITE + "Unifinished ";
+	final static String UNFINISHED_BLUEPRINT_PREFIX = "Unfinished ";
 	final static String UNFINISHED_BLUEPRINT_SUFFIX = ChatColor.WHITE + " Blueprint";
 	
-	final static String SEED_PREFIX = ChatColor.BLUE + "  Seed: " + ChatColor.WHITE;
+	final static String SEED_PREFIX = ChatColor.BLUE + "Seed: " + ChatColor.WHITE;
 	
 	final static String ROUND_PREFIX = ChatColor.BLUE + "Cards Chosen: " + ChatColor.WHITE + "[";
 	final static String ROUND_SUFFIX = "]";
@@ -34,6 +35,9 @@ public class UnfinishedBlueprint {
 	public UnfinishedBlueprint(AbstractBlueprint recipe) {
 		this.seed = new Random().nextLong();
 		this.baseBlueprint = recipe;
+		this.actions = new ArrayList<Action>();
+		this.rounds = 0;
+		this.maxRounds = 5;
 	}
 	
 	public AbstractBlueprint getBaseBlueprint() {
@@ -58,8 +62,10 @@ public class UnfinishedBlueprint {
 	
 	public static UnfinishedBlueprint parseFromItem(ItemStack i) {
 		String name = i.getItemMeta().getDisplayName();
-		name.replace(UNFINISHED_BLUEPRINT_PREFIX, "");
-		name.replace(UNFINISHED_BLUEPRINT_SUFFIX,"");
+		Bukkit.getServer().getLogger().info("To parse name = " + name);
+		name = name.replace(UNFINISHED_BLUEPRINT_PREFIX,"");
+		name = name.replace(UNFINISHED_BLUEPRINT_SUFFIX,"");
+		Bukkit.getServer().getLogger().info("Abp blueprint name : " + name);
 		
 		NobilityItem ni = NobilityItems.getItemByDisplayName(name);
 		AbstractBlueprint abp = Nobility.getBlueprintManager().getAbstractBlueprintFromItem(ni);
@@ -68,12 +74,15 @@ public class UnfinishedBlueprint {
 		UnfinishedBlueprint ubp = new UnfinishedBlueprint(abp);
 		List<String> lore = ItemAPI.getLore(i);
 		
-		ubp.seed = Long.parseLong(lore.get(0));
+		String seedString = lore.get(0);
+		seedString = seedString.replaceFirst(SEED_PREFIX, "");
+		Bukkit.getServer().getLogger().info("Seed string is: " + seedString);
+		ubp.seed = Long.parseLong(seedString);
 		
 		String rounds = lore.get(1);
 		String[] arr = rounds.split("/");
-		arr[0].replace(ROUND_PREFIX,"");
-		arr[1].replace(ROUND_SUFFIX, "");
+		arr[0] = arr[0].replace(ROUND_PREFIX,"");
+		arr[1] = arr[1].replace(ROUND_SUFFIX, "");
 		int spentRounds = Integer.parseInt(arr[0]);
 		int maxRounds = Integer.parseInt(arr[1]);
 		ubp.maxRounds = maxRounds;

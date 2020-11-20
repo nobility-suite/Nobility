@@ -559,16 +559,19 @@ public class CommandListener implements CommandExecutor{
 				UnfinishedBlueprint ubp = new UnfinishedBlueprint(bp);
 				ItemStack i = ubp.parseToItem();
 				player.getInventory().addItem(i);
+				return true;
 			}
 			if(args[0].equalsIgnoreCase("admin") && args[1].equalsIgnoreCase("abp")) {
 				ItemStack i = player.getItemInHand();
 				if(i != null) {
 					UnfinishedBlueprint ubp = UnfinishedBlueprint.parseFromItem(i);
 					if(ubp != null) {
-						player.sendMessage(ChatColor.BLUE + "Found UnfinishedBlueprint: " + ChatColor.WHITE + ubp.getBaseBlueprint().name);
+						AbstractBlueprint abp = ubp.getBaseBlueprint();
+						player.sendMessage(ChatColor.BLUE + "Found UnfinishedBlueprint: " + ChatColor.WHITE + abp.name);
 						player.sendMessage(ChatColor.BLUE + "Seed: " + ChatColor.WHITE + ubp.getSeed());
 					}
 				}else player.sendMessage(ChatColor.DARK_RED + "You must be holding an unfinishedblueprint in your main hand to use this debug command.");
+				return true;
 			}
 			if(args[0].equalsIgnoreCase("admin") && args[1].equalsIgnoreCase("siege")) {
 				String target = args[2];
