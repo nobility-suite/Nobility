@@ -158,6 +158,7 @@ public class Nobility extends ACivMod {
 		pm.registerEvents(new ChestClick(), this);
 		pm.registerEvents(new ProtectionListener(), this);
 		pm.registerEvents(new CannonListener(), this);
+		pm.registerEvents(new SpawnListener(), this);
 		pm.registerEvents(chestSelect, this);
 
 		
