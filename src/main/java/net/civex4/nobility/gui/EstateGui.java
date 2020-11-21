@@ -33,6 +33,7 @@ import net.civex4.nobility.developments.AbstractWorkshop;
 import net.civex4.nobility.estate.Estate;
 import net.civex4.nobility.estate.Relationship;
 import net.civex4.nobility.group.GroupPermission;
+import net.civex4.nobility.research.UnfinishedBlueprint;
 import net.civex4.nobilityitems.NobilityItem;
 import org.w3c.dom.Attr;
 import vg.civcraft.mc.civmodcore.api.ItemAPI;
@@ -185,6 +186,41 @@ public class EstateGui {
 		// OPEN
 		estateGUI.showInventory(player);
 
+
+	}
+	
+	private void openBlueprintResearchGUI(Player p) {
+		ItemStack i = p.getItemInHand();
+		if(i.hasItemMeta()) {
+			String name = ItemAPI.getDisplayName(i);
+			if(name.startsWith(UnfinishedBlueprint.UNFINISHED_BLUEPRINT_PREFIX)) {
+				if(i.getType() == Material.PAPER) {
+					//If the player is holding a blueprint, we can open the gui.
+					Estate estate = Nobility.getEstateManager().getEstateOfPlayer(p);
+					ClickableInventory gui = new ClickableInventory(54, "Workshops and Research");
+
+					int[] decoSlots = {0,1,2,3,4,5,6,7,8,9,10,12,13,15,16,18,26,27,35,36,44,45,46,47,48,50,51,52,53};
+
+					// DECORATION STACKS
+					for (int j : decoSlots) {
+						if (!(gui.getSlot(j) instanceof Clickable)) {
+							Clickable c = new DecorationStack(ButtonLibrary.createIcon(Material.BLACK_STAINED_GLASS_PANE, " "));
+							gui.setSlot(c, j);
+						}
+					}
+					
+					gui.setSlot(ButtonLibrary.HOME.clickable(),49);
+					gui.setSlot(ButtonLibrary.createResearchTutorial(), 11);
+					
+					//TODO card selection area
+					
+				}
+			}
+		}
+		
+		p.closeInventory();
+		p.sendMessage(ChatColor.RED + "You must be holding an Unfinished Blueprint in order to begin Researching.");
+		p.sendMessage(ChatColor.RED + "You can craft an Unfinished Blueprint from the Workshops menu (top buttons).");
 
 	}
 

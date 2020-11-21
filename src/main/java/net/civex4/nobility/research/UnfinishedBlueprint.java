@@ -24,8 +24,8 @@ public class UnfinishedBlueprint {
 	private int rounds;
 	private int maxRounds;
 	
-	final static String UNFINISHED_BLUEPRINT_PREFIX = "Unfinished ";
-	final static String UNFINISHED_BLUEPRINT_SUFFIX = ChatColor.WHITE + " Blueprint";
+	public final static String UNFINISHED_BLUEPRINT_PREFIX = "Unfinished ";
+	public final static String UNFINISHED_BLUEPRINT_SUFFIX = ChatColor.WHITE + " Blueprint";
 	
 	final static String SEED_PREFIX = ChatColor.BLUE + "Seed: " + ChatColor.WHITE;
 	
