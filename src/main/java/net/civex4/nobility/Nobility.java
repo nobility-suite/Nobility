@@ -42,6 +42,7 @@ import net.civex4.nobility.listeners.CreateCommand;
 import net.civex4.nobility.listeners.EstateCommandListener;
 import net.civex4.nobility.listeners.EstateCreate;
 import net.civex4.nobility.listeners.ProtectionListener;
+import net.civex4.nobility.listeners.SpawnListener;
 import net.civex4.nobility.research.CardManager;
 import net.civex4.nobility.siege.SiegeManager;
 import net.civex4.nobility.workers.WorkerManager;

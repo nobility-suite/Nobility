@@ -34,6 +34,10 @@ public class BlueprintCommandListener implements CommandExecutor {
             Player player = (Player) sender;
 
             if (args.length < 2) {
+            	if(args[0].equals("research")) {
+            		Player p = (Player) sender;
+            		Nobility.getEstateGui().openBlueprintResearchGUI(p);
+            	}
                 if (args[0].equals("craft")) {
                     sender.sendMessage(ChatColor.YELLOW + "Crafting...");
 

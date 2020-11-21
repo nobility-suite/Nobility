@@ -192,31 +192,64 @@ public class EstateGui {
 
 	}
 	
-	private void openBlueprintResearchGUI(Player p) {
+	public void openBlueprintResearchGUI(Player p) {
 		ItemStack i = p.getItemInHand();
 		if(i.hasItemMeta()) {
 			String name = ItemAPI.getDisplayName(i);
 			if(name.startsWith(UnfinishedBlueprint.UNFINISHED_BLUEPRINT_PREFIX)) {
 				if(i.getType() == Material.PAPER) {
-					//If the player is holding a blueprint, we can open the gui.
-					Estate estate = Nobility.getEstateManager().getEstateOfPlayer(p);
-					ClickableInventory gui = new ClickableInventory(54, "Workshops and Research");
+					
+					UnfinishedBlueprint ubp = UnfinishedBlueprint.parseFromItem(i);
+					if(ubp != null && ubp.getBaseBlueprint() != null) {
+						//If the player is holding a blueprint, we can open the gui.
+						Estate estate = Nobility.getEstateManager().getEstateOfPlayer(p);
+						ClickableInventory gui = new ClickableInventory(54, "Blueprint Research");
 
-					int[] decoSlots = {0,1,2,3,4,5,6,7,8,9,10,12,13,15,16,18,26,27,35,36,44,45,46,47,48,50,51,52,53};
+						int[] decoSlots = {0,1,2,3,4,5,6,7,8,9,10,12,13,15,16,17,18,26,27,35,36,44,45,46,47,48,50,51,52,53};
 
-					// DECORATION STACKS
-					for (int j : decoSlots) {
-						if (!(gui.getSlot(j) instanceof Clickable)) {
-							Clickable c = new DecorationStack(ButtonLibrary.createIcon(Material.BLACK_STAINED_GLASS_PANE, " "));
-							gui.setSlot(c, j);
+						// DECORATION STACKS
+						for (int j : decoSlots) {
+							if (!(gui.getSlot(j) instanceof Clickable)) {
+								Clickable c = new DecorationStack(ButtonLibrary.createIcon(Material.BLACK_STAINED_GLASS_PANE, " "));
+								gui.setSlot(c, j);
+							}
 						}
+						
+						gui.setSlot(ButtonLibrary.HOME.clickable(),49);
+						gui.setSlot(ButtonLibrary.createResearchTutorial(), 10);
+						
+						ItemStack clone = i.clone();
+						Clickable c = new DecorationStack(clone);
+						gui.setSlot(c, 13);
+						
+						int roundsRemaining = ubp.getMaxRounds() - ubp.getRounds();
+						if(roundsRemaining > 0) {
+							ItemStack rounds = new ItemStack(Material.REDSTONE,roundsRemaining);
+							ItemAPI.setDisplayName(rounds, ChatColor.BLUE + "Rounds Remaining: " + ChatColor.WHITE + roundsRemaining);
+							Clickable ci = new DecorationStack(rounds);
+							gui.setSlot(ci, 16);
+						}
+						
+						//29,31,33 for cards.
+						int[] decoSlots2 = {19,20,21,22,23,24,25,28,30,32,34,37,38,39,40,41,42,43};
+
+						// DECORATION STACKS
+						for (int j : decoSlots2) {
+							if (!(gui.getSlot(j) instanceof Clickable)) {
+								Clickable cl = new DecorationStack(ButtonLibrary.createIcon(Material.IRON_BARS, " "));
+								gui.setSlot(cl, j);
+							}
+						}
+						
+						//TODO card selection area
+						
+						gui.showInventory(p);
+						return;
+					}else {
+						p.sendMessage(ChatColor.RED + "The item in your hand is not a recognized blueprint, or, it's Blueprint recipe has been removed from the config.");
+						return;
 					}
-					
-					gui.setSlot(ButtonLibrary.HOME.clickable(),49);
-					gui.setSlot(ButtonLibrary.createResearchTutorial(), 11);
-					
-					//TODO card selection area
-					
+
 				}
 			}
 		}
