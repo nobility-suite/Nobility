@@ -1,5 +1,7 @@
 package net.civex4.nobility.research;
 
+import java.util.Random;
+
 import net.civex4.nobility.blueprints.AbstractBlueprint;
 import net.civex4.nobilityitems.NobilityItem;
 import net.md_5.bungee.api.ChatColor;
@@ -48,5 +50,20 @@ public class Action {
 			
 		}
 		return "";
+	}
+	
+	public static Action createLockInAction(AbstractBlueprint abp, int itemGroupIndex, Random rand) {
+		Action a = new Action(ActionType.LOCK_IN, abp);
+		a.itemGroupIndex = itemGroupIndex;
+		
+		
+		return a;
+	}
+	
+	public static Action createLockOutAction(AbstractBlueprint abp, int itemGroupIndex, Random rand) {
+		Action a = new Action(ActionType.LOCK_OUT, abp);
+		a.itemGroupIndex = itemGroupIndex;
+		
+		return a;
 	}
 }

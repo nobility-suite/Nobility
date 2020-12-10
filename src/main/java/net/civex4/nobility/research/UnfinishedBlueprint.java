@@ -92,6 +92,7 @@ public class UnfinishedBlueprint {
 			String actionString = lore.get(j);
 			Action action = Nobility.getCardManager().parseToAction(actionString, abp);
 			ubp.addAction(action);
+			ubp.applyAction(action);
 		}
 				
 		return ubp;
@@ -139,6 +140,10 @@ public class UnfinishedBlueprint {
 	
 	public void addAction(Action a) {
 		this.actions.add(a);
+	}
+	
+	public void applyAction(Action a) {
+		CardManager.apply(this,a);
 	}
 	
 
