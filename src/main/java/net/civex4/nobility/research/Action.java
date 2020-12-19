@@ -3,6 +3,7 @@ package net.civex4.nobility.research;
 import java.util.Random;
 
 import net.civex4.nobility.blueprints.AbstractBlueprint;
+import net.civex4.nobility.blueprints.ItemGroup;
 import net.civex4.nobilityitems.NobilityItem;
 import net.md_5.bungee.api.ChatColor;
 
@@ -17,6 +18,7 @@ public class Action {
 	public int amount = 0;
 	public int itemGroupIndex = -1;
 	public NobilityItem affected;
+	public int lockedItemIndex = -1;
 	
 	public Action(ActionType t, AbstractBlueprint b) {
 		this.type = t;
@@ -28,6 +30,7 @@ public class Action {
 		this.bp = b;
 		this.affected = item;
 		this.itemGroupIndex = index;
+		
 	}
 	
 	public String formatLine() {
@@ -55,6 +58,11 @@ public class Action {
 	public static Action createLockInAction(AbstractBlueprint abp, int itemGroupIndex, Random rand) {
 		Action a = new Action(ActionType.LOCK_IN, abp);
 		a.itemGroupIndex = itemGroupIndex;
+
+		ItemGroup g = abp.getItemGroups().get(itemGroupIndex);
+		int max = g.getDistinctTypes();
+		int selected = rand.nextInt(max);
+		a.lockedItemIndex = selected;
 		
 		
 		return a;
@@ -63,6 +71,11 @@ public class Action {
 	public static Action createLockOutAction(AbstractBlueprint abp, int itemGroupIndex, Random rand) {
 		Action a = new Action(ActionType.LOCK_OUT, abp);
 		a.itemGroupIndex = itemGroupIndex;
+		
+		ItemGroup g = abp.getItemGroups().get(itemGroupIndex);
+		int max = g.getDistinctTypes();
+		int selected = rand.nextInt(max);
+		a.lockedItemIndex = selected;
 		
 		return a;
 	}

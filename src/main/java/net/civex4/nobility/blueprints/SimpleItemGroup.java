@@ -56,5 +56,9 @@ public class SimpleItemGroup extends ItemGroup{
     
     return ret;
   }
+  
+  public int getDistinctTypes() {
+	  return this.items.size();
+  }
 
 }
