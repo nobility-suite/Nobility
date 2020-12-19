@@ -65,7 +65,7 @@ public class UnfinishedBlueprint {
 		Bukkit.getServer().getLogger().info("To parse name = " + name);
 		name = name.replace(UNFINISHED_BLUEPRINT_PREFIX,"");
 		name = name.replace(UNFINISHED_BLUEPRINT_SUFFIX,"");
-		Bukkit.getServer().getLogger().info("Abp blueprint name : " + name);
+		Bukkit.getServer().getLogger().info("Abp blueprint name (SEARCHING FOR THIS NOBILITY ITEM) : " + name);
 		
 		NobilityItem ni = NobilityItems.getItemByDisplayName(name);
 		AbstractBlueprint abp = Nobility.getBlueprintManager().getAbstractBlueprintFromItem(ni);

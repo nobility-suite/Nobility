@@ -254,6 +254,7 @@ public class EstateGui {
 						
 						for(Card card : cards) {
 							Clickable cl = CardManager.getCardIcon(card, ubp, p);
+							gui.addSlot(cl);
 						}
 						
 						gui.showInventory(p);
