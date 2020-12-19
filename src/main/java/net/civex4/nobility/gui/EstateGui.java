@@ -1,21 +1,20 @@
 package net.civex4.nobility.gui;
 
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.Set;
 import java.util.UUID;
 
-import net.civex4.nobility.cannons.Cannon;
-import net.civex4.nobility.developments.Armory;
-import net.civex4.nobility.developments.Inn;
-import net.civex4.nobility.group.Group;
-import org.bukkit.*;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.Material;
+import org.bukkit.OfflinePlayer;
+import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.block.Chest;
-import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -33,12 +32,16 @@ import net.civex4.nobility.development.Development;
 import net.civex4.nobility.development.DevelopmentBlueprint;
 import net.civex4.nobility.development.DevelopmentType;
 import net.civex4.nobility.developments.AbstractWorkshop;
+import net.civex4.nobility.developments.Armory;
+import net.civex4.nobility.developments.Inn;
 import net.civex4.nobility.estate.Estate;
 import net.civex4.nobility.estate.Relationship;
+import net.civex4.nobility.group.Group;
 import net.civex4.nobility.group.GroupPermission;
+import net.civex4.nobility.research.Card;
+import net.civex4.nobility.research.CardManager;
 import net.civex4.nobility.research.UnfinishedBlueprint;
 import net.civex4.nobilityitems.NobilityItem;
-import org.w3c.dom.Attr;
 import vg.civcraft.mc.civmodcore.api.ItemAPI;
 import vg.civcraft.mc.civmodcore.inventorygui.Clickable;
 import vg.civcraft.mc.civmodcore.inventorygui.ClickableInventory;
@@ -242,6 +245,16 @@ public class EstateGui {
 						}
 						
 						//TODO card selection area
+						ArrayList<Card> cards = new ArrayList<Card>();
+						
+						for(int j = 0; j < 3; j++) {
+							Nobility.getCardManager().generateCard(ubp, p, null, new Random(ubp.getSeed()));
+						}
+						
+						
+						for(Card card : cards) {
+							Clickable cl = CardManager.getCardIcon(card, ubp, p);
+						}
 						
 						gui.showInventory(p);
 						return;

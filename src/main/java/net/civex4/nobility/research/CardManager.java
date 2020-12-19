@@ -34,7 +34,7 @@ public class CardManager {
 		}
 	}
 	
-	public Clickable getCardIcon(Card c, UnfinishedBlueprint ubp, Player p) {
+	public static Clickable getCardIcon(Card c, UnfinishedBlueprint ubp, Player p) {
 		ItemStack icon = ButtonLibrary.createIcon(Material.PAPER, ChatColor.BLUE + "Card: " + c.getActions().get(0).type);
 		for(Action a : c.getActions()) {
 			ItemAPI.addLore(icon, a.formatLine());
@@ -98,11 +98,13 @@ public class CardManager {
 			case LOCK_IN:
 			int[] options = getLockInAvailable(ubp);
 			int index = rand.nextInt(options.length-1);
+			if(index < 0) { break; }
 			actions.add(Action.createLockInAction(ubp.getBaseBlueprint(), index, rand));
 			break;
 			case LOCK_OUT:
 			int[] options2 = getLockOutAvailable(ubp);
 			int index2 = rand.nextInt(options2.length-1);
+			if(index2 < 0) { break; }
 			actions.add(Action.createLockOutAction(ubp.getBaseBlueprint(), index2, rand));	
 			break;
 			case ADD_RUNS:

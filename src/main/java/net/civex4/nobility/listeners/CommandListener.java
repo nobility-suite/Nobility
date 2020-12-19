@@ -555,7 +555,7 @@ public class CommandListener implements CommandExecutor{
 			}
 
 			if(args[0].equalsIgnoreCase("admin") && args[1].equalsIgnoreCase("ubp")) {
-				AbstractBlueprint bp = Nobility.getBlueprintManager().blueprints.get(0);
+				AbstractBlueprint bp = Nobility.getBlueprintManager().blueprints.get(Integer.parseInt(args[2]));
 				UnfinishedBlueprint ubp = new UnfinishedBlueprint(bp);
 				ItemStack i = ubp.parseToItem();
 				player.getInventory().addItem(i);
