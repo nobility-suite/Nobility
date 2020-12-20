@@ -186,6 +186,16 @@ public class BlueprintManager {
           continue;
         }
         
+        if(type.equalsIgnoreCase("VARIABLE")) {
+        	ItemGroup g = getVariableItemGroup(group);
+            if (g == null) {
+                returnNull = true;
+              } else {
+                ret.add(g);
+              }
+              continue;
+        }
+        
         /*
          * add more cases here
          */
@@ -202,7 +212,62 @@ public class BlueprintManager {
     return ret;
   }
   
-  private SimpleItemGroup getSimpleItemGroup(ConfigurationSection group) {
+  
+  /*
+   *     ig2:                    #Wood and Stone supplies
+      type: VARIABLE            
+      selectionCount: 2             
+      items:                 
+        - rough_planks 3-5
+        - rough_stone 5-6
+        - bricks 6-7
+        - iron_ingot 7-8
+        - steel_ingot 8-25
+   */
+  
+  
+  private ItemGroup getVariableItemGroup(ConfigurationSection group) {
+	  int selectionCount = 1;
+	    
+	    ArrayList<NobilityItem> items = new ArrayList<NobilityItem>();
+	    ArrayList<Integer> minCounts = new ArrayList<Integer>();
+	    ArrayList<Integer> maxCounts = new ArrayList<Integer>();
+	    boolean returnNull = false;
+	    
+	    if(group.getString("selectionCount") != null) {
+	      selectionCount = group.getInt("selectionCount");
+	    } else {
+	      Bukkit.getLogger().warning("itemGroup " + group.getCurrentPath() + " has no selectionCount!");
+	      returnNull = true;
+	    }
+	    
+	    ConfigurationSection list = group.getConfigurationSection("items");
+	    if (group.isList("items")) {
+	      List<String> stringItems = group.getStringList("items");
+	      //TODO variable parsing here
+	      for (String string : stringItems) {
+	    	  String[] arr = string.split(" ");
+	    	  String[] counts = arr[1].split("-");
+	    	  minCounts.add(Integer.parseInt(counts[0]));
+	    	  maxCounts.add(Integer.parseInt(counts[1]));
+	        try {
+	          items.add(NobilityItems.getItemByName(arr[0]));
+	        } catch (IllegalArgumentException e) {
+	          Bukkit.getLogger().severe("itemGroup " + group.getCurrentPath() + " has invalid NobilityItem " + string + " in items!");
+	          returnNull = true;
+	        }
+	      }
+	    } else {
+	      Bukkit.getLogger().warning("itemGroup " + group.getCurrentPath() + " has no items!");
+	      returnNull = true;
+	    }
+	    
+	    if (returnNull) return null;
+	    return new VariableItemGroup(items,selectionCount,minCounts,maxCounts); 
+	    
+}
+
+private SimpleItemGroup getSimpleItemGroup(ConfigurationSection group) {
     int selectionCount = 1;
     int minItemCount = 1;
     int maxItemCount = 1;

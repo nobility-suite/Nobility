@@ -66,12 +66,7 @@ public class SimpleItemGroup extends ItemGroup{
 
 @Override
 public String getItemName(int index) {
-	// TODO Auto-generated method stub
 	NobilityItem ni = items.get(index);
-	Bukkit.getServer().getLogger().info("itemgroup list: " + items.toString());
-	for(int i = 0; i < items.size(); i++) {
-		Bukkit.getServer().getLogger().info("entry: " + i + items.get(i).getDisplayName());
-	}
 	return ni.getDisplayName();
 }
 
