@@ -99,19 +99,17 @@ public class CardManager {
 		switch(at) {
 			case LOCK_IN:
 			int[] options = getLockInAvailable(ubp);
-			Bukkit.getServer().getLogger().info("lock_in options: " + options.length);
-			int index = rand.nextInt(options.length-1);
-			Bukkit.getServer().getLogger().info("lock_in index: " + index);
+			ArrayList<Integer> itemGroupIndexes = parseLockArray(options);
+			int index = rand.nextInt(itemGroupIndexes.size()-1);
 			if(index < 0) { break; }
-			actions.add(Action.createLockInAction(ubp.getBaseBlueprint(), index, rand));
+			actions.add(Action.createLockInAction(ubp.getBaseBlueprint(), itemGroupIndexes.get(index), rand));
 			break;
 			case LOCK_OUT:
 			int[] options2 = getLockOutAvailable(ubp);
-			Bukkit.getServer().getLogger().info("lock_out options: " + options2.length);
-			int index2 = rand.nextInt(options2.length-1);
-			Bukkit.getServer().getLogger().info("lock_out index: " + index2);
+			ArrayList<Integer> itemGroupIndexes2 = parseLockArray(options2);
+			int index2 = rand.nextInt(itemGroupIndexes2.size()-1);
 			if(index2 < 0) { break; }
-			actions.add(Action.createLockOutAction(ubp.getBaseBlueprint(), index2, rand));	
+			actions.add(Action.createLockOutAction(ubp.getBaseBlueprint(), itemGroupIndexes2.get(index2), rand));	
 			break;
 			case ADD_RUNS:
 			break;
@@ -123,6 +121,22 @@ public class CardManager {
 		if(ret == null) { Bukkit.getServer().getLogger().info("Card = null!!!"); }
 		if(ret != null) { Bukkit.getServer().getLogger().info(ret.getIcon().getItemMeta().getDisplayName() + "||| " + ret.getActions().size()); }
 		
+		return ret;
+	}
+	
+	/**
+	 * Returns arrayList of itemGroupIndicies that are valid for corresponding lock array
+	 * @param toParse
+	 * @return
+	 */
+	private ArrayList<Integer> parseLockArray(int[] toParse){
+		ArrayList<Integer> ret = new ArrayList<Integer>();
+		
+		for(int i = 0; i < toParse.length; i++) {
+			if(toParse[i] > 0) {
+				ret.add(i);
+			}
+		}
 		return ret;
 	}
 	
