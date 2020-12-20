@@ -55,6 +55,12 @@ public class Action {
 		return ret;
 	}
 	
+	public static Action createAddRunsAction(AbstractBlueprint abp, int amount) {
+		Action a = new Action(ActionType.ADD_RUNS,abp);
+		a.amount = amount;
+		return a;
+	}
+	
 	public static Action createLockInAction(AbstractBlueprint abp, int itemGroupIndex, Random rand) {
 		Action a = new Action(ActionType.LOCK_IN, abp);
 		a.itemGroupIndex = itemGroupIndex;
