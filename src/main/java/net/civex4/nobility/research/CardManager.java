@@ -38,6 +38,7 @@ public class CardManager {
 		ItemStack icon = ButtonLibrary.createIcon(Material.PAPER, ChatColor.BLUE + "Card: " + c.getActions().get(0).type);
 		for(Action a : c.getActions()) {
 			ItemAPI.addLore(icon, a.formatLine());
+			Bukkit.getServer().getLogger().info("action: " + a.type.identifier + ", " + a.affectedName + ", " + a.formatLine());
 		}
 		
 		
@@ -66,9 +67,9 @@ public class CardManager {
 			actionWeightings.put(ActionType.LOCK_OUT, 20);
 		}
 		
-		actionWeightings.put(ActionType.ADD_RUNS, 20);
-		actionWeightings.put(ActionType.REMOVE_COST,10);
-		actionWeightings.put(ActionType.REROLL,5);
+		//actionWeightings.put(ActionType.ADD_RUNS, 20);
+		//actionWeightings.put(ActionType.REMOVE_COST,10);
+		//actionWeightings.put(ActionType.REROLL,5);
 		
 		int totalWeight = 0;
 		
@@ -87,6 +88,7 @@ public class CardManager {
 			}
 		}
 		
+		Bukkit.getServer().getLogger().info("generating card: " + selected.identifier);
 		return generateSpecificCard(ubp, selected, p, w, rand);
 	}
 	
@@ -97,12 +99,14 @@ public class CardManager {
 		switch(at) {
 			case LOCK_IN:
 			int[] options = getLockInAvailable(ubp);
+			Bukkit.getServer().getLogger().info("lock_in options: " + options.length);
 			int index = rand.nextInt(options.length-1);
 			if(index < 0) { break; }
 			actions.add(Action.createLockInAction(ubp.getBaseBlueprint(), index, rand));
 			break;
 			case LOCK_OUT:
 			int[] options2 = getLockOutAvailable(ubp);
+			Bukkit.getServer().getLogger().info("lock_out options: " + options2.length);
 			int index2 = rand.nextInt(options2.length-1);
 			if(index2 < 0) { break; }
 			actions.add(Action.createLockOutAction(ubp.getBaseBlueprint(), index2, rand));	
@@ -110,7 +114,13 @@ public class CardManager {
 			case ADD_RUNS:
 			break;
 		}
+
 		ret = new Card(actions, ubp.getBaseBlueprint());
+		
+		
+		if(ret == null) { Bukkit.getServer().getLogger().info("Card = null!!!"); }
+		if(ret != null) { Bukkit.getServer().getLogger().info(ret.getIcon().getItemMeta().getDisplayName() + "||| " + ret.getActions().size()); }
+		
 		return ret;
 	}
 	

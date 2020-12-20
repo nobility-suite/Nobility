@@ -208,7 +208,7 @@ public class EstateGui {
 						Estate estate = Nobility.getEstateManager().getEstateOfPlayer(p);
 						ClickableInventory gui = new ClickableInventory(54, "Blueprint Research");
 
-						int[] decoSlots = {0,1,2,3,4,5,6,7,8,9,10,12,13,15,16,17,18,26,27,35,36,44,45,46,47,48,50,51,52,53};
+						int[] decoSlots = {0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,26,27,35,36,44,45,46,47,48,50,51,52,53};
 
 						// DECORATION STACKS
 						for (int j : decoSlots) {
@@ -246,9 +246,11 @@ public class EstateGui {
 						
 						//TODO card selection area
 						ArrayList<Card> cards = new ArrayList<Card>();
-						
-						for(int j = 0; j < 3; j++) {
-							Nobility.getCardManager().generateCard(ubp, p, null, new Random(ubp.getSeed()));
+						long seed = ubp.getSeed();
+						for(int j = 0; j < 3; j++) {	
+							Random rand = new Random(seed);
+							cards.add(Nobility.getCardManager().generateCard(ubp, p, null, rand));
+							seed = rand.nextLong();
 						}
 						
 						

@@ -10,4 +10,5 @@ public abstract class ItemGroup {
   
   public abstract int getDistinctTypes();
 
+  public abstract String getItemName(int index);
 }

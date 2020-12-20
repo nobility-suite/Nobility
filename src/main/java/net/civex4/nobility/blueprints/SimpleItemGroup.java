@@ -61,4 +61,11 @@ public class SimpleItemGroup extends ItemGroup{
 	  return this.items.size();
   }
 
+@Override
+public String getItemName(int index) {
+	// TODO Auto-generated method stub
+	NobilityItem ni = items.get(index);
+	return ni.getDisplayName();
+}
+
 }

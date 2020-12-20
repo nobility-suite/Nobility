@@ -2,6 +2,8 @@ package net.civex4.nobility.research;
 
 import java.util.Random;
 
+import org.bukkit.Bukkit;
+
 import net.civex4.nobility.blueprints.AbstractBlueprint;
 import net.civex4.nobility.blueprints.ItemGroup;
 import net.civex4.nobilityitems.NobilityItem;
@@ -20,6 +22,8 @@ public class Action {
 	public NobilityItem affected;
 	public int lockedItemIndex = -1;
 	
+	static String affectedName = "";
+	
 	public Action(ActionType t, AbstractBlueprint b) {
 		this.type = t;
 		this.bp = b;
@@ -37,10 +41,6 @@ public class Action {
 		String ret = "";
 		ret += ChatColor.BLUE + this.type.identifier;
 		
-		String affectedName = "";
-		if(affected != null) {
-			affectedName = this.affected.getDisplayName();
-		}
 		switch(this.type) {
 		case LOCK_IN:
 			ret += ChatColor.GRAY + "Guarantee that <" + affectedName + ChatColor.GRAY + "> appears in the recipe. <" + itemGroupIndex + ">";
@@ -52,7 +52,7 @@ public class Action {
 			break;
 			
 		}
-		return "";
+		return ret;
 	}
 	
 	public static Action createLockInAction(AbstractBlueprint abp, int itemGroupIndex, Random rand) {
@@ -60,9 +60,12 @@ public class Action {
 		a.itemGroupIndex = itemGroupIndex;
 
 		ItemGroup g = abp.getItemGroups().get(itemGroupIndex);
+		Bukkit.getServer().getLogger().info("Accessing item group no: " + itemGroupIndex);
 		int max = g.getDistinctTypes();
 		int selected = rand.nextInt(max);
 		a.lockedItemIndex = selected;
+		
+		affectedName = g.getItemName(selected);
 		
 		
 		return a;
@@ -76,6 +79,8 @@ public class Action {
 		int max = g.getDistinctTypes();
 		int selected = rand.nextInt(max);
 		a.lockedItemIndex = selected;
+		
+		affectedName = g.getItemName(selected);
 		
 		return a;
 	}
