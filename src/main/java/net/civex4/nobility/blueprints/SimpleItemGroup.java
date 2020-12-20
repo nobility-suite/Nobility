@@ -3,6 +3,9 @@ package net.civex4.nobility.blueprints;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+
+import org.bukkit.Bukkit;
+
 import net.civex4.nobility.util.Util;
 import net.civex4.nobilityitems.NobilityItem;
 
@@ -65,6 +68,10 @@ public class SimpleItemGroup extends ItemGroup{
 public String getItemName(int index) {
 	// TODO Auto-generated method stub
 	NobilityItem ni = items.get(index);
+	Bukkit.getServer().getLogger().info("itemgroup list: " + items.toString());
+	for(int i = 0; i < items.size(); i++) {
+		Bukkit.getServer().getLogger().info("entry: " + i + items.get(i).getDisplayName());
+	}
 	return ni.getDisplayName();
 }
 

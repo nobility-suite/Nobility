@@ -22,7 +22,7 @@ public class Action {
 	public NobilityItem affected;
 	public int lockedItemIndex = -1;
 	
-	static String affectedName = "";
+	private String affectedName = "";
 	
 	public Action(ActionType t, AbstractBlueprint b) {
 		this.type = t;
@@ -64,8 +64,10 @@ public class Action {
 		int max = g.getDistinctTypes();
 		int selected = rand.nextInt(max);
 		a.lockedItemIndex = selected;
+		Bukkit.getServer().getLogger().info("Accessing item no: " + selected +" max:" + max);
+
 		
-		affectedName = g.getItemName(selected);
+		a.affectedName = g.getItemName(selected);
 		
 		
 		return a;
@@ -76,11 +78,14 @@ public class Action {
 		a.itemGroupIndex = itemGroupIndex;
 		
 		ItemGroup g = abp.getItemGroups().get(itemGroupIndex);
+		Bukkit.getServer().getLogger().info("Accessing item group no: " + itemGroupIndex);
+
 		int max = g.getDistinctTypes();
 		int selected = rand.nextInt(max);
 		a.lockedItemIndex = selected;
+		Bukkit.getServer().getLogger().info("Accessing item no: " + selected +" max:" + max);
 		
-		affectedName = g.getItemName(selected);
+		a.affectedName = g.getItemName(selected);
 		
 		return a;
 	}

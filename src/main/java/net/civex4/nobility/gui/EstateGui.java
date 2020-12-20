@@ -50,6 +50,9 @@ import vg.civcraft.mc.civmodcore.inventorygui.DecorationStack;
 public class EstateGui {
 
 	private static final int rowLength = 9;
+	
+	private Random rand;
+
 
 	public void openEstateGUI(Player player) {
 
@@ -248,7 +251,8 @@ public class EstateGui {
 						ArrayList<Card> cards = new ArrayList<Card>();
 						long seed = ubp.getSeed();
 						for(int j = 0; j < 3; j++) {	
-							Random rand = new Random(seed);
+							rand = new Random(seed);
+							Bukkit.getServer().getLogger().info("CARD SEED: " + seed);
 							cards.add(Nobility.getCardManager().generateCard(ubp, p, null, rand));
 							seed = rand.nextLong();
 						}

@@ -38,7 +38,7 @@ public class CardManager {
 		ItemStack icon = ButtonLibrary.createIcon(Material.PAPER, ChatColor.BLUE + "Card: " + c.getActions().get(0).type);
 		for(Action a : c.getActions()) {
 			ItemAPI.addLore(icon, a.formatLine());
-			Bukkit.getServer().getLogger().info("action: " + a.type.identifier + ", " + a.affectedName + ", " + a.formatLine());
+			Bukkit.getServer().getLogger().info("action: " + a.type.identifier + ", " + a.formatLine());
 		}
 		
 		
@@ -101,6 +101,7 @@ public class CardManager {
 			int[] options = getLockInAvailable(ubp);
 			Bukkit.getServer().getLogger().info("lock_in options: " + options.length);
 			int index = rand.nextInt(options.length-1);
+			Bukkit.getServer().getLogger().info("lock_in index: " + index);
 			if(index < 0) { break; }
 			actions.add(Action.createLockInAction(ubp.getBaseBlueprint(), index, rand));
 			break;
@@ -108,6 +109,7 @@ public class CardManager {
 			int[] options2 = getLockOutAvailable(ubp);
 			Bukkit.getServer().getLogger().info("lock_out options: " + options2.length);
 			int index2 = rand.nextInt(options2.length-1);
+			Bukkit.getServer().getLogger().info("lock_out index: " + index2);
 			if(index2 < 0) { break; }
 			actions.add(Action.createLockOutAction(ubp.getBaseBlueprint(), index2, rand));	
 			break;
