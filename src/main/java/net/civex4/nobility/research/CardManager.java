@@ -67,6 +67,8 @@ public class CardManager {
 			actionWeightings.put(ActionType.LOCK_OUT, 20);
 		}
 		
+		//Bulk craft card
+		actionWeightings.put(ActionType.MOD_RESULT,10);
 		//actionWeightings.put(ActionType.ADD_RUNS, 20);
 		//actionWeightings.put(ActionType.REMOVE_COST,10);
 		//actionWeightings.put(ActionType.REROLL,5);
@@ -97,21 +99,33 @@ public class CardManager {
 		ArrayList<Action> actions = new ArrayList<Action>();
 		
 		switch(at) {
-			case LOCK_IN:
+			case LOCK_IN: //LOCK IN CARDS
 			int[] options = getLockInAvailable(ubp);
 			ArrayList<Integer> itemGroupIndexes = parseLockArray(options);
 			int index = rand.nextInt(itemGroupIndexes.size()-1);
 			if(index < 0) { break; }
 			actions.add(Action.createLockInAction(ubp.getBaseBlueprint(), itemGroupIndexes.get(index), rand));
 			break;
-			case LOCK_OUT:
+			case LOCK_OUT: //LOCK OUT CARDS
 			int[] options2 = getLockOutAvailable(ubp);
 			ArrayList<Integer> itemGroupIndexes2 = parseLockArray(options2);
 			int index2 = rand.nextInt(itemGroupIndexes2.size()-1);
 			if(index2 < 0) { break; }
 			actions.add(Action.createLockOutAction(ubp.getBaseBlueprint(), itemGroupIndexes2.get(index2), rand));	
 			break;
-			case ADD_RUNS:
+			case MOD_RESULT: //BULK INGREDIENT CARDS
+				int bulkCap = 300;
+				double percentResultMod = rand.nextInt(bulkCap-20)+20;
+				double percentCostMod = percentResultMod - ((percentResultMod/bulkCap) * ((percentResultMod/bulkCap)) * (90 + rand.nextInt(10)));
+				int prm = (int) percentResultMod + 100; // between 120 and 400
+				int pcm = (int) percentCostMod + 100; //lags behind prm (between like 114 and 300)
+				//actions.add();
+				//actions.add();
+				break;
+			case ADD_RUNS: //ADD RUNS CARDS
+			break;
+			
+			case RATIO:
 			break;
 		}
 
