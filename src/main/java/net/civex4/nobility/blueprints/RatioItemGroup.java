@@ -14,7 +14,7 @@ public class RatioItemGroup extends ItemGroup{
 	public int minPoints; //total cost of the item group
 	public int maxPoints; //total cost of the item group
 	
-	  public RatioItemGroup(ArrayList<NobilityItem> items, int selectionCount, ArrayList<Double> ratios, ArrayList<Integer> pointValues, int minPoints, int maxPoints) {
+	  public RatioItemGroup(ArrayList<NobilityItem> items, ArrayList<Double> ratios, ArrayList<Integer> pointValues, int minPoints, int maxPoints) {
 
 		    this.items = items;
 		    this.ratios = ratios;
