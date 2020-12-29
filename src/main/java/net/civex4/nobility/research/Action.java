@@ -48,11 +48,42 @@ public class Action {
 		case LOCK_OUT:
 			ret += ChatColor.GRAY + "Prevent " + affectedName + ChatColor.GRAY + " from appearing in the recipe. <" + itemGroupIndex + ">";
 			break;
-		default:
+		case MOD_COSTS:
+			ret += ChatColor.GRAY + "Increase blueprint costs by " + ChatColor.WHITE + amount + "%";
 			break;
-			
+		case MOD_RESULT:
+			ret += ChatColor.GRAY + "Increase blueprint output by " + ChatColor.WHITE + amount + "%";
+			break;
+		case RATIO:
+			if(amount > 0) {
+				ret += ChatColor.GRAY + "Increase" + affectedName + ChatColor.GRAY + " requirement by " + ChatColor.WHITE + amount + "%";
+			}else {
+				ret += ChatColor.GRAY + "Reduce" + affectedName + ChatColor.GRAY + " requirement by " + ChatColor.WHITE + "-" + amount + "%";
+			}
+		default:
+			break;		
 		}
 		return ret;
+	}
+	
+	public static Action createRatiosAction(AbstractBlueprint abp, int pct, int itemGroupIndex, int itemIndex) {
+		Action a = new Action(ActionType.MOD_COSTS,abp);
+		a.amount = pct;
+		a.itemGroupIndex = itemGroupIndex;
+		a.lockedItemIndex = itemIndex;
+		return a;
+	}
+	
+	public static Action createModCostsAction(AbstractBlueprint abp, int pct) {
+		Action a = new Action(ActionType.MOD_COSTS,abp);
+		a.amount = pct;
+		return a;
+	}
+	
+	public static Action createModResultAction(AbstractBlueprint abp, int pct) {
+		Action a = new Action(ActionType.MOD_RESULT,abp);
+		a.amount = pct;
+		return a;
 	}
 	
 	public static Action createAddRunsAction(AbstractBlueprint abp, int amount) {

@@ -11,6 +11,7 @@ import org.bukkit.inventory.ItemStack;
 
 import net.civex4.nobility.blueprints.AbstractBlueprint;
 import net.civex4.nobility.blueprints.ItemGroup;
+import net.civex4.nobility.blueprints.RatioItemGroup;
 import net.civex4.nobility.blueprints.SimpleItemGroup;
 import net.civex4.nobility.developments.AbstractWorkshop;
 import net.civex4.nobility.gui.ButtonLibrary;
@@ -69,6 +70,16 @@ public class CardManager {
 		
 		//Bulk craft card
 		actionWeightings.put(ActionType.MOD_RESULT,10);
+		
+		if(isRatioAvailable(ubp)) {
+			actionWeightings.put(ActionType.RATIO,10);
+		}
+		
+		
+		
+		
+		
+		
 		//actionWeightings.put(ActionType.ADD_RUNS, 20);
 		//actionWeightings.put(ActionType.REMOVE_COST,10);
 		//actionWeightings.put(ActionType.REROLL,5);
@@ -92,6 +103,21 @@ public class CardManager {
 		
 		Bukkit.getServer().getLogger().info("generating card: " + selected.identifier);
 		return generateSpecificCard(ubp, selected, p, w, rand);
+	}
+	
+	public boolean isRatioAvailable(UnfinishedBlueprint ubp) {
+		for(int i = 0; i < ubp.getBaseBlueprint().getItemGroups().size(); i++) {
+			ItemGroup g = ubp.getBaseBlueprint().getItemGroups().get(i);
+			if(g instanceof RatioItemGroup) {
+				for(Action a : ubp.getActions()) {
+					if(a.type == ActionType.RATIO && a.itemGroupIndex == i) {
+						continue;
+					}
+				}
+				return true;
+			}
+		}
+		return false;
 	}
 	
 	public Card generateSpecificCard(UnfinishedBlueprint ubp, ActionType at, Player p, AbstractWorkshop w, Random rand) {
@@ -119,12 +145,10 @@ public class CardManager {
 				double percentCostMod = percentResultMod - ((percentResultMod/bulkCap) * ((percentResultMod/bulkCap)) * (90 + rand.nextInt(10)));
 				int prm = (int) percentResultMod + 100; // between 120 and 400
 				int pcm = (int) percentCostMod + 100; //lags behind prm (between like 114 and 300)
-				//actions.add();
-				//actions.add();
-				break;
-			case ADD_RUNS: //ADD RUNS CARDS
+
+				actions.add(Action.createModCostsAction(ubp.getBaseBlueprint(), pcm));
+				actions.add(Action.createModResultAction(ubp.getBaseBlueprint(), prm));
 			break;
-			
 			case RATIO:
 			break;
 		}
