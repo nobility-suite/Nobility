@@ -9,6 +9,7 @@ public enum ActionType {
 	ADD_RUNS("[+r]"),
 	REMOVE_RUNS("[-r]"),
 	ADD_TIME("[+t]"),
+	MOD_TIME("[*t]"),
 	REMOVE_TIME("[-t]"),
 	ADD_COST("[+c]"),
 	REMOVE_COST("[-c]"),

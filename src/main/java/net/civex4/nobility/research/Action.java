@@ -54,6 +54,12 @@ public class Action {
 		case MOD_RESULT:
 			ret += ChatColor.GRAY + "Increase blueprint output by " + ChatColor.WHITE + amount + "%";
 			break;
+		case MOD_TIME:
+			if(amount > 0) {
+				ret += ChatColor.GRAY + "Increase blueprint duration by " + ChatColor.WHITE + amount + "%";
+			}else {
+				ret += ChatColor.GRAY + "Reduce blueprint duration by " + ChatColor.WHITE + "-" + amount + "%";
+			}
 		case RATIO:
 			if(amount > 0) {
 				ret += ChatColor.GRAY + "Increase" + affectedName + ChatColor.GRAY + " requirement by " + ChatColor.WHITE + amount + "%";
@@ -71,6 +77,12 @@ public class Action {
 		a.amount = pct;
 		a.itemGroupIndex = itemGroupIndex;
 		a.lockedItemIndex = itemIndex;
+		return a;
+	}
+	
+	public static Action createModTimeAction(AbstractBlueprint abp, int pct) {
+		Action a = new Action(ActionType.MOD_TIME,abp);
+		a.amount = pct;
 		return a;
 	}
 	

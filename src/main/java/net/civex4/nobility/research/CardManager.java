@@ -149,7 +149,11 @@ public class CardManager {
 				actions.add(Action.createModCostsAction(ubp.getBaseBlueprint(), pcm));
 				actions.add(Action.createModResultAction(ubp.getBaseBlueprint(), prm));
 			break;
-			case RATIO:
+			case RATIO: //RATIO CARDS
+				ArrayList<Integer> itemGroupIndexes3 = parseRatioArray(getRatiosAvailable(ubp));
+				int index3 = rand.nextInt(itemGroupIndexes3.size());
+				index3 = itemGroupIndexes3.get(index3);
+				//TODO
 			break;
 		}
 
@@ -168,6 +172,17 @@ public class CardManager {
 	 * @return
 	 */
 	private ArrayList<Integer> parseLockArray(int[] toParse){
+		ArrayList<Integer> ret = new ArrayList<Integer>();
+		
+		for(int i = 0; i < toParse.length; i++) {
+			if(toParse[i] > 0) {
+				ret.add(i);
+			}
+		}
+		return ret;
+	}
+	
+	private ArrayList<Integer> parseRatioArray(int[] toParse){
 		ArrayList<Integer> ret = new ArrayList<Integer>();
 		
 		for(int i = 0; i < toParse.length; i++) {
@@ -198,6 +213,24 @@ public class CardManager {
 			}
 		}
 		return false;
+	}
+	
+	//Bit array, 0 for an index if that itemgroup index cannot have a ratio card applied to it, 1 otherwise.
+	public int[] getRatiosAvailable(UnfinishedBlueprint ubp) {
+		int[] ratios = new int[ubp.getBaseBlueprint().getItemGroups().size()];
+		for(int i = 0; i < ubp.getBaseBlueprint().getItemGroups().size(); i++) {
+			ItemGroup g = ubp.getBaseBlueprint().getItemGroups().get(i);
+			if(g instanceof RatioItemGroup) {
+				for(Action a : ubp.getActions()) {
+					if(a.type == ActionType.RATIO && a.itemGroupIndex == i) {
+						continue;
+					}
+				}
+				ratios[i] = 1;
+			}
+			ratios[i] = 0;
+		}
+		return ratios;
 	}
 	
 	/**
