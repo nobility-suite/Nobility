@@ -1,8 +1,10 @@
 package net.civex4.nobility.research;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
@@ -17,15 +19,15 @@ import vg.civcraft.mc.civmodcore.api.ItemAPI;
 public class UnfinishedBlueprint {
 	
 	private AbstractBlueprint baseBlueprint;
-	private ArrayList<Card> actions;
+	private ArrayList<Action> actions;
 	private long seed;
 	private int rounds;
 	private int maxRounds;
 	
-	final static String UNFINISHED_BLUEPRINT_PREFIX = ChatColor.WHITE + "Unifinished ";
-	final static String UNFINISHED_BLUEPRINT_SUFFIX = ChatColor.WHITE + " Blueprint";
+	public final static String UNFINISHED_BLUEPRINT_PREFIX = "Unfinished ";
+	public final static String UNFINISHED_BLUEPRINT_SUFFIX = ChatColor.WHITE + " Blueprint";
 	
-	final static String SEED_PREFIX = ChatColor.BLUE + "  Seed: " + ChatColor.WHITE;
+	final static String SEED_PREFIX = ChatColor.BLUE + "Seed: " + ChatColor.WHITE;
 	
 	final static String ROUND_PREFIX = ChatColor.BLUE + "Cards Chosen: " + ChatColor.WHITE + "[";
 	final static String ROUND_SUFFIX = "]";
@@ -33,22 +35,67 @@ public class UnfinishedBlueprint {
 	public UnfinishedBlueprint(AbstractBlueprint recipe) {
 		this.seed = new Random().nextLong();
 		this.baseBlueprint = recipe;
+		this.actions = new ArrayList<Action>();
+		this.rounds = 0;
+		this.maxRounds = 5;
 	}
 	
-	public UnfinishedBlueprint parseFromItem(ItemStack i) {
+	public AbstractBlueprint getBaseBlueprint() {
+		return this.baseBlueprint;
+	}
+	
+	public int getRounds() {
+		return this.rounds;
+	}
+	
+	public int getMaxRounds() {
+		return this.maxRounds;
+	}
+	
+	public long getSeed() {
+		return this.seed;
+	}
+	
+	public void resetSeed() {
+		this.seed = new Random().nextLong();
+	}
+	
+	public static UnfinishedBlueprint parseFromItem(ItemStack i) {
 		String name = i.getItemMeta().getDisplayName();
-		name.replace(UNFINISHED_BLUEPRINT_PREFIX, "");
-		name.replace(UNFINISHED_BLUEPRINT_SUFFIX,"");
+		Bukkit.getServer().getLogger().info("To parse name = " + name);
+		name = name.replace(UNFINISHED_BLUEPRINT_PREFIX,"");
+		name = name.replace(UNFINISHED_BLUEPRINT_SUFFIX,"");
+		Bukkit.getServer().getLogger().info("Abp blueprint name (SEARCHING FOR THIS NOBILITY ITEM) : " + name);
 		
 		NobilityItem ni = NobilityItems.getItemByDisplayName(name);
 		AbstractBlueprint abp = Nobility.getBlueprintManager().getAbstractBlueprintFromItem(ni);
 		//get abstractblueprint from item
 		
 		UnfinishedBlueprint ubp = new UnfinishedBlueprint(abp);
+		List<String> lore = ItemAPI.getLore(i);
 		
-		//TODO get UnfinishedBlueprint attributes and parse from item
+		String seedString = lore.get(0);
+		seedString = seedString.replaceFirst(SEED_PREFIX, "");
+		Bukkit.getServer().getLogger().info("Seed string is: " + seedString);
+		ubp.seed = Long.parseLong(seedString);
 		
-		return null;
+		String rounds = lore.get(1);
+		String[] arr = rounds.split("/");
+		arr[0] = arr[0].replace(ROUND_PREFIX,"");
+		arr[1] = arr[1].replace(ROUND_SUFFIX, "");
+		int spentRounds = Integer.parseInt(arr[0]);
+		int maxRounds = Integer.parseInt(arr[1]);
+		ubp.maxRounds = maxRounds;
+		ubp.rounds = spentRounds;
+		
+		for(int j = 2; j < lore.size(); j++) {
+			String actionString = lore.get(j);
+			Action action = Nobility.getCardManager().parseToAction(actionString, abp);
+			ubp.addAction(action);
+			ubp.applyAction(action);
+		}
+				
+		return ubp;
 	}
 	
 	public ItemStack createNewUnfinishedBlueprint(AbstractBlueprint baseRecipe) {
@@ -73,11 +120,11 @@ public class UnfinishedBlueprint {
 		String roundString = this.ROUND_PREFIX + this.rounds + "/" + this.maxRounds + this.ROUND_SUFFIX;
 		ItemAPI.addLore(ret, roundString);
 		
-		for(Card c : this.actions) {
-			for(Action a : c.getActions()) {
-				ItemAPI.addLore(ret,a.formatLine());
-			}
+	
+		for(Action a :this.getActions()) {
+			ItemAPI.addLore(ret,a.formatLine());
 		}
+	
 		
 		return ret;
 		
@@ -87,8 +134,16 @@ public class UnfinishedBlueprint {
 		return null;
 	}
 	
-	public ArrayList<Card> getActions(){
+	public ArrayList<Action> getActions(){
 		return this.actions;
+	}
+	
+	public void addAction(Action a) {
+		this.actions.add(a);
+	}
+	
+	public void applyAction(Action a) {
+		CardManager.apply(this,a);
 	}
 	
 

@@ -8,32 +8,42 @@ import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.util.*;
 
-import io.github.kingvictoria.regions.nodes.Node;
-import net.civex4.nobility.development.Camp;
-import net.civex4.nobility.development.DevelopmentType;
-import net.civex4.nobility.listeners.*;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
- 
+
 import com.sk89q.worldedit.extent.clipboard.Clipboard;
 import com.sk89q.worldedit.extent.clipboard.io.ClipboardFormat;
 import com.sk89q.worldedit.extent.clipboard.io.ClipboardFormats;
 import com.sk89q.worldedit.extent.clipboard.io.ClipboardReader;
 
 import io.github.kingvictoria.NobilityRegions;
+import io.github.kingvictoria.regions.nodes.Node;
 import net.civex4.nobility.blueprints.BlueprintManager;
 import net.civex4.nobility.cannons.CannonManager;
 import net.civex4.nobility.claim.ClaimManager;
 import net.civex4.nobility.database.utility.DatabaseBuilder;
+import net.civex4.nobility.development.Camp;
 import net.civex4.nobility.development.Development;
 import net.civex4.nobility.development.DevelopmentManager;
+import net.civex4.nobility.development.DevelopmentType;
 import net.civex4.nobility.estate.Estate;
 import net.civex4.nobility.estate.EstateManager;
 import net.civex4.nobility.group.GroupManager;
 import net.civex4.nobility.gui.EstateGui;
 import net.civex4.nobility.gui.GUICommand;
+import net.civex4.nobility.listeners.BlueprintCommandListener;
+import net.civex4.nobility.listeners.CannonListener;
+import net.civex4.nobility.listeners.ChestClick;
+import net.civex4.nobility.listeners.ChestSelectionListener;
+import net.civex4.nobility.listeners.CommandListener;
+import net.civex4.nobility.listeners.CreateCommand;
+import net.civex4.nobility.listeners.EstateCommandListener;
+import net.civex4.nobility.listeners.EstateCreate;
+import net.civex4.nobility.listeners.ProtectionListener;
+import net.civex4.nobility.listeners.SpawnListener;
+import net.civex4.nobility.research.CardManager;
 import net.civex4.nobility.siege.SiegeManager;
 import net.civex4.nobility.workers.WorkerManager;
 import net.md_5.bungee.api.ChatColor;
@@ -56,6 +66,7 @@ public class Nobility extends ACivMod {
 	private static BlueprintManager blueprintManager;
 	private static EstateGui estateGui;
 	private static ChestSelectionListener chestSelect;
+	private static CardManager cardManager;
 	//private static Citadel CitadelManager;
 	//public static ReinforcementManager reinforcementManager;
 
@@ -129,6 +140,11 @@ public class Nobility extends ACivMod {
 		blueprintManager = new BlueprintManager();
 		estateGui = new EstateGui();
 		chestSelect = new ChestSelectionListener();
+		cardManager = new CardManager();
+	}
+	
+	public static CardManager getCardManager() {
+		return cardManager;
 	}
 	
 	public static GroupManager getGroupManager() {
@@ -172,6 +188,7 @@ public class Nobility extends ACivMod {
 		pm.registerEvents(new ProtectionListener(), this);
 		pm.registerEvents(new CannonListener(), this);
 		pm.registerEvents(new PlayerListener(), this);
+		pm.registerEvents(new SpawnListener(), this);
 		pm.registerEvents(chestSelect, this);
 
 		

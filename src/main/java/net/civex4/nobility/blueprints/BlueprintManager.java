@@ -173,7 +173,7 @@ public class BlueprintManager {
     for(String groupKey : groups.getKeys(false)) {
       ConfigurationSection group = groups.getConfigurationSection(groupKey);
       
-      if(group.getString("type") != null) {
+      if(group.getString("type") != null) { //Parse Item Groups Here
         String type = group.getString("type");
         
         if(type.equalsIgnoreCase("SIMPLE")) {
@@ -184,6 +184,26 @@ public class BlueprintManager {
             ret.add(g);
           }
           continue;
+        }
+        
+        if(type.equalsIgnoreCase("VARIABLE")) {
+        	ItemGroup g = getVariableItemGroup(group);
+            if (g == null) {
+                returnNull = true;
+              } else {
+                ret.add(g);
+              }
+              continue;
+        }
+        
+        if(type.equalsIgnoreCase("RATIO")) {
+        	ItemGroup g = getRatioItemGroup(group);
+            if (g == null) {
+                returnNull = true;
+              } else {
+                ret.add(g);
+              }
+              continue;
         }
         
         /*
@@ -202,7 +222,125 @@ public class BlueprintManager {
     return ret;
   }
   
-  private SimpleItemGroup getSimpleItemGroup(ConfigurationSection group) {
+  
+  /*
+   *     ig2:                    #Wood and Stone supplies
+      type: VARIABLE            
+      selectionCount: 2             
+      items:                 
+        - rough_planks 3-5
+        - rough_stone 5-6
+        - bricks 6-7
+        - iron_ingot 7-8
+        - steel_ingot 8-25
+   */
+  
+  
+  private ItemGroup getVariableItemGroup(ConfigurationSection group) {
+	  int selectionCount = 1;
+	    
+	    ArrayList<NobilityItem> items = new ArrayList<NobilityItem>();
+	    ArrayList<Integer> minCounts = new ArrayList<Integer>();
+	    ArrayList<Integer> maxCounts = new ArrayList<Integer>();
+	    boolean returnNull = false;
+	    
+	    if(group.getString("selectionCount") != null) {
+	      selectionCount = group.getInt("selectionCount");
+	    } else {
+	      Bukkit.getLogger().warning("itemGroup " + group.getCurrentPath() + " has no selectionCount!");
+	      returnNull = true;
+	    }
+	    
+	    ConfigurationSection list = group.getConfigurationSection("items");
+	    if (group.isList("items")) {
+	      List<String> stringItems = group.getStringList("items");
+	      //TODO variable parsing here
+	      for (String string : stringItems) {
+	    	  String[] arr = string.split(" ");
+	    	  String[] counts = arr[1].split("-");
+	    	  minCounts.add(Integer.parseInt(counts[0]));
+	    	  maxCounts.add(Integer.parseInt(counts[1]));
+	        try {
+	          items.add(NobilityItems.getItemByName(arr[0]));
+	        } catch (IllegalArgumentException e) {
+	          Bukkit.getLogger().severe("itemGroup " + group.getCurrentPath() + " has invalid NobilityItem " + string + " in items!");
+	          returnNull = true;
+	        }
+	      }
+	    } else {
+	      Bukkit.getLogger().warning("itemGroup " + group.getCurrentPath() + " has no items!");
+	      returnNull = true;
+	    }
+	    
+	    if (returnNull) return null;
+	    return new VariableItemGroup(items,selectionCount,minCounts,maxCounts); 
+	    
+}
+  
+  /*
+   *     ig2:                    #Wood and Stone supplies
+      type: RATIO            
+      minCount: 50
+      maxCount: 100             
+      items:                 
+        - rough_planks 3/0.2
+        - rough_stone 5/0.1
+        - bricks 6/0.5
+        - iron_ingot 7/0.15
+        - steel_ingot 8/0.05
+   */
+  
+  private ItemGroup getRatioItemGroup(ConfigurationSection group) {
+	  int minPoints = 1;
+	  int maxPoints = 1;
+	    ArrayList<NobilityItem> items = new ArrayList<NobilityItem>();
+	    ArrayList<Double> ratios = new ArrayList<Double>();
+	    ArrayList<Integer> pointValues = new ArrayList<Integer>();
+	    boolean returnNull = false;
+	    
+	    if(group.getString("minPoints") != null) {
+	      minPoints = group.getInt("minPoints");
+	    } else {
+	      Bukkit.getLogger().warning("itemGroup " + group.getCurrentPath() + " has no minPoints!");
+	      returnNull = true;
+	    }
+	    
+	    if(group.getString("maxPoints") != null) {
+		      maxPoints = group.getInt("maxPoints");
+		    } else {
+		      Bukkit.getLogger().warning("itemGroup " + group.getCurrentPath() + " has no maxPoints!");
+		      returnNull = true;
+		    }
+	    
+	    ConfigurationSection list = group.getConfigurationSection("items");
+	    if (group.isList("items")) {
+	      List<String> stringItems = group.getStringList("items");
+	      //TODO variable parsing here
+	      for (String string : stringItems) {
+	    	  String[] arr = string.split(" ");
+	    	  String[] counts = arr[1].split("/");
+	    	  
+	    	  pointValues.add(Integer.parseInt(counts[0]));
+	    	  ratios.add(Double.parseDouble(counts[1]));
+
+	        try {
+	          items.add(NobilityItems.getItemByName(arr[0]));
+	        } catch (IllegalArgumentException e) {
+	          Bukkit.getLogger().severe("itemGroup " + group.getCurrentPath() + " has invalid NobilityItem " + string + " in items!");
+	          returnNull = true;
+	        }
+	      }
+	    } else {
+	      Bukkit.getLogger().warning("itemGroup " + group.getCurrentPath() + " has no items!");
+	      returnNull = true;
+	    }
+	    
+	    if (returnNull) return null;
+	    return new RatioItemGroup(items,ratios,pointValues,minPoints,maxPoints); 
+	    
+}
+
+private SimpleItemGroup getSimpleItemGroup(ConfigurationSection group) {
     int selectionCount = 1;
     int minItemCount = 1;
     int maxItemCount = 1;

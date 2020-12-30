@@ -3,6 +3,9 @@ package net.civex4.nobility.blueprints;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+
+import org.bukkit.Bukkit;
+
 import net.civex4.nobility.util.Util;
 import net.civex4.nobilityitems.NobilityItem;
 
@@ -56,5 +59,15 @@ public class SimpleItemGroup extends ItemGroup{
     
     return ret;
   }
+  
+  public int getDistinctTypes() {
+	  return this.items.size();
+  }
+
+@Override
+public String getItemName(int index) {
+	NobilityItem ni = items.get(index);
+	return ni.getDisplayName();
+}
 
 }

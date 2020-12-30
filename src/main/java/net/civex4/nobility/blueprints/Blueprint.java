@@ -1,6 +1,9 @@
 package net.civex4.nobility.blueprints;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -21,13 +24,17 @@ public class Blueprint {
 	private static final String RUNS_PREFIX = ChatColor.BLUE + "Uses: " + ChatColor.WHITE;
 	private static final String INGREDIENTS_LINE_DELIMITER = ChatColor.BLUE + "Components:" + ChatColor.WHITE;
 	
-	private static final String TIME_INSTANT = ChatColor.BLUE + "Time:" + ChatColor.WHITE + " Instant";
+	private static final String TIME_INSTANT = "Instant";
+	private static final String TIME_PREFIX = ChatColor.BLUE + "Duration: " + ChatColor.WHITE;
+	
+	private static final String DATE_PATTERN = "HH:mm:ss";
 	
 	public NobilityItem result;
 	public int resultAmount;
 	public HashMap<NobilityItem, Integer> ingredients;
 	public int runs;
 	public String name;
+	public Date time;
 	
 	/* Example Blueprint
 	 * 
@@ -53,6 +60,18 @@ public class Blueprint {
 		this.runs = runs;
 		this.name = name;
 		this.resultAmount = resultAmount;
+		this.time = null; //null = instant
+	}
+	
+	public Blueprint(NobilityItem result, HashMap<NobilityItem, Integer> ingredients, 
+			int runs, String name, int resultAmount, Date timeCost) {
+		
+		this.result = result;
+		this.ingredients = ingredients;
+		this.runs = runs;
+		this.name = name;
+		this.resultAmount = resultAmount;
+		this.time = timeCost; //hh-mm-ss
 	}
 
 	/**
@@ -73,8 +92,14 @@ public class Blueprint {
 				+ result.getDisplayName();
 	 
 		//TODO not needed for first test
-		String parsedTime = TIME_INSTANT;
+		String parsedTime;
 		
+		if(this.time == null) { 
+			parsedTime = TIME_PREFIX + TIME_INSTANT; 	
+		}else {
+			SimpleDateFormat sdf = new SimpleDateFormat(DATE_PATTERN);
+			parsedTime = TIME_PREFIX + sdf.format(this.time);
+		}
 		//Parse all ingredients
 		List<String> parsedIngredients = new ArrayList<>();
 
@@ -103,6 +128,8 @@ public class Blueprint {
 	
 	public static Blueprint parseBlueprintFromItem(ItemStack item) {
 		String itemName = ItemAPI.getDisplayName(item);
+		
+		
 		
 		List<String> lore = ItemAPI.getLore(item);
 		if (lore.size() < 4) {
@@ -134,8 +161,10 @@ public class Blueprint {
 		parsedRuns = parsedRuns.replaceFirst(RUNS_PREFIX, "");
 		int runsAmount = Integer.parseInt(parsedRuns);
 		
-		//ParsedTime is currently unused
+		//ParsedTime
+		parsedTime = parsedTime.replaceFirst(TIME_PREFIX, "");
 		
+
 		HashMap<NobilityItem, Integer> ingredientsMap = new HashMap<>();
 		
 		for(String str : ingredientStrings) {
@@ -145,8 +174,21 @@ public class Blueprint {
 			String name = amountAndName[1];
 			ingredientsMap.put(getItemStackFromName(name), amount);
 		}
+		Blueprint bp = new Blueprint(result, ingredientsMap, runsAmount, itemName, resultAmount);
 		
-		return new Blueprint(result, ingredientsMap, runsAmount, itemName, resultAmount);
+		if(parsedTime.equals(TIME_INSTANT)) {
+			bp.time = null;
+		}else {
+			SimpleDateFormat sdf = new SimpleDateFormat(DATE_PATTERN);
+			try {
+				bp.time = sdf.parse(parsedTime);
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+				
+		return bp;
 	}
 	
 }

@@ -4,16 +4,23 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.Set;
 import java.util.UUID;
 
 import net.civex4.nobility.group.Group;
 import org.bukkit.*;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.Material;
+import org.bukkit.OfflinePlayer;
+import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.block.Chest;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.SkullMeta;
 
 import io.github.kingvictoria.regions.Region;
@@ -27,9 +34,15 @@ import net.civex4.nobility.development.Development;
 import net.civex4.nobility.development.DevelopmentBlueprint;
 import net.civex4.nobility.development.DevelopmentType;
 import net.civex4.nobility.developments.AbstractWorkshop;
+import net.civex4.nobility.developments.Armory;
+import net.civex4.nobility.developments.Inn;
 import net.civex4.nobility.estate.Estate;
 import net.civex4.nobility.estate.Relationship;
+import net.civex4.nobility.group.Group;
 import net.civex4.nobility.group.GroupPermission;
+import net.civex4.nobility.research.Card;
+import net.civex4.nobility.research.CardManager;
+import net.civex4.nobility.research.UnfinishedBlueprint;
 import net.civex4.nobilityitems.NobilityItem;
 import vg.civcraft.mc.civmodcore.api.ItemAPI;
 import vg.civcraft.mc.civmodcore.inventorygui.Clickable;
@@ -39,6 +52,9 @@ import vg.civcraft.mc.civmodcore.inventorygui.DecorationStack;
 public class EstateGui {
 
 	private static final int rowLength = 9;
+	
+	private Random rand;
+
 
 	public void openEstateGUI(Player player) {
 
@@ -192,6 +208,88 @@ public class EstateGui {
 		// OPEN
 		estateGUI.showInventory(player);
 
+
+	}
+	
+	public void openBlueprintResearchGUI(Player p) {
+		ItemStack i = p.getItemInHand();
+		if(i.hasItemMeta()) {
+			String name = ItemAPI.getDisplayName(i);
+			if(name.startsWith(UnfinishedBlueprint.UNFINISHED_BLUEPRINT_PREFIX)) {
+				if(i.getType() == Material.PAPER) {
+					
+					UnfinishedBlueprint ubp = UnfinishedBlueprint.parseFromItem(i);
+					if(ubp != null && ubp.getBaseBlueprint() != null) {
+						//If the player is holding a blueprint, we can open the gui.
+						Estate estate = Nobility.getEstateManager().getEstateOfPlayer(p);
+						ClickableInventory gui = new ClickableInventory(54, "Blueprint Research");
+
+						int[] decoSlots = {0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,26,27,35,36,44,45,46,47,48,50,51,52,53};
+
+						// DECORATION STACKS
+						for (int j : decoSlots) {
+							if (!(gui.getSlot(j) instanceof Clickable)) {
+								Clickable c = new DecorationStack(ButtonLibrary.createIcon(Material.BLACK_STAINED_GLASS_PANE, " "));
+								gui.setSlot(c, j);
+							}
+						}
+						
+						gui.setSlot(ButtonLibrary.HOME.clickable(),49);
+						gui.setSlot(ButtonLibrary.createResearchTutorial(), 10);
+						
+						ItemStack clone = i.clone();
+						Clickable c = new DecorationStack(clone);
+						gui.setSlot(c, 13);
+						
+						int roundsRemaining = ubp.getMaxRounds() - ubp.getRounds();
+						if(roundsRemaining > 0) {
+							ItemStack rounds = new ItemStack(Material.REDSTONE,roundsRemaining);
+							ItemAPI.setDisplayName(rounds, ChatColor.BLUE + "Rounds Remaining: " + ChatColor.WHITE + roundsRemaining);
+							Clickable ci = new DecorationStack(rounds);
+							gui.setSlot(ci, 16);
+						}
+						
+						//29,31,33 for cards.
+						int[] decoSlots2 = {19,20,21,22,23,24,25,28,30,32,34,37,38,39,40,41,42,43};
+
+						// DECORATION STACKS
+						for (int j : decoSlots2) {
+							if (!(gui.getSlot(j) instanceof Clickable)) {
+								Clickable cl = new DecorationStack(ButtonLibrary.createIcon(Material.IRON_BARS, " "));
+								gui.setSlot(cl, j);
+							}
+						}
+						
+						//TODO card selection area
+						ArrayList<Card> cards = new ArrayList<Card>();
+						long seed = ubp.getSeed();
+						for(int j = 0; j < 3; j++) {	
+							rand = new Random(seed);
+							Bukkit.getServer().getLogger().info("CARD SEED: " + seed);
+							cards.add(Nobility.getCardManager().generateCard(ubp, p, null, rand));
+							seed = rand.nextLong();
+						}
+						
+						
+						for(Card card : cards) {
+							Clickable cl = CardManager.getCardIcon(card, ubp, p);
+							gui.addSlot(cl);
+						}
+						
+						gui.showInventory(p);
+						return;
+					}else {
+						p.sendMessage(ChatColor.RED + "The item in your hand is not a recognized blueprint, or, it's Blueprint recipe has been removed from the config.");
+						return;
+					}
+
+				}
+			}
+		}
+		
+		p.closeInventory();
+		p.sendMessage(ChatColor.RED + "You must be holding an Unfinished Blueprint in order to begin Researching.");
+		p.sendMessage(ChatColor.RED + "You can craft an Unfinished Blueprint from the Workshops menu (top buttons).");
 
 	}
 
@@ -628,7 +726,60 @@ public class EstateGui {
 				for(DevAttribute attr : d.attributes.keySet()) {
 					ItemAPI.addLore(icon, AttributeManager.getAttributeText(attr,d.attributes.get(attr)));
 				}
-			Clickable dicon = new DecorationStack(icon);
+			if(d.getType() == DevelopmentType.ARMORY) {
+				Armory armory = (Armory) d;
+				if(!(armory.upgradeItem == null)) {
+					ItemAPI.addLore(icon, ChatColor.BLUE + "Upgrade Cost: " + armory.upgradeItem.getDisplayName());
+					ItemAPI.addLore(icon, ChatColor.GREEN + "RIGHT CLICK to upgrade Armory");
+				}
+			}
+			if(d.getType() == DevelopmentType.INN) {
+				Inn inn = (Inn) d;
+				if(inn.defaultSpawn != null) {
+					ItemAPI.addLore(icon, ChatColor.BLUE + "Spawn: " + ChatColor.WHITE + inn.defaultSpawn.getBlockX() + " " + inn.defaultSpawn.getBlockY() + " " + inn.defaultSpawn.getBlockZ());
+				}
+				ItemAPI.addLore(icon, ChatColor.GREEN + "LEFT CLICK to set spawn");
+			}
+			Clickable dicon = new Clickable(icon) {
+				@Override
+				protected void clicked(Player player) {
+					if(d.name == "Town Inn") {
+						Estate estate = Nobility.getEstateManager().getEstateOfPlayer(player);
+						GroupPermission perm = estate.getGroup().getPermission(player);
+						if(perm == GroupPermission.LEADER || perm == GroupPermission.OFFICER) {
+							Nobility.getChestSelector().defaultSpawnQueue.put(player.getUniqueId(), (Inn) d);
+
+							player.sendMessage(ChatColor.YELLOW + "Punch a bed within 10 seconds to set the default Estate spawn.");
+							Bukkit.getScheduler().scheduleSyncDelayedTask(Nobility.getNobility(), new Runnable() {
+								@Override
+								public void run() {
+									if(Nobility.getChestSelector().defaultSpawnQueue.containsKey(p.getUniqueId())) {
+										Nobility.getChestSelector().defaultSpawnQueue.remove(p.getUniqueId());
+										p.sendMessage(ChatColor.RED + "Spawn selection cancelled.");
+									}
+								}
+							}, 20*10L); //20 Tick (1 Second) delay before run() is called
+						}
+					}
+					if(d.getType() == DevelopmentType.ARMORY) {
+						Armory armory = (Armory) d;
+						Integer level = d.attributes.get(DevAttribute.ARMORY_LEVEL);
+						if(level == 3) { return; }
+						PlayerInventory inventory = player.getInventory();
+
+						ItemStack upgradeItem = armory.upgradeItem.getItemStack(1);
+
+						if(inventory.containsAtLeast(upgradeItem, upgradeItem.getAmount())) {
+							inventory.remove(upgradeItem);
+							player.sendMessage("Successfully upgraded Armory.");
+							int newlevel = level + 1;
+							armory.attributes.replace(DevAttribute.ARMORY_LEVEL, newlevel);
+						} else {
+							player.sendMessage(ChatColor.RED + "You don't have enough materials to upgrade this.");
+						}
+					}
+				}
+			};
 			gui.addSlot(dicon);
 		}
 
