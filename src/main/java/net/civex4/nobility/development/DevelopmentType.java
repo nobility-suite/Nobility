@@ -6,6 +6,8 @@ public enum DevelopmentType {
 	CAMP,
 	WORKSHOP,
 	ARSENAL,
+	ARMORY,
+	INN,
 	GENERIC;
 
 	public Material getIcon() {

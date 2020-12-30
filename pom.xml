@@ -15,6 +15,10 @@
 
 	<repositories>
 		<repository>
+			<id>fast-async-worldedit-repo</id>
+			<url>https://mvn.intellectualsites.com/content/repositories/releases</url>
+		</repository>
+		<repository>
 			<id>spigot-repo</id>
 			<url>https://hub.spigotmc.org/nexus/content/groups/public/</url>
 		</repository>
@@ -25,10 +29,6 @@
 		<repository>
 			<id>jitpack.io</id>
 			<url>https://jitpack.io</url>
-		</repository>
-		<repository>
-			<id>sk89q-repo</id>
-			<url> https://maven.enginehub.org/repo/</url>
 		</repository>
 	</repositories>
 
@@ -74,9 +74,9 @@
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
-			<groupId>com.sk89q.worldedit</groupId>
-			<artifactId>worldedit-bukkit</artifactId>
-			<version>7.2.0-SNAPSHOT</version>
+			<groupId>com.intellectualsites.fawe</groupId>
+			<artifactId>FAWE-Bukkit</artifactId>
+			<version>1.16-434</version>
 			<scope>provided</scope>
 		</dependency>
 	</dependencies>

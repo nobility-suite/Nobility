@@ -41,6 +41,15 @@ public enum ButtonLibrary {
 		return icon;
 	}
 	
+	public static Clickable createResearchTutorial() {
+		ItemStack icon = createIcon(Material.BOOK, ChatColor.WHITE + "Research Tutorial");
+		ItemAPI.addLore(icon, ChatColor.GRAY + "Choose a card to progress your Blueprint.");
+		ItemAPI.addLore(icon, ChatColor.GRAY + "Your choices allow you to influence the final outcome.");
+		ItemAPI.addLore(icon, ChatColor.GRAY + "Each round you will be shown a new set of cards.");
+		Clickable ret = new DecorationStack(icon);
+		return ret;
+	}
+	
 	public static Clickable createWorkshopInfo(Development d) {
 		ItemStack icon = createIcon(Material.BOOK, "Workshop Info");
 		ItemAPI.addLore(icon, ChatColor.BLUE + "Workshop Type: " +  ChatColor.WHITE + d.name, ChatColor.GRAY + d.useDescription);

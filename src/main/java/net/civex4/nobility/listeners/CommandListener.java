@@ -6,27 +6,27 @@ import java.util.List;
 import java.util.UUID;
 import java.util.logging.Level;
 
-import io.github.kingvictoria.regions.nodes.Node;
-import net.civex4.nobility.development.Camp;
-import net.civex4.nobility.estate.EstateManager;
-import net.civex4.nobility.group.GroupManager;
-import net.civex4.nobility.group.GroupPermission;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
+import io.github.kingvictoria.regions.nodes.Node;
 import net.civex4.nobility.Nobility;
+import net.civex4.nobility.blueprints.AbstractBlueprint;
+import net.civex4.nobility.development.Camp;
 import net.civex4.nobility.development.DevAttribute;
 import net.civex4.nobility.development.Development;
 import net.civex4.nobility.development.DevelopmentType;
 import net.civex4.nobility.estate.Estate;
 import net.civex4.nobility.group.Group;
+import net.civex4.nobility.group.GroupPermission;
+import net.civex4.nobility.research.UnfinishedBlueprint;
 import net.civex4.nobility.siege.Siege;
 import net.md_5.bungee.api.ChatColor;
-import org.slf4j.Logger;
 
 public class CommandListener implements CommandExecutor{
 
@@ -561,6 +561,25 @@ public class CommandListener implements CommandExecutor{
 				return true;
 			}
 
+			if(args[0].equalsIgnoreCase("admin") && args[1].equalsIgnoreCase("ubp")) {
+				AbstractBlueprint bp = Nobility.getBlueprintManager().blueprints.get(Integer.parseInt(args[2]));
+				UnfinishedBlueprint ubp = new UnfinishedBlueprint(bp);
+				ItemStack i = ubp.parseToItem();
+				player.getInventory().addItem(i);
+				return true;
+			}
+			if(args[0].equalsIgnoreCase("admin") && args[1].equalsIgnoreCase("abp")) {
+				ItemStack i = player.getItemInHand();
+				if(i != null) {
+					UnfinishedBlueprint ubp = UnfinishedBlueprint.parseFromItem(i);
+					if(ubp != null) {
+						AbstractBlueprint abp = ubp.getBaseBlueprint();
+						player.sendMessage(ChatColor.BLUE + "Found UnfinishedBlueprint: " + ChatColor.WHITE + abp.name);
+						player.sendMessage(ChatColor.BLUE + "Seed: " + ChatColor.WHITE + ubp.getSeed());
+					}
+				}else player.sendMessage(ChatColor.DARK_RED + "You must be holding an unfinishedblueprint in your main hand to use this debug command.");
+				return true;
+			}
 			if(args[0].equalsIgnoreCase("admin") && args[1].equalsIgnoreCase("siege")) {
 				String target = args[2];
 				Estate e = null;

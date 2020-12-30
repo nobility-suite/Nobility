@@ -52,5 +52,14 @@ public class AbstractBlueprint {
     Blueprint ret = new Blueprint(result, (HashMap<NobilityItem, Integer>) ingredients, runs, name, resultAmount);
     return ret;
   }
+  
+  public ArrayList<ItemGroup> getItemGroups(){
+	  return this.groups;
+  }
+  
+  public void replaceItemGroup(int itemGroupIndex, ItemGroup replacement) {
+	  this.groups.remove(itemGroupIndex);
+	  this.groups.add(itemGroupIndex, replacement); 
+  }
 
 }
