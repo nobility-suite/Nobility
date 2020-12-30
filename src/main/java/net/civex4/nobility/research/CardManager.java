@@ -2,6 +2,7 @@ package net.civex4.nobility.research;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Random;
 
 import org.bukkit.Bukkit;
@@ -19,7 +20,6 @@ import net.civex4.nobilityitems.NobilityItems;
 import net.md_5.bungee.api.ChatColor;
 import vg.civcraft.mc.civmodcore.api.ItemAPI;
 import vg.civcraft.mc.civmodcore.inventorygui.Clickable;
-import vg.civcraft.mc.civmodcore.inventorygui.DecorationStack;
 
 public class CardManager {
 	
@@ -43,7 +43,21 @@ public class CardManager {
 		}
 		
 		
-		Clickable cl = new DecorationStack(icon);
+		Clickable cl = new Clickable(icon) {
+
+			@Override
+			public void clicked(Player p) {
+				c.activate(p,p.getItemInHand());
+				p.closeInventory();
+				
+				ItemStack i = p.getItemInHand();
+				List<String> lore = ItemAPI.getLore(i);
+				Long sd = new Random().nextLong();
+				String seed = UnfinishedBlueprint.SEED_PREFIX + sd;
+				lore.set(0, seed);
+			}
+
+		};
 		return cl;
 	}
 
