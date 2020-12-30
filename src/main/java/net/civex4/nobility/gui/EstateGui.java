@@ -1,6 +1,5 @@
 package net.civex4.nobility.gui;
 
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -8,12 +7,10 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
-import net.civex4.nobility.cannons.Cannon;
 import net.civex4.nobility.group.Group;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.Chest;
-import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -34,7 +31,6 @@ import net.civex4.nobility.estate.Estate;
 import net.civex4.nobility.estate.Relationship;
 import net.civex4.nobility.group.GroupPermission;
 import net.civex4.nobilityitems.NobilityItem;
-import org.w3c.dom.Attr;
 import vg.civcraft.mc.civmodcore.api.ItemAPI;
 import vg.civcraft.mc.civmodcore.inventorygui.Clickable;
 import vg.civcraft.mc.civmodcore.inventorygui.ClickableInventory;
@@ -58,6 +54,14 @@ public class EstateGui {
 			if (!(estateGUI.getSlot(i) instanceof Clickable)) {
 				Clickable c = new DecorationStack(ButtonLibrary.createIcon(Material.BLACK_STAINED_GLASS_PANE, " "));
 				estateGUI.setSlot(c, i);
+			}
+		}
+
+		if(estate.getAlert() == true) {
+			int[] alertSlots = {45,46,47,48,49,50,51,52,53};
+			for (int i : alertSlots) {
+				Clickable alert = new DecorationStack(ButtonLibrary.createIcon(Material.RED_STAINED_GLASS_PANE, ChatColor.RED + "! SIEGE IMMINENT !"));
+				estateGUI.setSlot(alert, i);
 			}
 		}
 
@@ -160,6 +164,9 @@ public class EstateGui {
 		ItemAPI.addLore(defIcon, ChatColor.BLUE + DevAttribute.CANNON_LIMIT.name + ": " + ChatColor.WHITE + AttributeManager.getCannonLimit(estate),
 				ChatColor.BLUE + DevAttribute.CANNON_STORED.name + ": " + ChatColor.WHITE + AttributeManager.getCannons(estate),
 				ChatColor.BLUE + DevAttribute.CANNON_DISREPAIRED.name +": " + ChatColor.WHITE + AttributeManager.getDisrepairedCannons(estate));
+		if (estate.getAlert() == true) {
+			ItemAPI.addLore(defIcon, ChatColor.RED + "Your estate is going to be sieged soon...");
+		}
 		Clickable defButton = new Clickable(defIcon) {
 
 			@Override
@@ -582,7 +589,7 @@ public class EstateGui {
 		HashMap<String, DevelopmentBlueprint> blueprints = Nobility.getDevelopmentManager().getBlueprints();
 		List<Development> built = estate.getBuiltDevelopments();
 
-		int[] decoSlots = {0,1,2,3,5,6,7,8,9,10,11,12,13,14,15,16,17,45,46,47,48,50,51,52,53};
+		int[] decoSlots = {0,2,3,4,5,6,8,9,10,11,12,13,14,15,16,17,45,46,47,48,50,51,52,53};
 
 		// DECORATION STACKS
 		for (int i : decoSlots) {
@@ -594,7 +601,17 @@ public class EstateGui {
 
 		Clickable infoIcon = ButtonLibrary.createEstateInfo(estate);
 
-		gui.addSlot(infoIcon);
+		gui.setSlot(infoIcon, 1);
+
+		ItemStack upgradeIcon = ButtonLibrary.createIcon(Material.FURNACE, "Upgrade Developments");
+		Clickable upgradeButton = new Clickable(upgradeIcon) {
+			@Override
+			public void clicked(Player player) {
+				openDevelopmentsUpgradeGUI(player);
+			}
+		};
+		gui.setSlot(upgradeButton, 7);
+
 
 		gui.setSlot(ButtonLibrary.HOME.clickable(),49);
 
