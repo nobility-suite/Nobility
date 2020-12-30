@@ -3,10 +3,10 @@ package net.civex4.nobility;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.sql.Time;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
+import java.util.*;
 
 import io.github.kingvictoria.regions.nodes.Node;
 import net.civex4.nobility.development.Camp;
@@ -65,6 +65,9 @@ public class Nobility extends ACivMod {
 	public static int currentDay = 0;
 	public static Map<String, Clipboard> schematics = new HashMap<>();
 
+	private Timer dayTimer;
+	private TimerTask dayTask;
+
 
 	@Override
 	public void onEnable() {
@@ -84,10 +87,35 @@ public class Nobility extends ACivMod {
 		//DevelopmentType.loadDevelopmentTypes(getConfig().getConfigurationSection("developments"));
 
 		registerEvents();
-		
-		
+
+		Calendar c = Calendar.getInstance();
+		c.add(Calendar.DAY_OF_MONTH, 1);
+		c.set(Calendar.HOUR_OF_DAY, 0);
+		c.set(Calendar.MINUTE, 0);
+		c.set(Calendar.SECOND, 0);
+		c.set(Calendar.MILLISECOND, 0);
+		long milisecondsUntil = (c.getTimeInMillis() - System.currentTimeMillis());
+
+		//Putting in a dayTask for the Timer to run.
+		dayTask = new TimerTask() {
+			@Override
+			public void run() {
+				tickDay();
+				resetTimer(milisecondsUntil);
+			}
+		};
+		//Setting up timer.
+		resetTimer(milisecondsUntil);
 
 		new DatabaseBuilder().setUpDatabase();
+	}
+
+	private void resetTimer(Long milis) {
+		//We want to cancel the timer, that way no exceptions get thrown.
+		//this just makes our lives easier in the long run.
+		dayTimer.cancel();
+		dayTimer = new Timer();
+		dayTimer.schedule(dayTask, milis);
 	}
 	
 	private static void initializeManagers() {
