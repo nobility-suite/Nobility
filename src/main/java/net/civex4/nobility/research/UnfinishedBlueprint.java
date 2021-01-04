@@ -91,6 +91,9 @@ public class UnfinishedBlueprint {
 		for(int j = 2; j < lore.size(); j++) {
 			String actionString = lore.get(j);
 			Action action = Nobility.getCardManager().parseToAction(actionString, abp);
+			if(action == null) { 
+				Bukkit.getServer().getLogger().info("Could not parse Action!: " + actionString);
+				continue; }
 			ubp.addAction(action);
 			ubp.applyAction(action);
 		}

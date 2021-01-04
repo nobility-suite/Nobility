@@ -1,6 +1,7 @@
 package net.civex4.nobility.research;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -44,11 +45,23 @@ public class Card {
 			ItemAPI.addLore(unfinishedBlueprint, a.formatLine());
 		}
 		
+		//Update round counter
+		UnfinishedBlueprint ubp = UnfinishedBlueprint.parseFromItem(unfinishedBlueprint);
+		List<String> lore = ItemAPI.getLore(unfinishedBlueprint);
+		String roundString = UnfinishedBlueprint.ROUND_PREFIX + (ubp.getRounds()+1) + "/" + ubp.getMaxRounds() + UnfinishedBlueprint.ROUND_SUFFIX;
+		
+		lore.set(1, roundString);
+		ItemAPI.setLore(unfinishedBlueprint, lore);
+		
+		if(ubp.getRounds()+1 >= ubp.getMaxRounds()) {
+			//GENERATE BLUEPRINT TODO
+		}
+		
 	}
 	
 	public boolean checkCost(Player p) {
 		//TODO add checking costs function.
-		return false;
+		return true;
 	}
 	
 	public void payCosts(Player p) {

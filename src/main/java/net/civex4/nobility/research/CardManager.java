@@ -36,7 +36,11 @@ public class CardManager {
 	}
 	
 	public static Clickable getCardIcon(Card c, UnfinishedBlueprint ubp, Player p) {
-		ItemStack icon = ButtonLibrary.createIcon(Material.PAPER, ChatColor.BLUE + "Card: " + c.getActions().get(0).type);
+		String type;
+		if(c.getActions().size() > 0) {
+			type = c.getActions().get(0).type + "";
+		}else type = "NULL";
+		ItemStack icon = ButtonLibrary.createIcon(Material.PAPER, ChatColor.BLUE + "Card: " + type);
 		for(Action a : c.getActions()) {
 			ItemAPI.addLore(icon, a.formatLine());
 			Bukkit.getServer().getLogger().info("action: " + a.type.identifier + ", " + a.formatLine());
@@ -142,15 +146,15 @@ public class CardManager {
 			case LOCK_IN: //LOCK IN CARDS
 			int[] options = getLockInAvailable(ubp);
 			ArrayList<Integer> itemGroupIndexes = parseLockArray(options);
+			if(itemGroupIndexes.size() <= 1) { break; }
 			int index = rand.nextInt(itemGroupIndexes.size()-1);
-			if(index < 0) { break; }
 			actions.add(Action.createLockInAction(ubp.getBaseBlueprint(), itemGroupIndexes.get(index), rand));
 			break;
 			case LOCK_OUT: //LOCK OUT CARDS
 			int[] options2 = getLockOutAvailable(ubp);
 			ArrayList<Integer> itemGroupIndexes2 = parseLockArray(options2);
+			if(itemGroupIndexes2.size() <= 1) { break; }
 			int index2 = rand.nextInt(itemGroupIndexes2.size()-1);
-			if(index2 < 0) { break; }
 			actions.add(Action.createLockOutAction(ubp.getBaseBlueprint(), itemGroupIndexes2.get(index2), rand));	
 			break;
 			case MOD_RESULT: //BULK INGREDIENT CARDS
@@ -377,10 +381,13 @@ public class CardManager {
 	
 	public static void apply(UnfinishedBlueprint ubp, Action a) {
 		// TODO Auto-generated method stub
+		if(a != null)
 		switch(a.type) {
 		case LOCK_IN:
 		break;
 		case LOCK_OUT:
+		break;
+		default:
 		break;
 		}
 		
