@@ -94,6 +94,13 @@ public class CommandListener implements CommandExecutor{
 				player.sendMessage(ChatColor.GOLD + "You are a, " + ChatColor.AQUA + g.getLocalization(perm) + ".");
 				return true;
 			}
+
+			//TODO DEBUG COMMAND REMOVE
+			if (args[0].equalsIgnoreCase("alert")) {
+				Estate estate = Nobility.getEstateManager().getEstateOfPlayer(player);
+				estate.setAlert("true");
+				return true;
+			}
 			
 			if (args[0].equalsIgnoreCase("nextday")) {
 				Nobility.tickDay();
