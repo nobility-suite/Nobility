@@ -16,6 +16,7 @@ public enum ActionType {
 	MOD_RESULT("[*r]"),
 	MOD_COSTS("[*c]"),
 	RATIO("[%c]"),
+	RATIO_REPLACE("[_c]"),
 	REROLL("[rr]");
 	
 

@@ -171,8 +171,43 @@ public class CardManager {
 				ArrayList<Integer> itemGroupIndexes3 = parseRatioArray(getRatiosAvailable(ubp));
 				int index3 = rand.nextInt(itemGroupIndexes3.size());
 				index3 = itemGroupIndexes3.get(index3);
-				//TODO
+				ItemGroup g = ubp.getBaseBlueprint().getItemGroups().get(index3);
+				int itemTypes = g.getDistinctTypes();
+				if(itemTypes >= 2) {
+					int type1 = rand.nextInt(itemTypes);
+					int type2 = type1;
+					while(type2 != type1) {
+						type2 = rand.nextInt(itemTypes);
+					}
+					
+					int pct1 = 20 + rand.nextInt(50);
+					int pct2 = (pct1 + 5) + rand.nextInt(10);
+					pct2 = -pct2;
+					
+					actions.add(Action.createRatiosAction(ubp.getBaseBlueprint(), pct1, index3, type1));
+					actions.add(Action.createRatiosAction(ubp.getBaseBlueprint(), pct2, index3, type2));
+				}
 			break;
+			case RATIO_REPLACE: //RATIO Replace cards
+				ArrayList<Integer> itemGroupIndexes4 = parseRatioArray(getRatiosAvailable(ubp));
+				int index4 = rand.nextInt(itemGroupIndexes4.size());
+				index4 = itemGroupIndexes4.get(index4);
+				ItemGroup gro = ubp.getBaseBlueprint().getItemGroups().get(index4);
+				int itemTypes2 = gro.getDistinctTypes();
+				if(itemTypes2 >= 2) {
+					int type1 = rand.nextInt(itemTypes2);
+					int type2 = type1;
+					while(type2 != type1) {
+						type2 = rand.nextInt(itemTypes2);
+					}
+					
+					int pct = 60 + rand.nextInt(10) + rand.nextInt(10) + rand.nextInt(40);
+					actions.add(Action.createRatiosAction(ubp.getBaseBlueprint(), pct, index4, type1));
+					actions.add(Action.createRatiosAction(ubp.getBaseBlueprint(), -100, index4, type2));
+				}
+				
+
+				
 		}
 
 		ret = new Card(actions, ubp.getBaseBlueprint());
