@@ -3,8 +3,10 @@ package net.civex4.nobility.blueprints;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+
 import net.civex4.nobility.util.Util;
 import net.civex4.nobilityitems.NobilityItem;
+import net.civex4.nobilityitems.NobilityItems;
 
 public class AbstractBlueprint {
   
@@ -60,6 +62,14 @@ public class AbstractBlueprint {
   public void replaceItemGroup(int itemGroupIndex, ItemGroup replacement) {
 	  this.groups.remove(itemGroupIndex);
 	  this.groups.add(itemGroupIndex, replacement); 
+  }
+  
+  public AbstractBlueprint clone() {
+	  ArrayList<ItemGroup> g = (ArrayList<ItemGroup>) this.groups.clone();
+	  NobilityItem r = NobilityItems.getItemByDisplayName(this.result.getDisplayName());
+	  String n = name;  
+	  AbstractBlueprint abp = new AbstractBlueprint(g,r,this.minRuns,this.maxRuns,n,this.minReturn,this.maxReturn);
+	  return abp;
   }
 
 }

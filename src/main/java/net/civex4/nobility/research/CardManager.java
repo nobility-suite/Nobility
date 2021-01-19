@@ -213,6 +213,7 @@ public class CardManager {
 		ret = new Card(actions, ubp.getBaseBlueprint());
 		
 		
+		
 		if(ret == null) { Bukkit.getServer().getLogger().info("Card = null!!!"); }
 		if(ret != null) { Bukkit.getServer().getLogger().info(ret.getIcon().getItemMeta().getDisplayName() + "||| " + ret.getActions().size()); }
 		

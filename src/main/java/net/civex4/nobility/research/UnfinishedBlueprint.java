@@ -134,7 +134,11 @@ public class UnfinishedBlueprint {
 	}
 	
 	public Blueprint generate() {
-		return null;
+		AbstractBlueprint abp = this.baseBlueprint.clone();
+		
+		//TODO apply actions
+		
+		return abp.generate();
 	}
 	
 	public ArrayList<Action> getActions(){
