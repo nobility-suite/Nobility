@@ -2,8 +2,8 @@ package net.civex4.nobility.util;
 
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
+import vg.civcraft.mc.civmodcore.inventory.items.ItemUtils;
 
-import vg.civcraft.mc.civmodcore.api.ItemAPI;
 
 public class CMat {
 	
@@ -33,7 +33,7 @@ public class CMat {
 	public ItemStack getItem(int amt) {
 		ItemStack stack = new ItemStack(this.mat,1);
 		if(itemName != "") {
-			ItemAPI.setDisplayName(stack, itemName);
+			ItemUtils.setDisplayName(stack, itemName);
 		}
 		return stack;
 	}

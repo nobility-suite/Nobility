@@ -8,7 +8,7 @@ import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import vg.civcraft.mc.civmodcore.api.ItemAPI;
+import vg.civcraft.mc.civmodcore.inventory.items.ItemUtils;
 
 import java.util.*;
 
@@ -150,11 +150,11 @@ public class EstateManager {
 
 	// Utilities
 	private static void nameItem(ItemStack item, String name) {
-		ItemAPI.setDisplayName(item, ChatColor.WHITE + name);
+		ItemUtils.setDisplayName(item, ChatColor.WHITE + name);
 	}
 
 	private static void addLore(ItemStack item, String text) {
-		ItemAPI.addLore(item, text);
+		ItemUtils.addLore(item, text);
 	}
 
 

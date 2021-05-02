@@ -6,8 +6,8 @@ import org.bukkit.block.banner.Pattern;
 import org.bukkit.block.banner.PatternType;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BannerMeta;
+import vg.civcraft.mc.civmodcore.inventory.items.ItemUtils;
 
-import vg.civcraft.mc.civmodcore.api.ItemAPI;
 
 public enum BannerLetter {
 	A(createBanner('a')),
@@ -298,7 +298,7 @@ public enum BannerLetter {
 				
 				
 		}
-		ItemAPI.setDisplayName(banner, (letter + "").toUpperCase());
+		ItemUtils.setDisplayName(banner, (letter + "").toUpperCase());
 		return banner;
 	}
 	

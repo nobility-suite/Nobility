@@ -14,7 +14,7 @@ import net.civex4.nobility.blueprints.Blueprint;
 import net.civex4.nobilityitems.NobilityItem;
 import net.civex4.nobilityitems.NobilityItems;
 import net.md_5.bungee.api.ChatColor;
-import vg.civcraft.mc.civmodcore.api.ItemAPI;
+import vg.civcraft.mc.civmodcore.inventory.items.ItemUtils;
 
 public class UnfinishedBlueprint {
 	
@@ -72,7 +72,7 @@ public class UnfinishedBlueprint {
 		//get abstractblueprint from item
 		
 		UnfinishedBlueprint ubp = new UnfinishedBlueprint(abp);
-		List<String> lore = ItemAPI.getLore(i);
+		List<String> lore = ItemUtils.getLore(i);
 		
 		String seedString = lore.get(0);
 		seedString = seedString.replaceFirst(SEED_PREFIX, "");
@@ -115,17 +115,17 @@ public class UnfinishedBlueprint {
 		ItemStack ret = new ItemStack(Material.PAPER);
 		NobilityItem ni = this.baseBlueprint.result;
 		String name = UNFINISHED_BLUEPRINT_PREFIX + ni.getDisplayName() + UNFINISHED_BLUEPRINT_SUFFIX;
-		ItemAPI.setDisplayName(ret, name);
+		ItemUtils.setDisplayName(ret, name);
 		
-		String seedString =  SEED_PREFIX + seed;  
-		ItemAPI.addLore(ret, seedString);
+		String seedString =  SEED_PREFIX + seed;
+		ItemUtils.addLore(ret, seedString);
 	
 		String roundString = this.ROUND_PREFIX + this.rounds + "/" + this.maxRounds + this.ROUND_SUFFIX;
-		ItemAPI.addLore(ret, roundString);
+		ItemUtils.addLore(ret, roundString);
 		
 	
 		for(Action a :this.getActions()) {
-			ItemAPI.addLore(ret,a.formatLine());
+			ItemUtils.addLore(ret,a.formatLine());
 		}
 	
 		

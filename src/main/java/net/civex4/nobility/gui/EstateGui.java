@@ -44,7 +44,7 @@ import net.civex4.nobility.research.Card;
 import net.civex4.nobility.research.CardManager;
 import net.civex4.nobility.research.UnfinishedBlueprint;
 import net.civex4.nobilityitems.NobilityItem;
-import vg.civcraft.mc.civmodcore.api.ItemAPI;
+import vg.civcraft.mc.civmodcore.inventory.items.ItemUtils;
 import vg.civcraft.mc.civmodcore.inventorygui.Clickable;
 import vg.civcraft.mc.civmodcore.inventorygui.ClickableInventory;
 import vg.civcraft.mc.civmodcore.inventorygui.DecorationStack;
@@ -177,11 +177,11 @@ public class EstateGui {
 
 
 
-		ItemAPI.addLore(defIcon, ChatColor.BLUE + DevAttribute.CANNON_LIMIT.name + ": " + ChatColor.WHITE + AttributeManager.getCannonLimit(estate),
+		ItemUtils.addLore(defIcon, ChatColor.BLUE + DevAttribute.CANNON_LIMIT.name + ": " + ChatColor.WHITE + AttributeManager.getCannonLimit(estate),
 				ChatColor.BLUE + DevAttribute.CANNON_STORED.name + ": " + ChatColor.WHITE + AttributeManager.getCannons(estate),
 				ChatColor.BLUE + DevAttribute.CANNON_DISREPAIRED.name +": " + ChatColor.WHITE + AttributeManager.getDisrepairedCannons(estate));
 		if (estate.getAlert() == true) {
-			ItemAPI.addLore(defIcon, ChatColor.RED + "Your estate is going to be sieged soon...");
+			ItemUtils.addLore(defIcon, ChatColor.RED + "Your estate is going to be sieged soon...");
 		}
 		Clickable defButton = new Clickable(defIcon) {
 
@@ -214,7 +214,7 @@ public class EstateGui {
 	public void openBlueprintResearchGUI(Player p) {
 		ItemStack i = p.getItemInHand();
 		if(i.hasItemMeta()) {
-			String name = ItemAPI.getDisplayName(i);
+			String name = ItemUtils.getDisplayName(i);
 			if(name.startsWith(UnfinishedBlueprint.UNFINISHED_BLUEPRINT_PREFIX)) {
 				if(i.getType() == Material.PAPER) {
 					
@@ -244,7 +244,7 @@ public class EstateGui {
 						int roundsRemaining = ubp.getMaxRounds() - ubp.getRounds();
 						if(roundsRemaining > 0) {
 							ItemStack rounds = new ItemStack(Material.REDSTONE,roundsRemaining);
-							ItemAPI.setDisplayName(rounds, ChatColor.BLUE + "Rounds Remaining: " + ChatColor.WHITE + roundsRemaining);
+							ItemUtils.setDisplayName(rounds, ChatColor.BLUE + "Rounds Remaining: " + ChatColor.WHITE + roundsRemaining);
 							Clickable ci = new DecorationStack(rounds);
 							gui.setSlot(ci, 16);
 						}
@@ -308,7 +308,7 @@ public class EstateGui {
 		}
 
 		ItemStack info = ButtonLibrary.createIcon(Material.BOOK,ChatColor.WHITE + "Research Info");
-		ItemAPI.addLore(info, ChatColor.WHITE + "Research" + ChatColor.GRAY + " allows you to spend materials to create",
+		ItemUtils.addLore(info, ChatColor.WHITE + "Research" + ChatColor.GRAY + " allows you to spend materials to create",
 				ChatColor.GRAY + "Blueprints, which you can use in Workshops.",
 				ChatColor.GRAY + "Select a category to get started.");
 		Clickable info2 = new DecorationStack(info);
@@ -385,7 +385,7 @@ public class EstateGui {
 		for(Development d : estate.getBuiltDevelopments()) {
 			if(d.getType() == DevelopmentType.WORKSHOP) {
 				ItemStack icon = ButtonLibrary.createIcon(d.icon, d.name);
-				ItemAPI.addLore(icon, ChatColor.BLUE + "Type: " + ChatColor.WHITE + d.getType().toString(),
+				ItemUtils.addLore(icon, ChatColor.BLUE + "Type: " + ChatColor.WHITE + d.getType().toString(),
 						ChatColor.BLUE + "Description: ",
 						ChatColor.GRAY + d.useDescription,
 						ChatColor.YELLOW + "",
@@ -502,15 +502,15 @@ public class EstateGui {
 			if (d.result.getType() == DevelopmentType.CAMP) {
 				Camp camp = (Camp) d.result;
 				if (camp != null) {
-					ItemAPI.addLore(icon, ChatColor.BLUE + "Node Limit: " + ChatColor.WHITE + camp.getNodeLimit());
+					ItemUtils.addLore(icon, ChatColor.BLUE + "Node Limit: " + ChatColor.WHITE + camp.getNodeLimit());
 				}
 			}
-			ItemAPI.addLore(icon, ChatColor.BLUE + "Type: " + ChatColor.WHITE + d.result.getType().toString(),
+			ItemUtils.addLore(icon, ChatColor.BLUE + "Type: " + ChatColor.WHITE + d.result.getType().toString(),
 					ChatColor.BLUE + "Description: ",
 					ChatColor.GRAY + d.result.useDescription);
 			if (d.result.attributes != null)
 				for (DevAttribute attr : d.result.attributes.keySet()) {
-					ItemAPI.addLore(icon, AttributeManager.getAttributeText(attr, d.result.attributes.get(attr)));
+					ItemUtils.addLore(icon, AttributeManager.getAttributeText(attr, d.result.attributes.get(attr)));
 				}
 			//Clickable upgradeIcon = new DecorationStack(icon);
 			Clickable upgradeIcon = new Clickable(icon) {
@@ -551,7 +551,7 @@ public class EstateGui {
 		if(selected != null  && Nobility.getBlueprintManager().recipeExists(selected, d)) {
 
 		}else { selected = ButtonLibrary.createIcon(Material.BARRIER, ChatColor.WHITE + "Select Blueprint"); }
-		ItemAPI.addLore(selected, true, ChatColor.YELLOW + "" + ChatColor.BOLD + "Click to change Blueprint!");
+		ItemUtils.addLore(selected, true, ChatColor.YELLOW + "" + ChatColor.BOLD + "Click to change Blueprint!");
 		Clickable rec = new Clickable(selected) {
 			@Override
 			public void clicked(Player p) {
@@ -572,8 +572,8 @@ public class EstateGui {
 		gui.setSlot(start, 18);
 
 		ItemStack assignOutput = ButtonLibrary.createIcon(Material.CHEST, ChatColor.GREEN + "Output Chest");
-		if(d.outputChest != null) { ItemAPI.addLore(assignOutput, ChatColor.BLUE + "Output Chest: " + ChatColor.WHITE + "[" + d.outputChest.getBlockX() + "x," + d.outputChest.getBlockY() + "y," + d.outputChest.getBlockZ() + "z]", "", ChatColor.YELLOW + "Click to reassign an output chest!"); }
-		else {ItemAPI.addLore(assignOutput, ChatColor.YELLOW + "" + ChatColor.BOLD + "Click to assign an output chest!"); }
+		if(d.outputChest != null) { ItemUtils.addLore(assignOutput, ChatColor.BLUE + "Output Chest: " + ChatColor.WHITE + "[" + d.outputChest.getBlockX() + "x," + d.outputChest.getBlockY() + "y," + d.outputChest.getBlockZ() + "z]", "", ChatColor.YELLOW + "Click to reassign an output chest!"); }
+		else {ItemUtils.addLore(assignOutput, ChatColor.YELLOW + "" + ChatColor.BOLD + "Click to assign an output chest!"); }
 		Clickable output = new Clickable(assignOutput) {
 				@Override
 				public void clicked(Player p) {
@@ -594,8 +594,8 @@ public class EstateGui {
 		gui.setSlot(output, 27);
 
 		ItemStack assignInput = ButtonLibrary.createIcon(Material.HOPPER, ChatColor.WHITE + "Input Chest");
-		if(d.inputChest != null) { ItemAPI.addLore(assignInput, ChatColor.BLUE + "Input Chest: " + ChatColor.WHITE + "[" + d.inputChest.getBlockX() + "x," + d.inputChest.getBlockY() + "y," + d.inputChest.getBlockZ() + "z]", "", ChatColor.YELLOW + "Click to reassign an output chest!"); }
-		else {ItemAPI.addLore(assignInput, ChatColor.YELLOW + "" + ChatColor.BOLD + "Click to assign an input chest!"); }
+		if(d.inputChest != null) { ItemUtils.addLore(assignInput, ChatColor.BLUE + "Input Chest: " + ChatColor.WHITE + "[" + d.inputChest.getBlockX() + "x," + d.inputChest.getBlockY() + "y," + d.inputChest.getBlockZ() + "z]", "", ChatColor.YELLOW + "Click to reassign an output chest!"); }
+		else {ItemUtils.addLore(assignInput, ChatColor.YELLOW + "" + ChatColor.BOLD + "Click to assign an input chest!"); }
 		Clickable input = new Clickable(assignInput) {
 				@Override
 				public void clicked(Player p) {
@@ -664,10 +664,10 @@ public class EstateGui {
 		for(UUID u : members) {
 			Player pl = Bukkit.getPlayer(u);
 			ItemStack playerIcon = ButtonLibrary.createIcon(Material.PLAYER_HEAD, pl.getName());
-			ItemAPI.addLore(playerIcon, ChatColor.BLUE + "Rank: " + ChatColor.WHITE + estate.getGroup().getPermission(pl));
-			ItemAPI.addLore(playerIcon, ChatColor.BLUE + "Workers: " + ChatColor.WHITE + Nobility.getWorkerManager().getWorkers(pl),
+			ItemUtils.addLore(playerIcon, ChatColor.BLUE + "Rank: " + ChatColor.WHITE + estate.getGroup().getPermission(pl));
+			ItemUtils.addLore(playerIcon, ChatColor.BLUE + "Workers: " + ChatColor.WHITE + Nobility.getWorkerManager().getWorkers(pl),
 					ChatColor.BLUE + "Activity Level: " + ChatColor.WHITE + "" + Nobility.getWorkerManager().getActivityLevel(pl));
-			SkullMeta im = (SkullMeta) ItemAPI.getItemMeta(playerIcon);
+			SkullMeta im = (SkullMeta) ItemUtils.getItemMeta(playerIcon);
 			im.setOwningPlayer(Bukkit.getOfflinePlayer(u));
 			playerIcon.setItemMeta(im);
 			Clickable pcon = new DecorationStack(playerIcon);
@@ -717,28 +717,28 @@ public class EstateGui {
 			ItemStack icon = ButtonLibrary.createIcon(d.icon, d.name);
 			if(d.getType() == DevelopmentType.CAMP) {
 				Camp camp = (Camp) d;
-				if(camp != null) { ItemAPI.addLore(icon, ChatColor.BLUE + "Node Limit: " + ChatColor.WHITE + camp.getNodeLimit()); }
+				if(camp != null) { ItemUtils.addLore(icon, ChatColor.BLUE + "Node Limit: " + ChatColor.WHITE + camp.getNodeLimit()); }
 			}
-			ItemAPI.addLore(icon, ChatColor.BLUE + "Type: " + ChatColor.WHITE + d.getType().toString(),
+			ItemUtils.addLore(icon, ChatColor.BLUE + "Type: " + ChatColor.WHITE + d.getType().toString(),
 					ChatColor.BLUE + "Description: ",
 					ChatColor.GRAY + d.useDescription);
 			if(d.attributes != null)
 				for(DevAttribute attr : d.attributes.keySet()) {
-					ItemAPI.addLore(icon, AttributeManager.getAttributeText(attr,d.attributes.get(attr)));
+					ItemUtils.addLore(icon, AttributeManager.getAttributeText(attr,d.attributes.get(attr)));
 				}
 			if(d.getType() == DevelopmentType.ARMORY) {
 				Armory armory = (Armory) d;
 				if(!(armory.upgradeItem == null)) {
-					ItemAPI.addLore(icon, ChatColor.BLUE + "Upgrade Cost: " + armory.upgradeItem.getDisplayName());
-					ItemAPI.addLore(icon, ChatColor.GREEN + "RIGHT CLICK to upgrade Armory");
+					ItemUtils.addLore(icon, ChatColor.BLUE + "Upgrade Cost: " + armory.upgradeItem.getDisplayName());
+					ItemUtils.addLore(icon, ChatColor.GREEN + "RIGHT CLICK to upgrade Armory");
 				}
 			}
 			if(d.getType() == DevelopmentType.INN) {
 				Inn inn = (Inn) d;
 				if(inn.defaultSpawn != null) {
-					ItemAPI.addLore(icon, ChatColor.BLUE + "Spawn: " + ChatColor.WHITE + inn.defaultSpawn.getBlockX() + " " + inn.defaultSpawn.getBlockY() + " " + inn.defaultSpawn.getBlockZ());
+					ItemUtils.addLore(icon, ChatColor.BLUE + "Spawn: " + ChatColor.WHITE + inn.defaultSpawn.getBlockX() + " " + inn.defaultSpawn.getBlockY() + " " + inn.defaultSpawn.getBlockZ());
 				}
-				ItemAPI.addLore(icon, ChatColor.GREEN + "LEFT CLICK to set spawn");
+				ItemUtils.addLore(icon, ChatColor.GREEN + "LEFT CLICK to set spawn");
 			}
 			Clickable dicon = new Clickable(icon) {
 				@Override
@@ -839,7 +839,7 @@ public class EstateGui {
 			Map<NobilityItem, Integer> output = n.getOutput();
 			ItemStack resourceIcon = ButtonLibrary.createIcon(Material.STONE, name);
 			Clickable resourceButton = new DecorationStack(resourceIcon);
-			ItemAPI.addLore(resourceIcon,
+			ItemUtils.addLore(resourceIcon,
 					ChatColor.BLUE + "Slots: (" + n.getUsedSlots() +"/" + n.getSlots() + ")",
 					ChatColor.BLUE + "Type: " + ChatColor.WHITE + n.getType(),
 					ChatColor.BLUE + "Output:");
@@ -850,7 +850,7 @@ public class EstateGui {
 					String iname = i.getDisplayName();
 					int amount = output.get(i);
 
-					ItemAPI.addLore(resourceIcon, ChatColor.GRAY + "  " + amount + "x " + ChatColor.WHITE + iname );
+					ItemUtils.addLore(resourceIcon, ChatColor.GRAY + "  " + amount + "x " + ChatColor.WHITE + iname );
 				}
 			}
 
@@ -862,11 +862,11 @@ public class EstateGui {
 //			// TODO Need Nice Capitalization For The Resource
 //			ItemStack resourceIcon = ButtonLibrary.createIcon(resource.resource().getType(), resource.name().toLowerCase());
 //			resourceIcon.setAmount((int) region.getResource(resource));
-//			ItemAPI.addLore(resourceIcon,
+//			ItemUtils.addLore(resourceIcon,
 //					ChatColor.GRAY + "Total Amount: " + ChatColor.WHITE + (int) region.getResource(resource),
 //					ChatColor.GOLD + "Collection Power: ");
 //			for (Estate estateInRegion : getEstatesInRegion(region)) {
-//				ItemAPI.addLore(resourceIcon,
+//				ItemUtils.addLore(resourceIcon,
 //						ChatColor.GRAY + estateInRegion.getGroup().getName() + ": " + ChatColor.WHITE + estateInRegion.getCollectionPower(resource));
 //			}
 //			Clickable resourceButton = new DecorationStack(resourceIcon);
@@ -898,7 +898,7 @@ public class EstateGui {
 
 		for(Camp c : estate.getCamps()) {
 			ItemStack info = ButtonLibrary.createIcon(c.icon, c.name);
-			ItemAPI.addLore(info, ChatColor.BLUE + "Node Limit: " + ChatColor.WHITE + c.getNodeLimit());
+			ItemUtils.addLore(info, ChatColor.BLUE + "Node Limit: " + ChatColor.WHITE + c.getNodeLimit());
 			Clickable click = new Clickable(info) {
 
 				@Override
@@ -944,7 +944,7 @@ public class EstateGui {
 				Map<NobilityItem, Integer> output = n.getOutput();
 				ItemStack resourceIcon = ButtonLibrary.createIcon(Material.STONE, name);
 				Clickable resourceButton = new DecorationStack(resourceIcon);
-				ItemAPI.addLore(resourceIcon, ChatColor.BLUE + "Slots: (" + n.getUsedSlots() + "/" + n.getSlots() + ")",
+				ItemUtils.addLore(resourceIcon, ChatColor.BLUE + "Slots: (" + n.getUsedSlots() + "/" + n.getSlots() + ")",
 						ChatColor.BLUE + "Type: " + ChatColor.WHITE + n.getType(),
 						ChatColor.BLUE + "Output:",
 						ChatColor.GREEN + "LEFT CLICK to add",
@@ -957,7 +957,7 @@ public class EstateGui {
 						String iname = i.getDisplayName();
 						int amount = output.get(i);
 
-						ItemAPI.addLore(resourceIcon, ChatColor.GRAY + "  " + amount + "x " + ChatColor.WHITE + iname );
+						ItemUtils.addLore(resourceIcon, ChatColor.GRAY + "  " + amount + "x " + ChatColor.WHITE + iname );
 					}
 				}
 
@@ -1037,7 +1037,7 @@ public class EstateGui {
 						Integer stored = d.attributes.get(DevAttribute.CANNON_STORED);
 						for (int i = 0; i < stored; i++) {
 							ItemStack info = ButtonLibrary.createIcon(Material.STONE_BRICKS, "Cannon");
-							ItemAPI.addLore(info, ChatColor.BLUE + "Cannon is fully repaired.");
+							ItemUtils.addLore(info, ChatColor.BLUE + "Cannon is fully repaired.");
 							Clickable click = new Clickable(info) {
 
 								@Override
@@ -1052,9 +1052,9 @@ public class EstateGui {
 						Integer disrepaired = d.attributes.get(DevAttribute.CANNON_DISREPAIRED);
 						for (int i = 0; i < disrepaired; i++) {
 							ItemStack dis = ButtonLibrary.createIcon(Material.CRACKED_STONE_BRICKS, "Broken Cannon");
-							ItemAPI.addLore(dis, ChatColor.RED + "Cannon is in disrepair.");
-							ItemAPI.addLore(dis, ChatColor.YELLOW + "COST: 128 IRON");
-							ItemAPI.addLore(dis, ChatColor.GREEN + "CLICK to repair");
+							ItemUtils.addLore(dis, ChatColor.RED + "Cannon is in disrepair.");
+							ItemUtils.addLore(dis, ChatColor.YELLOW + "COST: 128 IRON");
+							ItemUtils.addLore(dis, ChatColor.GREEN + "CLICK to repair");
 							Clickable click = new Clickable(dis) {
 								@Override
 								public void clicked(Player player) {
@@ -1112,14 +1112,14 @@ public class EstateGui {
 		}
 
 		ItemStack nodeIcon = ButtonLibrary.createIcon(node.getType().icon, node.getName());
-		ItemAPI.addLore(nodeIcon, ChatColor.BLUE + "Region: " + region.getName());
-		ItemAPI.addLore(nodeIcon, ChatColor.BLUE + "Workers: " + node.getUsedSlots());
+		ItemUtils.addLore(nodeIcon, ChatColor.BLUE + "Region: " + region.getName());
+		ItemUtils.addLore(nodeIcon, ChatColor.BLUE + "Workers: " + node.getUsedSlots());
 		Clickable info = new DecorationStack(nodeIcon);
 		gui.setSlot(info, 1);
 
 		ItemStack assignOutput = ButtonLibrary.createIcon(Material.CHEST, ChatColor.GREEN + "Output Chest");
-		if(camp.outputChest != null) { ItemAPI.addLore(assignOutput, ChatColor.BLUE + "Output Chest: " + ChatColor.WHITE + "[" + camp.outputChest.getBlockX() + "x," + camp.outputChest.getBlockY() + "y," + camp.outputChest.getBlockZ() + "z]", "", ChatColor.YELLOW + "Click to reassign an output chest!"); }
-		else {ItemAPI.addLore(assignOutput, ChatColor.YELLOW + "" + ChatColor.BOLD + "Click to assign an output chest!"); }
+		if(camp.outputChest != null) { ItemUtils.addLore(assignOutput, ChatColor.BLUE + "Output Chest: " + ChatColor.WHITE + "[" + camp.outputChest.getBlockX() + "x," + camp.outputChest.getBlockY() + "y," + camp.outputChest.getBlockZ() + "z]", "", ChatColor.YELLOW + "Click to reassign an output chest!"); }
+		else {ItemUtils.addLore(assignOutput, ChatColor.YELLOW + "" + ChatColor.BOLD + "Click to assign an output chest!"); }
 		Clickable output = new Clickable(assignOutput) {
 			@Override
 			public void clicked(Player p) {
@@ -1158,9 +1158,9 @@ public class EstateGui {
 
 			OfflinePlayer pl = Bukkit.getOfflinePlayer(u);
 			ItemStack playerIcon = ButtonLibrary.createIcon(Material.PLAYER_HEAD, pl.getName());
-			ItemAPI.addLore(playerIcon, ChatColor.BLUE + "Username: " + pl.getName());
-			ItemAPI.addLore(playerIcon, ChatColor.RED + "RIGHT CLICK to remove this worker");
-			SkullMeta im = (SkullMeta) ItemAPI.getItemMeta(playerIcon);
+			ItemUtils.addLore(playerIcon, ChatColor.BLUE + "Username: " + pl.getName());
+			ItemUtils.addLore(playerIcon, ChatColor.RED + "RIGHT CLICK to remove this worker");
+			SkullMeta im = (SkullMeta) ItemUtils.getItemMeta(playerIcon);
 			im.setOwningPlayer(Bukkit.getOfflinePlayer(u));
 			playerIcon.setItemMeta(im);
 			Clickable pcon = new Clickable(playerIcon) {
@@ -1223,7 +1223,7 @@ public class EstateGui {
 		for(Estate e : estates) {
 			//TODO refactor estate info button into its own method for reusability
 			ItemStack info = ButtonLibrary.createIcon(Material.BOOK, ChatColor.GOLD + e.getGroup().getName());
-			ItemAPI.addLore(info, ChatColor.BLUE + "Members: " + ChatColor.WHITE + "" + e.getGroup().getMembers().size(),
+			ItemUtils.addLore(info, ChatColor.BLUE + "Members: " + ChatColor.WHITE + "" + e.getGroup().getMembers().size(),
 					ChatColor.BLUE + "Leader: " + ChatColor.WHITE + "" + e.getGroup().getLocalization(GroupPermission.LEADER) + " " + estate.getGroup().getLeader().getName(),
 					ChatColor.BLUE + "Region: " + ChatColor.WHITE + e.getRegion().getName(),
 					ChatColor.BLUE + "Location: " + ChatColor.WHITE + e.getBlock().getX() + "X, " + e.getBlock().getZ() + "Z",
@@ -1232,7 +1232,7 @@ public class EstateGui {
 
 			if(e == estate)
 				for(Camp c : e.getCamps()) {
-					ItemAPI.addLore(info, ChatColor.BLUE + "Node Limit (" + c.nodeType + ") " + ChatColor.WHITE + c.getNodeLimit());
+					ItemUtils.addLore(info, ChatColor.BLUE + "Node Limit (" + c.nodeType + ") " + ChatColor.WHITE + c.getNodeLimit());
 				}
 			Clickable infoIcon = new Clickable(info) {
 
@@ -1270,7 +1270,7 @@ public class EstateGui {
 			Map<NobilityItem, Integer> output = n.getOutput();
 			ItemStack resourceIcon = ButtonLibrary.createIcon(Material.STONE, name);
 			Clickable resourceButton = new DecorationStack(resourceIcon);
-			ItemAPI.addLore(resourceIcon, ChatColor.BLUE + "Slots: (" + n.getUsedSlots() + "/" + n.getSlots() + ")",
+			ItemUtils.addLore(resourceIcon, ChatColor.BLUE + "Slots: (" + n.getUsedSlots() + "/" + n.getSlots() + ")",
 					ChatColor.BLUE + "Type: " + ChatColor.WHITE + n.getType(),
 					ChatColor.BLUE + "Output:");
 
@@ -1280,12 +1280,12 @@ public class EstateGui {
 					String iname = i.getDisplayName();
 					int amount = output.get(i);
 
-					ItemAPI.addLore(resourceIcon, ChatColor.GRAY + "  " + amount + "x " + ChatColor.WHITE + iname );
+					ItemUtils.addLore(resourceIcon, ChatColor.GRAY + "  " + amount + "x " + ChatColor.WHITE + iname );
 				}
 			}
 
 			if(owner == null) {
-				ItemAPI.addLore(resourceIcon, " ",
+				ItemUtils.addLore(resourceIcon, " ",
 						ChatColor.YELLOW + "" + ChatColor.BOLD + "Left click to claim!");
 				Clickable claimButton = new Clickable(resourceIcon) {
 
@@ -1354,7 +1354,7 @@ public class EstateGui {
 			String name = otherEstate.getGroup().getName();
 			Material mat = Material.WHITE_BANNER; // TODO add icon creation;
 			ItemStack icon = ButtonLibrary.createIcon(mat, name);
-			ItemAPI.addLore(icon, "Relationship: " + estate.getRelationship(otherEstate).title());
+			ItemUtils.addLore(icon, "Relationship: " + estate.getRelationship(otherEstate).title());
 			Clickable c = new Clickable(icon) {
 
 				@Override
@@ -1445,25 +1445,25 @@ public class EstateGui {
 			if(!b.hasPrereqs) {
 				String formattedName = b.result.name;
 				ItemStack icon = ButtonLibrary.createIcon(b.result.icon, formattedName);
-				ItemAPI.addLore(icon, ChatColor.BLUE + "Type: " + ChatColor.WHITE + b.result.getType().toString());
+				ItemUtils.addLore(icon, ChatColor.BLUE + "Type: " + ChatColor.WHITE + b.result.getType().toString());
 
 				if(b.result.getType() == DevelopmentType.CAMP) {
 					Camp camp = (Camp) b.result;
-					if(camp != null) { ItemAPI.addLore(icon, ChatColor.BLUE + "Node Limit: " + ChatColor.WHITE + camp.getNodeLimit());}
+					if(camp != null) { ItemUtils.addLore(icon, ChatColor.BLUE + "Node Limit: " + ChatColor.WHITE + camp.getNodeLimit());}
 
 				}
 
-				ItemAPI.addLore(icon, ChatColor.BLUE + "Cost:");
+				ItemUtils.addLore(icon, ChatColor.BLUE + "Cost:");
 
 				for(String s : b.cost.keySet()) {
-					ItemAPI.addLore(icon, ChatColor.GRAY + "  " + b.cost.get(s) + "x" + ChatColor.WHITE + " " + s);
+					ItemUtils.addLore(icon, ChatColor.GRAY + "  " + b.cost.get(s) + "x" + ChatColor.WHITE + " " + s);
 				}
-				ItemAPI.addLore(icon, ChatColor.BLUE + "Description: ");
-				ItemAPI.addLore(icon, ChatColor.GRAY + b.result.buildDescription);
+				ItemUtils.addLore(icon, ChatColor.BLUE + "Description: ");
+				ItemUtils.addLore(icon, ChatColor.GRAY + b.result.buildDescription);
 
 				if(b.result.attributes != null)
 					for(DevAttribute attr : b.result.attributes.keySet()) {
-						ItemAPI.addLore(icon, AttributeManager.getAttributeText(attr,b.result.attributes.get(attr)));
+						ItemUtils.addLore(icon, AttributeManager.getAttributeText(attr,b.result.attributes.get(attr)));
 					}
 
 
@@ -1502,26 +1502,26 @@ public class EstateGui {
 				prereqList.append(d);
 				prereqList.append(" ");
 			}
-			ItemAPI.addLore(icon, ChatColor.RED + "Has Prerequisites: " + prereqList);
-			ItemAPI.addLore(icon, ChatColor.BLUE + "Type: " + ChatColor.WHITE + b.result.getType().toString());
+			ItemUtils.addLore(icon, ChatColor.RED + "Has Prerequisites: " + prereqList);
+			ItemUtils.addLore(icon, ChatColor.BLUE + "Type: " + ChatColor.WHITE + b.result.getType().toString());
 
 			if(b.result.getType() == DevelopmentType.CAMP) {
 				Camp camp = (Camp) b.result;
-				if(camp != null) { ItemAPI.addLore(icon, ChatColor.BLUE + "Node Limit: " + ChatColor.WHITE + camp.getNodeLimit());}
+				if(camp != null) { ItemUtils.addLore(icon, ChatColor.BLUE + "Node Limit: " + ChatColor.WHITE + camp.getNodeLimit());}
 
 			}
 
-			ItemAPI.addLore(icon, ChatColor.BLUE + "Cost:");
+			ItemUtils.addLore(icon, ChatColor.BLUE + "Cost:");
 
 			for(String s : b.cost.keySet()) {
-				ItemAPI.addLore(icon, ChatColor.GRAY + "  " + b.cost.get(s) + "x" + ChatColor.WHITE + " " + s);
+				ItemUtils.addLore(icon, ChatColor.GRAY + "  " + b.cost.get(s) + "x" + ChatColor.WHITE + " " + s);
 			}
-			ItemAPI.addLore(icon, ChatColor.BLUE + "Description: ");
-			ItemAPI.addLore(icon, ChatColor.GRAY + b.result.buildDescription);
+			ItemUtils.addLore(icon, ChatColor.BLUE + "Description: ");
+			ItemUtils.addLore(icon, ChatColor.GRAY + b.result.buildDescription);
 
 			if(b.result.attributes != null)
 				for(DevAttribute attr : b.result.attributes.keySet()) {
-					ItemAPI.addLore(icon, AttributeManager.getAttributeText(attr,b.result.attributes.get(attr)));
+					ItemUtils.addLore(icon, AttributeManager.getAttributeText(attr,b.result.attributes.get(attr)));
 				}
 
 			Clickable button = new DecorationStack(icon);
