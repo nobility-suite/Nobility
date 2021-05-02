@@ -68,15 +68,8 @@ public class Estate {
 
 	public boolean getAlert() { return  this.isAlert; }
 
-	public void setAlert(String string) {
-		if(string == "true") {
-			this.isAlert = true;
-			return;
-		}
-		if(string == "false") {
-			this.isAlert = false;
-			return;
-		}
+	public void setAlert(boolean bool) {
+		this.isAlert = bool;
 	}
 
 	public Group getGroup() {

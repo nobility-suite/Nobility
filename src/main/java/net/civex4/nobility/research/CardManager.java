@@ -36,7 +36,11 @@ public class CardManager {
 	}
 	
 	public static Clickable getCardIcon(Card c, UnfinishedBlueprint ubp, Player p) {
-		ItemStack icon = ButtonLibrary.createIcon(Material.PAPER, ChatColor.BLUE + "Card: " + c.getActions().get(0).type);
+		String type;
+		if(c.getActions().size() > 0) {
+			type = c.getActions().get(0).type + "";
+		}else type = "NULL";
+		ItemStack icon = ButtonLibrary.createIcon(Material.PAPER, ChatColor.BLUE + "Card: " + type);
 		for(Action a : c.getActions()) {
 			ItemUtils.addLore(icon, a.formatLine());
 			Bukkit.getServer().getLogger().info("action: " + a.type.identifier + ", " + a.formatLine());
@@ -142,15 +146,15 @@ public class CardManager {
 			case LOCK_IN: //LOCK IN CARDS
 			int[] options = getLockInAvailable(ubp);
 			ArrayList<Integer> itemGroupIndexes = parseLockArray(options);
+			if(itemGroupIndexes.size() <= 1) { break; }
 			int index = rand.nextInt(itemGroupIndexes.size()-1);
-			if(index < 0) { break; }
 			actions.add(Action.createLockInAction(ubp.getBaseBlueprint(), itemGroupIndexes.get(index), rand));
 			break;
 			case LOCK_OUT: //LOCK OUT CARDS
 			int[] options2 = getLockOutAvailable(ubp);
 			ArrayList<Integer> itemGroupIndexes2 = parseLockArray(options2);
+			if(itemGroupIndexes2.size() <= 1) { break; }
 			int index2 = rand.nextInt(itemGroupIndexes2.size()-1);
-			if(index2 < 0) { break; }
 			actions.add(Action.createLockOutAction(ubp.getBaseBlueprint(), itemGroupIndexes2.get(index2), rand));	
 			break;
 			case MOD_RESULT: //BULK INGREDIENT CARDS
@@ -167,11 +171,47 @@ public class CardManager {
 				ArrayList<Integer> itemGroupIndexes3 = parseRatioArray(getRatiosAvailable(ubp));
 				int index3 = rand.nextInt(itemGroupIndexes3.size());
 				index3 = itemGroupIndexes3.get(index3);
-				//TODO
+				ItemGroup g = ubp.getBaseBlueprint().getItemGroups().get(index3);
+				int itemTypes = g.getDistinctTypes();
+				if(itemTypes >= 2) {
+					int type1 = rand.nextInt(itemTypes);
+					int type2 = type1;
+					while(type2 != type1) {
+						type2 = rand.nextInt(itemTypes);
+					}
+					
+					int pct1 = 20 + rand.nextInt(50);
+					int pct2 = (pct1 + 5) + rand.nextInt(10);
+					pct2 = -pct2;
+					
+					actions.add(Action.createRatiosAction(ubp.getBaseBlueprint(), pct1, index3, type1));
+					actions.add(Action.createRatiosAction(ubp.getBaseBlueprint(), pct2, index3, type2));
+				}
 			break;
+			case RATIO_REPLACE: //RATIO Replace cards
+				ArrayList<Integer> itemGroupIndexes4 = parseRatioArray(getRatiosAvailable(ubp));
+				int index4 = rand.nextInt(itemGroupIndexes4.size());
+				index4 = itemGroupIndexes4.get(index4);
+				ItemGroup gro = ubp.getBaseBlueprint().getItemGroups().get(index4);
+				int itemTypes2 = gro.getDistinctTypes();
+				if(itemTypes2 >= 2) {
+					int type1 = rand.nextInt(itemTypes2);
+					int type2 = type1;
+					while(type2 != type1) {
+						type2 = rand.nextInt(itemTypes2);
+					}
+					
+					int pct = 60 + rand.nextInt(10) + rand.nextInt(10) + rand.nextInt(40);
+					actions.add(Action.createRatiosAction(ubp.getBaseBlueprint(), pct, index4, type1));
+					actions.add(Action.createRatiosAction(ubp.getBaseBlueprint(), -100, index4, type2));
+				}
+				
+
+				
 		}
 
 		ret = new Card(actions, ubp.getBaseBlueprint());
+		
 		
 		
 		if(ret == null) { Bukkit.getServer().getLogger().info("Card = null!!!"); }
@@ -377,10 +417,13 @@ public class CardManager {
 	
 	public static void apply(UnfinishedBlueprint ubp, Action a) {
 		// TODO Auto-generated method stub
+		if(a != null)
 		switch(a.type) {
 		case LOCK_IN:
 		break;
 		case LOCK_OUT:
+		break;
+		default:
 		break;
 		}
 		
