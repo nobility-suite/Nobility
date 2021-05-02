@@ -10,7 +10,7 @@ import net.civex4.nobility.blueprints.AbstractBlueprint;
 import net.civex4.nobility.blueprints.Blueprint;
 import net.civex4.nobilityitems.NobilityItem;
 import net.md_5.bungee.api.ChatColor;
-import vg.civcraft.mc.civmodcore.api.ItemAPI;
+import vg.civcraft.mc.civmodcore.inventory.items.ItemUtils;
 
 public class Card {
 	
@@ -41,7 +41,7 @@ public class Card {
 	
 	public void execute(ItemStack unfinishedBlueprint) {
 		for(Action a : this.actions) {
-			ItemAPI.addLore(unfinishedBlueprint, a.formatLine());
+			ItemUtils.addLore(unfinishedBlueprint, a.formatLine());
 		}
 		
 	}
@@ -66,7 +66,7 @@ public class Card {
 		for(Action a : this.actions) {
 			devname += a.type.name();
 		}
-		ItemAPI.setDisplayName(ret,devname);
+		ItemUtils.setDisplayName(ret,devname);
 		//TODO ADD CARD EFFECT TO LORE.
 		return ret;
 	}

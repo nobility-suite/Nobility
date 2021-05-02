@@ -18,7 +18,7 @@ import net.civex4.nobility.developments.AbstractWorkshop;
 import net.civex4.nobility.gui.ButtonLibrary;
 import net.civex4.nobilityitems.NobilityItems;
 import net.md_5.bungee.api.ChatColor;
-import vg.civcraft.mc.civmodcore.api.ItemAPI;
+import vg.civcraft.mc.civmodcore.inventory.items.ItemUtils;
 import vg.civcraft.mc.civmodcore.inventorygui.Clickable;
 
 public class CardManager {
@@ -38,7 +38,7 @@ public class CardManager {
 	public static Clickable getCardIcon(Card c, UnfinishedBlueprint ubp, Player p) {
 		ItemStack icon = ButtonLibrary.createIcon(Material.PAPER, ChatColor.BLUE + "Card: " + c.getActions().get(0).type);
 		for(Action a : c.getActions()) {
-			ItemAPI.addLore(icon, a.formatLine());
+			ItemUtils.addLore(icon, a.formatLine());
 			Bukkit.getServer().getLogger().info("action: " + a.type.identifier + ", " + a.formatLine());
 		}
 		
@@ -51,7 +51,7 @@ public class CardManager {
 				p.closeInventory();
 				
 				ItemStack i = p.getItemInHand();
-				List<String> lore = ItemAPI.getLore(i);
+				List<String> lore = ItemUtils.getLore(i);
 				Long sd = new Random().nextLong();
 				String seed = UnfinishedBlueprint.SEED_PREFIX + sd;
 				lore.set(0, seed);

@@ -26,7 +26,7 @@ import net.civex4.nobility.estate.Estate;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.event.player.PlayerBucketEmptyEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
-import vg.civcraft.mc.civmodcore.api.BlockAPI;
+import vg.civcraft.mc.civmodcore.world.WorldUtils;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -197,7 +197,7 @@ public class ProtectionListener implements Listener{
 
 
 	public void restoneDoors(Block block, BlockFace skip) {
-		for (Map.Entry<BlockFace, Block> entry : BlockAPI.getAllSidesMapped(block).entrySet()) {
+		for (Map.Entry<BlockFace, Block> entry : WorldUtils.getAllBlockSidesMapped(block, true).entrySet()) {
 			if (entry.getKey() == skip) {
 				continue;
 			}

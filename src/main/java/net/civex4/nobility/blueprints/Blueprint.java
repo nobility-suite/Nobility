@@ -14,8 +14,8 @@ import org.bukkit.inventory.ItemStack;
 import net.civex4.nobilityitems.NobilityItem;
 import net.civex4.nobilityitems.NobilityItems;
 import net.md_5.bungee.api.ChatColor;
-import vg.civcraft.mc.civmodcore.api.ItemAPI;
-	
+import vg.civcraft.mc.civmodcore.inventory.items.ItemUtils;
+
 public class Blueprint {
 	private static final String AMOUNT_DELIMITER = "x ";
 	private static final String RESULT_AMOUNT_PREFIX = "";
@@ -112,9 +112,9 @@ public class Blueprint {
 		}
 
 		ItemStack returnItem = new ItemStack(Material.PAPER);
-		ItemAPI.setDisplayName(returnItem, parsedName);
-		ItemAPI.addLore(returnItem, parsedResult, parsedRuns, parsedTime, INGREDIENTS_LINE_DELIMITER);
-		ItemAPI.addLore(returnItem, parsedIngredients);
+		ItemUtils.setDisplayName(returnItem, parsedName);
+		ItemUtils.addLore(returnItem, parsedResult, parsedRuns, parsedTime, INGREDIENTS_LINE_DELIMITER);
+		ItemUtils.addLore(returnItem, parsedIngredients);
 		
 		return returnItem;
 	}
@@ -127,11 +127,11 @@ public class Blueprint {
 	 */
 	
 	public static Blueprint parseBlueprintFromItem(ItemStack item) {
-		String itemName = ItemAPI.getDisplayName(item);
+		String itemName = ItemUtils.getDisplayName(item);
 		
 		
 		
-		List<String> lore = ItemAPI.getLore(item);
+		List<String> lore = ItemUtils.getLore(item);
 		if (lore.size() < 4) {
 			Bukkit.getLogger().warning("Only Blueprint Items can be parsed");
 			return null;
