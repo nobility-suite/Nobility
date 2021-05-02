@@ -47,11 +47,11 @@ public class Card {
 		
 		//Update round counter
 		UnfinishedBlueprint ubp = UnfinishedBlueprint.parseFromItem(unfinishedBlueprint);
-		List<String> lore = ItemAPI.getLore(unfinishedBlueprint);
+		List<String> lore = ItemUtils.getLore(unfinishedBlueprint);
 		String roundString = UnfinishedBlueprint.ROUND_PREFIX + (ubp.getRounds()+1) + "/" + ubp.getMaxRounds() + UnfinishedBlueprint.ROUND_SUFFIX;
 		
 		lore.set(1, roundString);
-		ItemAPI.setLore(unfinishedBlueprint, lore);
+		ItemUtils.setLore(unfinishedBlueprint, lore);
 		
 		if(ubp.getRounds()+1 >= ubp.getMaxRounds()) {
 			//GENERATE BLUEPRINT TODO

@@ -98,7 +98,7 @@ public class CommandListener implements CommandExecutor{
 			//TODO DEBUG COMMAND REMOVE
 			if (args[0].equalsIgnoreCase("alert")) {
 				Estate estate = Nobility.getEstateManager().getEstateOfPlayer(player);
-				estate.setAlert("true");
+				estate.setAlert(true);
 				return true;
 			}
 			
