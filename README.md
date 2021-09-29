@@ -7,18 +7,30 @@ You can read more about the design of [Nobility here.](https://www.reddit.com/r/
 Development on Nobility is only partially completed. Functional features include:
 
 Guild creation and management
+
 City founding
+
 City upgrades and construction
+
 City build protection
+
 Node claiming
+
 Siege timers
+
 Siege battles, cannons, and structure damage.
+
 City-based crafting system
+
 Administrative tools for the above
+
 
 Notable features still under development include:
 
 Node resource generation
+
 Siege results
+
 Siege initiation
+
 Database support
