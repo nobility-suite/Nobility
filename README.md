@@ -4,7 +4,7 @@ Nobility is a guild and territory control system meant to bring war mechanics to
 
 You can read more about the design of [Nobility here.](https://www.reddit.com/r/CivEx/comments/i36biq/nobility_simplified_progress_update_3/)
 
-Development on Nobility is only partially completed. Functional features include:
+**Development on Nobility is only partially completed. Functional features include:**
 
 Guild creation and management
 
@@ -25,7 +25,7 @@ City-based crafting system
 Administrative tools for the above
 
 
-Notable features still under development include:
+**Notable features still under development include:**
 
 Node resource generation
 
